@@ -1,7 +1,6 @@
 ﻿import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-
 import qxpack.indcom.ui_qml_base 1.0     // [HINT] this is the pre-registered module name.
 import qxpack.indcom.ui_qml_control 1.0  // [HINT] ModalPopupDialog is in it
 
@@ -44,15 +43,10 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
         }
 
         Rectangle { anchors.centerIn: parent; implicitWidth: 400; implicitHeight: 200; color: "black"; border.color: "#6E6E6E";
-
             RowLayout { anchors.centerIn: parent;
-
                 Item { id: idYear; Layout.preferredWidth: 100; Layout.preferredHeight: 180;
-
                     Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
-
                     Rectangle { anchors.bottom: parent.bottom; anchors.bottomMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
-
                     PathView { id: idYearList; clip: true; anchors.fill: parent; pathItemCount: 3; preferredHighlightBegin: 0.5; preferredHighlightEnd: 0.5; highlightRangeMode: PathView.StrictlyEnforceRange;
                         delegate: Label { width: 100; height: 60; text: currentValue; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
                         path: Path { startX: idYear.width / 2 ; startY: 0;
@@ -67,15 +61,10 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
                         }
                     }
                 }
-
                 Rectangle { Layout.preferredWidth: 25; Layout.preferredHeight: 1; Layout.alignment: Qt.AlignVCenter; color: "#FAFAFA" }
-
                 Item { id: idMonth; Layout.preferredWidth: 100; Layout.preferredHeight: 180;
-
                     Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
-
                     Rectangle { anchors.bottom: parent.bottom; anchors.bottomMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
-
                     PathView { id: idMonthList; clip: true; anchors.fill: parent; pathItemCount: 3; preferredHighlightBegin: 0.5; preferredHighlightEnd: 0.5; highlightRangeMode: PathView.StrictlyEnforceRange;
                         delegate: Label { width: 100; height: 60; text: currentValue; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
                         path: Path { startX: idMonth.width / 2 ; startY: 0;
@@ -92,13 +81,9 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
                 }
 
                 Rectangle { Layout.preferredWidth: 25; Layout.preferredHeight: 1; Layout.alignment: Qt.AlignVCenter; color: "#FAFAFA" }
-
                 Item { id: idDay; Layout.preferredWidth: 100; Layout.preferredHeight: 180;
-
                     Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
-
                     Rectangle { anchors.bottom: parent.bottom; anchors.bottomMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
-
                     PathView { id: idDayList; clip: true; anchors.fill: parent; pathItemCount: 3; preferredHighlightBegin: 0.5; preferredHighlightEnd: 0.5; highlightRangeMode: PathView.StrictlyEnforceRange;
                         delegate: Label { width: 100; height: 60; text: currentValue; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
                         path: Path { startX: idDay.width / 2 ; startY: 0;
@@ -171,3 +156,9 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
         }
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;formeditorZoom:0.66}
+}
+##^##*/

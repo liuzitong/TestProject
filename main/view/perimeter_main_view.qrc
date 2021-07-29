@@ -75,5 +75,6 @@
         <file>Assets/Pics/user-svg/pwd_hide.svg</file>
         <file>Assets/Pics/user-svg/pwd_show.svg</file>
         <file>Assets/Pics/user-svg/username.svg</file>
+        <file>customControl/calendarview.qml</file>
     </qresource>
 </RCC>
