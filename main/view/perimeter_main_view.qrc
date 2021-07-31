@@ -1,15 +1,6 @@
 <RCC>
     <qresource prefix="/perimeter/main/view">
         <file alias="main.qml">main.qml</file>
-        <file alias="qmldir">qmldir</file>
-        <file>customControl/CusButton.qml</file>
-        <file>customControl/CusComboBox.qml</file>
-        <file>customControl/CusText.qml</file>
-        <file>customControl/EntranceButton.qml</file>
-        <file>customControl/LineEdit.qml</file>
-        <file>customControl/Scan.qml</file>
-        <file>customControl/TimeChangeBtn.qml</file>
-        <file>customControl/TimeInput.qml</file>
         <file>Assets/Pics/base-svg/2logo_256_black.svg</file>
         <file>Assets/Pics/base-svg/2logo_256_blue.svg</file>
         <file>Assets/Pics/base-svg/2logo_version.svg</file>
@@ -75,6 +66,75 @@
         <file>Assets/Pics/user-svg/pwd_hide.svg</file>
         <file>Assets/Pics/user-svg/pwd_show.svg</file>
         <file>Assets/Pics/user-svg/username.svg</file>
-        <file>customControl/calendarview.qml</file>
+        <file>Assets/Pics/base/2logo_256_black.png</file>
+        <file>Assets/Pics/base/2logo_256_blue.png</file>
+        <file>Assets/Pics/base/2logo_version.png</file>
+        <file>Assets/Pics/base/btn_adjust.png</file>
+        <file>Assets/Pics/base/btn_analysis_enter.png</file>
+        <file>Assets/Pics/base/btn_checkbox_1normal.png</file>
+        <file>Assets/Pics/base/btn_checkbox_2hover.png</file>
+        <file>Assets/Pics/base/btn_checkbox_3press.png</file>
+        <file>Assets/Pics/base/btn_close.png</file>
+        <file>Assets/Pics/base/btn_drop_down.png</file>
+        <file>Assets/Pics/base/btn_find.png</file>
+        <file>Assets/Pics/base/btn_radio.png</file>
+        <file>Assets/Pics/base/btn_radio_click.png</file>
+        <file>Assets/Pics/base/btn_select_click.png</file>
+        <file>Assets/Pics/base/btn_select_normal.png</file>
+        <file>Assets/Pics/base/btn_sex_man.png</file>
+        <file>Assets/Pics/base/btn_sex_woman.png</file>
+        <file>Assets/Pics/base/main_syseye_logo.png</file>
+        <file>Assets/Pics/base/menu_about.png</file>
+        <file>Assets/Pics/base/menu_capture.png</file>
+        <file>Assets/Pics/base/menu_customize.png</file>
+        <file>Assets/Pics/base/menu_login.png</file>
+        <file>Assets/Pics/base/menu_patient.png</file>
+        <file>Assets/Pics/base/menu_set.png</file>
+        <file>Assets/Pics/base/page_1head_1normal.png</file>
+        <file>Assets/Pics/base/page_1head_2hover.png</file>
+        <file>Assets/Pics/base/page_1head_3press.png</file>
+        <file>Assets/Pics/base/page_2previous_1normal.png</file>
+        <file>Assets/Pics/base/page_2previous_2hover.png</file>
+        <file>Assets/Pics/base/page_2previous_3press.png</file>
+        <file>Assets/Pics/base/page_3goto_1normal.png</file>
+        <file>Assets/Pics/base/page_3goto_2hover.png</file>
+        <file>Assets/Pics/base/page_3goto_3press.png</file>
+        <file>Assets/Pics/base/page_4next_1normal.png</file>
+        <file>Assets/Pics/base/page_4next_2hover.png</file>
+        <file>Assets/Pics/base/page_4next_3press.png</file>
+        <file>Assets/Pics/base/page_5end_1normal.png</file>
+        <file>Assets/Pics/base/page_5end_2hover.png</file>
+        <file>Assets/Pics/base/page_5end_3press.png</file>
+        <file>Assets/Pics/base/window_4close_1normal.png</file>
+        <file>Assets/Pics/base/window_4close_2hover.png</file>
+        <file>Assets/Pics/base/window_4close_3press.png</file>
+        <file>Assets/Pics/capture/arrow_1up.png</file>
+        <file>Assets/Pics/capture/arrow_2down.png</file>
+        <file>Assets/Pics/capture/arrow_3left.png</file>
+        <file>Assets/Pics/capture/arrow_4right.png</file>
+        <file>Assets/Pics/capture/btn_alarm.png</file>
+        <file>Assets/Pics/capture/btn_alarm_sound.png</file>
+        <file>Assets/Pics/capture/btn_refresh.png</file>
+        <file>Assets/Pics/print/btn_edit.png</file>
+        <file>Assets/Pics/print/btn_print.png</file>
+        <file>Assets/Pics/print/btn_return.png</file>
+        <file>Assets/Pics/print/btn_screen_full.png</file>
+        <file>Assets/Pics/print/btn_screen_width.png</file>
+        <file>Assets/Pics/print/btn_upload.png</file>
+        <file>Assets/Pics/print/btn_zoom_in.png</file>
+        <file>Assets/Pics/print/btn_zoom_out.png</file>
+        <file>Assets/Pics/user/0syseye_logo.png</file>
+        <file>Assets/Pics/user/close.png</file>
+        <file>Assets/Pics/user/keyboard.png</file>
+        <file>Assets/Pics/user/keyboard_close.png</file>
+        <file>Assets/Pics/user/password.png</file>
+        <file>Assets/Pics/user/pwd_hide.png</file>
+        <file>Assets/Pics/user/pwd_show.png</file>
+        <file>Assets/Pics/user/username.png</file>
+        <file>Assets/Pics/Archives.bmp</file>
+        <file>Assets/Pics/Examine.bmp</file>
+        <file>Assets/Pics/Logo.png</file>
+        <file>Assets/Pics/NewPatient.bmp</file>
+        <file>qmldir</file>
     </qresource>
 </RCC>

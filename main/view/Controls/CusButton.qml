@@ -30,7 +30,7 @@ Rectangle{
         //onClicked: patientManagement.parent.source="main.qml"
     }
 
-    Row{
+    Item{
         id: row
         anchors.fill: parent
         Text {

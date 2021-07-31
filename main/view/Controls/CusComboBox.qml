@@ -1,13 +1,12 @@
-
 import QtQuick 2.6
-import QtQuick.Controls 2.1
+import QtQuick.Controls 2.2
 
 ComboBox {
     id: control
     model: ["First", "Second", "Third"]
-    property var borderColor:"black"
-    property var borderColorPressed:"Brown"
-    property var imageSrc
+    property string borderColor:"black"
+    property string borderColorPressed:"Brown"
+    property string imageSrc
 
     delegate: ItemDelegate {
         width: control.width

@@ -2,7 +2,7 @@
 #define PERIMETER_MAIN_CXX
 
 #include "perimeter_main.hxx"
-
+#include "../Control/Calendar/perimeter_calendarvm.hxx"
 // services list
 
 namespace Perimeter {
@@ -41,6 +41,9 @@ void  Main :: registerTypes( QxPack::IcAppCtrlBase *app_base )
     // ------------------------------------------------------------------------
     // register all public types of this module
     // ------------------------------------------------------------------------
+    obj_mgr->registerType<Perimeter::CalendarVm>(
+        QStringLiteral("Perimeter::CalendarVm"), Q_NULLPTR
+    );
 }
 
 
