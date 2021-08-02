@@ -11,13 +11,11 @@ Window {
     property int commonRadius:height*0.03
     property string backGroudColor:"#dcdee0"
     property string backGroudBorderColor:"#bdc0c6"
-    Column {id: column;anchors.fill: parent
-        Rectangle{
-            Component.onCompleted: {
-                console.log("aaaa");
-            }
+    property string version: /*"Chinese"*/"English"
 
-            id:topRibbon;width: parent.width;height: parent.height*0.1;color: "#333e44";}
+    Column {
+        id: column;anchors.fill: parent
+        Rectangle{id:topRibbon;width: parent.width;height: parent.height*0.1;color: "#333e44";}
         Item{
             id:content;width:parent.width;height: parent.height*0.84;
             property int layGroupMargin: 0.03*height
@@ -26,7 +24,6 @@ Window {
                 Rectangle{
                     width: (parent.width-content.layGroupMargin)*0.6;height: parent.height;
                     border.color: backGroudBorderColor;color: backGroudColor;radius: commonRadius
-                    Keys.onRightPressed: {console.log("up");}
                     Item{
                         anchors.fill: parent;anchors.margins: content.layGroupMargin
                         Column{
@@ -36,12 +33,11 @@ Window {
                                 id:dateSelection; width: parent.width;
                                 height: patientManagement.rowHight;spacing: height*0.4;
                                 CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5}
-                                LineEdit{id:dateFrom;radius: height/6;width: height*4; Keys.onRightPressed: {console.log("xxxxxxxxxxxx");}}
-                                CusButton{id:dateFromButton;text:"选择";width:height*2;onClicked: calendar.open()}
-                                CusText{text:"到";width: height*0.6}
+                                LineEdit{id:dateFrom;radius: height/6;width: height*4;}
+                                CusButton{id:dateFromButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateFrom;calendar.open();}}
+                                CusText{text:"到";width: height*0.6;}
                                 LineEdit{id:dateTo;radius: height/6;width: height*4}
-                                CusButton{id:dateToButton;text:"选择";width:height*2}
-                                Keys.onRightPressed: {console.log("dow");}
+                                CusButton{id:dateToButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateTo;calendar.open();}}
                             }
                             Row{
                                 id:query; width: parent.width; height: patientManagement.rowHight;spacing: height*0.5
@@ -50,17 +46,44 @@ Window {
                                     borderColor: backGroudBorderColor;font.family:"Microsoft YaHei";
                                     imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_drop_down.svg";
                                     model: ListModel {ListElement { text: "最近诊断" } ListElement { text: "患者ID" } ListElement { text: "姓名" }ListElement { text: "性别" }ListElement { text: "出身日期" }}
+                                    onCurrentIndexChanged: {
+                                        if(currentIndex==0){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;}
+                                        if(currentIndex==1){patientID.visible=true;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;}
+                                        if(currentIndex==2)
+                                        {
+                                            if(version=="Chinese"){ patientID.visible=false;chineseName.visible=true;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;}
+                                            else{patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=true;gender.visible=false;birthDateGroup.visible=false;}
+                                        }
+                                        if(currentIndex==3){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=true;birthDateGroup.visible=false;}
+                                        if(currentIndex==4){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=true;}
+                                    }
+                                }
+                                LineEdit{id:patientID;radius:height/6;width: height*4}
+                                LineEdit{id:chineseName;radius:height/6;width: height*4}
+                                Flow{
+                                    id:englishNameGroup;height: parent.height;spacing: height*0.4;
+                                    CusText{text:"First Name:";width:height*2.5}
+                                    LineEdit{id:firstName;radius:height/6;width: height*4}
+                                    CusText{text:"Last Name:";width:height*2.5}
+                                    LineEdit{id:lastName;radius:height/6;width: height*4}
+                                }
+                                CusComboBox{
+                                    id:gender;height: parent.height;width: parent.height*3;
+                                    borderColor: backGroudBorderColor;font.family:"Microsoft YaHei";
+                                    imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_drop_down.svg";
+                                    model: ListModel {ListElement { text: "男" } ListElement { text: "女" } }
                                 }
                                 Flow{
-                                    id:singleNameQuery;height: parent.height
-                                    LineEdit{id:queryIDorName;radius:height/6;width: height*4}
+                                    id:birthDateGroup;visible: false;height: parent.height;spacing: height*0.4;
+                                    LineEdit{id:birthDate;height: parent.height;radius:height/6;width: height*4;visible: true;}
+                                    CusButton{text:"选择";width:height*2;onClicked:{calendar.inputObj=birthDate;calendar.open();}}
                                 }
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}}
-
                             Item{
                                 width: parent.width;height: parent.height-6*patientManagement.rowHight
-                                CusCalendar{id:calendar;inputObj: dateFrom;}
-//                                DatePick{}
+                                CusCalendar{
+                                    id: calendar;width: parent.width;height: parent.height;
+                                }
                             }
                             Row{
                                 id:pageControl;width: parent.width;height: patientManagement.rowHight;

@@ -7,12 +7,16 @@ import qxpack.indcom.ui_qml_control 1.0  // [HINT] ModalPopupDialog is in it
 
 ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
     id: idPopup;
+    visible: false;
+    property alias contentWidth : idContent.implicitWidth;
+    property alias contentHeight: idContent.implicitHeight;
     property var   inputObj: null;
 
     onInputObjChanged: {
         if ( inputObj !== null )
         {
             var strData = inputObj.text;
+            if(strData===""){strData="1980-1-1";}
             idPriv.calendar_vm.yearListModel.currentValue = Number(strData.split("-")[0]);
             idPriv.calendar_vm.monthListModel.currentValue = Number(strData.split("-")[1]);
             idPriv.calendar_vm.dayListModel.currentValue = Number(strData.split("-")[2]);
@@ -26,9 +30,11 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
     // ////////////////////////////////////////////////////////////////////////
     // layout
     // ////////////////////////////////////////////////////////////////////////
-    backgroundColor: "red"; backgroundVisible: false;
-    contentItem:
-    Rectangle { anchors.centerIn: parent; implicitWidth: 400; implicitHeight: 200; color: "black"; border.color: "#6E6E6E";
+//    backgroundColor: "red"; backgroundVisible: false;
+
+   contentItem: Rectangle {
+        // [HINT] Popup element need implicitWidth & implicitHeight to calc. the right position
+        id: idContent; implicitWidth: idPopup.width; implicitHeight: idPopup.height; color: "#60606060";
         MouseArea { anchors.fill: parent;
             onClicked: {
                 if ( inputObj !== null )
@@ -36,72 +42,67 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
                 idPopup.close();
             }
         }
-        RowLayout { anchors.centerIn: parent;
-            Item { id: idYear; Layout.preferredWidth: 100; Layout.preferredHeight: 180;
-                Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
-                Rectangle { anchors.bottom: parent.bottom; anchors.bottomMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
-                PathView { id: idYearList; clip: true; anchors.fill: parent; pathItemCount: 3; preferredHighlightBegin: 0.5; preferredHighlightEnd: 0.5; highlightRangeMode: PathView.StrictlyEnforceRange;
-                    delegate: Label { width: 100; height: 60; text: currentValue; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
-                    path: Path { startX: idYear.width / 2 ; startY: 0;
-                        PathAttribute { name: "pixelSize"; value: 18 }
-                        PathAttribute { name: "color"; value: 1 }
-                        PathLine { relativeX: 0; y: idMonth.height / 2; }
-                        PathAttribute { name: "pixelSize"; value: 36 }
-                        PathAttribute { name: "color"; value: 0 }
-                        PathLine { relativeX: 0; relativeY: idMonth.height / 2; }
-                        PathAttribute { name: "pixelSize"; value: 18 }
-                        PathAttribute { name: "color"; value: 1 }
+
+        Rectangle { anchors.centerIn: parent; implicitWidth: 400; implicitHeight: 200; color: "black"; border.color: "#6E6E6E";
+            RowLayout { anchors.centerIn: parent;
+                Item { id: idYear; Layout.preferredWidth: 100; Layout.preferredHeight: 180;
+                    Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
+                    Rectangle { anchors.bottom: parent.bottom; anchors.bottomMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
+                    PathView { id: idYearList; clip: true; anchors.fill: parent; pathItemCount: 3; preferredHighlightBegin: 0.5; preferredHighlightEnd: 0.5; highlightRangeMode: PathView.StrictlyEnforceRange;
+                        delegate: Label { width: 100; height: 60; text: currentValue; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
+                        path: Path { startX: idYear.width / 2 ; startY: 0;
+                            PathAttribute { name: "pixelSize"; value: 18 }
+                            PathAttribute { name: "color"; value: 1 }
+                            PathLine { relativeX: 0; y: idMonth.height / 2; }
+                            PathAttribute { name: "pixelSize"; value: 36 }
+                            PathAttribute { name: "color"; value: 0 }
+                            PathLine { relativeX: 0; relativeY: idMonth.height / 2; }
+                            PathAttribute { name: "pixelSize"; value: 18 }
+                            PathAttribute { name: "color"; value: 1 }
+                        }
                     }
                 }
-            }
 
-            Rectangle { Layout.preferredWidth: 25; Layout.preferredHeight: 1; Layout.alignment: Qt.AlignVCenter; color: "#FAFAFA" }
-            Item { id: idMonth; Layout.preferredWidth: 100; Layout.preferredHeight: 180;
-                Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
-                Rectangle { anchors.bottom: parent.bottom; anchors.bottomMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
-                PathView {
-                    id: idMonthList; clip: true; anchors.fill: parent; pathItemCount: 3; preferredHighlightBegin: 0.5; preferredHighlightEnd: 0.5; highlightRangeMode: PathView.StrictlyEnforceRange;
-                    focus: true;
-                    Keys.onLeftPressed:
-                    {
-                        decrementCurrentIndex();
-                    }
-                    Keys.onRightPressed: incrementCurrentIndex();
-                    delegate: Label { width: 100; height: 60; text: currentValue; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
-                    path: Path { startX: idMonth.width / 2 ; startY: 0;
-                        PathAttribute { name: "pixelSize"; value: 18 }
-                        PathAttribute { name: "color"; value: 1 }
-                        PathLine { relativeX: 0; y: idMonth.height / 2; }
-                        PathAttribute { name: "pixelSize"; value: 36 }
-                        PathAttribute { name: "color"; value: 0 }
-                        PathLine { relativeX: 0; relativeY: idMonth.height / 2; }
-                        PathAttribute { name: "pixelSize"; value: 18 }
-                        PathAttribute { name: "color"; value: 1 }
+                Rectangle { Layout.preferredWidth: 25; Layout.preferredHeight: 1; Layout.alignment: Qt.AlignVCenter; color: "#FAFAFA" }
+                Item { id: idMonth; Layout.preferredWidth: 100; Layout.preferredHeight: 180;
+                    Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
+                    Rectangle { anchors.bottom: parent.bottom; anchors.bottomMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
+                    PathView { id: idMonthList; clip: true; anchors.fill: parent; pathItemCount: 3; preferredHighlightBegin: 0.5; preferredHighlightEnd: 0.5; highlightRangeMode: PathView.StrictlyEnforceRange;
+                        delegate: Label { width: 100; height: 60; text: currentValue; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
+                        path: Path { startX: idMonth.width / 2 ; startY: 0;
+                            PathAttribute { name: "pixelSize"; value: 18 }
+                            PathAttribute { name: "color"; value: 1 }
+                            PathLine { relativeX: 0; y: idMonth.height / 2; }
+                            PathAttribute { name: "pixelSize"; value: 36 }
+                            PathAttribute { name: "color"; value: 0 }
+                            PathLine { relativeX: 0; relativeY: idMonth.height / 2; }
+                            PathAttribute { name: "pixelSize"; value: 18 }
+                            PathAttribute { name: "color"; value: 1 }
+                        }
                     }
                 }
-            }
 
-            Rectangle { Layout.preferredWidth: 25; Layout.preferredHeight: 1; Layout.alignment: Qt.AlignVCenter; color: "#FAFAFA" }
-            Item { id: idDay; Layout.preferredWidth: 100; Layout.preferredHeight: 180;
-                Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
-                Rectangle { anchors.bottom: parent.bottom; anchors.bottomMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
-                PathView { id: idDayList; clip: true; anchors.fill: parent; pathItemCount: 3; preferredHighlightBegin: 0.5; preferredHighlightEnd: 0.5; highlightRangeMode: PathView.StrictlyEnforceRange;
-                    delegate: Label { width: 100; height: 60; text: currentValue; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
-                    path: Path { startX: idDay.width / 2 ; startY: 0;
-                        PathAttribute { name: "pixelSize"; value: 18 }
-                        PathAttribute { name: "color"; value: 1 }
-                        PathLine { relativeX: 0; y: idMonth.height / 2; }
-                        PathAttribute { name: "pixelSize"; value: 36 }
-                        PathAttribute { name: "color"; value: 0 }
-                        PathLine { relativeX: 0; relativeY: idMonth.height / 2; }
-                        PathAttribute { name: "pixelSize"; value: 18 }
-                        PathAttribute { name: "color"; value: 1 }
+                Rectangle { Layout.preferredWidth: 25; Layout.preferredHeight: 1; Layout.alignment: Qt.AlignVCenter; color: "#FAFAFA" }
+                Item { id: idDay; Layout.preferredWidth: 100; Layout.preferredHeight: 180;
+                    Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
+                    Rectangle { anchors.bottom: parent.bottom; anchors.bottomMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
+                    PathView { id: idDayList; clip: true; anchors.fill: parent; pathItemCount: 3; preferredHighlightBegin: 0.5; preferredHighlightEnd: 0.5; highlightRangeMode: PathView.StrictlyEnforceRange;
+                        delegate: Label { width: 100; height: 60; text: currentValue; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
+                        path: Path { startX: idDay.width / 2 ; startY: 0;
+                            PathAttribute { name: "pixelSize"; value: 18 }
+                            PathAttribute { name: "color"; value: 1 }
+                            PathLine { relativeX: 0; y: idMonth.height / 2; }
+                            PathAttribute { name: "pixelSize"; value: 36 }
+                            PathAttribute { name: "color"; value: 0 }
+                            PathLine { relativeX: 0; relativeY: idMonth.height / 2; }
+                            PathAttribute { name: "pixelSize"; value: 18 }
+                            PathAttribute { name: "color"; value: 1 }
+                        }
                     }
                 }
             }
         }
     }
-
 
     // ////////////////////////////////////////////////////////////////////////
     // logic
@@ -125,7 +126,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
             idYearList.movementEnded.connect( yearChanged );
             idMonthList.movementEnded.connect( monthChanged );
             idDayList.movementEnded.connect( dayChanged );
-
+            yearChanged( );monthChanged( );dayChanged( );
         }
 
         // ====================================================================

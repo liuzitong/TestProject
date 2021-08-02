@@ -13,7 +13,7 @@ Item {
     {
         if ( backgroundVisible ) { idPopupBg.open(); }
         idPopup.open ();
-        if ( reqEnterEventLoop ) { IcUiQmlApi.enterEventLoop(); }
+        //if ( reqEnterEventLoop ) { IcUiQmlApi.enterEventLoop(); }  //有这条Calendar控件无法用
     }
 
     function close( )
@@ -91,3 +91,8 @@ Item {
     }
 
 }
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

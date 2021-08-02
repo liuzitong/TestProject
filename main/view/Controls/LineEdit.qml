@@ -12,7 +12,7 @@ Rectangle {
 
     TextInput {
         id:input
-        horizontalAlignment: Text.AlignLeft
+        horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         anchors.fill: parent
         anchors.margins: 2
