@@ -2,7 +2,9 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
+import QtQuick.Controls.Styles 1.4
 import perimeter.main.view.Controls 1.0
+
 
 
 Window {
@@ -45,7 +47,7 @@ Window {
                                     id:queryStrategy;height: parent.height;width: parent.height*5;
                                     borderColor: backGroudBorderColor;font.family:"Microsoft YaHei";
                                     imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_drop_down.svg";
-                                    model: ListModel {ListElement { text: "最近诊断" } ListElement { text: "患者ID" } ListElement { text: "姓名" }ListElement { text: "性别" }ListElement { text: "出身日期" }}
+                                    model: ListModel {ListElement { text: "最近诊断" } ListElement { text: "患者ID" } ListElement { text: "姓名" }ListElement { text: "性别" }ListElement { text: "出生日期" }}
                                     onCurrentIndexChanged: {
                                         if(currentIndex==0){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;}
                                         if(currentIndex==1){patientID.visible=true;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;}
@@ -81,8 +83,44 @@ Window {
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}}
                             Item{
                                 width: parent.width;height: parent.height-6*patientManagement.rowHight
-                                CusCalendar{
-                                    id: calendar;width: parent.width;height: parent.height;
+                                CusCalendar{id: calendar;width: parent.width;height: parent.height;}
+                                Column{
+                                    anchors.fill:parent;
+                                    Row{
+                                        id:header
+                                        width: parent.width; height: patientManagement.rowHight;
+                                        spacing: -1;
+                                        property bool isAllSelected: false;
+                                        CusButton{
+                                            width: parent.width*1/9;height: parent.height;color: "#D2D3D5"; border.color: "#656566";radius:0;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg"
+                                            onClicked: {
+                                                if(!header.isAllSelected)
+                                                {
+                                                    header.isAllSelected=true;imageSrc="qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_click.svg";
+                                                }
+                                                else
+                                                {
+                                                    header.isAllSelected=false;imageSrc="qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg";
+                                                }
+                                            }
+                                        }
+                                        Rectangle{width: parent.width*2/9+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"患者ID"}}
+                                        Rectangle{width: parent.width*2/9+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"姓名"}}
+                                        Rectangle{width: parent.width*1/9+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"性别"}}
+                                        Rectangle{width: parent.width*2/9+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"出生日期"}}
+                                        Rectangle{width: parent.width*1/9+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"载入"}}
+                                    }
+                                    ListView{
+                                        width: parent.width;height: parent.height- patientManagement.rowHight;model:contactModel;delegate: patientInfoDelegate;
+                                        ListModel {
+                                            id:contactModel
+                                            ListElement {name: "Bill Smith";number: "555 3264"}
+                                        }
+                                        Component{
+                                            id:patientInfoDelegate
+                                            Row{ Text { text: '<b>Name:</b> ' +model.name }Text { text: '<b>Number:</b> ' + model.number }}
+                                        }
+                                    }
                                 }
                             }
                             Row{
@@ -119,8 +157,4 @@ Window {
 
 
 
-/*##^##
-Designer {
-    D{i:0;formeditorZoom:0.33}
-}
-##^##*/
+

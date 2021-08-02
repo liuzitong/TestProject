@@ -11,7 +11,7 @@ Rectangle{
     border.width: 1
     signal clicked()
     property string text
-    property int fontSize:height/2.5
+    property int fontSize:height/3
     property bool hoverEnabled: true
     property string hoverColor: "white"
     property string imageSrc
