@@ -22,6 +22,7 @@ Window {
         Item{
             id:content;width:parent.width;height: parent.height*0.84;
             property int layoutGroupMargin: 0.03*height
+            CusCalendar{id: calendar;width: parent.width;height: parent.height;}
             Row{
                 anchors.fill: parent;anchors.margins: content.layoutGroupMargin;spacing:content.layoutGroupMargin
                 Rectangle{
@@ -84,7 +85,6 @@ Window {
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}}
                             Item{
                                 width: parent.width;height: parent.height-6*patientManagement.rowHight
-                                CusCalendar{id: calendar;width: parent.width;height: parent.height;}
                                 Column{
                                     id:patientInfoCol;
                                     anchors.fill:parent;spacing: -1;
@@ -205,6 +205,11 @@ Window {
                             anchors.fill: parent;anchors.margins: content.layoutGroupMargin;
                             Column{
                                 id:newPatient;anchors.fill: parent;property int rowHeight: height*0.1;spacing: rowHeight
+                                Component.onCompleted: {
+                                    if(version==="Chinese") {newChineseName.visible=true;newEnglishName.visible=false;}
+                                    else {newChineseName.visible=false;newEnglishName.visible=true;}
+                                }
+
                                 Row{
                                     width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
                                     CusText{text:"*患者ID "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
@@ -212,13 +217,13 @@ Window {
                                     CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}
                                 }
                                 Row{
-                                    width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
+                                    id:newChineseName;width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
                                     CusText{text:"*姓名 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                     LineEdit{id:name;width: parent.width*0.6}
                                     CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}
                                 }
                                 Row{
-                                    width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
+                                    id:newEnglishName;width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
                                     CusText{text:"*firstName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                     LineEdit{id:firstname;width: parent.width*0.205}
                                     CusText{text:"*lastName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.15}
