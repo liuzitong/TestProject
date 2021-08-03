@@ -15,19 +15,20 @@ Window {
     property string backGroudBorderColor:"#bdc0c6"
     property string version: /*"Chinese"*/"English"
 
+
     Column {
         id: column;anchors.fill: parent
         Rectangle{id:topRibbon;width: parent.width;height: parent.height*0.1;color: "#333e44";}
         Item{
             id:content;width:parent.width;height: parent.height*0.84;
-            property int layGroupMargin: 0.03*height
+            property int layoutGroupMargin: 0.03*height
             Row{
-                anchors.fill: parent;anchors.margins: content.layGroupMargin;spacing:content.layGroupMargin
+                anchors.fill: parent;anchors.margins: content.layoutGroupMargin;spacing:content.layoutGroupMargin
                 Rectangle{
-                    width: (parent.width-content.layGroupMargin)*0.6;height: parent.height;
+                    width: (parent.width-content.layoutGroupMargin)*0.6;height: parent.height;
                     border.color: backGroudBorderColor;color: backGroudColor;radius: commonRadius
                     Item{
-                        anchors.fill: parent;anchors.margins: content.layGroupMargin
+                        anchors.fill: parent;anchors.margins: content.layoutGroupMargin
                         Column{
                             id:patientManagement;anchors.fill: parent;spacing: rowHight
                             property int rowHight: height*0.05
@@ -197,15 +198,41 @@ Window {
                     }
                 }
                 Column{
-                    width: (parent.width-content.layGroupMargin)*0.4; height: parent.height;spacing:content.layGroupMargin;
+                    width: (parent.width-content.layoutGroupMargin)*0.4; height: parent.height;spacing:content.layoutGroupMargin;
                     Rectangle{
-                        width: parent.width;height: (parent.height-content.layGroupMargin)*0.6;border.color: backGroudBorderColor;color: backGroudColor;radius: commonRadius;
-                        Column{
-                            id:newPatient;
+                        width: parent.width;height: (parent.height-content.layoutGroupMargin)*0.6;border.color: backGroudBorderColor;color: backGroudColor;radius: commonRadius;
+                        Item{
+                            anchors.fill: parent;anchors.margins: content.layoutGroupMargin;
+                            Column{
+                                id:newPatient;anchors.fill: parent;property int rowHeight: height*0.1;spacing: rowHeight
+                                Row{
+                                    width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
+                                    CusText{text:"*患者ID "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                    LineEdit{width: parent.width*0.6}
+                                    CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}
+                                }
+                                Row{
+                                    width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
+                                    CusText{text:"*姓名 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                    LineEdit{id:name;width: parent.width*0.6}
+                                    CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}
+                                }
+                                Row{
+                                    width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
+                                    CusText{text:"*firstName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                    LineEdit{id:firstname;width: parent.width*0.205}
+                                    CusText{text:"*lastName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.15}
+                                    LineEdit{id:last;width: parent.width*0.205}
+                                    CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}
+
+                                }
+                            }
                         }
+
+
                     }
                     Rectangle{
-                        width: parent.width;height: (parent.height-content.layGroupMargin)*0.4;
+                        width: parent.width;height: (parent.height-content.layoutGroupMargin)*0.4;
                         border.color: backGroudBorderColor;color: backGroudColor;radius: commonRadius;
                     }
                 }

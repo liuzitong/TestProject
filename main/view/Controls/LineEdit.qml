@@ -1,23 +1,26 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.0
 
-
-Rectangle {
-    width: 300
-    height: parent.height
-    color: "white"
-    border.color: "#bdc0c6"
-    property alias fontSize: input.font.pointSize
-    property alias enabled: input.enabled
-    property alias text: input.text
-
-    TextInput {
-        id:input
-        horizontalAlignment: Text.AlignHCenter
+Item{
+    id:root
+    property int radius:height/6;
+    property string text:"";
+    width: parent.width;
+    height:parent.height;
+    TextField{
+        anchors.fill: parent;
+        renderType: Text.NativeRendering
+        text:root.text;
+        horizontalAlignment: Text.right
         verticalAlignment: Text.AlignVCenter
-        anchors.fill: parent
-        anchors.margins: 2
         font.pointSize: parent.height/3
-        focus: true
         font.family:"Microsoft YaHei"
+        selectByMouse: true
+        selectionColor: "#999999"
+        background: Rectangle {border.width: 1;radius: root.radius;color: "white" ;border.color: "#bdc0c6"}
     }
+
 }
+
+
+

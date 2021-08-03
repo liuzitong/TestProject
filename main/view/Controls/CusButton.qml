@@ -38,7 +38,6 @@ Rectangle{
         }
         onEntered: {if(hoverEnabled) {root.color=root.hoverColor;if(hoverImageSrc!="") image.source=hoverImageSrc;root.entered();}}
         onExited:{if(hoverEnabled) {root.color=root.buttonColor;if(hoverImageSrc!="") image.source=imageSrc;root.exited();}}
-        //onClicked: patientManagement.parent.source="main.qml"
     }
 
     Item{
