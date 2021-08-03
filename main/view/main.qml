@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -85,14 +85,14 @@ Window {
                                 width: parent.width;height: parent.height-6*patientManagement.rowHight
                                 CusCalendar{id: calendar;width: parent.width;height: parent.height;}
                                 Column{
-                                    anchors.fill:parent;
+                                    id:patientInfoCol;
+                                    anchors.fill:parent;spacing: -1;
                                     Row{
                                         id:header
-                                        width: parent.width; height: patientManagement.rowHight;
-                                        spacing: -1;
+                                        width: parent.width; height: patientManagement.rowHight;spacing: -1;z:1;
                                         property bool isAllSelected: false;
                                         CusButton{
-                                            width: parent.width*1/9;height: parent.height;color: "#D2D3D5"; border.color: "#656566";radius:0;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg"
+                                            width: parent.width*1/9;height: parent.height;buttonColor: "#D2D3D5"; border.color: "#656566";radius:0;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg"
                                             onClicked: {
                                                 if(!header.isAllSelected)
                                                 {
@@ -111,20 +111,87 @@ Window {
                                         Rectangle{width: parent.width*1/9+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"载入"}}
                                     }
                                     ListView{
-                                        width: parent.width;height: parent.height- patientManagement.rowHight;model:contactModel;delegate: patientInfoDelegate;
+                                        id:patientInfoListView
+                                        width: parent.width;height:patientInfoCol.height-patientManagement.rowHight +1; /*interactive: false;*/model:contactModel;delegate: patientInfoDelegate;spacing: -1;clip:true;snapMode: ListView.SnapPosition;
+                                        //List Element会导致界面预览无法显示
                                         ListModel {
                                             id:contactModel
-                                            ListElement {name: "Bill Smith";number: "555 3264"}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
+//                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
                                         }
+
                                         Component{
                                             id:patientInfoDelegate
-                                            Row{ Text { text: '<b>Name:</b> ' +model.name }Text { text: '<b>Number:</b> ' + model.number }}
+                                            Row{
+                                                id:patientInfoRow
+                                                width: patientInfoListView.width;height: (patientInfoCol.height-patientManagement.rowHight)/14+1;spacing: -1;
+                                                property bool isSelected: false;
+                                                CusButton{
+                                                    width: parent.width*1/9;height: parent.height;buttonColor: "white"; border.color: backGroudBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg"
+                                                    onClicked: {
+                                                        if(!patientInfoRow.isSelected)
+                                                        {
+                                                            patientInfoRow.isSelected=true;imageSrc="qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_click.svg";
+                                                        }
+                                                        else
+                                                        {
+                                                            patientInfoRow.isSelected=false;imageSrc="qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg";
+                                                        }
+                                                    }
+                                                }
+                                                Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
+                                                Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.name}}
+                                                Rectangle{width: parent.width*1/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.gender}}
+                                                Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
+                                                CusButton{width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; border.color: backGroudBorderColor;radius:0;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_analysis_enter.svg"}
+                                            }
                                         }
                                     }
                                 }
                             }
-                            Row{
+                            Item{
                                 id:pageControl;width: parent.width;height: patientManagement.rowHight;
+                                Flow{
+                                    id:pageIndex;
+                                    property int currentPage: 0;property int totalPage: 10;property int totalRecordCount: 100;anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;height:parent.height;
+                                    CusText{id:currentPageNumberText;text:"第 "+pageIndex.currentPage+"/"+pageIndex.totalPage+" 页,共计 "+pageIndex.totalRecordCount+" 条纪录";width: height*6}
+                                }
+                                Flow{
+                                    anchors.right: parent.right;height:parent.height*1.3;anchors.verticalCenter: parent.verticalCenter;spacing:0.4*height;
+                                    CusButton{
+                                        imageHightScale: 1;width: height; border.width: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_1head_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_1head_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_1head_3press.svg";
+                                    }
+                                    CusButton{
+                                        imageHightScale: 1;width: height; border.width: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_2previous_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_2previous_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_2previous_3press.svg";
+                                    }
+                                    LineEdit{width: height*2;text:"1";radius: height*0.2}
+                                    CusButton{width: height; text:"Goto";fontSize: height*0.25;onEntered: {border.color=hoverBorderColor;}onExited: {border.color=borderColor;}onClicked: {border.color=pressBorderColor;}}
+                                    CusButton{
+                                        imageHightScale: 1;width: height; border.width: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_4next_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_4next_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_4next_3press.svg";
+                                    }
+                                    CusButton{
+                                        imageHightScale: 1;width: height; border.width: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_5end_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_5end_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_5end_3press.svg";
+                                    }
+                                }
                             }
                         }
                     }
@@ -132,8 +199,7 @@ Window {
                 Column{
                     width: (parent.width-content.layGroupMargin)*0.4; height: parent.height;spacing:content.layGroupMargin;
                     Rectangle{
-                        width: parent.width;height: (parent.height-content.layGroupMargin)*0.6;
-                        border.color: backGroudBorderColor;color: backGroudColor;radius: commonRadius;
+                        width: parent.width;height: (parent.height-content.layGroupMargin)*0.6;border.color: backGroudBorderColor;color: backGroudColor;radius: commonRadius;
                         Column{
                             id:newPatient;
                         }

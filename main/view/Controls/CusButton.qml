@@ -5,17 +5,26 @@ Rectangle{
     width: parent.height*3
     height:parent.height
     property string buttonColor: "#dcdee0"
+    property string hoverBorderColor: "black"
+    property string pressBorderColor: "#006486"
+    property string borderColor:"#bdc0c6"
     color: buttonColor
     radius: height/10
-    border.color: "#bdc0c6"
+    border.color: borderColor
     border.width: 1
     signal clicked()
+    signal entered()
+    signal exited()
     property string text
     property int fontSize:height/3
     property bool hoverEnabled: true
     property string hoverColor: "white"
-    property string imageSrc
-
+    property string imageSrc:""
+    property string hoverImageSrc:""
+    property string pressImageSrc: ""
+    property double imageHightScale: 0.6
+    property bool isAnime: true
+    property int animationDuration: 150
 
 
     MouseArea{
@@ -23,10 +32,12 @@ Rectangle{
         hoverEnabled: root.hoverEnabled
         onClicked:
         {
-            anime.start();
+            if(pressImageSrc!="") image.source=pressImageSrc;
+            if(isAnime) anime.start();
+            else root.clicked();
         }
-        onEntered: root.color=root.hoverColor
-        onExited: root.color=root.buttonColor
+        onEntered: {if(hoverEnabled) {root.color=root.hoverColor;if(hoverImageSrc!="") image.source=hoverImageSrc;root.entered();}}
+        onExited:{if(hoverEnabled) {root.color=root.buttonColor;if(hoverImageSrc!="") image.source=imageSrc;root.exited();}}
         //onClicked: patientManagement.parent.source="main.qml"
     }
 
@@ -44,11 +55,11 @@ Rectangle{
         }
 
         Image {
-            id: name
+            id: image
             source: imageSrc
             anchors.horizontalCenter: parent.horizontalCenter
-            height: root.height*0.6
-            width: height
+            height: root.height*root.imageHightScale
+            width: sourceSize.width*(height/sourceSize.height)
             anchors.verticalCenter: parent.verticalCenter
         }
     }
@@ -60,7 +71,7 @@ Rectangle{
         target: root
         properties: "opacity";
         to: 0.5
-        duration: 200
+        duration: animationDuration
         onStopped: {
             root.opacity=1.0;
             root.clicked();

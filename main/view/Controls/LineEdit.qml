@@ -16,7 +16,8 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
         anchors.fill: parent
         anchors.margins: 2
-        font.pointSize: parent.height/2
+        font.pointSize: parent.height/3
         focus: true
+        font.family:"Microsoft YaHei"
     }
 }

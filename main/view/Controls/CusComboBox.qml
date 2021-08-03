@@ -7,6 +7,8 @@ ComboBox {
     property string borderColor:"black"
     property string borderColorPressed:"Brown"
     property string imageSrc
+    font.family:"Microsoft YaHei"
+    font.pointSize:height/3;
 
     delegate: ItemDelegate {
         width: control.width
