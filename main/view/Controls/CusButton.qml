@@ -1,23 +1,17 @@
 import QtQuick 2.0
 
-Rectangle{
+Item{
     id:root
-    width: parent.height*3
-    height:parent.height
     property string buttonColor: "#dcdee0"
     property string hoverBorderColor: "black"
     property string pressBorderColor: "#006486"
-    property string borderColor:"#bdc0c6"
-    color: buttonColor
-    radius: height/10
-    border.color: borderColor
-    border.width: 1
-    signal clicked()
-    signal entered()
-    signal exited()
+    property string commonBorderColor: "#bdc0c6"
+    property string borderColor:commonBorderColor
+    property bool hoverEnabled: true
     property string text
     property int fontSize:height/3
-    property bool hoverEnabled: true
+    property int radius:height/6
+    property int borderWidth:1
     property string hoverColor: "white"
     property string imageSrc:""
     property string hoverImageSrc:""
@@ -25,19 +19,20 @@ Rectangle{
     property double imageHightScale: 0.6
     property bool isAnime: true
     property int animationDuration: 150
+    height:parent.height;
+    width:parent.height*3;
+    signal clicked()
+    signal entered()
+    signal exited()
 
-
-    MouseArea{
-        anchors.fill: parent
-        hoverEnabled: root.hoverEnabled
-        onClicked:
-        {
-            if(pressImageSrc!="") image.source=pressImageSrc;
-            if(isAnime) anime.start();
-            else root.clicked();
-        }
-        onEntered: {if(hoverEnabled) {root.color=root.hoverColor;if(hoverImageSrc!="") image.source=hoverImageSrc;root.entered();}}
-        onExited:{if(hoverEnabled) {root.color=root.buttonColor;if(hoverImageSrc!="") image.source=imageSrc;root.exited();}}
+    Image {
+        id: image
+        source: imageSrc
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: root.height*root.imageHightScale
+        width: sourceSize.width*(height/sourceSize.height)
+        anchors.verticalCenter: parent.verticalCenter
+        z:1;
     }
 
     Item{
@@ -53,31 +48,51 @@ Rectangle{
             font.family: "Microsoft YaHei"
         }
 
-        Image {
-            id: image
-            source: imageSrc
-            anchors.horizontalCenter: parent.horizontalCenter
-            height: root.height*root.imageHightScale
-            width: sourceSize.width*(height/sourceSize.height)
-            anchors.verticalCenter: parent.verticalCenter
-        }
     }
 
+    Rectangle{
+        id:rec
+        width:parent.width
+        height:parent.height
+        color: root.buttonColor
+        radius: root.radius
+        border.color: root.borderColor
+        border.width: root.borderWidth
+        z:-1
 
-    PropertyAnimation
-    {
-        id:anime
-        target: root
-        properties: "opacity";
-        to: 0.5
-        duration: animationDuration
-        onStopped: {
-            root.opacity=1.0;
-            root.clicked();
+        MouseArea{
+            anchors.fill: parent
+            hoverEnabled: root.hoverEnabled
+            onClicked:
+            {
+                if(pressImageSrc!="") image.source=pressImageSrc;
+                if(isAnime) anime.start();
+                else rec.clicked();
+            }
+            onEntered: {if(root.hoverEnabled) {rec.color=root.hoverColor;if(hoverImageSrc!="") image.source=hoverImageSrc;root.entered();}}
+            onExited:{if(root.hoverEnabled) {rec.color=root.buttonColor;if(hoverImageSrc!="") image.source=imageSrc;root.exited();}}
         }
+
+
+
+
+        PropertyAnimation
+        {
+            id:anime
+            target: rec
+            properties: "opacity";
+            to: 0.5
+            duration: animationDuration
+            onStopped: {
+                rec.opacity=1.0;
+                root.clicked();
+            }
+        }
+
     }
 
 }
+
 
 /*##^##
 Designer {

@@ -6,7 +6,6 @@ import QtQuick.Controls.Styles 1.4
 import perimeter.main.view.Controls 1.0
 
 
-
 Window {
     id: window;visible: true;width: 1366;height: 768;title: qsTr("Hello World");
     minimumWidth: 960;minimumHeight: 640;color: backGroudColor;
@@ -37,10 +36,10 @@ Window {
                                 id:dateSelection; width: parent.width;
                                 height: patientManagement.rowHight;spacing: height*0.4;
                                 CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5}
-                                LineEdit{id:dateFrom;radius: height/6;width: height*4;}
+                                LineEdit{id:dateFrom;radius: height/6;width: height*3.2;}
                                 CusButton{id:dateFromButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateFrom;calendar.open();}}
                                 CusText{text:"到";width: height*0.6;}
-                                LineEdit{id:dateTo;radius: height/6;width: height*4}
+                                LineEdit{id:dateTo;radius: height/6;width: height*3.2}
                                 CusButton{id:dateToButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateTo;calendar.open();}}
                             }
                             Row{
@@ -93,7 +92,7 @@ Window {
                                         width: parent.width; height: patientManagement.rowHight;spacing: -1;z:1;
                                         property bool isAllSelected: false;
                                         CusButton{
-                                            width: parent.width*1/9;height: parent.height;buttonColor: "#D2D3D5"; border.color: "#656566";radius:0;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg"
+                                            width: parent.width*1/9;height: parent.height;buttonColor: "#D2D3D5"; borderColor: "#656566";radius:0;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg"
                                             onClicked: {
                                                 if(!header.isAllSelected)
                                                 {
@@ -147,7 +146,7 @@ Window {
                                                 width: patientInfoListView.width;height: (patientInfoCol.height-patientManagement.rowHight)/14+1;spacing: -1;
                                                 property bool isSelected: false;
                                                 CusButton{
-                                                    width: parent.width*1/9;height: parent.height;buttonColor: "white"; border.color: backGroudBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg"
+                                                    width: parent.width*1/9;height: parent.height;buttonColor: "white"; borderColor: backGroudBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg"
                                                     onClicked: {
                                                         if(!patientInfoRow.isSelected)
                                                         {
@@ -163,7 +162,7 @@ Window {
                                                 Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.name}}
                                                 Rectangle{width: parent.width*1/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.gender}}
                                                 Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
-                                                CusButton{width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; border.color: backGroudBorderColor;radius:0;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_analysis_enter.svg"}
+                                                CusButton{width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_analysis_enter.svg"}
                                             }
                                         }
                                     }
@@ -179,18 +178,18 @@ Window {
                                 Flow{
                                     anchors.right: parent.right;height:parent.height*1.3;anchors.verticalCenter: parent.verticalCenter;spacing:0.4*height;
                                     CusButton{
-                                        imageHightScale: 1;width: height; border.width: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_1head_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_1head_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_1head_3press.svg";
+                                        imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_1head_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_1head_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_1head_3press.svg";
                                     }
                                     CusButton{
-                                        imageHightScale: 1;width: height; border.width: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_2previous_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_2previous_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_2previous_3press.svg";
+                                        imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_2previous_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_2previous_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_2previous_3press.svg";
                                     }
-                                    LineEdit{width: height*2;text:"1";radius: height*0.2}
-                                    CusButton{width: height; text:"Goto";fontSize: height*0.25;onEntered: {border.color=hoverBorderColor;}onExited: {border.color=borderColor;}onClicked: {border.color=pressBorderColor;}}
+                                    LineEdit{width: height*2;text:"1";radius: height*0.2;horizontalAlignment: Text.AlignHCenter}
+                                    CusButton{width: height; text:"Goto";fontSize: height*0.25;onEntered: {borderColor=hoverBorderColor;}onExited: {borderColor=commonBorderColor;}onClicked: {borderColor=pressBorderColor;}}
                                     CusButton{
-                                        imageHightScale: 1;width: height; border.width: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_4next_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_4next_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_4next_3press.svg";
+                                        imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_4next_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_4next_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_4next_3press.svg";
                                     }
                                     CusButton{
-                                        imageHightScale: 1;width: height; border.width: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_5end_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_5end_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_5end_3press.svg";
+                                        imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_5end_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_5end_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_5end_3press.svg";
                                     }
                                 }
                             }
@@ -223,13 +222,60 @@ Window {
                                     CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}
                                 }
                                 Row{
-                                    id:newEnglishName;width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
+                                    id:newEnglishName;width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02;visible:false;
                                     CusText{text:"*firstName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                     LineEdit{id:firstname;width: parent.width*0.205}
                                     CusText{text:"*lastName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.15}
                                     LineEdit{id:last;width: parent.width*0.205}
                                     CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}
 
+                                }
+                                Row{
+                                    width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
+                                    CusText{text:"*性别 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                    Row{
+                                        id:genderSelect;property string gender;
+                                        height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
+                                        CusButton{
+                                            id:manButton;property bool chosen:false;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_sex_man.svg";width: 2*height
+                                            onClicked: {genderSelect.selectGender(manButton,this)}
+                                        }
+                                        CusButton{
+                                            id:womanButton;property bool chosen:false;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_sex_woman.svg";width: 2*height
+                                            onClicked:  {genderSelect.selectGender(womanButton,this)}
+                                        }
+                                        CusButton{id:otherButton;property bool chosen:false;text:"其它";width:height*2;
+                                             onClicked: {genderSelect.selectGender(otherButton,this)}
+                                        }
+                                        function selectGender(id,button)
+                                        {
+                                            womanButton.borderColor=womanButton.commonBorderColor;
+                                            manButton.borderColor=manButton.commonBorderColor;
+                                            otherButton.borderColor=otherButton.commonBorderColor;
+                                            button.borderColor=button.pressBorderColor;
+                                            switch(id)
+                                            {
+                                                case manButton: genderSelect.gender="man";break;
+                                                case womanButton:genderSelect.gender="women";break;
+                                                case otherButton:genderSelect.gender="other";break;
+                                            }
+                                        }
+                                    }
+                                }
+                                Row{
+                                    width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
+                                    CusText{text:"*出生日期 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                    Row{
+                                        height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
+                                        Item{
+                                            height: parent.height;width: 2*height;
+                                            LineEdit{
+                                                id:newDateBirth;width: height*3.2
+                                            }
+                                        }
+                                        CusButton{text:"选择";width:height*2;}
+                                        LineEdit{width: height*2;text:"1";radius: height*0.2;horizontalAlignment: Text.AlignHCenter;readOnly: true;backgroundColor:backGroudColor}
+                                    }
                                 }
                             }
                         }
