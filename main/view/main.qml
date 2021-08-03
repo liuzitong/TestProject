@@ -12,7 +12,7 @@ Window {
     property int commonRadius:height*0.03
     property string backGroudColor:"#dcdee0"
     property string backGroudBorderColor:"#bdc0c6"
-    property string version: /*"Chinese"*/"English"
+    property string version: "Chinese"/*"English"*/
 
 
     Column {
@@ -43,7 +43,7 @@ Window {
                                 CusButton{id:dateToButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateTo;calendar.open();}}
                             }
                             Row{
-                                id:query; width: parent.width; height: patientManagement.rowHight;spacing: height*0.5
+                                id:query; width: parent.width; height:patientManagement.rowHight;spacing: height*0.5
                                 CusComboBox{
                                     id:queryStrategy;height: parent.height;width: parent.height*5;
                                     borderColor: backGroudBorderColor;font.family:"Microsoft YaHei";
@@ -89,7 +89,7 @@ Window {
                                     anchors.fill:parent;spacing: -1;
                                     Row{
                                         id:header
-                                        width: parent.width; height: patientManagement.rowHight;spacing: -1;z:1;
+                                        width: parent.width; height:patientManagement.rowHight;spacing: -1;z:1;
                                         property bool isAllSelected: false;
                                         CusButton{
                                             width: parent.width*1/9;height: parent.height;buttonColor: "#D2D3D5"; borderColor: "#656566";radius:0;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg"
@@ -169,7 +169,7 @@ Window {
                                 }
                             }
                             Item{
-                                id:pageControl;width: parent.width;height: patientManagement.rowHight;
+                                id:pageControl;width: parent.width;height:patientManagement.rowHight;
                                 Flow{
                                     id:pageIndex;
                                     property int currentPage: 0;property int totalPage: 10;property int totalRecordCount: 100;anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;height:parent.height;
@@ -203,26 +203,26 @@ Window {
                         Item{
                             anchors.fill: parent;anchors.margins: content.layoutGroupMargin;
                             Column{
-                                id:newPatient;anchors.fill: parent;property int rowHeight: height*0.1;spacing: rowHeight
+                                id:newPatient;anchors.fill: parent;spacing: patientManagement.rowHight*1.5
                                 Component.onCompleted: {
                                     if(version==="Chinese") {newChineseName.visible=true;newEnglishName.visible=false;}
                                     else {newChineseName.visible=false;newEnglishName.visible=true;}
                                 }
 
                                 Row{
-                                    width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
+                                    width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
                                     CusText{text:"*患者ID "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                     LineEdit{width: parent.width*0.6}
                                     CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}
                                 }
                                 Row{
-                                    id:newChineseName;width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
+                                    id:newChineseName;width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
                                     CusText{text:"*姓名 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                     LineEdit{id:name;width: parent.width*0.6}
                                     CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}
                                 }
                                 Row{
-                                    id:newEnglishName;width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02;visible:false;
+                                    id:newEnglishName;width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02;visible:false;
                                     CusText{text:"*firstName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                     LineEdit{id:firstname;width: parent.width*0.205}
                                     CusText{text:"*lastName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.15}
@@ -231,7 +231,7 @@ Window {
 
                                 }
                                 Row{
-                                    width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
+                                    width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
                                     CusText{text:"*性别 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                     Row{
                                         id:genderSelect;property string gender;
@@ -263,28 +263,68 @@ Window {
                                     }
                                 }
                                 Row{
-                                    width: parent.width;height:newPatient.rowHeight;spacing: parent.width*0.02
+                                    width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
                                     CusText{text:"*出生日期 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                     Row{
                                         height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
-                                        Item{
-                                            height: parent.height;width: 2*height;
-                                            LineEdit{
-                                                id:newDateBirth;width: height*3.2
-                                            }
-                                        }
-                                        CusButton{text:"选择";width:height*2;}
+                                        Item{height: parent.height;width: 2*height;LineEdit{id:newDateBirth;width: height*3.2}}
+                                        CusButton{text:"选择";width:height*2;onClicked:{calendar.inputObj=newDateBirth;calendar.open();}}
                                         LineEdit{width: height*2;text:"1";radius: height*0.2;horizontalAlignment: Text.AlignHCenter;readOnly: true;backgroundColor:backGroudColor}
                                     }
                                 }
                             }
                         }
-
-
                     }
                     Rectangle{
                         width: parent.width;height: (parent.height-content.layoutGroupMargin)*0.4;
                         border.color: backGroudBorderColor;color: backGroudColor;radius: commonRadius;
+                       Item{
+                           anchors.fill: parent;anchors.margins: content.layoutGroupMargin;
+                           Column{
+                               id:eyeBallCalc
+                               anchors.fill: parent;spacing: patientManagement.rowHight;
+                               Row{
+                                   width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
+                                   Item{height:parent.height;width:parent.width*0.20}
+                                   Row{
+                                       height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
+                                       CusText{ text:"球面";width: 2*height}
+                                       CusText{ text:"柱面";width: 2*height}
+                                       CusText{ text:"轴向";width: 2*height}
+                                   }
+                               }
+                               Row{
+                                   width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
+                                   CusText{text:"右眼";width:parent.width*0.20}
+                                   Row{
+                                       height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
+                                       LineEdit{ width: 2*height}
+                                       LineEdit{ width: 2*height}
+                                       LineEdit{ width: 2*height}
+                                   }
+                               }
+                               Row{
+                                   width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
+                                   CusText{text:"左眼";width:parent.width*0.20}
+                                   Row{
+                                       height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
+                                       LineEdit{ width: 2*height}
+                                       LineEdit{ width: 2*height}
+                                       LineEdit{ width: 2*height}
+                                   }
+                               }
+                               Row{
+                                   width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
+                                   Item{height:parent.height;width:parent.width*0.20}
+                                   Row{
+                                       height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
+                                       Item{ height:parent.height;width: 2*height}
+                                       CusButton{text:"计算"; width: 2*height}
+                                       Item{ height:parent.height;width: 2*height}
+                                   }
+                               }
+                           }
+                       }
                     }
                 }
             }
