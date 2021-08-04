@@ -47,7 +47,7 @@ Window {
                                 CusComboBox{
                                     id:queryStrategy;height: parent.height;width: parent.height*5;
                                     borderColor: backGroudBorderColor;font.family:"Microsoft YaHei";
-                                    imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_drop_down.svg";
+                                    imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
                                     model: ListModel {ListElement { text: "最近诊断" } ListElement { text: "患者ID" } ListElement { text: "姓名" }ListElement { text: "性别" }ListElement { text: "出生日期" }}
                                     onCurrentIndexChanged: {
                                         if(currentIndex==0){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;}
@@ -73,7 +73,7 @@ Window {
                                 CusComboBox{
                                     id:gender;height: parent.height;width: parent.height*3;
                                     borderColor: backGroudBorderColor;font.family:"Microsoft YaHei";
-                                    imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_drop_down.svg";
+                                    imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
                                     model: ListModel {ListElement { text: "男" } ListElement { text: "女" } }
                                 }
                                 Flow{
@@ -81,7 +81,7 @@ Window {
                                     LineEdit{id:birthDate;height: parent.height;radius:height/6;width: height*4;visible: true;}
                                     CusButton{text:"选择";width:height*2;onClicked:{calendar.inputObj=birthDate;calendar.open();}}
                                 }
-                                CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}}
+                                CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}}
                             Item{
                                 width: parent.width;height: parent.height-6*patientManagement.rowHight
                                 Column{
@@ -92,15 +92,15 @@ Window {
                                         width: parent.width; height:patientManagement.rowHight;spacing: -1;z:1;
                                         property bool isAllSelected: false;
                                         CusButton{
-                                            width: parent.width*1/9;height: parent.height;buttonColor: "#D2D3D5"; borderColor: "#656566";radius:0;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg"
+                                            width: parent.width*1/9;height: parent.height;buttonColor: "#D2D3D5"; borderColor: "#656566";radius:0;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
                                             onClicked: {
                                                 if(!header.isAllSelected)
                                                 {
-                                                    header.isAllSelected=true;imageSrc="qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_click.svg";
+                                                    header.isAllSelected=true;imageSrc="qrc:/Pics/base-svg/btn_select_click.svg";
                                                 }
                                                 else
                                                 {
-                                                    header.isAllSelected=false;imageSrc="qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg";
+                                                    header.isAllSelected=false;imageSrc="qrc:/Pics/base-svg/btn_select_normal.svg";
                                                 }
                                             }
                                         }
@@ -146,15 +146,15 @@ Window {
                                                 width: patientInfoListView.width;height: (patientInfoCol.height-patientManagement.rowHight)/14+1;spacing: -1;
                                                 property bool isSelected: false;
                                                 CusButton{
-                                                    width: parent.width*1/9;height: parent.height;buttonColor: "white"; borderColor: backGroudBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg"
+                                                    width: parent.width*1/9;height: parent.height;buttonColor: "white"; borderColor: backGroudBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
                                                     onClicked: {
                                                         if(!patientInfoRow.isSelected)
                                                         {
-                                                            patientInfoRow.isSelected=true;imageSrc="qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_click.svg";
+                                                            patientInfoRow.isSelected=true;imageSrc="qrc:/Pics/base-svg/btn_select_click.svg";
                                                         }
                                                         else
                                                         {
-                                                            patientInfoRow.isSelected=false;imageSrc="qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_select_normal.svg";
+                                                            patientInfoRow.isSelected=false;imageSrc="qrc:/Pics/base-svg/btn_select_normal.svg";
                                                         }
                                                     }
                                                 }
@@ -162,7 +162,7 @@ Window {
                                                 Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.name}}
                                                 Rectangle{width: parent.width*1/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.gender}}
                                                 Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
-                                                CusButton{width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_analysis_enter.svg"}
+                                                CusButton{width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"}
                                             }
                                         }
                                     }
@@ -178,18 +178,18 @@ Window {
                                 Flow{
                                     anchors.right: parent.right;height:parent.height*1.3;anchors.verticalCenter: parent.verticalCenter;spacing:0.4*height;
                                     CusButton{
-                                        imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_1head_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_1head_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_1head_3press.svg";
+                                        imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_1head_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_1head_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_1head_3press.svg";
                                     }
                                     CusButton{
-                                        imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_2previous_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_2previous_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_2previous_3press.svg";
+                                        imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_2previous_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_2previous_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_2previous_3press.svg";
                                     }
                                     LineEdit{width: height*2;text:"1";radius: height*0.2;horizontalAlignment: Text.AlignHCenter}
                                     CusButton{width: height; text:"Goto";fontSize: height*0.25;onEntered: {borderColor=hoverBorderColor;}onExited: {borderColor=commonBorderColor;}onClicked: {borderColor=pressBorderColor;}}
                                     CusButton{
-                                        imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_4next_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_4next_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_4next_3press.svg";
+                                        imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_4next_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_4next_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_4next_3press.svg";
                                     }
                                     CusButton{
-                                        imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_5end_1normal.svg";hoverImageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/page_5end_2hover.svg";pressImageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/page_5end_3press.svg";
+                                        imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_5end_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_5end_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_5end_3press.svg";
                                     }
                                 }
                             }
@@ -213,13 +213,13 @@ Window {
                                     width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
                                     CusText{text:"*患者ID "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                     LineEdit{width: parent.width*0.6}
-                                    CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}
+                                    CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                                 }
                                 Row{
                                     id:newChineseName;width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
                                     CusText{text:"*姓名 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                     LineEdit{id:name;width: parent.width*0.6}
-                                    CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}
+                                    CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                                 }
                                 Row{
                                     id:newEnglishName;width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02;visible:false;
@@ -227,7 +227,7 @@ Window {
                                     LineEdit{id:firstname;width: parent.width*0.205}
                                     CusText{text:"*lastName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.15}
                                     LineEdit{id:last;width: parent.width*0.205}
-                                    CusButton{height: parent.height;width: height;imageSrc:"qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_find.svg"}
+                                    CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
 
                                 }
                                 Row{
@@ -237,11 +237,11 @@ Window {
                                         id:genderSelect;property string gender;
                                         height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
                                         CusButton{
-                                            id:manButton;property bool chosen:false;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_sex_man.svg";width: 2*height
+                                            id:manButton;property bool chosen:false;imageSrc: "qrc:/Pics/base-svg/btn_sex_man.svg";width: 2*height
                                             onClicked: {genderSelect.selectGender(manButton,this)}
                                         }
                                         CusButton{
-                                            id:womanButton;property bool chosen:false;imageSrc: "qrc:/perimeter/main/view/Assets/Pics/base-svg/btn_sex_woman.svg";width: 2*height
+                                            id:womanButton;property bool chosen:false;imageSrc: "qrc:/Pics/base-svg/btn_sex_woman.svg";width: 2*height
                                             onClicked:  {genderSelect.selectGender(womanButton,this)}
                                         }
                                         CusButton{id:otherButton;property bool chosen:false;text:"其它";width:height*2;

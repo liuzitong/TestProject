@@ -36,6 +36,9 @@
 
 }
 
+RESOURCES += \
+    $$PWD/view/assets/assets.qrc
+
 
 
 
