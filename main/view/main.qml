@@ -92,8 +92,27 @@ Rectangle {
         }
         Rectangle{
             id:bottomRibbon;width: parent.width;height: parent.height*0.06;color: "#333e44";
-            Item{
-                anchors.fill: parent;anchors.margins:parent.height*0.12;
+            Row{
+                anchors.fill: parent;anchors.margins:parent.height*0.15;
+                Item{
+                    id: item2
+                    height: parent.height;width:parent.width*0.6;
+                    CusButton{text:"关闭"}
+                    Flow{
+                        height: parent.height;spacing: height*0.8
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        CusButton{text:"复查"}
+                        CusButton{text:"修改"}
+                        CusButton{text:"删除"}
+                        CusButton{text:"分析"}
+                    }
+                }
+                Flow{
+                    height:parent.height; layoutDirection: Qt.RightToLeft;width:parent.width*0.4;spacing: height*0.8;
+                    CusButton{text:"进入检测"}
+                    CusButton{text:"保存"}
+                    CusButton{text:"新建"}
+                }
             }
         }
     }

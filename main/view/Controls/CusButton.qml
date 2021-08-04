@@ -24,7 +24,7 @@ Item{
     property alias underImageText: imageText;
     property string type;
     height:parent.height;/*300*/
-    width:parent.height*3;/*100*/
+    width:parent.height*2.5;/*100*/
     signal clicked()
     signal entered()
     signal exited()
