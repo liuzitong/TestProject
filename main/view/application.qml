@@ -14,6 +14,22 @@ Window {
             onClicked: changePage();
         }
 
+    Loader {
+        id: pageLoader
+        anchors.fill: parent;
+        source: "qrc:/perimeter/main/view/main.qml";
+        function changePage(pageName)
+        {
+            switch(pageName)
+            {
+                case "main": source="qrc:/perimeter/main/view/main.qml";break;
+            }
+        }
+    }
+
+//    Component.onCompleted: {pageLoader.source="qrc:/perimeter/main/view/main.qml";}
+
+
     function changePage() {
         if(isFirst) {
             pageLoader.source = "Page1.qml"

@@ -1,5 +1,11 @@
 import QtQuick 2.0
 
-Item {
-
+Rectangle {
+    id:root;
+    anchors.fill: parent;
+    color: "blue";
+    MouseArea{
+        anchors.fill: parent;
+        onClicked: {root.parent.changePage("main");}
+    }
 }

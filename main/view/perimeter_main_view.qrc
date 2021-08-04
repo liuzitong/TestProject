@@ -4,6 +4,7 @@
         <file>qmldir</file>
         <file>login.qml</file>
         <file>application.qml</file>
+        <file>patientManagement.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>
