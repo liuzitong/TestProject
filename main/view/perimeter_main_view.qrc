@@ -5,6 +5,8 @@
         <file>login.qml</file>
         <file>application.qml</file>
         <file>patientManagement.qml</file>
+        <file>check.qml</file>
+        <file>programCustomize.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

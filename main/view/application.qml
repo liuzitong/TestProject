@@ -23,6 +23,7 @@ Window {
             switch(pageName)
             {
                 case "main": source="qrc:/perimeter/main/view/main.qml";break;
+                case "login": source="qrc:/perimeter/main/view/login.qml";break;
             }
         }
     }

@@ -43,7 +43,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
             }
         }
 
-        Rectangle { anchors.centerIn: parent; implicitWidth: 400; implicitHeight: 200; color: "black"; border.color: "#6E6E6E";
+        Rectangle { anchors.centerIn: parent; implicitWidth: 400; implicitHeight: 200; color: "#333e44"; border.color: "#6E6E6E";
             RowLayout { anchors.centerIn: parent;
                 Item { id: idYear; Layout.preferredWidth: 100; Layout.preferredHeight: 180;
                     Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
