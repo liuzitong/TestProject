@@ -66,5 +66,11 @@
         <file>Pics/user-svg/pwd_hide.svg</file>
         <file>Pics/user-svg/pwd_show.svg</file>
         <file>Pics/user-svg/username.svg</file>
+        <file>Pics/base-svg/menu_about_select.svg</file>
+        <file>Pics/base-svg/menu_capture_select.svg</file>
+        <file>Pics/base-svg/menu_customize_select.svg</file>
+        <file>Pics/base-svg/menu_login_select.svg</file>
+        <file>Pics/base-svg/menu_patient_select.svg</file>
+        <file>Pics/base-svg/menu_set_select.svg</file>
     </qresource>
 </RCC>

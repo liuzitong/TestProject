@@ -9,10 +9,10 @@ Window {
     id: window;visible: true;width: 1366;height: 768;title: qsTr("Hello World");
     minimumWidth: 960;minimumHeight: 640;property string currentpage: "Login";
 
-    MouseArea {
-            anchors.fill: parent
-            onClicked: changePage();
-        }
+//    MouseArea {
+//            anchors.fill: parent
+//            onClicked: changePage();
+//        }
 
     Loader {
         id: pageLoader
@@ -30,14 +30,14 @@ Window {
 //    Component.onCompleted: {pageLoader.source="qrc:/perimeter/main/view/main.qml";}
 
 
-    function changePage() {
-        if(isFirst) {
-            pageLoader.source = "Page1.qml"
-        } else {
-            pageLoader.source = "Page2.qml"
-        }
+//    function changePage() {
+//        if(isFirst) {
+//            pageLoader.source = "Page1.qml"
+//        } else {
+//            pageLoader.source = "Page2.qml"
+//        }
 
-        isFirst = !isFirst;
-    }
+//        isFirst = !isFirst;
+//    }
 
 }

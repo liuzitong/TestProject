@@ -1,5 +1,5 @@
 import QtQuick 2.0
-
+import QtQml 2.2
 Item{
     id:root
     property string buttonColor: "#dcdee0"
@@ -19,21 +19,57 @@ Item{
     property double imageHightScale: 0.6
     property bool isAnime: true
     property int animationDuration: 150
-    height:parent.height;
-    width:parent.height*3;
+    property alias image: image;
+    property alias rec: rec;
+    property alias underImageText: imageText;
+    property string type;
+    height:parent.height;/*300*/
+    width:parent.height*3;/*100*/
     signal clicked()
     signal entered()
     signal exited()
 
-    Image {
-        id: image
-        source: imageSrc
-        anchors.horizontalCenter: parent.horizontalCenter
-        height: root.height*root.imageHightScale
-        width: sourceSize.width*(height/sourceSize.height)
-        anchors.verticalCenter: parent.verticalCenter
-        z:1;
+    MouseArea{
+        anchors.fill: parent
+        hoverEnabled: root.hoverEnabled
+        onClicked:{ if(isAnime) anime.start();else root.clicked();}
+        onPressed:{if(pressImageSrc!="") image.source=pressImageSrc;}
+        onEntered:{if(root.hoverEnabled) {rec.color=root.hoverColor;if(hoverImageSrc!="") image.source=hoverImageSrc;root.entered();}}
+        onExited:{if(root.hoverEnabled) {rec.color=root.buttonColor;if(hoverImageSrc!="") image.source=imageSrc;root.exited();}}
+        onReleased: {if(root.type=="click"){image.source=imageSrc;}}
     }
+    Item{
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: parent.height;
+        height: image.height+imageText.height
+        anchors.verticalCenter: parent.verticalCenter
+        Column{
+            id: column
+            anchors.fill: parent;
+            Image {
+                id: image
+                source: imageSrc
+                height: root.height*root.imageHightScale
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: sourceSize.width*(height/sourceSize.height);
+
+            }
+            Text {
+                id:imageText
+                width: parent.width;
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pointSize: root.fontSize
+                fontSizeMode: Text.Fit
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.family: "Microsoft YaHei"
+            }
+            Component.onCompleted: {if(imageText.text=="") imageText.height=0;}
+        }
+    }
+
+
+
 
     Item{
         id: row
@@ -47,7 +83,6 @@ Item{
             anchors.fill: parent
             font.family: "Microsoft YaHei"
         }
-
     }
 
     Rectangle{
@@ -59,22 +94,6 @@ Item{
         border.color: root.borderColor
         border.width: root.borderWidth
         z:-1
-
-        MouseArea{
-            anchors.fill: parent
-            hoverEnabled: root.hoverEnabled
-            onClicked:
-            {
-                if(pressImageSrc!="") image.source=pressImageSrc;
-                if(isAnime) anime.start();
-                else rec.clicked();
-            }
-            onEntered: {if(root.hoverEnabled) {rec.color=root.hoverColor;if(hoverImageSrc!="") image.source=hoverImageSrc;root.entered();}}
-            onExited:{if(root.hoverEnabled) {rec.color=root.buttonColor;if(hoverImageSrc!="") image.source=imageSrc;root.exited();}}
-        }
-
-
-
 
         PropertyAnimation
         {
