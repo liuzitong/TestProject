@@ -3,7 +3,7 @@
   PERIMETER_MODULES *= main
 
   QT *= quick qml
-
+  QT += sql
   HEADERS += \
     $$PWD/appctrl/perimeter_appctrl.hxx \
     \

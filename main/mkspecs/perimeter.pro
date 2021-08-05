@@ -1,8 +1,8 @@
 QT -= gui
-CONFIG += c++11
+
+CONFIG += c++11 console qml_debug
 CONFIG -= app_bundle
 DEFINES += QT_DEPRECATED_WARNINGS QT_MESSAGELOGCONTEXT
-CONFIG+=qml_debug
 
 INCLUDEPATH *= $$PWD/../../../
 # ///////////////////////////////////////////////////////////////////////////
