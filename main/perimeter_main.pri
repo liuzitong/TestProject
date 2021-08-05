@@ -3,7 +3,7 @@
   PERIMETER_MODULES *= main
 
   QT *= quick qml
-  QT += sql
+#  QT += sql
   HEADERS += \
     $$PWD/appctrl/perimeter_appctrl.hxx \
     \
@@ -24,20 +24,22 @@
     QML_DESIGNER_IMPORT_PATH =
 
 
-    HEADERS += \
-        $$PWD/Control/Calendar/perimeter_calendarsvc.hxx \
-        $$PWD/Control/Calendar/perimeter_calendarvm.hxx \
-        $$PWD/Control/Calendar/perimeter_ymdlistmodel.hxx
+   HEADERS += \
+       $$PWD/Control/Calendar/perimeter_calendarsvc.hxx \
+       $$PWD/Control/Calendar/perimeter_calendarvm.hxx \
+       $$PWD/Control/Calendar/perimeter_ymdlistmodel.hxx
 
-    SOURCES += \
-        $$PWD/Control/Calendar/perimeter_calendarsvc.cxx \
-        $$PWD/Control/Calendar/perimeter_calendarvm.cxx \
-        $$PWD/Control/Calendar/perimeter_ymdlistmodel.cxx
+   SOURCES += \
+       $$PWD/Control/Calendar/perimeter_calendarsvc.cxx \
+       $$PWD/Control/Calendar/perimeter_calendarvm.cxx \
+       $$PWD/Control/Calendar/perimeter_ymdlistmodel.cxx
 
+   RESOURCES += \
+        $$PWD/view/assets/assets.qrc
+
+#    include( $$PWD/model/model.pri )
 }
 
-RESOURCES += \
-    $$PWD/view/assets/assets.qrc
 
 
 
