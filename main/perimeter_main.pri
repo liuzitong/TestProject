@@ -3,7 +3,7 @@
   PERIMETER_MODULES *= main
 
   QT *= quick qml
-#  QT += sql
+  QT += sql
   HEADERS += \
     $$PWD/appctrl/perimeter_appctrl.hxx \
     \
@@ -37,7 +37,7 @@
    RESOURCES += \
         $$PWD/view/assets/assets.qrc
 
-#    include( $$PWD/model/model.pri )
+    include( $$PWD/model/model.pri )
 }
 
 
