@@ -6,9 +6,9 @@ DEFINES += _BUILDING_QX_API
 
 HEADERS += \
     $$PWD/export.h \
-    $$PWD/user.h \
+    $$PWD/patient.h \
     $$PWD/precompiled.h
 
 SOURCES += \
-    $$PWD/user.cpp
+    $$PWD/patient.cpp
 

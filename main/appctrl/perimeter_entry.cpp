@@ -19,7 +19,7 @@
 #include "qxpack/indcom/sys/qxpack_ic_eventloopbarrier.hxx"
 #include "qxpack/indcom/sys/qxpack_ic_appdcl_priv.hxx"
 #include "qxpack/indcom/ui_qml_base/qxpack_ic_ui_qml_api.hxx"
-#include "perimeter/main/model/user.h"
+#include "perimeter/main/model/patient.h"
 
 
 
@@ -164,11 +164,11 @@ void test(  )
     qx::QxSqlDatabase::getSingleton()->setVerifyOffsetRelation(true);
 
     //更具上面类型创建表
-    QSqlError daoError = qx::dao::create_table<User>();
+    QSqlError daoError = qx::dao::create_table<Patient>();
 
-    User_ptr user_1, user_2;
-    user_1.reset(new User);
-    user_2.reset(new User);
+    Patient_ptr user_1, user_2;
+    user_1.reset(new Patient);
+    user_2.reset(new Patient);
 
 
     user_1->id=1;
@@ -199,11 +199,11 @@ void test(  )
     qAssert(bCommit);
 
     //通过SQL进行检索，映射到 typedef qx::QxCollection<int, User_ptr> List_user;中
-    List_user list_user;
+    List_Patient list_user;
     qx_query storedProc("select * from user");
     daoError = qx::dao::execute_query(storedProc, list_user);
 
-    List_user::iterator it = list_user.begin();
+    List_Patient::iterator it = list_user.begin();
 
     qDebug() << "------------------华丽的分割线------------------";
     while(it != list_user.end()){
