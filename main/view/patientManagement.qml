@@ -4,8 +4,11 @@ import QtQuick.Window 2.3
 import QtQml 2.2
 import QtQuick.Controls.Styles 1.4
 import perimeter.main.view.Controls 1.0
+import qxpack.indcom.ui_qml_base 1.0
 
 Column{
+    id:root;
+    property string language:IcUiQmlApi.appCtrl.language
     anchors.fill:parent;
     Item{
         width: parent.width;
@@ -45,8 +48,13 @@ Column{
                                     if(currentIndex==1){patientID.visible=true;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;}
                                     if(currentIndex==2)
                                     {
-                                        if(version=="Chinese"){ patientID.visible=false;chineseName.visible=true;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;}
-                                        else{patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=true;gender.visible=false;birthDateGroup.visible=false;}
+                                        console.log(language);
+                                        if(language=="Chinese"){
+                                            patientID.visible=false;chineseName.visible=true;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;
+                                        }
+                                        else{
+                                            patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=true;gender.visible=false;birthDateGroup.visible=false;
+                                        }
                                     }
                                     if(currentIndex==3){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=true;birthDateGroup.visible=false;}
                                     if(currentIndex==4){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=true;}
@@ -196,8 +204,8 @@ Column{
                         Column{
                             id:newPatient;anchors.fill: parent;spacing: patientManagement.rowHight*1.5
                             Component.onCompleted: {
-                                if(version==="Chinese") {newChineseName.visible=true;newEnglishName.visible=false;}
-                                else {newChineseName.visible=false;newEnglishName.visible=true;}
+                                if(language=="Chinese") {newChineseNameRow.visible=true;newEnglishFirstNameRow.visible=false;newEnglishLastNameRow.visible=false;}
+                                else {newChineseName.visible=false;newEnglishFirstNameRow.visible=true;newEnglishLastNameRow.visible=true;}
                             }
 
                             Row{
@@ -207,20 +215,25 @@ Column{
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
                             Row{
-                                id:newChineseName;width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
+                                id:newChineseNameRow;visible:false;width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
                                 CusText{text:"*姓名 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
-                                LineEdit{id:name;width: parent.width*0.6}
+                                LineEdit{id:newChineseName;width: parent.width*0.6}
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
-                            Row{
-                                id:newEnglishName;width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02;visible:false;
-                                CusText{text:"*firstName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
-                                LineEdit{id:firstname;width: parent.width*0.205}
-                                CusText{text:"*lastName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.15}
-                                LineEdit{id:last;width: parent.width*0.205}
-                                CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
 
+                            Row{
+                                id:newEnglishFirstNameRow;visible:false;width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
+                                CusText{text:"*FirstName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                LineEdit{id:newEnglishFirstName;width: parent.width*0.6}
+                                CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
+
+                            Row{
+                                id:newEnglishLastNameRow;visible:false;width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
+                                CusText{text:"*LastName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                LineEdit{id:newEnglishLastName;width: parent.width*0.6}
+                            }
+
                             Row{
                                 width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
                                 CusText{text:"*性别 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}

@@ -4,14 +4,19 @@ import QtQuick.Window 2.3
 import QtQml 2.2
 import QtQuick.Controls.Styles 1.4
 import perimeter.main.view.Controls 1.0
-
+import qxpack.indcom.ui_qml_base 1.0
 
 Rectangle {
     id: root;visible: true;width: 1366;height: 768;color: backGroudColor;
     property int commonRadius:height*0.03
     property string backGroudColor:"#dcdee0"
     property string backGroudBorderColor:"#bdc0c6"
-    property string version: "Chinese"/*"English"*/
+    property string language:IcUiQmlApi.appCtrl.language
+//    Component.onCompleted: {
+//        console.log(version);
+//        version=root.parent.version;
+//        console.log(root.parent.version);
+//    }
     function switchContent(contentType)
     {
         if(contentType==="patientManagement")
@@ -92,7 +97,9 @@ Rectangle {
             {
                 switch(pageName)
                 {
-                    case "patientManagement": source="qrc:/perimeter/main/view/patientManagement.qml";break;
+                    case "patientManagement":
+                        source="qrc:/perimeter/main/view/patientManagement.qml";
+                        break;
                     case "check": source="qrc:/perimeter/main/view/check.qml";break;
                     case "programCustomize": source="qrc:/perimeter/main/view/programCustomize.qml";break;
                 }

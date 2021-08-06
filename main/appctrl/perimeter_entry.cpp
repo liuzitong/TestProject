@@ -104,11 +104,10 @@ void test( );
 int  main ( int argc, char *argv[] )
 {
     int ret = 0;
-    qDebug()<<"hellworld";
-//    test();
-    // handle the terminate signal
-//    signal( SIGTERM, & gSigTerm_Handler );
-//    qInstallMessageHandler( & gMsgHandler );
+
+    //handle the terminate signal
+    signal( SIGTERM, & gSigTerm_Handler );
+    qInstallMessageHandler( & gMsgHandler );
 
     // start the application
     gPrintMemCntr("pre-stage");
