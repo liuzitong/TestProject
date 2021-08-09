@@ -7,8 +7,12 @@ DEFINES += _BUILDING_QX_API
 HEADERS += \
     $$PWD/export.h \
     $$PWD/patient.h \
-    $$PWD/precompiled.h
+    $$PWD/precompiled.h \
+    $$PWD/check_result.h \
+    $$PWD/program.h
 
 SOURCES += \
-    $$PWD/patient.cpp
+    $$PWD/patient.cpp \
+    $$PWD/check_result.cpp \
+    $$PWD/program.cpp
 
