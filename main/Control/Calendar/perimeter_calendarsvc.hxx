@@ -17,6 +17,7 @@ public:
     QObject   * monthObj( ) const;
     QObject   * dayObj  ( ) const;
     QString     dateStr ( ) const;
+    int      currentYear() const;
 
 private:
     void *m_obj;

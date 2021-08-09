@@ -30,10 +30,10 @@ Column{
                             id:dateSelection; width: parent.width;
                             height: patientManagement.rowHight;spacing: height*0.4;
                             CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5}
-                            LineEdit{id:dateFrom;radius: height/6;width: height*3.2;}
+                            LineEdit{id:dateFrom;radius: height/6;width: height*3.3;}
                             CusButton{id:dateFromButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateFrom;calendar.open();}}
                             CusText{text:"到";width: height*0.6;}
-                            LineEdit{id:dateTo;radius: height/6;width: height*3.2}
+                            LineEdit{id:dateTo;radius: height/6;width: height*3.3}
                             CusButton{id:dateToButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateTo;calendar.open();}}
                         }
                         Row{
@@ -271,7 +271,7 @@ Column{
                                 CusText{text:"*出生日期 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                 Row{
                                     height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
-                                    Item{height: parent.height;width: 2*height;LineEdit{id:newDateBirth;width: height*3.2}}
+                                    Item{height: parent.height;width: 2*height;LineEdit{id:newDateBirth;width: height*3.3}}
                                     CusButton{text:"选择";width:height*2;onClicked:{calendar.inputObj=newDateBirth;calendar.open();}}
                                     LineEdit{width: height*2;text:"1";radius: height*0.2;horizontalAlignment: Text.AlignHCenter;readOnly: true;backgroundColor:backGroudColor}
                                 }

@@ -16,7 +16,9 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
         if ( inputObj !== null )
         {
             var strData = inputObj.text;
-            if(strData===""){strData="1980-1-1";}
+            if(strData===""){
+                strData=String(idPriv.calendar_vm.yearListModel.currentValue = idPriv.calendar_vm.currentYear-40)+"-1-1";
+            }
             idPriv.calendar_vm.yearListModel.currentValue = Number(strData.split("-")[0]);
             idPriv.calendar_vm.monthListModel.currentValue = Number(strData.split("-")[1]);
             idPriv.calendar_vm.dayListModel.currentValue = Number(strData.split("-")[2]);

@@ -35,7 +35,7 @@ private:
 public:
     explicit YearListModelPriv ( YmdListModel * );
     virtual ~YearListModelPriv( ) {}
-    inline int  rowCount( ) { return YEAR_RANGE * 2 + 1; }
+    inline int  rowCount( ) { return YEAR_RANGE * 1 + 1; }
     QVariant    data( int idx, int role );
 
     int     current( ) { return m_currentYear; }

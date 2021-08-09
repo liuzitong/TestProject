@@ -22,6 +22,7 @@ public:
     inline  QObject   * monthObj( ) { return m_calSvc.monthObj(); }
     inline  QObject   * dayObj  ( ) { return m_calSvc.dayObj(); }
     inline  QString     dateStr ( ) { return m_calSvc.dateStr(); }
+    inline  int         currentYear(){ return m_calSvc.currentYear(); }
 };
 
 CalendarVmPriv::CalendarVmPriv(CalendarVm *pa)
@@ -54,6 +55,9 @@ QObject *CalendarVm::dayObj() const
 
 QString CalendarVm::dateStr() const
 { return T_PrivPtr( m_obj )->dateStr(); }
+
+int CalendarVm::currentYear() const
+{ return T_PrivPtr( m_obj )->currentYear(); }
 
 }
 

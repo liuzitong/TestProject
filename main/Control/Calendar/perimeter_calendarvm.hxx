@@ -18,6 +18,7 @@ class PERIMETER_API CalendarVm : public QxPack::IcViewModelBase
     Q_PROPERTY(QObject * monthListModel READ monthObj CONSTANT)
     Q_PROPERTY(QObject * dayListModel   READ dayObj   CONSTANT)
     Q_PROPERTY(QString   dateStr        READ dateStr  CONSTANT)
+    Q_PROPERTY(int       currentYear    READ currentYear  CONSTANT)
 public:
     Q_INVOKABLE explicit CalendarVm( const QVariantList & );
     Q_INVOKABLE virtual ~CalendarVm( ) Q_DECL_OVERRIDE;
@@ -26,7 +27,7 @@ public:
     QObject   * monthObj( ) const;
     QObject   * dayObj  ( ) const;
     QString     dateStr ( ) const;
-
+    int         currentYear() const;
 private:
     void *m_obj;
     Q_DISABLE_COPY( CalendarVm )

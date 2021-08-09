@@ -4,6 +4,7 @@
 #include "perimeter/main/Control/Calendar/perimeter_calendarsvc.hxx"
 #include "perimeter/main/Control/Calendar/perimeter_ymdlistmodel.hxx"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
+#include <QDate>
 
 namespace Perimeter {
 
@@ -27,6 +28,7 @@ public :
                 .arg(m_year->current(), 4, 10, QChar('0'))
                 .arg(m_month->current(), 2, 10, QChar('0'))
                 .arg(m_day->current(), 2, 10, QChar('0')); }
+    inline  int         currentYear(){ return QDate::currentDate().year();}
 };
 
 CalendarSvcPriv::CalendarSvcPriv(CalendarSvc * pa)
@@ -65,6 +67,9 @@ QObject *CalendarSvc::dayObj() const
 
 QString CalendarSvc::dateStr() const
 { return T_PrivPtr( m_obj )->dateStr(); }
+
+int CalendarSvc::currentYear() const
+{ return T_PrivPtr( m_obj )->currentYear(); }
 
 }
 
