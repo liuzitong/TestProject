@@ -1,5 +1,5 @@
 #include "program.h"
-
+#include "checkResult.h"
 QX_REGISTER_CPP_QX_API(Program)
 
 template <> void qx::register_class(QxClass<Program> &t){

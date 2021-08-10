@@ -3,9 +3,10 @@
 #include "precompiled.h"
 #include <QxOrm_Impl.h>
 #include <QDate>
-#include "checkResult.h"
 #include "perimeter/base/common/perimeter_def.h"
+#include "qxpack/indcom/afw/qxpack_ic_viewmodelbase.hxx"
 
+class CheckResult;
 class QX_DLL_EXPORT_API Patient{
 public:
     enum sex { male, female, unknown };
@@ -23,32 +24,12 @@ public:
     virtual ~Patient(){}
 };
 
-
 typedef std::shared_ptr<Patient> Patient_ptr;
-//typedef qx::QxCollection<QString, Patient_ptr> List_Patient;
 typedef QList<Patient_ptr> List_Patient;
-
 QX_REGISTER_PRIMARY_KEY(Patient, QString)
 QX_REGISTER_HPP_QX_API(Patient, qx::trait::no_base_class_defined, 0)
 
-namespace Perimeter {
-class PERIMETER_API PatientVm{
-public:
-    Q_OBJECT
-    Q_PROPERTY(QString id READ getId WRITE setId)
-    Q_PROPERTY(QString name READ getName WRITE setName)
-    Q_PROPERTY(int sex READ getSex WRITE setSex)
-    Q_PROPERTY(QDate m_)
-};
-}
-
-
-
-
-#endif // Patient_H
-
-
-
+#endif
 
 
 

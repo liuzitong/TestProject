@@ -26,4 +26,4 @@ private:
 
 }
 
-#endif // ALBIO_CALENDARSVC_HXX
+#endif // PERIMETER_CALENDARSVC_HXX

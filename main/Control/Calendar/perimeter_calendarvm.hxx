@@ -1,5 +1,5 @@
-﻿#ifndef ALBIO_CALENDARVM_HXX
-#define ALBIO_CALENDARVM_HXX
+﻿#ifndef PERIMETER_CALENDARVM_HXX
+#define PERIMETER_CALENDARVM_HXX
 
 #include "perimeter/base/common/perimeter_def.h"
 #include "qxpack/indcom/afw/qxpack_ic_viewmodelbase.hxx"
@@ -36,4 +36,4 @@ private:
 
 }
 
-#endif // ALBIO_CALENDARVM_HXX
+#endif // PERIMETER_CALENDARVM_HXX

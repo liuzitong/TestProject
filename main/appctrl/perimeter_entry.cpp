@@ -104,10 +104,10 @@ int  main ( int argc, char *argv[] )
     signal( SIGTERM, & gSigTerm_Handler );
     qInstallMessageHandler( & gMsgHandler );
 
-    Test::connectDataBase();
+//    Test::connectDataBase();
 //    Test::createTable();
 //    Test::createData();
-    Test::displayInfo();
+//    Test::displayInfo();
 //    Test::updateInfo();
 //    Test::query();
 //    Test::insertData();
