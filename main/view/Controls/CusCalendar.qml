@@ -15,6 +15,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
     onInputObjChanged: {
         if ( inputObj !== null )
         {
+            console.log(inputObj.text);
             var strData = inputObj.text;
             if(strData===""){
                 strData=String(idPriv.calendar_vm.yearListModel.currentValue = idPriv.calendar_vm.currentYear-40)+"-1-1";

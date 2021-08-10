@@ -1,4 +1,4 @@
-#include "check_result.h"
+#include "checkResult.h"
 #include "patient.h"
 #include "program.h"
 QX_REGISTER_CPP_QX_API(CheckResult)

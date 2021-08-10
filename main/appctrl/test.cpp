@@ -6,7 +6,7 @@
 #include <QDate>
 #include <QDateTime>
 #include <QFile>
-#include "perimeter/main/model/check_result.h"
+#include "perimeter/main/model/checkResult.h"
 #include "perimeter/main/model/patient.h"
 #include "perimeter/main/model/program.h"
 #include "perimeter/main/model/patient.h"

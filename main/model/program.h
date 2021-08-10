@@ -5,7 +5,7 @@
 #include <QDate>
 #include <QPoint>
 #include <QVector>
-#include "check_result.h"
+#include "checkResult.h"
 class QX_DLL_EXPORT_API Program{
 public:
     enum Type { ThreshHold, Screening , Special };

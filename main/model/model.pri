@@ -8,11 +8,11 @@ HEADERS += \
     $$PWD/export.h \
     $$PWD/patient.h \
     $$PWD/precompiled.h \
-    $$PWD/check_result.h \
-    $$PWD/program.h
+    $$PWD/program.h \
+    $$PWD/checkResult.h
 
 SOURCES += \
     $$PWD/patient.cpp \
-    $$PWD/check_result.cpp \
-    $$PWD/program.cpp
+    $$PWD/program.cpp \
+    $$PWD/checkResult.cpp
 

@@ -20,7 +20,7 @@ Column{
             anchors.fill: parent;anchors.margins: content.layoutGroupMargin;spacing:content.layoutGroupMargin
             Rectangle{
                 width: (parent.width-content.layoutGroupMargin)*0.6;height: parent.height;
-                border.color: backGroudBorderColor;color: backGroudColor;radius: commonRadius
+                border.color: backGroundBorderColor;color: backGroundColor;radius: commonRadius
                 Item{
                     anchors.fill: parent;anchors.margins: content.layoutGroupMargin
                     Column{
@@ -29,18 +29,18 @@ Column{
                         Row{
                             id:dateSelection; width: parent.width;
                             height: patientManagement.rowHight;spacing: height*0.4;
-                            CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5}
+                            CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5;}
                             LineEdit{id:dateFrom;radius: height/6;width: height*3.3;}
                             CusButton{id:dateFromButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateFrom;calendar.open();}}
                             CusText{text:"到";width: height*0.6;}
-                            LineEdit{id:dateTo;radius: height/6;width: height*3.3}
+                            LineEdit{id:dateTo;radius: height/6;width: height*3.3;}
                             CusButton{id:dateToButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateTo;calendar.open();}}
                         }
                         Row{
                             id:query; width: parent.width; height:patientManagement.rowHight;spacing: height*0.5
                             CusComboBox{
                                 id:queryStrategy;height: parent.height;width: parent.height*5;
-                                borderColor: backGroudBorderColor;font.family:"Microsoft YaHei";
+                                borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                                 imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
                                 model: ListModel {ListElement { text: "最近诊断" } ListElement { text: "患者ID" } ListElement { text: "姓名" }ListElement { text: "性别" }ListElement { text: "出生日期" }}
                                 onCurrentIndexChanged: {
@@ -71,7 +71,7 @@ Column{
                             }
                             CusComboBox{
                                 id:gender;height: parent.height;width: parent.height*3;
-                                borderColor: backGroudBorderColor;font.family:"Microsoft YaHei";
+                                borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                                 imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
                                 model: ListModel {ListElement { text: "男" } ListElement { text: "女" } }
                             }
@@ -145,7 +145,7 @@ Column{
                                             width: patientInfoListView.width;height: (patientInfoCol.height-patientManagement.rowHight)/14+1;spacing: -1;
                                             property bool isSelected: false;
                                             CusButton{
-                                                width: parent.width*1/9;height: parent.height;buttonColor: "white"; borderColor: backGroudBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
+                                                width: parent.width*1/9;height: parent.height;buttonColor: "white"; borderColor: backGroundBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
                                                 onClicked: {
                                                     if(!patientInfoRow.isSelected)
                                                     {
@@ -157,10 +157,10 @@ Column{
                                                     }
                                                 }
                                             }
-                                            Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
-                                            Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.name}}
-                                            Rectangle{width: parent.width*1/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.gender}}
-                                            Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroudBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
+                                            Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
+                                            Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.name}}
+                                            Rectangle{width: parent.width*1/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.gender}}
+                                            Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
                                             CusButton{width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"}
                                         }
                                     }
@@ -198,7 +198,7 @@ Column{
             Column{
                 width: (parent.width-content.layoutGroupMargin)*0.4; height: parent.height;spacing:content.layoutGroupMargin;
                 Rectangle{
-                    width: parent.width;height: (parent.height-content.layoutGroupMargin)*0.6;border.color: backGroudBorderColor;color: backGroudColor;radius: commonRadius;
+                    width: parent.width;height: (parent.height-content.layoutGroupMargin)*0.6;border.color: backGroundBorderColor;color: backGroundColor;radius: commonRadius;
                     Item{
                         anchors.fill: parent;anchors.margins: content.layoutGroupMargin;
                         Column{
@@ -273,7 +273,7 @@ Column{
                                     height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
                                     Item{height: parent.height;width: 2*height;LineEdit{id:newDateBirth;width: height*3.3}}
                                     CusButton{text:"选择";width:height*2;onClicked:{calendar.inputObj=newDateBirth;calendar.open();}}
-                                    LineEdit{width: height*2;text:"1";radius: height*0.2;horizontalAlignment: Text.AlignHCenter;readOnly: true;backgroundColor:backGroudColor}
+                                    LineEdit{width: height*2;text:"1";radius: height*0.2;horizontalAlignment: Text.AlignHCenter;readOnly: true;backgroundColor:backGroundColor;}
                                 }
                             }
                         }
@@ -281,7 +281,7 @@ Column{
                 }
                 Rectangle{
                     width: parent.width;height: (parent.height-content.layoutGroupMargin)*0.4;
-                    border.color: backGroudBorderColor;color: backGroudColor;radius: commonRadius;
+                    border.color: backGroundBorderColor;color: backGroundColor;radius: commonRadius;
                    Item{
                        anchors.fill: parent;anchors.margins: content.layoutGroupMargin;
                        Column{

@@ -3,7 +3,7 @@
 #include "precompiled.h"
 #include <QxOrm_Impl.h>
 #include <QDate>
-#include "check_result.h"
+#include "checkResult.h"
 class QX_DLL_EXPORT_API Patient{
 public:
     enum sex { male, female, unknown };

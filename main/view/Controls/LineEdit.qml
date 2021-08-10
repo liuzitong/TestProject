@@ -4,18 +4,18 @@ import QtQuick.Controls 2.0
 Item{
     id:root
     property int radius:height/6;
-    property string text:"";
+    property alias text:textfeild.text;
     property alias verticalAlignment: textfeild.verticalAlignment;
     property alias horizontalAlignment: textfeild.horizontalAlignment;
     property alias readOnly: textfeild.readOnly;
     property alias backgroundColor: recbackground.color;
+    property alias textfeild: textfeild;
     width: parent.width;
     height:parent.height;
     TextField{
         id:textfeild;
         anchors.fill: parent;
         renderType: Text.NativeRendering
-        text:root.text;
         horizontalAlignment: Text.right
         verticalAlignment: Text.AlignVCenter
         font.pointSize: parent.height/3
