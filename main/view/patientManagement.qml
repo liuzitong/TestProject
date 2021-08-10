@@ -9,6 +9,8 @@ import qxpack.indcom.ui_qml_base 1.0
 Column{
     id:root;
     property string language:IcUiQmlApi.appCtrl.language
+    property string backGroundColor:"#dcdee0"
+    property string backGroundBorderColor:"#bdc0c6"
     anchors.fill:parent;
     Item{
         width: parent.width;

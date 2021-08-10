@@ -4,6 +4,7 @@
 #include "perimeter/base/common/perimeter_def.h"
 #include "qxpack/indcom/afw/qxpack_ic_viewmodelbase.hxx"
 
+
 namespace Perimeter {
 
 // ////////////////////////////////////////////////////////////////////////////

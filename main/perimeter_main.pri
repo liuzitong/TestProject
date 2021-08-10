@@ -37,7 +37,7 @@
    RESOURCES += \
         $$PWD/view/assets/assets.qrc
 
-    include( $$PWD/model/model.pri )
+    include( $$PWD/database/database.pri )
 }
 
 SOURCES += \

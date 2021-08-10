@@ -1,4 +1,4 @@
-#include "perimeter/main/model/precompiled.h"
+#include "perimeter/main/database/precompiled.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <iostream>
@@ -6,10 +6,10 @@
 #include <QDate>
 #include <QDateTime>
 #include <QFile>
-#include "perimeter/main/model/checkResult.h"
-#include "perimeter/main/model/patient.h"
-#include "perimeter/main/model/program.h"
-#include "perimeter/main/model/patient.h"
+#include "perimeter/main/database/checkResult.h"
+#include "perimeter/main/database/patient.h"
+#include "perimeter/main/database/program.h"
+#include "perimeter/main/database/patient.h"
 
 
 class Test{

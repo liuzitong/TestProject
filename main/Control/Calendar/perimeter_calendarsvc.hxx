@@ -1,5 +1,5 @@
-﻿#ifndef ALBIO_CALENDARSVC_HXX
-#define ALBIO_CALENDARSVC_HXX
+﻿#ifndef PERIMETER_CALENDARSVC_HXX
+#define PERIMETER_CALENDARSVC_HXX
 
 #include "perimeter/base/common/perimeter_def.h"
 #include "qxpack/indcom/afw/qxpack_ic_svcbase.hxx"
