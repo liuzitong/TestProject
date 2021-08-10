@@ -6,8 +6,6 @@
 #include <QQmlApplicationEngine>
 #include <QSharedPointer>
 
-#include <QxOrm_Impl.h>
-#include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -19,7 +17,8 @@
 #include "qxpack/indcom/sys/qxpack_ic_eventloopbarrier.hxx"
 #include "qxpack/indcom/sys/qxpack_ic_appdcl_priv.hxx"
 #include "qxpack/indcom/ui_qml_base/qxpack_ic_ui_qml_api.hxx"
-#include "perimeter/main/model/patient.h"
+#include "perimeter/main/appctrl/test.cpp"
+
 
 #include <cstdio>
 #include <signal.h>
@@ -104,6 +103,16 @@ int  main ( int argc, char *argv[] )
     //handle the terminate signal
     signal( SIGTERM, & gSigTerm_Handler );
     qInstallMessageHandler( & gMsgHandler );
+
+    Test::connectDataBase();
+//    Test::createTable();
+//    Test::createData();
+    Test::displayInfo();
+//    Test::updateInfo();
+//    Test::query();
+//    Test::insertData();
+//    Test::DeleteData();
+//    Test::query2();
 
     // start the application
     gPrintMemCntr("pre-stage");

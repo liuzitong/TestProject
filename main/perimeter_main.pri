@@ -40,6 +40,9 @@
     include( $$PWD/model/model.pri )
 }
 
+SOURCES += \
+    $$PWD/appctrl/test.cpp
+
 
 
 
