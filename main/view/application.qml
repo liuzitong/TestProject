@@ -26,8 +26,27 @@ Window {
         }
     }
 
-//    Component.onCompleted:
-//    {
-//        console.log(IcUiQmlApi.appCtrl.language);
-//    }
+    // ////////////////////////////////////////////////////////////////////////
+    // logic
+    // ////////////////////////////////////////////////////////////////////////
+    Component.onCompleted:   { idPriv.init();   }
+//    Component.onDestruction: { idPriv.deinit(); }
+    QtObject{
+        id: idPriv;
+        property var patient_vm:null;
+        function init()
+        {
+
+            IcUiQmlApi.appCtrl.databaseSvc.initDataBase();
+            IcUiQmlApi.appCtrl.databaseSvc.test();
+            console.log("sssss");
+            patient_vm=IcUiQmlApi.appCtrl.databaseSvc.getPatientById("5001");
+            console.log("sssss");
+            console.log(patient_vm.name);
+            console.log("sssss");
+//            delete patient_vm;
+        }
+    }
+
+
 }

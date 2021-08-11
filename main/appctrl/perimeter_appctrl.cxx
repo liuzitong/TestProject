@@ -77,6 +77,7 @@ void  AppCtrlPriv :: registerTypes()
 AppCtrl :: AppCtrl ( QObject *pa ) : QxPack::IcAppCtrlBase( pa )
 {
     m_obj = perimeter_new( AppCtrlPriv, this );
+    m_databaseSvc=static_cast<QObject*>(new databaseSvc());
 }
 
 // ============================================================================
@@ -85,6 +86,7 @@ AppCtrl :: AppCtrl ( QObject *pa ) : QxPack::IcAppCtrlBase( pa )
 AppCtrl :: ~AppCtrl ( )
 {
     perimeter_delete( m_obj, AppCtrlPriv );
+    delete m_databaseSvc;
 }
 
 // ============================================================================

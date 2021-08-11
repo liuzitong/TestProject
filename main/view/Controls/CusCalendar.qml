@@ -11,12 +11,12 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
     property alias contentWidth : idContent.implicitWidth;
     property alias contentHeight: idContent.implicitHeight;
     property var   inputObj: null;
+    property string strData;
 
     onInputObjChanged: {
         if ( inputObj !== null )
         {
-            console.log(inputObj.text);
-            var strData = inputObj.text;
+            strData = inputObj.text;
             if(strData===""){
                 strData=String(idPriv.calendar_vm.yearListModel.currentValue = idPriv.calendar_vm.currentYear-40)+"-1-1";
             }
@@ -28,6 +28,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
             idYearList.positionViewAtIndex( Number(strData.split("-")[0] - Number(idYearList.currentItem.text)) + idYearList.currentIndex, PathView.Center );
             idMonthList.positionViewAtIndex( Number(strData.split("-")[1] - 1), PathView.Center );
             idDayList.positionViewAtIndex( Number(strData.split("-")[2] - 1), PathView.Center );
+
         }
     }
 

@@ -63,7 +63,7 @@ void YearListModelPriv::setCurrent(int y)
 {
     bool is_need_emit = false;
 
-    if ( y >= m_startYear &&  y < m_startYear + YEAR_RANGE * 2 ) {
+    if ( y >= m_startYear &&  y < m_startYear + YEAR_RANGE * 1+1 ) {
         if ( y != m_currentYear ) { m_currentYear = y; is_need_emit = true; }
     }
     if ( is_need_emit ) { emit m_parent->currentChanged(); }

@@ -3,6 +3,7 @@
 
 #include "perimeter_main.hxx"
 #include "../Control/Calendar/perimeter_calendarvm.hxx"
+#include "perimeter/main/database/patientObj.h"
 // services list
 
 namespace Perimeter {
@@ -44,6 +45,8 @@ void  Main :: registerTypes( QxPack::IcAppCtrlBase *app_base )
     obj_mgr->registerType<Perimeter::CalendarVm>(
         QStringLiteral("Perimeter::CalendarVm"), Q_NULLPTR
     );
+
+
 }
 
 

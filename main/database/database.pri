@@ -11,14 +11,14 @@ HEADERS += \
     $$PWD/program.h \
     $$PWD/checkResult.h \
     $$PWD/checkResultVm.h \
-    $$PWD/patientVm.h \
-    $$PWD/databaseSvc.h
+    $$PWD/databaseSvc.h \
+    $$PWD/patientObj.h
 
 SOURCES += \
     $$PWD/patient.cpp \
     $$PWD/program.cpp \
     $$PWD/checkResult.cpp \
     $$PWD/checkResultVm.cpp \
-    $$PWD/patientVm.cpp \
-    $$PWD/databaseSvc.cpp
+    $$PWD/databaseSvc.cpp \
+    $$PWD/patientObj.cpp
 

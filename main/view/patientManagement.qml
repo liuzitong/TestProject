@@ -32,11 +32,16 @@ Column{
                             id:dateSelection; width: parent.width;
                             height: patientManagement.rowHight;spacing: height*0.4;
                             CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5;}
-                            LineEdit{id:dateFrom;radius: height/6;width: height*3.3;}
+                            LineEdit{property string name: "dateFrom";id:dateFrom;radius: height/6;width: height*3.3;}
                             CusButton{id:dateFromButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateFrom;calendar.open();}}
                             CusText{text:"到";width: height*0.6;}
-                            LineEdit{id:dateTo;radius: height/6;width: height*3.3;}
-                            CusButton{id:dateToButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateTo;calendar.open();}}
+                            LineEdit{property string name: "dateTo";id:dateTo;radius: height/6;width: height*3.3;}
+                            CusButton{id:dateToButton;text:"选择";width:height*2;
+                                onClicked:{
+                                    if(dateFrom.text!==""&&dateTo.text=="")
+                                        dateTo.text=dateFrom.text;
+                                    calendar.inputObj=dateTo;calendar.open();
+                                }}
                         }
                         Row{
                             id:query; width: parent.width; height:patientManagement.rowHight;spacing: height*0.5

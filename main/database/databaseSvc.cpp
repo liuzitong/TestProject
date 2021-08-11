@@ -3,6 +3,7 @@
 #include "checkResult.h"
 #include "patient.h"
 #include "program.h"
+//#include "perimeter/base/common/perimeter_memcntr.hxx"
 
 namespace Perimeter {
 
@@ -18,20 +19,27 @@ void databaseSvc::initDataBase()
     qx::QxSqlDatabase::getSingleton()->setVerifyOffsetRelation(true);
 }
 
-PatientVm databaseSvc::GetPatientById(QString id)
+QObject* databaseSvc::getPatientById(QString id)
 {
+    qDebug()<<"getPatientById..";
+    qDebug()<<id;
     List_Patient list_patient;
-    qx_query query("select * from patient where id=:id");
+    qx_query query("select * from patient where patient_id=:id");
     query.bind(":id",id);
     QSqlError daoError = qx::dao::execute_query(query, list_patient);;
 
     std::cout<<"*****patient_list*****"<<std::endl;
     for(auto& i:list_patient)
-        std::cout<<i->m_id.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
-    std::cout<<std::endl;
-    std::shared_ptr<Patient> pp=list_patient.front();
-    PatientVm pv(pp);
-    return pv;
+    {
+        qDebug()<<i->m_id;
+        qDebug()<<i->m_name;
+    }
+    return static_cast<QObject*>(new PatientObj(list_patient.front()));
+}
+
+void databaseSvc::test()
+{
+    qDebug()<<"test test test..";
 }
 
 }

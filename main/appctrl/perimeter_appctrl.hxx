@@ -18,6 +18,7 @@ class PERIMETER_API  AppCtrl : public QxPack::IcAppCtrlBase {
     Q_OBJECT
     Q_PROPERTY( QObject*  objMgr READ  objMgrObj CONSTANT )
     Q_PROPERTY( QObject*  msgBus READ  msgBusObj CONSTANT )
+    Q_PROPERTY( QObject*  databaseSvc READ  databaseSvcObj CONSTANT )
     Q_PROPERTY( QString language READ  language WRITE setLanguage NOTIFY languageChanged)
 
 
@@ -33,6 +34,8 @@ public:
 
     //! msgBusObj
     QObject*  msgBusObj( ) const;
+
+    QObject* databaseSvcObj() const {return m_databaseSvc;}
 
     QString language() {return m_language ;}
 
@@ -62,7 +65,7 @@ protected:
 private:
     void *m_obj;
     QString m_language="Chinese";
-
+    QObject* m_databaseSvc;
     Q_DISABLE_COPY( AppCtrl )
 };
 
