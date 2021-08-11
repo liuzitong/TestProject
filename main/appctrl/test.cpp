@@ -40,30 +40,30 @@ public:
 
     static void displayInfo()
     {
-        List_Program list_program;
-        List_Patient list_patient;
-        List_CheckResult list_checkResult;
+        Program_List Program_List;
+        Patient_List Patient_List;
+        CheckResult_List CheckResult_List;
 
         qx_query query("select * from program");
-        QSqlError daoError = qx::dao::execute_query(query, list_program);
+        QSqlError daoError = qx::dao::execute_query(query, Program_List);
         query.query("select * from patient");
-        daoError = qx::dao::execute_query(query, list_patient);
+        daoError = qx::dao::execute_query(query, Patient_List);
         query.query("select * from checkResult");
-        daoError = qx::dao::execute_query(query, list_checkResult);
+        daoError = qx::dao::execute_query(query, CheckResult_List);
 
 
         std::cout<<"*****patient_list*****"<<std::endl;
-        for(auto& i:list_patient)
+        for(auto& i:Patient_List)
             std::cout<<i->m_id.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
         std::cout<<std::endl;
 
         std::cout<<"*****program_list****"<<std::endl;
-        for(auto& i:list_program)
+        for(auto& i:Program_List)
             std::cout<<i->m_id<<" "<<i->m_predefined<<" "<<i->m_type<<" "<<i->m_name.toStdString()<<" "<<i->m_data.toStdString()<<std::endl;
         std::cout<<std::endl;
 
         std::cout<<"*****checkResult_list****"<<std::endl;
-        for(auto& i:list_checkResult)
+        for(auto& i:CheckResult_List)
             std::cout<<i->m_id<<" "<<i->m_strategy<<" "<<i->m_params.toStdString()<<" "<<i->m_data.toStdString()<<" "
                      <<i->m_time.toString("yyyy-MM-dd HH:mm::ss").toStdString()<<" "<<i->m_patient->m_id.toStdString()<<" "<<i->m_program->m_id<<std::endl;
         std::cout<<std::endl;
@@ -71,90 +71,90 @@ public:
 
     static void updateInfo()
     {
-        List_Patient list_patient;
+        Patient_List Patient_List;
         qx_query query("select * from patient");
-        QSqlError daoError = qx::dao::execute_query(query, list_patient);
-        for(auto& i:list_patient)
+        QSqlError daoError = qx::dao::execute_query(query, Patient_List);
+        for(auto& i:Patient_List)
         {
             if(i->m_name=="yangzhiqun")
             {
                 i->m_birthDate=QDate(1960,5,18);
             }
         }
-        qx::dao::update(list_patient);
+        qx::dao::update(Patient_List);
     }
 
     static void insertData()
     {
-        List_Patient list_patient;
+        Patient_List Patient_List;
         qx_query query("select * from patient where name=:name");
         query.bind(":name","yangzhiqun");
-        qx::dao::execute_query(query,list_patient);
+        qx::dao::execute_query(query,Patient_List);
 
-        List_Program list_program;
+        Program_List Program_List;
         query.query("select * from program where name=:name");
         query.bind(":name","30-2");
-        qx::dao::execute_query(query,list_program);
+        qx::dao::execute_query(query,Program_List);
 
-        CheckResult_ptr checkResult(new CheckResult(5,CheckResult::Strategy::strategy3,"params1","data1",QDateTime::currentDateTime(),list_patient.front(),list_program.front()));
+        CheckResult_ptr checkResult(new CheckResult(5,CheckResult::Strategy::strategy3,"params1","data1",QDateTime::currentDateTime(),Patient_List.front(),Program_List.front()));
         QSqlError daoError = qx::dao::insert(checkResult);
 
     }
 
     static void query()
     {
-        List_Patient list_patient;
+        Patient_List Patient_List;
         qx_query query("select * from patient where name=:name");
         query.bind(":name","yangzhiqun");
-        QSqlError daoError = qx::dao::execute_query(query, list_patient);;
+        QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
 
         std::cout<<"*****patient_list*****"<<std::endl;
-        for(auto& i:list_patient)
+        for(auto& i:Patient_List)
             std::cout<<i->m_id.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
         std::cout<<std::endl;
     }
 
     static void query2()
     {
-        List_Patient list_patient;
+        Patient_List Patient_List;
         qx_query query;QSqlError daoError ;
         query.where("name").isEqualTo("lzt");
-        daoError = qx::dao::fetch_by_query(query, list_patient);;
+        daoError = qx::dao::fetch_by_query(query, Patient_List);;
 
         std::cout<<"*****patient_list*****"<<std::endl;
-        for(auto& i:list_patient)
+        for(auto& i:Patient_List)
             std::cout<<i->m_id.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
         std::cout<<std::endl;
 
         query.clear();
         query.where("name").isEqualTo("yangzhiqun");
-        daoError = qx::dao::fetch_by_query(query, list_patient);;
+        daoError = qx::dao::fetch_by_query(query, Patient_List);;
 
         std::cout<<"*****patient_list*****"<<std::endl;
-        for(auto& i:list_patient)
+        for(auto& i:Patient_List)
             std::cout<<i->m_id.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
         std::cout<<std::endl;
     }
 
     static void DeleteData()
     {
-        List_Patient list_patient;
-        List_CheckResult list_checkResult;
-        List_CheckResult list_checkResult2;
+        Patient_List Patient_List;
+        CheckResult_List CheckResult_List1;
+        CheckResult_List CheckResult_List2;
         qx_query query("select * from patient where name=:name");
         query.bind(":name","yangzhiqun");
-        QSqlError daoError =  qx::dao::execute_query(query,list_patient);
+        QSqlError daoError =  qx::dao::execute_query(query,Patient_List);
         query.query("select* from checkResult");
-        daoError = qx::dao::execute_query(query,list_checkResult);
-        for(auto & patient:list_patient)
+        daoError = qx::dao::execute_query(query,CheckResult_List1);
+        for(auto & patient:Patient_List)
         {
-            for(auto &checkResult:list_checkResult)
+            for(auto &checkResult:CheckResult_List1)
             {
                 if(checkResult->m_patient->m_id==patient->m_id)
-                    list_checkResult2.append(checkResult);
+                    CheckResult_List2.append(checkResult);
             }
         }
-        qx::dao::delete_by_id(list_checkResult2);
+        qx::dao::delete_by_id(CheckResult_List2);
     }
 
     static void createData()

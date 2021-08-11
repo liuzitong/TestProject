@@ -11,6 +11,6 @@ template <> void qx::register_class(QxClass<Program> &t){
     t.data(&Program::m_params,"params");
     t.data(&Program::m_data,"data");
 
-    t.relationOneToMany(&Program::m_checkResultX,"list_checkResult","program_id");
+    t.relationOneToMany(&Program::m_checkResultX,"CheckResult_List","program_id");
 }
 

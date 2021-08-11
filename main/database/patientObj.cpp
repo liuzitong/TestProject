@@ -8,20 +8,20 @@ PatientObj::PatientObj(std::shared_ptr<Patient> patient)
     m_patient=patient;
 }
 
-//PatientObj &PatientObj::operator=(const PatientObj &other)
-//{
-//    this->m_patient=other.m_patient;
-//    return *this;
-//}
-//PatientObj::PatientObj(const PatientObj &&other)
-//{
-//    this->m_patient=other.m_patient;
-//}
+PatientObj &PatientObj::operator=(const PatientObj &other)
+{
+    this->m_patient=other.m_patient;
+    return *this;
+}
+PatientObj::PatientObj(const PatientObj &&other)
+{
+    this->m_patient=other.m_patient;
+}
 
-//PatientObj::PatientObj(const PatientObj &other)
-//{
-//    this->m_patient=other.m_patient;
-//}
+PatientObj::PatientObj(const PatientObj &other)
+{
+    this->m_patient=other.m_patient;
+}
 
 PatientObj::~PatientObj()
 {

@@ -18,9 +18,9 @@ class PERIMETER_API PatientObj:public QObject
 public:
     PatientObj()=default;
     PatientObj(std::shared_ptr<Patient> patient);
-//    PatientObj(const PatientObj& other);
-//    PatientObj(const PatientObj&& other);
-//    PatientObj& operator=(const PatientObj& other);
+    PatientObj(const PatientObj& other);
+    PatientObj(const PatientObj&& other);
+    PatientObj& operator=(const PatientObj& other);
     ~PatientObj();
     QString getID();void setID(QString value);
     QString getName();void setName(QString value);

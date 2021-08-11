@@ -31,7 +31,7 @@ QX_REGISTER_PRIMARY_KEY(CheckResult, long)
 QX_REGISTER_HPP_QX_API(CheckResult, qx::trait::no_base_class_defined, 0)
 
 typedef std::shared_ptr<CheckResult> CheckResult_ptr;
-typedef QList<CheckResult_ptr> List_CheckResult;
+typedef QList<CheckResult_ptr> CheckResult_List;
 
 #endif // CHECK_RESULT_H
 

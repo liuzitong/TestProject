@@ -13,7 +13,8 @@ HEADERS += \
     $$PWD/checkResultVm.h \
     $$PWD/databaseSvc.h \
     $$PWD/patientObj.h \
-    $$PWD/patientModelList.h
+    $$PWD/patientListModel.h \
+    $$PWD/roles.h
 
 SOURCES += \
     $$PWD/patient.cpp \
@@ -22,5 +23,5 @@ SOURCES += \
     $$PWD/checkResultVm.cpp \
     $$PWD/databaseSvc.cpp \
     $$PWD/patientObj.cpp \
-    $$PWD/patientModelList.cpp
+    $$PWD/patientListModel.cpp
 

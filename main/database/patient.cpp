@@ -6,7 +6,7 @@ template <> void qx::register_class(QxClass<Patient> &t){
     t.data(&Patient::m_name, "name");
     t.data(&Patient::m_birthDate, "birthDate");
     t.data(&Patient::m_sex,"sex");
-    t.relationOneToMany(&Patient::m_checkResultX,"list_checkResult","patient_id");
+    t.relationOneToMany(&Patient::m_checkResultX,"CheckResult_List","patient_id");
 }
 
 

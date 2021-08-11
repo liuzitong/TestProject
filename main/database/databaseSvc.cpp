@@ -23,18 +23,18 @@ QObject* databaseSvc::getPatientById(QString id)
 {
     qDebug()<<"getPatientById..";
     qDebug()<<id;
-    List_Patient list_patient;
+    Patient_List Patient_List;
     qx_query query("select * from patient where patient_id=:id");
     query.bind(":id",id);
-    QSqlError daoError = qx::dao::execute_query(query, list_patient);;
+    QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
 
     std::cout<<"*****patient_list*****"<<std::endl;
-    for(auto& i:list_patient)
+    for(auto& i:Patient_List)
     {
         qDebug()<<i->m_id;
         qDebug()<<i->m_name;
     }
-    return static_cast<QObject*>(new PatientObj(list_patient.front()));
+    return static_cast<QObject*>(new PatientObj(Patient_List.front()));
 }
 
 void databaseSvc::test()

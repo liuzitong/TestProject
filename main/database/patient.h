@@ -13,20 +13,20 @@ public:
     enum sex { male, female, unknown };
 // -- typedef
     typedef std::shared_ptr<CheckResult> CheckResult_ptr;
-    typedef std::vector<CheckResult_ptr> List_CheckResult;
+    typedef std::vector<CheckResult_ptr> CheckResult_List;
 
     QString m_id;
     QString m_name;
     sex m_sex;
     QDate m_birthDate;
-    List_CheckResult m_checkResultX;
+    CheckResult_List m_checkResultX;
     Patient() = default;
     Patient(QString id,QString name,sex sex,QDate date):m_id(id),m_name(name),m_sex(sex),m_birthDate(date){}
     virtual ~Patient(){}
 };
 
 typedef std::shared_ptr<Patient> Patient_ptr;
-typedef QList<Patient_ptr> List_Patient;
+typedef QList<Patient_ptr> Patient_List;
 QX_REGISTER_PRIMARY_KEY(Patient, QString)
 QX_REGISTER_HPP_QX_API(Patient, qx::trait::no_base_class_defined, 0)
 
