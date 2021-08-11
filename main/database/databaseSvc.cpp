@@ -1,31 +1,37 @@
+#include "precompiled.h"
 #include "databaseSvc.h"
 #include "checkResult.h"
 #include "patient.h"
 #include "program.h"
-#include "perimeter/base/common/perimeter_memcntr.hxx"
-
 
 namespace Perimeter {
-class PERIMETER_API databaseSvcPriv
-{
-private:
-    databaseSvc *m_parent;
-public :
-    explicit databaseSvcPriv( databaseSvc * pa)
-    {
-        m_parent=pa;
-    }
-    ~databaseSvcPriv( ){};
-};
 
-databaseSvc::databaseSvc()
+void databaseSvc::initDataBase()
 {
-    m_obj=perimeter_new( databaseSvcPriv, this );
+    qx::QxSqlDatabase::getSingleton()->setDriverName("QSQLITE");
+    qx::QxSqlDatabase::getSingleton()->setDatabaseName(R"(./test.sqlite)");
+    qx::QxSqlDatabase::getSingleton()->setHostName("localhost");
+    qx::QxSqlDatabase::getSingleton()->setUserName("root");
+    qx::QxSqlDatabase::getSingleton()->setPassword("");
+    qx::QxSqlDatabase::getSingleton()->setFormatSqlQueryBeforeLogging(true);
+    qx::QxSqlDatabase::getSingleton()->setDisplayTimerDetails(true);
+    qx::QxSqlDatabase::getSingleton()->setVerifyOffsetRelation(true);
 }
 
-databaseSvc::~databaseSvc()
+PatientVm databaseSvc::GetPatientById(QString id)
 {
-    perimeter_delete( m_obj, databaseSvcPriv );
+    List_Patient list_patient;
+    qx_query query("select * from patient where id=:id");
+    query.bind(":id",id);
+    QSqlError daoError = qx::dao::execute_query(query, list_patient);;
+
+    std::cout<<"*****patient_list*****"<<std::endl;
+    for(auto& i:list_patient)
+        std::cout<<i->m_id.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
+    std::cout<<std::endl;
+    std::shared_ptr<Patient> pp=list_patient.front();
+    PatientVm pv(pp);
+    return pv;
 }
 
 }

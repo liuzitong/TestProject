@@ -3,6 +3,27 @@
 #include <QDate>
 namespace Perimeter {
 
+PatientVm::PatientVm(std::shared_ptr<Patient> patient)
+{
+    m_patient=patient;
+}
+
+PatientVm &PatientVm::operator=(const PatientVm &other)
+{
+    this->m_patient=other.m_patient;
+    return *this;
+}
+
+PatientVm::PatientVm(const PatientVm &&other)
+{
+    this->m_patient=other.m_patient;
+}
+
+PatientVm::PatientVm(const PatientVm &other)
+{
+    this->m_patient=other.m_patient;
+}
+
 QString PatientVm::getID()
 {
     return m_patient->m_id;

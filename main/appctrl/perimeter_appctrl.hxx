@@ -5,6 +5,7 @@
 #include "qxpack/indcom/afw/qxpack_ic_appctrlbase.hxx"
 #include <QObject>
 #include <QString>
+#include "perimeter/main/database/databaseSvc.h"
 
 namespace Perimeter {
 
@@ -18,6 +19,7 @@ class PERIMETER_API  AppCtrl : public QxPack::IcAppCtrlBase {
     Q_PROPERTY( QObject*  objMgr READ  objMgrObj CONSTANT )
     Q_PROPERTY( QObject*  msgBus READ  msgBusObj CONSTANT )
     Q_PROPERTY( QString language READ  language WRITE setLanguage NOTIFY languageChanged)
+
 
 public:
     //! ctor
@@ -60,6 +62,7 @@ protected:
 private:
     void *m_obj;
     QString m_language="Chinese";
+
     Q_DISABLE_COPY( AppCtrl )
 };
 

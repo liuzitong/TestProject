@@ -16,6 +16,11 @@ class PERIMETER_API PatientVm:QObject
 
 public:
     PatientVm()=default;
+    PatientVm(std::shared_ptr<Patient> patient);
+    PatientVm(const PatientVm& other);
+    PatientVm(const PatientVm&& other);
+    PatientVm& operator=(const PatientVm& other);
+    ~PatientVm(){};
     QString getID();void setID(QString value);
     QString getName();void setName(QString value);
     int getSex();void setSex(int value);

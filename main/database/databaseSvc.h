@@ -6,15 +6,13 @@
 
 
 namespace Perimeter {
-class databaseSvcPriv;
-class databaseSvc: public QxPack::IcViewModelBase
+class databaseSvc: QObject
 {
+    Q_OBJECT
 public:
-    Q_INVOKABLE explicit databaseSvc( );
-    virtual ~databaseSvc( ) Q_DECL_OVERRIDE;
-//    PatientVm GetPatientById(QString id);
-private:
-    databaseSvcPriv* m_obj;
+    databaseSvc( )=default;
+    Q_INVOKABLE static void initDataBase();
+    Q_INVOKABLE static PatientVm GetPatientById(QString id);
 };
 }
 #endif // DATABASEVM_H

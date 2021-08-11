@@ -208,6 +208,7 @@ QThread*  IcAppCtrlBase :: businessThread() const
 IcMsgBus *  IcAppCtrlBase :: msgBus( ) const
 { return T_PrivPtr( m_obj )->msgBus(); }
 
+
 // ============================================================================
 // access the object manager
 // ============================================================================
