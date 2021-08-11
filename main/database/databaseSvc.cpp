@@ -3,7 +3,8 @@
 #include "checkResult.h"
 #include "patient.h"
 #include "program.h"
-//#include "perimeter/base/common/perimeter_memcntr.hxx"
+#include "patientListModel.h"
+#include "perimeter/base/common/perimeter_memcntr.hxx"
 
 namespace Perimeter {
 
@@ -34,7 +35,8 @@ QObject* databaseSvc::getPatientById(QString id)
         qDebug()<<i->m_id;
         qDebug()<<i->m_name;
     }
-    return static_cast<QObject*>(new PatientObj(Patient_List.front()));
+    PatientObj * po=perimeter_new(PatientObj,Patient_List.front());
+    return po;
 }
 
 void databaseSvc::test()
@@ -42,4 +44,13 @@ void databaseSvc::test()
     qDebug()<<"test test test..";
 }
 
+QObject* databaseSvc::getPatientModel()
+{
+    Patient_List Patient_List;
+    qx_query query("select * from patient");
+    QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
+    PatientListModel* plm=perimeter_new(PatientListModel);
+    plm->setPatientList(Patient_List);
+    return plm;
+}
 }

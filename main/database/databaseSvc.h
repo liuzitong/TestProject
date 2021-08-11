@@ -2,8 +2,6 @@
 #define DATABASEVM_H
 #include "perimeter/base/common/perimeter_def.h"
 #include "qxpack/indcom/afw/qxpack_ic_viewmodelbase.hxx"
-#include "patientObj.h"
-
 
 namespace Perimeter {
 class databaseSvc:public QObject
@@ -14,6 +12,7 @@ public:
     Q_INVOKABLE static void initDataBase();
     Q_INVOKABLE static QObject* getPatientById(QString id);
     Q_INVOKABLE static void test();
+    Q_INVOKABLE static QObject* getPatientModel();
 };
 }
 #endif // DATABASEVM_H

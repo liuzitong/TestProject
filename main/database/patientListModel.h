@@ -6,16 +6,16 @@
 #include "patient.h"
 
 namespace Perimeter{
-class PERIMETER_API PatientListModelPriv;
 class PERIMETER_API PatientListModel:public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(int currentValue READ current WRITE setCurrent NOTIFY currentChanged)
+//    Q_PROPERTY(int currentValue READ current WRITE setCurrent NOTIFY currentChanged)
 public:
     PatientListModel();
-    int current();
-    void setCurrent();
-    Q_SIGNAL void currentChanged();
+//    int current();
+//    void setCurrent();
+    void setPatientList(Patient_List patient_list);
+//    Q_SIGNAL void currentChanged();
 
     // ========================================================================
     // override functions
@@ -30,14 +30,14 @@ public:
     //! @note we used roles like "id","name","dob", so view can use name to access it.
     virtual QHash<int,QByteArray>  roleNames( ) const Q_DECL_OVERRIDE;
 
-    //! directly set data object at spec. index
-    virtual bool       setData ( const QModelIndex &, const QVariant &, int ) Q_DECL_OVERRIDE;
+//    //! directly set data object at spec. index
+//    virtual bool       setData ( const QModelIndex &, const QVariant &, int ) Q_DECL_OVERRIDE;
 
-    //! return flags ( characteristics )
-    virtual Qt::ItemFlags  flags ( const QModelIndex & ) const Q_DECL_OVERRIDE;
+//    //! return flags ( characteristics )
+//    virtual Qt::ItemFlags  flags ( const QModelIndex & ) const Q_DECL_OVERRIDE;
 
 private:
-    PatientListModelPriv* m_obj;
+    void* m_obj;
     Q_DISABLE_COPY(PatientListModel);
 };
 }

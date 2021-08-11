@@ -4,11 +4,10 @@
 #include <QList>
 #include "roles.h"
 namespace Perimeter{
+#define T_PrivPtr( o )  perimeter_objcast( PatientListModelPriv*, o )
 class PERIMETER_API PatientListModelPriv
 {
-
 private:
-//    QList<PatientObj> m_list;
     PatientListModel* m_parent;
     Patient_List m_list;
 public:
@@ -19,16 +18,16 @@ public:
     inline int RowCount(){return m_list.count();}
     QVariant data(const QModelIndex &idx, int role) const
     {
-//        int index=idx.row();
-//        Patient_ptr pp=m_list[index];
-//        if ( role == Qt::DisplayRole )
-//        {
-//            PatientObj pb(pp);
-//            return pb;
-
-//        } else {
-//            return QVariant( 0 );
-//        }
+        int index=idx.row();
+        Patient_ptr pp=m_list[index];
+        switch (role)
+        {
+        case (PatientRoles::id): return pp->m_id;
+        case (PatientRoles::name): return pp->m_name;
+        case (PatientRoles::birthDate): return pp->m_birthDate;
+        case(PatientRoles::sex): return pp->m_sex;
+        default:return QVariant();
+        }
     }
 
     QHash<int, QByteArray> roleNames() const
@@ -40,6 +39,10 @@ public:
            roles[sex]="sex";
            return roles;
     }
+    void setPatientList(Patient_List patient_list)
+    {
+        m_list=patient_list;
+    }
 };
 
 PatientListModel::PatientListModel()
@@ -47,28 +50,33 @@ PatientListModel::PatientListModel()
     m_obj = perimeter_new( PatientListModelPriv, this );
 }
 
+void PatientListModel::setPatientList(Patient_List patient_list)
+{
+    T_PrivPtr( m_obj )->setPatientList(patient_list);
+}
+
 int PatientListModel::rowCount(const QModelIndex &) const
 {
-    return m_obj->RowCount();
+    return T_PrivPtr( m_obj )->RowCount();
 }
 
 QVariant PatientListModel::data(const QModelIndex &idx, int role) const
 {
-    return m_obj->data(idx,role);
+    return T_PrivPtr( m_obj )->data(idx,role);
 }
 
 QHash<int, QByteArray> PatientListModel::roleNames() const
 {
-    return m_obj->roleNames();
+    return T_PrivPtr( m_obj )->roleNames();
 }
 
-bool PatientListModel::setData(const QModelIndex &, const QVariant &, int)
-{
+//bool PatientListModel::setData(const QModelIndex &, const QVariant &, int)
+//{
 
-}
+//}
 
-Qt::ItemFlags PatientListModel::flags(const QModelIndex &) const
-{
+//Qt::ItemFlags PatientListModel::flags(const QModelIndex &) const
+//{
 
-}
+//}
 }
