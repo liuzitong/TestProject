@@ -66,6 +66,10 @@ Column{
                                     if(currentIndex==3){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=true;birthDateGroup.visible=false;}
                                     if(currentIndex==4){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=true;}
                                 }
+
+                                Component.onCompleted: {
+                                    IcUiQmlApi.appCtrl.languageChanged.connect(onCurrentIndexChanged)
+                                }
                             }
                             LineEdit{id:patientID;radius:height/6;width: height*4}
                             LineEdit{id:chineseName;radius:height/6;width: height*4}
@@ -211,8 +215,14 @@ Column{
                         Column{
                             id:newPatient;anchors.fill: parent;spacing: patientManagement.rowHight*1.5
                             Component.onCompleted: {
+                                showControl();
+                                IcUiQmlApi.appCtrl.languageChanged.connect(showControl)
+                            }
+
+                            function showControl()
+                            {
                                 if(language=="Chinese") {newChineseNameRow.visible=true;newEnglishFirstNameRow.visible=false;newEnglishLastNameRow.visible=false;}
-                                else {newChineseName.visible=false;newEnglishFirstNameRow.visible=true;newEnglishLastNameRow.visible=true;}
+                                else {newChineseNameRow.visible=false;newEnglishFirstNameRow.visible=true;newEnglishLastNameRow.visible=true;}
                             }
 
                             Row{
