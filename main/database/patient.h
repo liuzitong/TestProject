@@ -5,6 +5,7 @@
 #include <QDate>
 #include "perimeter/base/common/perimeter_def.h"
 #include "qxpack/indcom/afw/qxpack_ic_viewmodelbase.hxx"
+#include <QObject>
 
 class CheckResult;
 class QX_DLL_EXPORT_API Patient{
