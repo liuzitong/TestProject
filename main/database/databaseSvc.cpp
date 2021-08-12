@@ -53,4 +53,6 @@ QObject* databaseSvc::getPatientModel()
     plm->setPatientList(Patient_List);
     return plm;
 }
+
+
 }

@@ -4,6 +4,7 @@
 #include "perimeter_main.hxx"
 #include "../Control/Calendar/perimeter_calendarvm.hxx"
 #include "perimeter/main/database/patientObj.h"
+#include "perimeter/main/database/databaseSvc.h"
 // services list
 
 namespace Perimeter {
@@ -17,6 +18,7 @@ namespace Perimeter {
 Main :: Main ( QObject *pa ) : QxPack::IcModMgrBase( pa )
 {
 
+    databaseSvc::initDataBase();
 }
 
 // ============================================================================

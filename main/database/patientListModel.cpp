@@ -22,10 +22,10 @@ public:
         Patient_ptr pp=m_list[index];
         switch (role)
         {
-        case (PatientRoles::id): return pp->m_id;
+        case (PatientRoles::patientId): return pp->m_id;
         case (PatientRoles::name): return pp->m_name;
-        case (PatientRoles::birthDate): return pp->m_birthDate;
-        case(PatientRoles::sex): return pp->m_sex;
+        case (PatientRoles::birthDate): return pp->m_birthDate.toString("yyyy-MM-dd");
+        case (PatientRoles::sex): return pp->m_sex;
         default:return QVariant();
         }
     }
@@ -33,7 +33,7 @@ public:
     QHash<int, QByteArray> roleNames() const
     {
         QHash<int, QByteArray> roles;
-           roles[id] = "id";
+           roles[patientId] = "patientId";
            roles[name] = "name";
            roles[birthDate] = "birthDate";
            roles[sex]="sex";

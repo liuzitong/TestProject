@@ -28,21 +28,7 @@ Column{
                     Column{
                         id:patientManagement;anchors.fill: parent;spacing: rowHight
                         property int rowHight: height*0.05
-                        Row{
-                            id:dateSelection; width: parent.width;
-                            height: patientManagement.rowHight;spacing: height*0.4;
-                            CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5;}
-                            LineEdit{property string name: "dateFrom";id:dateFrom;radius: height/6;width: height*3.3;}
-                            CusButton{id:dateFromButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateFrom;calendar.open();}}
-                            CusText{text:"到";width: height*0.6;}
-                            LineEdit{property string name: "dateTo";id:dateTo;radius: height/6;width: height*3.3;}
-                            CusButton{id:dateToButton;text:"选择";width:height*2;
-                                onClicked:{
-                                    if(dateFrom.text!==""&&dateTo.text=="")
-                                        dateTo.text=dateFrom.text;
-                                    calendar.inputObj=dateTo;calendar.open();
-                                }}
-                        }
+
                         Row{
                             id:query; width: parent.width; height:patientManagement.rowHight;spacing: height*0.5
                             CusComboBox{
@@ -71,6 +57,7 @@ Column{
                                     IcUiQmlApi.appCtrl.languageChanged.connect(onCurrentIndexChanged)
                                 }
                             }
+
                             LineEdit{id:patientID;radius:height/6;width: height*4}
                             LineEdit{id:chineseName;radius:height/6;width: height*4}
                             Flow{
@@ -91,7 +78,29 @@ Column{
                                 LineEdit{id:birthDate;height: parent.height;radius:height/6;width: height*4;visible: true;}
                                 CusButton{text:"选择";width:height*2;onClicked:{calendar.inputObj=birthDate;calendar.open();}}
                             }
-                            CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}}
+                            CusButton{
+                                height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"
+                                onClicked:
+                                {
+                                    patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientModel();
+                                }
+                            }
+                        }
+                        Row{
+                            id:dateSelection; width: parent.width;
+                            height: patientManagement.rowHight;spacing: height*0.4;
+                            CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5;}
+                            LineEdit{property string name: "dateFrom";id:dateFrom;radius: height/6;width: height*3.3;}
+                            CusButton{id:dateFromButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateFrom;calendar.open();}}
+                            CusText{text:"到";width: height*0.6;}
+                            LineEdit{property string name: "dateTo";id:dateTo;radius: height/6;width: height*3.3;}
+                            CusButton{id:dateToButton;text:"选择";width:height*2;
+                                onClicked:{
+                                    if(dateFrom.text!==""&&dateTo.text=="")
+                                        dateTo.text=dateFrom.text;
+                                    calendar.inputObj=dateTo;calendar.open();
+                                }}
+                        }
                         Item{
                             width: parent.width;height: parent.height-6*patientManagement.rowHight
                             Column{
@@ -122,33 +131,16 @@ Column{
                                 }
                                 ListView{
                                     id:patientInfoListView
-                                    width: parent.width;height:patientInfoCol.height-patientManagement.rowHight +1; /*interactive: false;*/model:contactModel;delegate: patientInfoDelegate;spacing: -1;clip:true;snapMode: ListView.SnapPosition;
+                                    width: parent.width;height:patientInfoCol.height-patientManagement.rowHight +1; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
+                                    delegate: patientInfoDelegate;
                                     //List Element会导致界面预览无法显示
-                                    ListModel {
-                                        id:contactModel
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-                                    }
+//                                    ListModel {
+//                                        id:contactModel
+//    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
 
+//                                    }
+
+                                    Component.onCompleted: {patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientModel();}
                                     Component{
                                         id:patientInfoDelegate
                                         Row{
@@ -170,7 +162,7 @@ Column{
                                             }
                                             Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
                                             Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.name}}
-                                            Rectangle{width: parent.width*1/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.gender}}
+                                            Rectangle{width: parent.width*1/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.sex}}
                                             Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
                                             CusButton{width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"}
                                         }
