@@ -112,7 +112,7 @@ Column{
                                     width: parent.width; height:patientManagement.rowHight;spacing: -1;z:1;
                                     property bool isAllSelected: false;
                                     CusButton{
-                                        width: parent.width*1/9;height: parent.height;buttonColor: "#D2D3D5"; borderColor: "#656566";radius:0;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
+                                        width: parent.width*1/10;height: parent.height;buttonColor: "#D2D3D5"; borderColor: "#656566";radius:0;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
                                         onClicked: {
                                             if(!header.isAllSelected)
                                             {
@@ -124,17 +124,17 @@ Column{
                                             }
                                         }
                                     }
-                                    Rectangle{width: parent.width*2/9+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"患者ID"}}
-                                    Rectangle{width: parent.width*2/9+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"姓名"}}
-                                    Rectangle{width: parent.width*1/9+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"性别"}}
-                                    Rectangle{width: parent.width*2/9+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"出生日期"}}
-                                    Rectangle{width: parent.width*1/9+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"载入"}}
+                                    Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"患者ID"}}
+                                    Rectangle{width: parent.width*3/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"姓名"}}
+                                    Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"性别"}}
+                                    Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"出生日期"}}
+                                    Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"载入"}}
                                 }
                                 ListView{
                                     id:patientInfoListView
                                     width: parent.width;height:patientInfoCol.height-patientManagement.rowHight +1; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
                                     delegate: patientInfoDelegate
-                                    Component.onCompleted: {patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientModel();}
+//                                    Component.onCompleted: {patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientModel();}
                                     Component{
                                         id:patientInfoDelegate
                                         Row{
@@ -142,17 +142,18 @@ Column{
                                             width: patientInfoListView.width;height: (patientInfoCol.height-patientManagement.rowHight)/14+1;spacing: -1;
                                             property bool isSelected: false;
                                             CusButton{
-                                                width: parent.width*1/9;height: parent.height;buttonColor: "white"; borderColor: backGroundBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
+                                                width: parent.width*1/10;height: parent.height;buttonColor: "white"; borderColor: backGroundBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
                                                 onClicked:
                                                 {
                                                     if(!patientInfoRow.isSelected){patientInfoRow.isSelected=true;imageSrc="qrc:/Pics/base-svg/btn_select_click.svg";}
                                                     else{patientInfoRow.isSelected=false;imageSrc="qrc:/Pics/base-svg/btn_select_normal.svg";}
                                                 }
                                             }
-                                            Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
-                                            Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.name}}
-                                            Rectangle{width: parent.width*1/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.sex}}
-                                            Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
+                                            Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
+                                            Rectangle{width: parent.width*3/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.name}}
+                                            Rectangle{width: parent.width*1/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.sex}}
+                                            Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
+                                            Rectangle{width: parent.width*1/50;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.Id}}
                                             CusButton
                                             {
                                                 width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"
@@ -289,7 +290,7 @@ Column{
                                                 var now=new Date(Date.now());
                                                 var age=now.getFullYear()-birthDate.getFullYear();
                                                 if(now.getMonth()<birthDate.getMonth()) age-=1;
-                                                if((now.getMonth()==birthDate.getMonth())&&(now.getDay()<birthDate.now.getDay())) age-=1;
+                                                if((now.getMonth()==birthDate.getMonth())&&(now.getDay()<birthDate.getDay())) age-=1;
                                                 newPatientage.text=age;
                                             }
                                         }

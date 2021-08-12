@@ -10,7 +10,8 @@ namespace Perimeter{
 class PERIMETER_API PatientVm:public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString id READ getID WRITE setID)
+    Q_PROPERTY(long id READ getID WRITE setID)
+    Q_PROPERTY(QString patientId READ getPatientID WRITE setPatientID)
     Q_PROPERTY(QString name READ getName WRITE setName)
     Q_PROPERTY(int sex READ getSex WRITE setSex)
     Q_PROPERTY(QDate date READ getBirthDate WRITE setBirthDate)
@@ -22,7 +23,8 @@ public:
     PatientVm(const PatientVm&& other);
     PatientVm& operator=(const PatientVm& other);
     ~PatientVm();
-    QString getID();void setID(QString value);
+    long getID();void setID(long value);
+    QString getPatientID();void setPatientID(QString value);
     QString getName();void setName(QString value);
     int getSex();void setSex(int value);
     QDate getBirthDate();void setBirthDate(QDate value);

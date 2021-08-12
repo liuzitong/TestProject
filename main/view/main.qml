@@ -71,6 +71,15 @@ Rectangle {
                         }
                         Flow{
                             height: parent.height;anchors.right: parent.right;spacing: height*1
+
+                            CusButton{
+                                width: parent.height*3;text: "创建数据库表";
+                                onClicked: {IcUiQmlApi.appCtrl.databaseSvc.createTable();}
+                            }
+                            CusButton{
+                                width: parent.height*2;text: "生成数据";
+                                onClicked: {IcUiQmlApi.appCtrl.databaseSvc.createData();}
+                            }
                             CusButton{
                                 type:"click";isAnime: false;underImageText.text: "设置";underImageText.color: "white"; fontSize: height/4;rec.visible: false;
                                 width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_set.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_set_select.svg";

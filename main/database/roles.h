@@ -6,7 +6,8 @@ namespace Perimeter{
 
 enum PatientRoles
 {
-    patientId = Qt::UserRole + 1,
+    Id=Qt::UserRole + 1,
+    patientId ,
     name,
     birthDate,
     sex,

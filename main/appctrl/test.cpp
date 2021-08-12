@@ -54,7 +54,7 @@ public:
 
         std::cout<<"*****patient_list*****"<<std::endl;
         for(auto& i:Patient_List)
-            std::cout<<i->m_id.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
+            std::cout<<i->m_id<<" "<<i->m_patinetId.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
         std::cout<<std::endl;
 
         std::cout<<"*****program_list****"<<std::endl;
@@ -65,7 +65,7 @@ public:
         std::cout<<"*****checkResult_list****"<<std::endl;
         for(auto& i:CheckResult_List)
             std::cout<<i->m_id<<" "<<i->m_strategy<<" "<<i->m_params.toStdString()<<" "<<i->m_data.toStdString()<<" "
-                     <<i->m_time.toString("yyyy-MM-dd HH:mm::ss").toStdString()<<" "<<i->m_patient->m_id.toStdString()<<" "<<i->m_program->m_id<<std::endl;
+                     <<i->m_time.toString("yyyy-MM-dd HH:mm::ss").toStdString()<<" "<<i->m_patient->m_patinetId.toStdString()<<" "<<i->m_program->m_id<<std::endl;
         std::cout<<std::endl;
     }
 
@@ -110,7 +110,7 @@ public:
 
         std::cout<<"*****patient_list*****"<<std::endl;
         for(auto& i:Patient_List)
-            std::cout<<i->m_id.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
+            std::cout<<i->m_patinetId.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
         std::cout<<std::endl;
     }
 
@@ -123,7 +123,7 @@ public:
 
         std::cout<<"*****patient_list*****"<<std::endl;
         for(auto& i:Patient_List)
-            std::cout<<i->m_id.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
+            std::cout<<i->m_patinetId.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
         std::cout<<std::endl;
 
         query.clear();
@@ -132,7 +132,7 @@ public:
 
         std::cout<<"*****patient_list*****"<<std::endl;
         for(auto& i:Patient_List)
-            std::cout<<i->m_id.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
+            std::cout<<i->m_patinetId.toStdString()<<" "<<i->m_name.toStdString()<<" "<<i->m_birthDate.toString("yyyy-MM-dd").toStdString()<<" "<<std::endl;
         std::cout<<std::endl;
     }
 

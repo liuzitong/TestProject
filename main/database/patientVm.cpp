@@ -29,14 +29,24 @@ PatientVm::~PatientVm()
     qDebug()<<"patient  destructed";
 }
 
-QString PatientVm::getID()
+long PatientVm::getID()
 {
     return m_patient->m_id;
 }
 
-void PatientVm::setID(QString value)
+void PatientVm::setID(long value)
 {
     m_patient->m_id=value;
+}
+
+QString PatientVm::getPatientID()
+{
+   return m_patient->m_patinetId;
+}
+
+void PatientVm::setPatientID(QString value)
+{
+    m_patient->m_patinetId=value;
 }
 
 QString PatientVm::getName()

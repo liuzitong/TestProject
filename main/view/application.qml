@@ -38,12 +38,12 @@ Window {
         {
 
             IcUiQmlApi.appCtrl.databaseSvc.initDataBase();
-            IcUiQmlApi.appCtrl.databaseSvc.test();
-            console.log("sssss");
-            patient_vm=IcUiQmlApi.appCtrl.databaseSvc.getPatientById("5001");
-            console.log("sssss");
-            console.log(patient_vm.name);
-            console.log("sssss");
+//            IcUiQmlApi.appCtrl.databaseSvc.test();
+//            console.log("sssss");
+//            patient_vm=IcUiQmlApi.appCtrl.databaseSvc.getPatientById("5001");
+//            console.log("sssss");
+//            console.log(patient_vm.name);
+//            console.log("sssss");
 //            delete patient_vm;
         }
     }

@@ -11,6 +11,8 @@ class databaseSvc:public QObject
 public:
     databaseSvc( )=default;
     Q_INVOKABLE static void initDataBase();
+    Q_INVOKABLE static void createTable();
+    Q_INVOKABLE static void createData();
     Q_INVOKABLE static QObject* getPatientById(QString id);
     Q_INVOKABLE static void test();
     Q_INVOKABLE static QObject* getPatientModel();
