@@ -15,6 +15,7 @@ Item{
     TextField{
         id:textfeild;
         anchors.fill: parent;
+        text:"";
         renderType: Text.NativeRendering
         horizontalAlignment: Text.right
         verticalAlignment: Text.AlignVCenter

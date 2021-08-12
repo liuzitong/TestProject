@@ -5,6 +5,7 @@
 #include "program.h"
 #include "patientListModel.h"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
+#include <QMessageBox>
 
 namespace Perimeter {
 
@@ -52,6 +53,16 @@ QObject* databaseSvc::getPatientModel()
     PatientListModel* plm=perimeter_new(PatientListModel);
     plm->setPatientList(Patient_List);
     return plm;
+}
+
+void databaseSvc::addPatient(QString id, QString name, int sex, QDate date)
+{
+    Patient_ptr patient_ptr(new Patient(id,name,Patient::sex(sex),date));
+//    patient->m_id=id;
+//    patient->m_name=name;
+//    pat
+     QSqlError daoError = qx::dao::insert(patient_ptr);
+
 }
 
 

@@ -11,6 +11,7 @@ Column{
     property string language:IcUiQmlApi.appCtrl.language
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
+    property int pageSize: 14;
     anchors.fill:parent;
     Item{
         width: parent.width;
@@ -374,8 +375,14 @@ Column{
             Flow{
                 height:parent.height; layoutDirection: Qt.RightToLeft;width:parent.width*0.4;spacing: height*0.8;
                 CusButton{text:"进入检测"}
-                CusButton{text:"保存"}
-                CusButton{text:"新建"}
+                CusButton{text:"保存";onClicked:{
+                        var Name="";
+                        if(language=="Chinese"){ Name=newChineseName.text; }
+                        else {Name = newEnglishFirstName.text+" "+newEnglishLastName.text;}
+                        IcUiQmlApi.appCtrl.databaseSvc.addPatient(newId.text,Name,genderSelect.gender,newDateBirth.text);}}
+                CusButton{
+                    text:"新建";
+                }
             }
         }
     }
