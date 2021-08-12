@@ -2,7 +2,7 @@
 #define PATIENTMODELLIST_H
 #include "perimeter/base/common/perimeter_def.h"
 #include <QAbstractListModel>
-#include "patientObj.h"
+#include "patientVm.h"
 #include "patient.h"
 
 namespace Perimeter{

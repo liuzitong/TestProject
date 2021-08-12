@@ -132,14 +132,7 @@ Column{
                                 ListView{
                                     id:patientInfoListView
                                     width: parent.width;height:patientInfoCol.height-patientManagement.rowHight +1; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
-                                    delegate: patientInfoDelegate;
-                                    //List Element会导致界面预览无法显示
-//                                    ListModel {
-//                                        id:contactModel
-//    //                                            ListElement {patientId: "Bill Smith";name: "555 3264";gender:"男性";birthDate:"1988-5-11";}
-
-//                                    }
-
+                                    delegate: patientInfoDelegate
                                     Component.onCompleted: {patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientModel();}
                                     Component{
                                         id:patientInfoDelegate
@@ -149,22 +142,26 @@ Column{
                                             property bool isSelected: false;
                                             CusButton{
                                                 width: parent.width*1/9;height: parent.height;buttonColor: "white"; borderColor: backGroundBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
-                                                onClicked: {
-                                                    if(!patientInfoRow.isSelected)
-                                                    {
-                                                        patientInfoRow.isSelected=true;imageSrc="qrc:/Pics/base-svg/btn_select_click.svg";
-                                                    }
-                                                    else
-                                                    {
-                                                        patientInfoRow.isSelected=false;imageSrc="qrc:/Pics/base-svg/btn_select_normal.svg";
-                                                    }
+                                                onClicked:
+                                                {
+                                                    if(!patientInfoRow.isSelected){patientInfoRow.isSelected=true;imageSrc="qrc:/Pics/base-svg/btn_select_click.svg";}
+                                                    else{patientInfoRow.isSelected=false;imageSrc="qrc:/Pics/base-svg/btn_select_normal.svg";}
                                                 }
                                             }
                                             Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
                                             Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.name}}
                                             Rectangle{width: parent.width*1/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.sex}}
                                             Rectangle{width: parent.width*2/9+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
-                                            CusButton{width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"}
+                                            CusButton
+                                            {
+                                                width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"
+                                                onClicked:
+                                                {
+                                                    var name=model.name;var firstName ="";var lastName="";
+                                                    if(model.name.indexOf(" ")>-1){ firstName =model.name.split(" ")[0]; lastName=model.name.split(" ")[1];};
+                                                    newId.text=model.patientId;newChineseName.text=model.name;genderSelect.selectGender(model.sex);newDateBirth.text=model.birthDate;newEnglishFirstName.text=firstName;newEnglishLastName.text=lastName;
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -220,7 +217,7 @@ Column{
                             Row{
                                 width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
                                 CusText{text:"*患者ID "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
-                                LineEdit{width: parent.width*0.6}
+                                LineEdit{id:newId;width: parent.width*0.6}
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
                             Row{
@@ -247,30 +244,30 @@ Column{
                                 width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
                                 CusText{text:"*性别 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                 Row{
-                                    id:genderSelect;property string gender;
+                                    id:genderSelect;property int gender;
                                     height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
                                     CusButton{
                                         id:manButton;property bool chosen:false;imageSrc: "qrc:/Pics/base-svg/btn_sex_man.svg";width: 2*height
-                                        onClicked: {genderSelect.selectGender(manButton,this)}
+                                        onClicked: {genderSelect.selectGender(0)}
                                     }
                                     CusButton{
                                         id:womanButton;property bool chosen:false;imageSrc: "qrc:/Pics/base-svg/btn_sex_woman.svg";width: 2*height
-                                        onClicked:  {genderSelect.selectGender(womanButton,this)}
+                                        onClicked:  {genderSelect.selectGender(1)}
                                     }
                                     CusButton{id:otherButton;property bool chosen:false;text:"其它";width:height*2;
-                                         onClicked: {genderSelect.selectGender(otherButton,this)}
+                                         onClicked: {genderSelect.selectGender(2)}
                                     }
-                                    function selectGender(id,button)
+                                    function selectGender(id)
+
                                     {
-                                        womanButton.borderColor=womanButton.commonBorderColor;
                                         manButton.borderColor=manButton.commonBorderColor;
+                                        womanButton.borderColor=womanButton.commonBorderColor;
                                         otherButton.borderColor=otherButton.commonBorderColor;
-                                        button.borderColor=button.pressBorderColor;
                                         switch(id)
                                         {
-                                            case manButton: genderSelect.gender="man";break;
-                                            case womanButton:genderSelect.gender="women";break;
-                                            case otherButton:genderSelect.gender="other";break;
+                                            case 0:genderSelect.gender=0; manButton.borderColor=manButton.pressBorderColor;break;
+                                            case 1:genderSelect.gender=1; womanButton.borderColor=womanButton.pressBorderColor;break;
+                                            case 2:genderSelect.gender=2; otherButton.borderColor=otherButton.pressBorderColor;break;
                                         }
                                     }
                                 }
