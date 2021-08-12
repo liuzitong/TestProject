@@ -7,7 +7,7 @@
 
 class Patient;
 namespace Perimeter{
-class PERIMETER_API PatientObj:public QObject
+class PERIMETER_API PatientVm:public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString id READ getID WRITE setID)
@@ -16,12 +16,12 @@ class PERIMETER_API PatientObj:public QObject
     Q_PROPERTY(QDate date READ getBirthDate WRITE setBirthDate)
 
 public:
-    PatientObj()=default;
-    PatientObj(std::shared_ptr<Patient> patient);
-    PatientObj(const PatientObj& other);
-    PatientObj(const PatientObj&& other);
-    PatientObj& operator=(const PatientObj& other);
-    ~PatientObj();
+    PatientVm()=default;
+    PatientVm(std::shared_ptr<Patient> patient);
+    PatientVm(const PatientVm& other);
+    PatientVm(const PatientVm&& other);
+    PatientVm& operator=(const PatientVm& other);
+    ~PatientVm();
     QString getID();void setID(QString value);
     QString getName();void setName(QString value);
     int getSex();void setSex(int value);

@@ -3,7 +3,7 @@
 
 #include "perimeter_main.hxx"
 #include "../Control/Calendar/perimeter_calendarvm.hxx"
-#include "perimeter/main/database/patientObj.h"
+#include "perimeter/main/database/patientVm.h"
 #include "perimeter/main/database/databaseSvc.h"
 // services list
 
@@ -44,9 +44,8 @@ void  Main :: registerTypes( QxPack::IcAppCtrlBase *app_base )
     // ------------------------------------------------------------------------
     // register all public types of this module
     // ------------------------------------------------------------------------
-    obj_mgr->registerType<Perimeter::CalendarVm>(
-        QStringLiteral("Perimeter::CalendarVm"), Q_NULLPTR
-    );
+    obj_mgr->registerType<Perimeter::CalendarVm>(QStringLiteral("Perimeter::CalendarVm"), Q_NULLPTR);
+    obj_mgr->registerType<Perimeter::PatientVm>(QStringLiteral("Perimeter::PatientVm"), Q_NULLPTR);
 
 
 }

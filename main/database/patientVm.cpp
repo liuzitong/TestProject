@@ -1,70 +1,70 @@
-#include "patientObj.h"
+#include "PatientVm.h"
 #include "patient.h"
 #include <QDate>
 namespace Perimeter {
 
-PatientObj::PatientObj(std::shared_ptr<Patient> patient)
+PatientVm::PatientVm(std::shared_ptr<Patient> patient)
 {
     m_patient=patient;
 }
 
-PatientObj &PatientObj::operator=(const PatientObj &other)
+PatientVm &PatientVm::operator=(const PatientVm &other)
 {
     this->m_patient=other.m_patient;
     return *this;
 }
-PatientObj::PatientObj(const PatientObj &&other)
+PatientVm::PatientVm(const PatientVm &&other)
 {
     this->m_patient=other.m_patient;
 }
 
-PatientObj::PatientObj(const PatientObj &other)
+PatientVm::PatientVm(const PatientVm &other)
 {
     this->m_patient=other.m_patient;
 }
 
-PatientObj::~PatientObj()
+PatientVm::~PatientVm()
 {
     m_patient=0;
     qDebug()<<"patient  destructed";
 }
 
-QString PatientObj::getID()
+QString PatientVm::getID()
 {
     return m_patient->m_id;
 }
 
-void PatientObj::setID(QString value)
+void PatientVm::setID(QString value)
 {
     m_patient->m_id=value;
 }
 
-QString PatientObj::getName()
+QString PatientVm::getName()
 {
     return m_patient->m_name;
 }
 
-void PatientObj::setName(QString value)
+void PatientVm::setName(QString value)
 {
     m_patient->m_name=value;
 }
 
-int PatientObj::getSex()
+int PatientVm::getSex()
 {
     return m_patient->m_sex;
 }
 
-void PatientObj::setSex(int value)
+void PatientVm::setSex(int value)
 {
     m_patient->m_sex=Patient::sex(value);
 }
 
-QDate PatientObj::getBirthDate()
+QDate PatientVm::getBirthDate()
 {
     return m_patient->m_birthDate;
 }
 
-void PatientObj::setBirthDate(QDate value)
+void PatientVm::setBirthDate(QDate value)
 {
     m_patient->m_birthDate=value;
 }

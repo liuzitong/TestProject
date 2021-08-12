@@ -1,5 +1,5 @@
 #include "patientListModel.h"
-#include "patientObj.h"
+#include "patientVm.h"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
 #include <QList>
 #include "roles.h"
