@@ -11,6 +11,7 @@ Window {
     minimumWidth: 960;minimumHeight: 640;property string currentpage: "Login";
     property string language: IcUiQmlApi.appCtrl.language
 
+
     Loader {
         id: pageLoader
         anchors.fill: parent;

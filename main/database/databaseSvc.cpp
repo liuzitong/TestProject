@@ -34,7 +34,7 @@ void databaseSvc::createTable(){
     daoError = qx::dao::create_table<Program>();
 }
 
-QObject* databaseSvc::getPatientById(QString id)
+QObject* databaseSvc::getPatientObjByPatientId(QString id)
 {
     qDebug()<<"getPatientById..";
     qDebug()<<id;
@@ -52,6 +52,7 @@ QObject* databaseSvc::getPatientById(QString id)
     PatientVm * po=perimeter_new(PatientVm,Patient_List.front());
     return po;
 }
+
 
 void databaseSvc::test()
 {
@@ -76,6 +77,17 @@ void databaseSvc::addPatient(QString patientId, QString name, int sex, QDate dat
 //    pat
      QSqlError daoError = qx::dao::insert(patient_ptr);
 
+}
+
+void databaseSvc::updatePatient(long id,QString patientId, QString name, int sex, QDate date)
+{
+    Patient_List Patient_List;
+    qx_query query("select * from patient where id=:id");
+    query.bind(":id",QString::number(id));
+    QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
+    Patient_ptr pp = Patient_List.front();
+    pp->m_patinetId=patientId;pp->m_name=name;pp->m_sex=Patient::sex(sex);pp->m_birthDate=date;
+    daoError = qx::dao::update(pp);
 }
 
 void databaseSvc::createData()

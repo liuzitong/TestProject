@@ -19,7 +19,8 @@ class PERIMETER_API  AppCtrl : public QxPack::IcAppCtrlBase {
     Q_PROPERTY( QObject*  objMgr READ  objMgrObj CONSTANT )
     Q_PROPERTY( QObject*  msgBus READ  msgBusObj CONSTANT )
     Q_PROPERTY( QObject*  databaseSvc READ  databaseSvcObj CONSTANT )
-    Q_PROPERTY( QString language READ  language WRITE setLanguage NOTIFY languageChanged)
+    Q_PROPERTY( QString language READ  getLanguage WRITE setLanguage NOTIFY languageChanged)
+    Q_PROPERTY( QObject* currentPatient READ  getCurrentPatient WRITE setCurrentPatient NOTIFY CurrentPatientChanged)
 
 
 public:
@@ -35,14 +36,11 @@ public:
     //! msgBusObj
     QObject*  msgBusObj( ) const;
 
-    QObject* databaseSvcObj() const {return m_databaseSvc;}
 
-    QString language() {return m_language ;}
-
-    void setLanguage(QString value){m_language=value;languageChanged(m_language);}
-
-    Q_SIGNAL void  languageChanged(QString value);
-
+    //Custom Code
+    QObject*    databaseSvcObj() const;
+    QString     getLanguage();          void setLanguage(QString value);            Q_SIGNAL void  languageChanged(QString value);
+    QObject*    getCurrentPatient();    void setCurrentPatient(QObject* value);     Q_SIGNAL void  CurrentPatientChanged(QObject* value);
 protected:
     // override the name
     virtual QString   instanceName() const Q_DECL_OVERRIDE;
@@ -64,8 +62,6 @@ protected:
 
 private:
     void *m_obj;
-    QString m_language="Chinese";
-    QObject* m_databaseSvc;
     Q_DISABLE_COPY( AppCtrl )
 };
 

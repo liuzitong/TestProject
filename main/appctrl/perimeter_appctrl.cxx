@@ -25,9 +25,12 @@ private:
     QxPack::IcMsgBus *m_msg_bus_svc;
     QxPack::IcObjMgr *m_obj_mgr_svc;
     QxPack::IcAppSettingsBase *m_app_set_svc;
-
     // add other sub modules here
-    Main      m_main_mod;
+    Main        m_main_mod;
+    //Custom Code
+    QString     m_language="Chinese";
+    QObject*    m_databaseSvc;
+    QObject*    m_currentPatient;
 public :
     AppCtrlPriv ( AppCtrl *pa );
     ~AppCtrlPriv( );
@@ -35,6 +38,13 @@ public :
     inline QxPack::IcObjMgr*  objMgrSvc( ) const { return m_obj_mgr_svc; }
     inline QxPack::IcAppSettingsBase*  appSetSvc( ) const { return m_app_set_svc; }
     void  registerTypes( );
+
+    //Custom Code
+    QObject*    getDatabaseSvcObj() const           {return m_databaseSvc;}
+    QString     getLanguage()                       {return m_language;}
+    void        setLanguage(QString value)          {m_language=value;}
+    QObject*    getCurrentPatient()                 {return m_currentPatient;}
+    void        setCurrentPatient(QObject *value)   {m_currentPatient=value;}
 };
 
 // ============================================================================
@@ -46,6 +56,8 @@ AppCtrlPriv :: AppCtrlPriv ( AppCtrl *pa )
     m_app_set_svc = AppSettingsSvc::getInstance();
     m_msg_bus_svc = MsgBusSvc::getInstance();
     m_obj_mgr_svc = ObjMgrSvc::getInstance();
+//    m_databaseSvc = static_cast<QObject*>(new databaseSvc());
+    m_databaseSvc = perimeter_new(databaseSvc);
 }
 
 // ============================================================================
@@ -57,6 +69,8 @@ AppCtrlPriv :: ~AppCtrlPriv ( )
     ObjMgrSvc::freeInstance();
     MsgBusSvc::freeInstance();
     AppSettingsSvc::freeInstance();
+//    delete m_databaseSvc;
+    perimeter_delete(m_databaseSvc,databaseSvc);
 }
 
 // ============================================================================
@@ -67,7 +81,6 @@ void  AppCtrlPriv :: registerTypes()
     m_main_mod.registerTypes    ( m_parent );
 }
 
-
 // ////////////////////////////////////////////////////////////////////////////
 //  wrapper API
 // ////////////////////////////////////////////////////////////////////////////
@@ -77,7 +90,6 @@ void  AppCtrlPriv :: registerTypes()
 AppCtrl :: AppCtrl ( QObject *pa ) : QxPack::IcAppCtrlBase( pa )
 {
     m_obj = perimeter_new( AppCtrlPriv, this );
-    m_databaseSvc=static_cast<QObject*>(new databaseSvc());
 }
 
 // ============================================================================
@@ -86,7 +98,6 @@ AppCtrl :: AppCtrl ( QObject *pa ) : QxPack::IcAppCtrlBase( pa )
 AppCtrl :: ~AppCtrl ( )
 {
     perimeter_delete( m_obj, AppCtrlPriv );
-    delete m_databaseSvc;
 }
 
 // ============================================================================
@@ -100,6 +111,13 @@ QObject*  AppCtrl :: objMgrObj() const
 // ============================================================================
 QObject*  AppCtrl :: msgBusObj() const
 { return msgBus(); }
+
+//Custom Code
+QObject*    AppCtrl::databaseSvcObj() const             {return T_PrivPtr( m_obj )-> getDatabaseSvcObj();}
+QString     AppCtrl::getLanguage()                      {return T_PrivPtr( m_obj )->getLanguage() ;}
+void        AppCtrl::setLanguage(QString value)         {T_PrivPtr( m_obj )->setLanguage(value) ;emit languageChanged(value);}
+QObject*    AppCtrl::getCurrentPatient()                {return T_PrivPtr( m_obj )->getCurrentPatient();}
+void        AppCtrl::setCurrentPatient(QObject *value)  {T_PrivPtr( m_obj )->setCurrentPatient(value);emit CurrentPatientChanged(value);}
 
 // ============================================================================
 // instance name
@@ -194,10 +212,6 @@ void      AppCtrl :: postDeinit( )
 {
 
 }
-
-
-
-
 
 }
 

@@ -12,6 +12,10 @@ Column{
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
     property int pageSize: 14;
+//    Object{
+
+//    }
+
     anchors.fill:parent;
     Item{
         width: parent.width;
@@ -368,7 +372,7 @@ Column{
                     height: parent.height;spacing: height*0.8
                     anchors.horizontalCenter: parent.horizontalCenter
                     CusButton{text:"复查"}
-                    CusButton{text:"修改"}
+                    CusButton{text:"修改";onClicked: {IcUiQmlApi.appCtrl.databaseSvc.updatePatient();}}
                     CusButton{text:"删除"}
                     CusButton{text:"分析"}
                 }
