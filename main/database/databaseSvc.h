@@ -20,7 +20,7 @@ public:
     Q_INVOKABLE static QObject* getPatientModel();
     Q_INVOKABLE static void addPatient(QString patientId,QString name,int sex,QDate date);
     Q_INVOKABLE static void updatePatient(long id,QString patientId, QString name, int sex, QDate date);
-
+    Q_INVOKABLE static void deletePatient(long id);
 };
 }
 #endif // DATABASEVM_H

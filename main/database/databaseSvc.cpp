@@ -79,6 +79,17 @@ void databaseSvc::addPatient(QString patientId, QString name, int sex, QDate dat
 
 }
 
+void databaseSvc:: deletePatient(long id)
+{
+    QSqlError daoError;qx_query query;
+    query.query("delete from Patient where id=:id");
+    query.bind(":id",(int)id);
+    daoError = qx::dao::call_query(query);
+    query.query("delete from CheckResult where patient_id=:id");
+    query.bind(":id",(int)id);
+    daoError = qx::dao::call_query(query);
+}
+
 void databaseSvc::updatePatient(long id,QString patientId, QString name, int sex, QDate date)
 {
     Patient_List Patient_List;

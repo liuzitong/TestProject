@@ -82,10 +82,11 @@ Column{
                             }
                             CusButton{
                                 height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"
-                                onClicked:
-                                {
-                                    patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientModel();
-                                }
+                                onClicked:query.startQuery();
+                            }
+                            function startQuery()
+                            {
+                                patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientModel();
                             }
                         }
                         Row{
@@ -133,6 +134,7 @@ Column{
                                 }
                                 ListView{
                                     id:patientInfoListView
+                                    property var seletedPatient:[];
                                     width: parent.width;height:patientInfoCol.height-patientManagement.rowHight +1; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
                                     delegate: patientInfoDelegate
 //                                    Component.onCompleted: {patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientModel();}
@@ -146,8 +148,8 @@ Column{
                                                 width: parent.width*1/10;height: parent.height;buttonColor: "white"; borderColor: backGroundBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
                                                 onClicked:
                                                 {
-                                                    if(!patientInfoRow.isSelected){patientInfoRow.isSelected=true;imageSrc="qrc:/Pics/base-svg/btn_select_click.svg";}
-                                                    else{patientInfoRow.isSelected=false;imageSrc="qrc:/Pics/base-svg/btn_select_normal.svg";}
+                                                    if(!patientInfoRow.isSelected){patientInfoRow.isSelected=true;imageSrc="qrc:/Pics/base-svg/btn_select_click.svg";patientInfoListView.seletedPatient.push(model.Id);}
+                                                    else{patientInfoRow.isSelected=false;imageSrc="qrc:/Pics/base-svg/btn_select_normal.svg";patientInfoListView.seletedPatient.pop(model.Id);}
                                                 }
                                             }
                                             Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
@@ -164,7 +166,10 @@ Column{
                                                     if(model.name.indexOf(" ")>-1){ firstName =model.name.split(" ")[0]; lastName=model.name.split(" ")[1];};
                                                     newId.text=model.patientId;newChineseName.text=model.name;genderSelect.selectGender(model.sex);newDateBirth.text=model.birthDate;newEnglishFirstName.text=firstName;newEnglishLastName.text=lastName;
                                                     IcUiQmlApi.appCtrl.currentPatient.id=model.Id;
+                                                    patientSaveButton.enabled=false;
+                                                    patientReviseButton.enabled=true;
                                                    /* patient.id=model.Id;*//*patient.patientId=model.patientId;patient.sex=model.sex;patient.birthDate=model.birtDate;*/
+
                                                 }
                                             }
                                         }
@@ -372,28 +377,59 @@ Column{
                     anchors.horizontalCenter: parent.horizontalCenter
                     CusButton{text:"复查"}
                     CusButton{
+                        id:patientReviseButton;
+                        enabled: false;
                         text:"修改";
                         onClicked:
                         {
                             var Name;
                             if(language=="Chinese") Name=newChineseName.text;else {Name=newEnglishFirstName.text+" "+newEnglishLastName.text;}
                             IcUiQmlApi.appCtrl.databaseSvc.updatePatient(IcUiQmlApi.appCtrl.currentPatient.id,newId.text,Name,genderSelect.gender,newDateBirth.text);
+                            query.startQuery();
                         }
                     }
-                    CusButton{text:"删除"}
+                    CusButton
+                    {
+                        text:"删除";
+                        onClicked: {
+                            var pl=patientInfoListView.seletedPatient;
+                            for(var i=0;i<pl.length;i++){
+                                console.log(pl[i])
+                                 IcUiQmlApi.appCtrl.databaseSvc.deletePatient(pl[i]);
+                            }
+                            query.startQuery();
+                        }
+
+                    }
                     CusButton{text:"分析"}
                 }
             }
             Flow{
                 height:parent.height; layoutDirection: Qt.RightToLeft;width:parent.width*0.4;spacing: height*0.8;
                 CusButton{text:"进入检测"}
-                CusButton{text:"保存";onClicked:{
+                CusButton{
+                    id:patientSaveButton;text:"保存";
+                    enabled: false;
+                    onClicked:{
                         var Name="";
                         if(language=="Chinese"){ Name=newChineseName.text; }
                         else {Name = newEnglishFirstName.text+" "+newEnglishLastName.text;}
-                        IcUiQmlApi.appCtrl.databaseSvc.addPatient(newId.text,Name,genderSelect.gender,newDateBirth.text);}}
+                        IcUiQmlApi.appCtrl.databaseSvc.addPatient(newId.text,Name,genderSelect.gender,newDateBirth.text);
+                        query.startQuery();
+                    }
+                }
                 CusButton{
                     text:"新建";
+                    onClicked: {
+                        patientReviseButton.enabled=false;
+                        patientSaveButton.enabled=true;
+                        newId.text="";
+                        newChineseName.text="";
+                        newEnglishFirstName.text="";
+                        newEnglishLastName.text="";
+                        genderSelect.selectGender(0);
+                        newDateBirth.text="";
+                    }
                 }
             }
         }
