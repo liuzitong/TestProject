@@ -1,9 +1,18 @@
 #include "PatientVm.h"
 #include "patient.h"
+#include "perimeter/base/common/perimeter_def.h"
+#include "perimeter/base/common/perimeter_memcntr.hxx"
 #include <QDate>
+#define T_PrivPtr( o )  perimeter_objcast( Patient*, o )
+
 namespace Perimeter {
 
-PatientVm::PatientVm(std::shared_ptr<Patient> patient)
+PatientVm::PatientVm()
+{
+    m_patient=perimeter_new(Patient);
+}
+
+PatientVm::PatientVm(void* patient)
 {
     m_patient=patient;
 }
@@ -13,9 +22,11 @@ PatientVm &PatientVm::operator=(const PatientVm &other)
     this->m_patient=other.m_patient;
     return *this;
 }
-PatientVm::PatientVm(const PatientVm &&other)
+
+PatientVm::PatientVm(PatientVm &&other)
 {
     this->m_patient=other.m_patient;
+    other.m_patient=nullptr;
 }
 
 PatientVm::PatientVm(const PatientVm &other)
@@ -25,58 +36,61 @@ PatientVm::PatientVm(const PatientVm &other)
 
 PatientVm::~PatientVm()
 {
-    m_patient=0;
-    qDebug()<<"patient  destructed";
+//    m_patient=0;
+//    qDebug()<<"patient  destructed";
+    if(m_patient!=nullptr)
+        perimeter_delete(m_patient,Patient);
+
 }
 
 long PatientVm::getID()
 {
-    return m_patient->m_id;
+    return T_PrivPtr( m_patient )->m_id;
 }
 
 void PatientVm::setID(long value)
 {
-    m_patient->m_id=value;
+    T_PrivPtr( m_patient )->m_id=value;
 }
 
 QString PatientVm::getPatientID()
 {
-   return m_patient->m_patinetId;
+   return T_PrivPtr( m_patient )->m_patinetId;
 }
 
 void PatientVm::setPatientID(QString value)
 {
-    m_patient->m_patinetId=value;
+    T_PrivPtr( m_patient )->m_patinetId=value;
 }
 
 QString PatientVm::getName()
 {
-    return m_patient->m_name;
+    return T_PrivPtr( m_patient )->m_name;
 }
 
 void PatientVm::setName(QString value)
 {
-    m_patient->m_name=value;
+    T_PrivPtr( m_patient )->m_name=value;
 }
 
 int PatientVm::getSex()
 {
-    return m_patient->m_sex;
+    return T_PrivPtr( m_patient )->m_sex;
 }
 
 void PatientVm::setSex(int value)
 {
-    m_patient->m_sex=Patient::sex(value);
+    T_PrivPtr( m_patient )->m_sex=Patient::sex(value);
 }
 
 QDate PatientVm::getBirthDate()
 {
-    return m_patient->m_birthDate;
+    return T_PrivPtr( m_patient )->m_birthDate;
 }
 
 void PatientVm::setBirthDate(QDate value)
 {
-    m_patient->m_birthDate=value;
+    T_PrivPtr( m_patient )->m_birthDate=value;
 }
 
 }

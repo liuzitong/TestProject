@@ -5,7 +5,6 @@
 #include <memory>
 #include <QDate>
 
-class Patient;
 namespace Perimeter{
 class PERIMETER_API PatientVm:public QObject
 {
@@ -17,10 +16,10 @@ class PERIMETER_API PatientVm:public QObject
     Q_PROPERTY(QDate date READ getBirthDate WRITE setBirthDate)
 
 public:
-    PatientVm()=default;
-    PatientVm(std::shared_ptr<Patient> patient);
+    PatientVm();
+    PatientVm(void* patient);
     PatientVm(const PatientVm& other);
-    PatientVm(const PatientVm&& other);
+    PatientVm(PatientVm&& other);
     PatientVm& operator=(const PatientVm& other);
     ~PatientVm();
     long getID();void setID(long value);
@@ -30,7 +29,7 @@ public:
     QDate getBirthDate();void setBirthDate(QDate value);
 
 private:
-    std::shared_ptr<Patient> m_patient;
+    void* m_patient;
 };
 }
 #endif // PATIENTVM_H

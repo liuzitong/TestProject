@@ -49,7 +49,7 @@ QObject* databaseSvc::getPatientObjByPatientId(QString id)
         qDebug()<<i->m_id;
         qDebug()<<i->m_name;
     }
-    PatientVm * po=perimeter_new(PatientVm,Patient_List.front());
+    PatientVm * po=perimeter_new(PatientVm,(void*)Patient_List.front().get());
     return po;
 }
 

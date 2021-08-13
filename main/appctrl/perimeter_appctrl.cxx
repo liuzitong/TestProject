@@ -58,6 +58,7 @@ AppCtrlPriv :: AppCtrlPriv ( AppCtrl *pa )
     m_obj_mgr_svc = ObjMgrSvc::getInstance();
 //    m_databaseSvc = static_cast<QObject*>(new databaseSvc());
     m_databaseSvc = perimeter_new(databaseSvc);
+    m_currentPatient=perimeter_new(PatientVm);
 }
 
 // ============================================================================
@@ -71,6 +72,7 @@ AppCtrlPriv :: ~AppCtrlPriv ( )
     AppSettingsSvc::freeInstance();
 //    delete m_databaseSvc;
     perimeter_delete(m_databaseSvc,databaseSvc);
+    perimeter_delete(m_currentPatient,PatientVm);
 }
 
 // ============================================================================
@@ -116,7 +118,9 @@ QObject*  AppCtrl :: msgBusObj() const
 QObject*    AppCtrl::databaseSvcObj() const             {return T_PrivPtr( m_obj )-> getDatabaseSvcObj();}
 QString     AppCtrl::getLanguage()                      {return T_PrivPtr( m_obj )->getLanguage() ;}
 void        AppCtrl::setLanguage(QString value)         {T_PrivPtr( m_obj )->setLanguage(value) ;emit languageChanged(value);}
-QObject*    AppCtrl::getCurrentPatient()                {return T_PrivPtr( m_obj )->getCurrentPatient();}
+QObject*    AppCtrl::getCurrentPatient()                {
+    return T_PrivPtr( m_obj )->getCurrentPatient();
+}
 void        AppCtrl::setCurrentPatient(QObject *value)  {T_PrivPtr( m_obj )->setCurrentPatient(value);emit CurrentPatientChanged(value);}
 
 // ============================================================================

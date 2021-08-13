@@ -12,9 +12,6 @@ Column{
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
     property int pageSize: 14;
-//    Object{
-
-//    }
 
     anchors.fill:parent;
     Item{
@@ -166,6 +163,22 @@ Column{
                                                     var name=model.name;var firstName ="";var lastName="";
                                                     if(model.name.indexOf(" ")>-1){ firstName =model.name.split(" ")[0]; lastName=model.name.split(" ")[1];};
                                                     newId.text=model.patientId;newChineseName.text=model.name;genderSelect.selectGender(model.sex);newDateBirth.text=model.birthDate;newEnglishFirstName.text=firstName;newEnglishLastName.text=lastName;
+                                                    var patient=IcUiQmlApi.appCtrl.currentPatient;
+                                                    IcUiQmlApi.appCtrl.currentPatient.Id=5001;
+                                                    console.log("hahaahahahaha");
+                                                    console.log(IcUiQmlApi.appCtrl.currentPatient.Id);
+                                                    console.log(patient.Id);
+                                                    patient.Id=44444;
+                                                    console.log(IcUiQmlApi.appCtrl.currentPatient.Id);
+
+                                                    var tesst;var tset2;
+                                                    tset2="ppp";
+                                                    tesst=tset2;
+                                                    tset2="ggg"
+                                                    console.log(tesst);
+//                                                    patient.id=model.Id;patient.patientId=model.patientId;patient.sex=model.sex;patient.birthDate=model.birtDate;
+//                                                    console.log(IcUiQmlApi.appCtrl.databaseSvc.currentPatient.Id);
+//                                                    console.log("bye bye");
                                                 }
                                             }
                                         }
