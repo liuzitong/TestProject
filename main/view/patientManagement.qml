@@ -163,22 +163,8 @@ Column{
                                                     var name=model.name;var firstName ="";var lastName="";
                                                     if(model.name.indexOf(" ")>-1){ firstName =model.name.split(" ")[0]; lastName=model.name.split(" ")[1];};
                                                     newId.text=model.patientId;newChineseName.text=model.name;genderSelect.selectGender(model.sex);newDateBirth.text=model.birthDate;newEnglishFirstName.text=firstName;newEnglishLastName.text=lastName;
-                                                    var patient=IcUiQmlApi.appCtrl.currentPatient;
-                                                    IcUiQmlApi.appCtrl.currentPatient.Id=5001;
-                                                    console.log("hahaahahahaha");
-                                                    console.log(IcUiQmlApi.appCtrl.currentPatient.Id);
-                                                    console.log(patient.Id);
-                                                    patient.Id=44444;
-                                                    console.log(IcUiQmlApi.appCtrl.currentPatient.Id);
-
-                                                    var tesst;var tset2;
-                                                    tset2="ppp";
-                                                    tesst=tset2;
-                                                    tset2="ggg"
-                                                    console.log(tesst);
-//                                                    patient.id=model.Id;patient.patientId=model.patientId;patient.sex=model.sex;patient.birthDate=model.birtDate;
-//                                                    console.log(IcUiQmlApi.appCtrl.databaseSvc.currentPatient.Id);
-//                                                    console.log("bye bye");
+                                                    IcUiQmlApi.appCtrl.currentPatient.id=model.Id;
+                                                   /* patient.id=model.Id;*//*patient.patientId=model.patientId;patient.sex=model.sex;patient.birthDate=model.birtDate;*/
                                                 }
                                             }
                                         }
@@ -385,7 +371,15 @@ Column{
                     height: parent.height;spacing: height*0.8
                     anchors.horizontalCenter: parent.horizontalCenter
                     CusButton{text:"复查"}
-                    CusButton{text:"修改";onClicked: {IcUiQmlApi.appCtrl.databaseSvc.updatePatient();}}
+                    CusButton{
+                        text:"修改";
+                        onClicked:
+                        {
+                            var Name;
+                            if(language=="Chinese") Name=newChineseName.text;else {Name=newEnglishFirstName.text+" "+newEnglishLastName.text;}
+                            IcUiQmlApi.appCtrl.databaseSvc.updatePatient(IcUiQmlApi.appCtrl.currentPatient.id,newId.text,Name,genderSelect.gender,newDateBirth.text);
+                        }
+                    }
                     CusButton{text:"删除"}
                     CusButton{text:"分析"}
                 }
