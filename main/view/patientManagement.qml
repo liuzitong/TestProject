@@ -137,39 +137,44 @@ Column{
                                     property var seletedPatient:[];
                                     width: parent.width;height:patientInfoCol.height-patientManagement.rowHight +1; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
                                     delegate: patientInfoDelegate
-//                                    Component.onCompleted: {patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientModel();}
                                     Component{
                                         id:patientInfoDelegate
-                                        Row{
-                                            id:patientInfoRow
-                                            width: patientInfoListView.width;height: (patientInfoCol.height-patientManagement.rowHight)/14+1;spacing: -1;
-                                            property bool isSelected: false;
-                                            CusButton{
-                                                width: parent.width*1/10;height: parent.height;buttonColor: "white"; borderColor: backGroundBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
-                                                onClicked:
-                                                {
-                                                    if(!patientInfoRow.isSelected){patientInfoRow.isSelected=true;imageSrc="qrc:/Pics/base-svg/btn_select_click.svg";patientInfoListView.seletedPatient.push(model.Id);}
-                                                    else{patientInfoRow.isSelected=false;imageSrc="qrc:/Pics/base-svg/btn_select_normal.svg";patientInfoListView.seletedPatient.pop(model.Id);}
-                                                }
+                                        Item{
+                                            width: patientInfoListView.width;height: (patientInfoCol.height-patientManagement.rowHight)/14+1;
+                                            MouseArea{
+                                                anchors.fill: parent;
+                                                onClicked: {console.log("Ted Say hi id="+model.Id)}
                                             }
-                                            Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
-                                            Rectangle{width: parent.width*3/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.name}}
-                                            Rectangle{width: parent.width*1/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.sex}}
-                                            Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
-                                            Rectangle{width: parent.width*1/50;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.Id}}
-                                            CusButton
-                                            {
-                                                width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"
-                                                onClicked:
+                                            Row{
+                                                id:patientInfoRow;anchors.fill: parent;spacing: -1;
+                                                property bool isSelected: false;
+                                                CusButton{
+                                                    width: parent.width*1/10;height: parent.height;buttonColor: "white"; borderColor: backGroundBorderColor;radius:0;isAnime:false;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
+                                                    onClicked:
+                                                    {
+                                                        if(!patientInfoRow.isSelected){patientInfoRow.isSelected=true;imageSrc="qrc:/Pics/base-svg/btn_select_click.svg";patientInfoListView.seletedPatient.push(model.Id);}
+                                                        else{patientInfoRow.isSelected=false;imageSrc="qrc:/Pics/base-svg/btn_select_normal.svg";patientInfoListView.seletedPatient.pop(model.Id);}
+                                                    }
+                                                }
+                                                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
+                                                Rectangle{width: parent.width*3/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.name}}
+                                                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.sex}}
+                                                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
+                                                Rectangle{width: parent.width*1/50;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.Id}}
+                                                CusButton
                                                 {
-                                                    var name=model.name;var firstName ="";var lastName="";
-                                                    if(model.name.indexOf(" ")>-1){ firstName =model.name.split(" ")[0]; lastName=model.name.split(" ")[1];};
-                                                    newId.text=model.patientId;newChineseName.text=model.name;genderSelect.selectGender(model.sex);newDateBirth.text=model.birthDate;newEnglishFirstName.text=firstName;newEnglishLastName.text=lastName;
-                                                    IcUiQmlApi.appCtrl.currentPatient.id=model.Id;
-                                                    patientSaveButton.enabled=false;
-                                                    patientReviseButton.enabled=true;
-                                                   /* patient.id=model.Id;*//*patient.patientId=model.patientId;patient.sex=model.sex;patient.birthDate=model.birtDate;*/
+                                                    width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"
+                                                    onClicked:
+                                                    {
+                                                        var name=model.name;var firstName ="";var lastName="";
+                                                        if(model.name.indexOf(" ")>-1){ firstName =model.name.split(" ")[0]; lastName=model.name.split(" ")[1];};
+                                                        newId.text=model.patientId;newChineseName.text=model.name;genderSelect.selectGender(model.sex);newDateBirth.text=model.birthDate;newEnglishFirstName.text=firstName;newEnglishLastName.text=lastName;
+                                                        IcUiQmlApi.appCtrl.currentPatient.id=model.Id;
+                                                        patientSaveButton.enabled=false;
+                                                        patientReviseButton.enabled=true;
+                                                       /* patient.id=model.Id;*//*patient.patientId=model.patientId;patient.sex=model.sex;patient.birthDate=model.birtDate;*/
 
+                                                    }
                                                 }
                                             }
                                         }
