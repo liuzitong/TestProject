@@ -38,6 +38,7 @@ public:
 
 private:
     void* m_obj;
+    friend class PatientListModelPriv;
     Q_DISABLE_COPY(PatientListModel);
 };
 }

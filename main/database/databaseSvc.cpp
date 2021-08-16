@@ -7,8 +7,21 @@
 #include "perimeter/base/common/perimeter_memcntr.hxx"
 #include <QMessageBox>
 #include <QFile>
+#include "qxpack/indcom/common/qxpack_ic_global.hxx"
+#include <QDebug.h>
 
 namespace Perimeter {
+
+databaseSvc::databaseSvc()
+{
+    m_plm=perimeter_new(PatientListModel);
+    initDataBase();
+}
+
+databaseSvc::~databaseSvc()
+{
+    perimeter_delete(m_plm,PatientListModel);
+}
 
 void databaseSvc::initDataBase()
 {
@@ -54,33 +67,30 @@ QObject* databaseSvc::getPatientObjByPatientId(QString id)
 }
 
 
-void databaseSvc::test()
-{
-    qDebug()<<"test test test..";
-}
 
-QObject* databaseSvc::getPatientModel()
+void databaseSvc::setPatientModel()
 {
     Patient_List Patient_List;
     qx_query query("select * from patient");
-    QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
-    PatientListModel* plm=perimeter_new(PatientListModel);
-    plm->setPatientList(Patient_List);
-    return plm;
+    QSqlError daoError = qx::dao::execute_query(query, Patient_List);
+    qDebug()<<Patient_List.front()->m_name;
+    m_plm->setPatientList(Patient_List);
+    emit patientListChanged();
 }
+
+
 
 void databaseSvc::addPatient(QString patientId, QString name, int sex, QDate date,QDateTime updateTime)
 {
     Patient_ptr patient_ptr(new Patient(patientId,name,Patient::sex(sex),date,updateTime));
-//    patient->m_id=id;
-//    patient->m_name=name;
-//    pat
-     QSqlError daoError = qx::dao::insert(patient_ptr);
+    QSqlError daoError = qx::dao::insert(patient_ptr);
 
 }
 
 void databaseSvc:: deletePatient(long id)
 {
+    QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
+    bool bCommit = db.transaction();
     QSqlError daoError;qx_query query;
     query.query("delete from Patient where id=:id");
     query.bind(":id",(int)id);
@@ -88,6 +98,29 @@ void databaseSvc:: deletePatient(long id)
     query.query("delete from CheckResult where patient_id=:id");
     query.bind(":id",(int)id);
     daoError = qx::dao::call_query(query);
+    bCommit = (bCommit && ! daoError.isValid());
+    qAssert(bCommit);
+    db.commit();
+}
+
+void databaseSvc::recentDiagnosis(int months)
+{
+//    int secs=QDateTime::currentSecsSinceEpoch();
+//    secs-
+
+    Patient_List Patient_List;
+    QDate dateFrom=QDate::currentDate().addMonths(-months);
+    qx_query query("select * from patient where lastUpdate>:dateFrom");
+    query.bind(":dateFrom",dateFrom);
+    QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
+
+//    pp->m_patinetId=patientId;pp->m_name=name;pp->m_sex=Patient::sex(sex);pp->m_birthDate=date;pp->m_lastUpdate=QDateTime::currentDateTime();
+    //    daoError = qx::dao::update(pp);
+}
+
+QObject *databaseSvc::getPatientListModel()
+{
+    return m_plm;
 }
 
 void databaseSvc::updatePatient(long id,QString patientId, QString name, int sex, QDate date)
@@ -97,13 +130,13 @@ void databaseSvc::updatePatient(long id,QString patientId, QString name, int sex
     query.bind(":id",QString::number(id));
     QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
     Patient_ptr pp = Patient_List.front();
-    pp->m_patinetId=patientId;pp->m_name=name;pp->m_sex=Patient::sex(sex);pp->m_birthDate=date;
+    pp->m_patinetId=patientId;pp->m_name=name;pp->m_sex=Patient::sex(sex);pp->m_birthDate=date;pp->m_lastUpdate=QDateTime::currentDateTime();
     daoError = qx::dao::update(pp);
 }
 
 void databaseSvc::createData()
 {
-
+    QxPack::IcLCG  lcg;
     Patient_ptr patient_1,patient_2;
     CheckResult_ptr checkResult_1,checkResult_2,checkResult_3,checkResult_4;
     Program_ptr program_1,program_2;
@@ -120,6 +153,8 @@ void databaseSvc::createData()
     patient_2.reset(new Patient("5003","yangzhiqun",Patient::sex::female,QDate::fromString("1988-05-11","yyyy-MM-dd")));
 
 
+
+
     checkResult_1.reset(new CheckResult(1,CheckResult::Strategy::strategy1,"params1","data1",QDateTime::currentDateTime(),patient_1,program_1));
     checkResult_2.reset(new CheckResult(2,CheckResult::Strategy::strategy1,"params2","data2",QDateTime::currentDateTime(),patient_2,program_1));
     checkResult_3.reset(new CheckResult(3,CheckResult::Strategy::strategy2,"params3","data3",QDateTime::currentDateTime(),patient_1,program_2));
@@ -131,6 +166,7 @@ void databaseSvc::createData()
     QSqlError daoError;
     daoError = qx::dao::insert(program_1, &db);
     daoError = qx::dao::insert(program_2, &db);
+
     bCommit = (bCommit && ! daoError.isValid());
     qAssert(bCommit);
     db.commit();
@@ -138,6 +174,26 @@ void databaseSvc::createData()
     bCommit = db.transaction();
     daoError = qx::dao::insert(patient_1, &db);
     daoError = qx::dao::insert(patient_2, &db);
+    for(int i=0;i<500;i++)
+    {
+//        Patient_ptr pp=ppArray[i];
+//        QDate date = QDate::currentDate();
+//        int a=lcg.value()%80;
+//        qDebug()<<QString::number(a);
+//        date=date.addYears(-lcg.value()%80);
+//        QDateTime time = QDateTime::currentDateTime();
+//        time = time.addDays(-lcg.value()%365);
+//        time = time.addMonths(-lcg.value()%12);
+//        time = time.addYears(-lcg.value()%(time.date().year()-date.year()));
+        QString nm = QString("%1%2%3").arg( QChar( ( lcg.value() % 26 ) + 'A' ))
+                         .arg( QChar( ( lcg.value() % 26 ) + 'a' ))
+                         .arg( QChar( ( lcg.value() % 26 ) + 'a' ));
+        QString id = QString("PID_%1").arg( lcg.value() % 100 );
+//        Patient::sex sex=Patient::sex::male;
+//        pp.reset(new Patient("998","fdsfds",sex,QDate::fromString("1988-05-11","yyyy-MM-dd")));
+        patient_2.reset(new Patient(id ,nm,Patient::sex::female,QDate::fromString("1988-05-11","yyyy-MM-dd")));
+        daoError = qx::dao::insert(patient_2, &db);
+    }
     bCommit = (bCommit && ! daoError.isValid());
     qAssert(bCommit);
     db.commit();

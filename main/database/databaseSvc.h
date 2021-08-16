@@ -5,23 +5,37 @@
 #include <QDate>
 #include <QDateTime>
 #include "perimeter/main/database/patientVm.h"
+#include "patientListModel.h"
 
 namespace Perimeter {
 class databaseSvc:public QObject
 {
     Q_OBJECT
-//    Q_PROPERTY(QObject* Patient READ getPatientVm CONSTANT)
+    Q_PROPERTY(QObject* patientListModel READ getPatientListModel NOTIFY patientListChanged)
 public:
-    databaseSvc( )=default;
-    Q_INVOKABLE static void initDataBase();
-    Q_INVOKABLE static void createTable();
-    Q_INVOKABLE static void createData();
-    Q_INVOKABLE static QObject* getPatientObjByPatientId(QString id);
-    Q_INVOKABLE static void test();
-    Q_INVOKABLE static QObject* getPatientModel();
-    Q_INVOKABLE static void addPatient(QString patientId,QString name,int sex,QDate date,QDateTime updateTime=QDateTime::currentDateTime());
-    Q_INVOKABLE static void updatePatient(long id,QString patientId, QString name, int sex, QDate date);
-    Q_INVOKABLE static void deletePatient(long id);
+    PatientListModel* m_plm;
+    databaseSvc( );
+    ~databaseSvc();
+    Q_INVOKABLE void initDataBase();
+    Q_INVOKABLE void createTable();
+    Q_INVOKABLE void createData();
+    Q_INVOKABLE QObject* getPatientObjByPatientId(QString id);
+    Q_INVOKABLE void setPatientModel();
+    Q_INVOKABLE void addPatient(QString patientId,QString name,int sex,QDate date,QDateTime updateTime=QDateTime::currentDateTime());
+    Q_INVOKABLE void updatePatient(long id,QString patientId, QString name, int sex, QDate date);
+    Q_INVOKABLE void deletePatient(long id);
+    Q_INVOKABLE void recentDiagnosis(int months);
+
+
+    QObject* getPatientListModel();Q_SIGNAL void patientListChanged();
+//    Q_INVOKABLE void getPatientByPatientId(QString id);
+//    Q_INVOKABLE void getPatientByName(QString name,QDate from,QDate to);
+//    Q_INVOKABLE void getPatientByGender(int sex,QDate from,QDate to);
+//    Q_INVOKABLE void getPatientByBirthDate(QDate date);
+//    Q_INVOKABLE QObject* getPatientModelByIndex(int startIndex,int count,QDate from,QDate to);
+//    Q_INVOKABLE QObject* getPatientModelByIndex(int startIndex,int count,QString name);
+//    Q_INVOKABLE QObject* getPatientModelByIndex(int startIndex,int count,int sex);
+//    Q_INVOKABLE QObject* getPatientModelByIndex(int startIndex,int count,QDate birthDate);
 };
 }
 #endif // DATABASEVM_H

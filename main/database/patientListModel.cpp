@@ -45,7 +45,9 @@ public:
     }
     void setPatientList(Patient_List patient_list)
     {
+        m_parent->beginResetModel();
         m_list=patient_list;
+        m_parent->endResetModel();
     }
 };
 

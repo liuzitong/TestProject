@@ -39,20 +39,20 @@ Column{
                                 imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
                                 model: ListModel {ListElement { text: "最近诊断" } ListElement { text: "患者ID" } ListElement { text: "姓名" }ListElement { text: "性别" }ListElement { text: "出生日期" }}
                                 onCurrentIndexChanged: {
-                                    if(currentIndex==0){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;}
-                                    if(currentIndex==1){patientID.visible=true;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;}
+                                    if(currentIndex==0){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;dateSelection.opacity=0;}
+                                    if(currentIndex==1){patientID.visible=true;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;dateSelection.opacity=0;}
                                     if(currentIndex==2)
                                     {
                                         console.log(language);
                                         if(language=="Chinese"){
-                                            patientID.visible=false;chineseName.visible=true;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;
+                                            patientID.visible=false;chineseName.visible=true;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;dateSelection.opacity=1;
                                         }
                                         else{
-                                            patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=true;gender.visible=false;birthDateGroup.visible=false;
+                                            patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=true;gender.visible=false;birthDateGroup.visible=false;dateSelection.opacity=1;
                                         }
                                     }
-                                    if(currentIndex==3){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=true;birthDateGroup.visible=false;}
-                                    if(currentIndex==4){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=true;}
+                                    if(currentIndex==3){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=true;birthDateGroup.visible=false;dateSelection.opacity=1;}
+                                    if(currentIndex==4){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=true;dateSelection.opacity=0;}
                                 }
 
                                 Component.onCompleted: {
@@ -86,11 +86,12 @@ Column{
                             }
                             function startQuery()
                             {
-                                patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientModel();
+                                IcUiQmlApi.appCtrl.databaseSvc.setPatientModel();
+//                                patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.patientListModel;
                             }
                         }
                         Row{
-                            id:dateSelection; width: parent.width;
+                            id:dateSelection; width: parent.width;opacity: 0;
                             height: patientManagement.rowHight;spacing: height*0.4;
                             CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5;}
                             LineEdit{property string name: "dateFrom";id:dateFrom;radius: height/6;width: height*3.3;}
@@ -135,8 +136,9 @@ Column{
                                 ListView{
                                     id:patientInfoListView
                                     property var seletedPatient:[];
-                                    width: parent.width;height:patientInfoCol.height-patientManagement.rowHight +1; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
+                                    width: parent.width;height:patientInfoCol.height-patientManagement.rowHight +1; interactive: false; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
                                     delegate: patientInfoDelegate
+                                    model:IcUiQmlApi.appCtrl.databaseSvc.patientListModel;
                                     Component{
                                         id:patientInfoDelegate
                                         Item{
@@ -197,17 +199,20 @@ Column{
                             Flow{
                                 anchors.right: parent.right;height:parent.height*1.3;anchors.verticalCenter: parent.verticalCenter;spacing:0.4*height;
                                 CusButton{
+                                    id:startPage;
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_1head_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_1head_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_1head_3press.svg";
                                 }
                                 CusButton{
+                                    id:previousPage;
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_2previous_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_2previous_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_2previous_3press.svg";
                                 }
-                                LineEdit{width: height*2;text:"1";radius: height*0.2;horizontalAlignment: Text.AlignHCenter}
+                                LineEdit{id:currentPage;width: height*2;text:"1";radius: height*0.2;horizontalAlignment: Text.AlignHCenter}
                                 CusButton{width: height; text:"Goto";fontSize: height*0.25;onEntered: {borderColor=hoverBorderColor;}onExited: {borderColor=commonBorderColor;}onClicked: {borderColor=pressBorderColor;}}
                                 CusButton{
+                                    id:nextPage;
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_4next_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_4next_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_4next_3press.svg";
                                 }
-                                CusButton{
+                                CusButton{id:endPage;
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_5end_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_5end_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_5end_3press.svg";
                                 }
                             }

@@ -18,7 +18,7 @@ namespace Perimeter {
 Main :: Main ( QObject *pa ) : QxPack::IcModMgrBase( pa )
 {
 
-    databaseSvc::initDataBase();
+
 
 }
 
