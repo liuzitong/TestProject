@@ -4,6 +4,7 @@
 //#include "qxpack/indcom/afw/qxpack_ic_viewmodelbase.hxx"
 #include <memory>
 #include <QDate>
+#include <QDateTime>
 
 namespace Perimeter{
 class PERIMETER_API PatientVm:public QObject
@@ -14,6 +15,7 @@ class PERIMETER_API PatientVm:public QObject
     Q_PROPERTY(QString name READ getName WRITE setName)
     Q_PROPERTY(int sex READ getSex WRITE setSex)
     Q_PROPERTY(QDate date READ getBirthDate WRITE setBirthDate)
+    Q_PROPERTY(QDateTime lastUpdate READ getLastUpdate WRITE setLastUpdate)
 
 public:
     PatientVm();
@@ -27,6 +29,7 @@ public:
     QString getName();void setName(QString value);
     int getSex();void setSex(int value);
     QDate getBirthDate();void setBirthDate(QDate value);
+    QDateTime getLastUpdate();void setLastUpdate(QDateTime lastUpdate);
 
 private:
     void* m_patient;

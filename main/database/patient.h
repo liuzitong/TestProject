@@ -6,6 +6,7 @@
 #include "perimeter/base/common/perimeter_def.h"
 #include "qxpack/indcom/afw/qxpack_ic_viewmodelbase.hxx"
 #include <QObject>
+#include <QDateTime>
 
 class CheckResult;
 class QX_DLL_EXPORT_API Patient{
@@ -20,10 +21,11 @@ public:
     QString m_name;
     sex m_sex;
     QDate m_birthDate;
+    QDateTime m_lastUpdate;
     CheckResult_List m_checkResultX;
     Patient() = default;
-    Patient(QString patientId,QString name,sex sex,QDate date):m_patinetId(patientId),m_name(name),m_sex(sex),m_birthDate(date){}
-    Patient(long id,QString patientId,QString name,sex sex,QDate date):m_id(id),m_patinetId(patientId),m_name(name),m_sex(sex),m_birthDate(date){}
+    Patient(QString patientId,QString name,sex sex,QDate date,QDateTime lastUpdate=QDateTime::currentDateTime()):m_patinetId(patientId),m_name(name),m_sex(sex),m_birthDate(date),m_lastUpdate(lastUpdate){}
+    Patient(long id,QString patientId,QString name,sex sex,QDate date,QDateTime lastUpdate=QDateTime::currentDateTime()):m_id(id),m_patinetId(patientId),m_name(name),m_sex(sex),m_birthDate(date),m_lastUpdate(lastUpdate){}
     virtual ~Patient(){}
 };
 

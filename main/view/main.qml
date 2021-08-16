@@ -72,10 +72,10 @@ Rectangle {
                         Flow{
                             height: parent.height;anchors.right: parent.right;spacing: height*1
 
-                            CusButton{
-                                width: parent.height*3;text: "创建数据库表";
-                                onClicked: {IcUiQmlApi.appCtrl.databaseSvc.createTable();}
-                            }
+//                            CusButton{
+//                                width: parent.height*3;text: "创建数据库表";
+//                                onClicked: {IcUiQmlApi.appCtrl.databaseSvc.createTable();}
+//                            }
                             CusButton{
                                 width: parent.height*2;text: "生成数据";
                                 onClicked: {IcUiQmlApi.appCtrl.databaseSvc.createData();}

@@ -157,10 +157,9 @@ Column{
                                                     }
                                                 }
                                                 Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
-                                                Rectangle{width: parent.width*3/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.name}}
+                                                Rectangle{width: parent.width*3/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.name+" "+model.Id+" "+model.lastUpdate}}
                                                 Rectangle{width: parent.width*1/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.sex}}
                                                 Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
-                                                Rectangle{width: parent.width*1/50;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.Id}}
                                                 CusButton
                                                 {
                                                     width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"
@@ -170,6 +169,12 @@ Column{
                                                         if(model.name.indexOf(" ")>-1){ firstName =model.name.split(" ")[0]; lastName=model.name.split(" ")[1];};
                                                         newId.text=model.patientId;newChineseName.text=model.name;genderSelect.selectGender(model.sex);newDateBirth.text=model.birthDate;newEnglishFirstName.text=firstName;newEnglishLastName.text=lastName;
                                                         IcUiQmlApi.appCtrl.currentPatient.id=model.Id;
+                                                        IcUiQmlApi.appCtrl.currentPatient.patientId=model.patientId;
+                                                        IcUiQmlApi.appCtrl.currentPatient.name=model.name;
+                                                        IcUiQmlApi.appCtrl.currentPatient.sex=model.sex;
+                                                        IcUiQmlApi.appCtrl.currentPatient.birthDate=model.birthDate;
+                                                        IcUiQmlApi.appCtrl.currentPatient.lastUpdate=model.lastUpdate;
+                                                        console.log("current patient info:"+IcUiQmlApi.appCtrl.currentPatient.id+" "+IcUiQmlApi.appCtrl.currentPatient.patientId+" "+IcUiQmlApi.appCtrl.currentPatient.name+" "+IcUiQmlApi.appCtrl.currentPatient.sex+" "+IcUiQmlApi.appCtrl.currentPatient.birthDate+" "+IcUiQmlApi.appCtrl.currentPatient.lastUpdate)
                                                         patientSaveButton.enabled=false;
                                                         patientReviseButton.enabled=true;
                                                        /* patient.id=model.Id;*//*patient.patientId=model.patientId;patient.sex=model.sex;patient.birthDate=model.birtDate;*/

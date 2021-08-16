@@ -3,6 +3,7 @@
 #include "perimeter/base/common/perimeter_def.h"
 #include "qxpack/indcom/afw/qxpack_ic_viewmodelbase.hxx"
 #include <QDate>
+#include <QDateTime>
 #include "perimeter/main/database/patientVm.h"
 
 namespace Perimeter {
@@ -18,7 +19,7 @@ public:
     Q_INVOKABLE static QObject* getPatientObjByPatientId(QString id);
     Q_INVOKABLE static void test();
     Q_INVOKABLE static QObject* getPatientModel();
-    Q_INVOKABLE static void addPatient(QString patientId,QString name,int sex,QDate date);
+    Q_INVOKABLE static void addPatient(QString patientId,QString name,int sex,QDate date,QDateTime updateTime=QDateTime::currentDateTime());
     Q_INVOKABLE static void updatePatient(long id,QString patientId, QString name, int sex, QDate date);
     Q_INVOKABLE static void deletePatient(long id);
 };

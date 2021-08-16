@@ -93,4 +93,14 @@ void PatientVm::setBirthDate(QDate value)
     T_PrivPtr( m_patient )->m_birthDate=value;
 }
 
+QDateTime PatientVm::getLastUpdate()
+{
+    return T_PrivPtr( m_patient )->m_lastUpdate;
+}
+
+void Perimeter::PatientVm::setLastUpdate(QDateTime value)
+{
+    T_PrivPtr(m_patient)->m_lastUpdate=value;
+}
+
 }

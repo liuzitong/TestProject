@@ -69,9 +69,9 @@ QObject* databaseSvc::getPatientModel()
     return plm;
 }
 
-void databaseSvc::addPatient(QString patientId, QString name, int sex, QDate date)
+void databaseSvc::addPatient(QString patientId, QString name, int sex, QDate date,QDateTime updateTime)
 {
-    Patient_ptr patient_ptr(new Patient(patientId,name,Patient::sex(sex),date));
+    Patient_ptr patient_ptr(new Patient(patientId,name,Patient::sex(sex),date,updateTime));
 //    patient->m_id=id;
 //    patient->m_name=name;
 //    pat
@@ -116,9 +116,8 @@ void databaseSvc::createData()
     program_1->m_type=Program::Type::ThreshHold;
     program_1->m_params="ttt";
     program_1->m_data="bbbb";
-
-    patient_1.reset(new Patient("5001","lzt",Patient::sex::male,QDate::currentDate()));
-    patient_2.reset(new Patient("5003","yangzhiqun",Patient::sex::female,QDate::currentDate()));
+    patient_1.reset(new Patient("5001","lzt",Patient::sex::male,QDate::fromString("1988-05-11","yyyy-MM-dd")));
+    patient_2.reset(new Patient("5003","yangzhiqun",Patient::sex::female,QDate::fromString("1988-05-11","yyyy-MM-dd")));
 
 
     checkResult_1.reset(new CheckResult(1,CheckResult::Strategy::strategy1,"params1","data1",QDateTime::currentDateTime(),patient_1,program_1));

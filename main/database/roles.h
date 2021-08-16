@@ -11,6 +11,7 @@ enum PatientRoles
     name,
     birthDate,
     sex,
+    lastUpdate
 };
 
 }

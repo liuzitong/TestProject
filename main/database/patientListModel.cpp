@@ -27,6 +27,7 @@ public:
         case (PatientRoles::name): return pp->m_name;
         case (PatientRoles::birthDate): return pp->m_birthDate.toString("yyyy-MM-dd");
         case (PatientRoles::sex): return pp->m_sex;
+        case (PatientRoles::lastUpdate): return pp->m_lastUpdate;
         default:return QVariant();
         }
     }
@@ -39,6 +40,7 @@ public:
            roles[name] = "name";
            roles[birthDate] = "birthDate";
            roles[sex]="sex";
+           roles[lastUpdate]="lastUpdate";
            return roles;
     }
     void setPatientList(Patient_List patient_list)
@@ -71,6 +73,7 @@ QHash<int, QByteArray> PatientListModel::roleNames() const
 {
     return T_PrivPtr( m_obj )->roleNames();
 }
+
 
 //bool PatientListModel::setData(const QModelIndex &, const QVariant &, int)
 //{
