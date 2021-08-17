@@ -18,7 +18,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
         {
             strData = inputObj.text;
             if(strData===""){
-                strData=String(idPriv.calendar_vm.yearListModel.currentValue = idPriv.calendar_vm.currentYear-40)+"-1-1";
+                strData=idPriv.calendar_vm.currentDate;
             }
 
             idPriv.calendar_vm.yearListModel.currentValue = Number(strData.split("-")[0]);

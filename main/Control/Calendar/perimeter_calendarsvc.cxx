@@ -28,7 +28,7 @@ public :
                 .arg(m_year->current(), 4, 10, QChar('0'))
                 .arg(m_month->current(), 2, 10, QChar('0'))
                 .arg(m_day->current(), 2, 10, QChar('0')); }
-    inline  int         currentYear(){ return QDate::currentDate().year();}
+    inline  QString    currentDate  ( ) { return QDate::currentDate().toString("yyyy-MM-dd"); }
 };
 
 CalendarSvcPriv::CalendarSvcPriv(CalendarSvc * pa)
@@ -68,8 +68,8 @@ QObject *CalendarSvc::dayObj() const
 QString CalendarSvc::dateStr() const
 { return T_PrivPtr( m_obj )->dateStr(); }
 
-int CalendarSvc::currentYear() const
-{ return T_PrivPtr( m_obj )->currentYear(); }
+QString CalendarSvc::currentDate() const
+{ return T_PrivPtr( m_obj )->currentDate(); }
 
 }
 

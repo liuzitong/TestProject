@@ -103,13 +103,18 @@ void databaseSvc:: deletePatient(long id)
     db.commit();
 }
 
-void databaseSvc::recentDiagnosis(int months)
+void databaseSvc::getPatientByTimeSpan(QDate from,QDate to)
 {
+    if(from.toString()=="") from.setDate(1900,1,1);
+    if(to.toString()=="") to=QDate::currentDate();
+    qx_query query("select * from patient where lastUpdate>=:from and lastUpdate<=:to ORDER BY lastUpdate DESC");
+    QString fromStr=convertQDateToQString(from);
+    QString toStr=convertQDateToQString(to);
+    qDebug()<<QString("from:1%,to:2%").arg(fromStr).arg(toStr);
+    query.bind(":from",convertQDateToQString(from));
+    query.bind(":to",convertQDateToQString(to));
     Patient_List Patient_List;
-    QDate dateFrom=QDate::currentDate().addMonths(-months);
-    qx_query query("select * from patient where lastUpdate>:dateFrom ORDER BY lastUpdate DESC");
-    query.bind(":dateFrom",dateFrom);/*query.orderDesc("lastUpdate");*/
-    QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
+    QSqlError daoError = qx::dao::execute_query(query, Patient_List);
     m_plm->setPatientList(Patient_List);
     emit patientListChanged();
 }
@@ -142,6 +147,9 @@ void databaseSvc::getPatientBySex(int sex, QDate from, QDate to)
     if(to.toString()=="") to=QDate::currentDate();
     qx_query query("select * from patient where sex=:sex and lastUpdate>=:from and lastUpdate<=:to ORDER BY lastUpdate DESC");
     query.bind(":sex",sex);
+    QString fromStr=convertQDateToQString(from);
+    QString toStr=convertQDateToQString(to);
+    qDebug()<<QString("from:1%,to:2%").arg(fromStr).arg(toStr);
     query.bind(":from",convertQDateToQString(from));
     query.bind(":to",convertQDateToQString(to));
     Patient_List Patient_List;
@@ -149,6 +157,13 @@ void databaseSvc::getPatientBySex(int sex, QDate from, QDate to)
     m_plm->setPatientList(Patient_List);
     emit patientListChanged();
 }
+
+inline QString databaseSvc::convertQDateToQString(QDate date){
+    int year=date.year(),month=date.month(),day=date.day();
+    QString dateStr=QString("%1-%2-%3").arg(year).arg(month).arg(day);
+    return dateStr;
+}
+
 
 void databaseSvc::getPatientByBirthDate(QDate date)
 {
@@ -164,6 +179,7 @@ QObject *databaseSvc::getPatientListModel()
 {
     return m_plm;
 }
+
 
 void databaseSvc::updatePatient(long id,QString patientId, QString name, int sex, QDate date)
 {

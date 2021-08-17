@@ -32,7 +32,7 @@ Column{
                         property int rowHight: height*0.05
 
                         Row{
-                            id:dateSelection; width: parent.width;opacity: 0;
+                            id:dateSelection; width: parent.width;opacity: 1;
                             height: patientManagement.rowHight;spacing: height*0.4;
                             CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5;}
                             LineEdit{property string name: "dateFrom";id:dateFrom;radius: height/6;width: height*3.3;}
@@ -52,16 +52,16 @@ Column{
                                 id:queryStrategy;height: parent.height;width: parent.height*5;
                                 borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                                 imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                                model: ListModel {ListElement { text: "最近诊断" } ListElement { text: "患者ID" } ListElement { text: "姓名" }ListElement { text: "性别" }ListElement { text: "出生日期" }}
+                                model: ListModel {ListElement { text: "按时间查询" } ListElement { text: "患者ID" } ListElement { text: "姓名" }ListElement { text: "性别" }ListElement { text: "出生日期" }}
                                 onCurrentIndexChanged: {
                                     patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;sex.visible=false;birthDateGroup.visible=false;dateSelection.opacity=0;
                                     switch(currentIndex)
                                     {
-                                    case 0:break;
-                                    case 1:patientID.visible=true;dateSelection.opacity=1;break;
+                                    case 0:dateSelection.opacity=1;break;
+                                    case 1:patientID.visible=true;dateSelection.opacity=0;break;
                                     case 2:if(language=="Chinese") {chineseName.visible=true;} else{englishNameGroup.visible=true;} dateSelection.opacity=1;break;
                                     case 3:sex.visible=true;dateSelection.opacity=1;break;
-                                    case 4:birthDateGroup.visible=true;break;
+                                    case 4:birthDateGroup.visible=true;dateSelection.opacity=0;break;
                                     }
                                 }
                                 Component.onCompleted: {
@@ -98,7 +98,7 @@ Column{
                                 console.log(patientID.text);
                                 switch (queryStrategy.currentIndex)
                                 {
-                                case 0:IcUiQmlApi.appCtrl.databaseSvc.recentDiagnosis(6);break;
+                                case 0:IcUiQmlApi.appCtrl.databaseSvc.getPatientByTimeSpan(dateFrom.text,dateTo.text);break;
                                 case 1:IcUiQmlApi.appCtrl.databaseSvc.getPatientByPatientId(patientID.text);break;
                                 case 2:
                                     console.log(chineseName.text);
@@ -227,7 +227,12 @@ Column{
                             }
                             Component.onCompleted: {queryStarted.connect(refresh)}
                             function refresh(){
-                                console.log("hahaah");
+                                console.log("refresh page...");
+                                pageIndex.currentPage=1;
+                                var rowCount=patientInfoListView.model.rowCount();
+                                console.log("model count:"+rowCount);
+                                pageIndex.totalPage=rowCount/pageSize+1;
+                                pageIndex.totalRecordCount=rowCount;
                             }
                         }
                     }
