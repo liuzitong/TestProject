@@ -137,7 +137,7 @@ Column{
                                     Rectangle{width: parent.width*3/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"姓名"}}
                                     Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"性别"}}
                                     Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"出生日期"}}
-                                    Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"载入"}}
+                                    Rectangle{width: parent.width*1/10;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"载入"}}
                                 }
                                 ListView{
                                     id:patientInfoListView
@@ -170,7 +170,7 @@ Column{
                                                 Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
                                                 CusButton
                                                 {
-                                                    width: parent.width*1/9+1;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"
+                                                    width: parent.width*1/10;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"
                                                     onClicked:
                                                     {
                                                         var name=model.name;var firstName ="";var lastName="";
@@ -207,22 +207,49 @@ Column{
                                 CusButton{
                                     id:startPage;
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_1head_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_1head_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_1head_3press.svg";
+                                    onClicked: {
+                                        pageIndex.currentPage=1;
+                                        patientInfoListView.positionViewAtIndex(0,ListView.Beginning);
+                                    }
                                 }
                                 CusButton{
                                     id:previousPage;
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_2previous_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_2previous_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_2previous_3press.svg";
+                                    onClicked: {
+                                        if(pageIndex.currentPage>1)
+                                        {
+                                            pageIndex.currentPage-=1;
+                                            patientInfoListView.positionViewAtIndex((pageIndex.currentPage-1)*14,ListView.Beginning);
+                                        }
+                                    }
                                 }
                                 LineEdit{id:currentPage;width: height*2;text:pageIndex.currentPage;radius: height*0.2;horizontalAlignment: Text.AlignHCenter}
-                                CusButton{width: height; text:"Goto";fontSize: height*0.25;onEntered: {borderColor=hoverBorderColor;}onExited: {borderColor=commonBorderColor;}onClicked: {borderColor=pressBorderColor;}}
+                                CusButton{
+                                    width: height; text:"Goto";fontSize: height*0.25;onEntered: {borderColor=hoverBorderColor;}onExited: {borderColor=commonBorderColor;}
+                                    onClicked:
+                                    {
+                                        borderColor=pressBorderColor;
+                                        pageIndex.currentPage=currentPage.text;
+                                        patientInfoListView.positionViewAtIndex((pageIndex.currentPage-1)*14,ListView.Beginning);
+                                    }
+                                }
                                 CusButton{
                                     id:nextPage;
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_4next_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_4next_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_4next_3press.svg";
                                     onClicked: {
-//                                        currentPage.text=currentPage.text
+                                        if(pageIndex.currentPage<pageIndex.totalPage)
+                                        {
+                                            pageIndex.currentPage+=1;
+                                            patientInfoListView.positionViewAtIndex((pageIndex.currentPage-1)*14,ListView.Beginning);
+                                        }
                                     }
                                 }
                                 CusButton{id:endPage;
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_5end_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_5end_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_5end_3press.svg";
+                                    onClicked: {
+                                        pageIndex.currentPage=pageIndex.totalPage;
+                                        patientInfoListView.positionViewAtIndex((pageIndex.currentPage-1)*14,ListView.Beginning);
+                                    }
                                 }
                             }
                             Component.onCompleted: {queryStarted.connect(refresh)}
