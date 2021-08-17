@@ -47,24 +47,24 @@ void databaseSvc::createTable(){
     daoError = qx::dao::create_table<Program>();
 }
 
-QObject* databaseSvc::getPatientObjByPatientId(QString id)
-{
-    qDebug()<<"getPatientById..";
-    qDebug()<<id;
-    Patient_List Patient_List;
-    qx_query query("select * from patient where patient_id=:id");
-    query.bind(":id",id);
-    QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
+//QObject* databaseSvc::getPatientObjByPatientId(QString id)
+//{
+//    qDebug()<<"getPatientById..";
+//    qDebug()<<id;
+//    Patient_List Patient_List;
+//    qx_query query("select * from patient where patient_id=:id");
+//    query.bind(":id",id);
+//    QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
 
-    std::cout<<"*****patient_list*****"<<std::endl;
-    for(auto& i:Patient_List)
-    {
-        qDebug()<<i->m_id;
-        qDebug()<<i->m_name;
-    }
-    PatientVm * po=perimeter_new(PatientVm,(void*)Patient_List.front().get());
-    return po;
-}
+//    std::cout<<"*****patient_list*****"<<std::endl;
+//    for(auto& i:Patient_List)
+//    {
+//        qDebug()<<i->m_id;
+//        qDebug()<<i->m_name;
+//    }
+//    PatientVm * po=perimeter_new(PatientVm,(void*)Patient_List.front().get());
+//    return po;
+//}
 
 
 
@@ -105,17 +105,48 @@ void databaseSvc:: deletePatient(long id)
 
 void databaseSvc::recentDiagnosis(int months)
 {
-//    int secs=QDateTime::currentSecsSinceEpoch();
-//    secs-
-
     Patient_List Patient_List;
+    months=2;
     QDate dateFrom=QDate::currentDate().addMonths(-months);
     qx_query query("select * from patient where lastUpdate>:dateFrom");
     query.bind(":dateFrom",dateFrom);
     QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
+    m_plm->setPatientList(Patient_List);
+    emit patientListChanged();
+}
 
-//    pp->m_patinetId=patientId;pp->m_name=name;pp->m_sex=Patient::sex(sex);pp->m_birthDate=date;pp->m_lastUpdate=QDateTime::currentDateTime();
-    //    daoError = qx::dao::update(pp);
+void databaseSvc::getPatientByPatientId(QString id)
+{
+    qx_query query("select * from patient where patientId=:patientId");
+    query.bind(":patientId",id);
+    Patient_List Patient_List;
+    QSqlError daoError = qx::dao::execute_query(query, Patient_List);
+    m_plm->setPatientList(Patient_List);
+    emit patientListChanged();
+}
+
+void databaseSvc::getPatientByName(QString name, QDate from, QDate to)
+{
+    if(from.toString()=="") from.setDate(1900,1,1);
+    if(to.toString()=="") to.setDate(QDate::currentDate().year(),QDate::currentDate().month(),QDate::currentDate().day());
+    qx_query query("select * from patient where name=:name and lastUpdate>=:from and lastUpdate<=:to");
+    query.bind(":name",name);query.bind(":from",from);query.bind(":to",to);
+    Patient_List Patient_List;
+    QSqlError daoError = qx::dao::execute_query(query, Patient_List);
+    m_plm->setPatientList(Patient_List);
+    emit patientListChanged();
+}
+
+void databaseSvc::getPatientBySex(int sex, QDate from, QDate to)
+{
+    if(from.toString()=="") from.setDate(1900,1,1);
+    if(to.toString()=="") to.setDate(QDate::currentDate().year(),QDate::currentDate().month(),QDate::currentDate().day());
+    qx_query query("select * from patient where sex=:sex and lastUpdate>=:from and lastUpdate<=:to");
+    query.bind(":sex",sex);query.bind(":from",from);query.bind(":to",to);
+    Patient_List Patient_List;
+    QSqlError daoError = qx::dao::execute_query(query, Patient_List);
+    m_plm->setPatientList(Patient_List);
+    emit patientListChanged();
 }
 
 QObject *databaseSvc::getPatientListModel()
@@ -174,8 +205,8 @@ void databaseSvc::createData()
     bCommit = db.transaction();
     daoError = qx::dao::insert(patient_1, &db);
     daoError = qx::dao::insert(patient_2, &db);
-    for(int i=0;i<500;i++)
-    {
+//    for(int i=0;i<500;i++)
+//    {
 //        Patient_ptr pp=ppArray[i];
 //        QDate date = QDate::currentDate();
 //        int a=lcg.value()%80;
@@ -185,15 +216,15 @@ void databaseSvc::createData()
 //        time = time.addDays(-lcg.value()%365);
 //        time = time.addMonths(-lcg.value()%12);
 //        time = time.addYears(-lcg.value()%(time.date().year()-date.year()));
-        QString nm = QString("%1%2%3").arg( QChar( ( lcg.value() % 26 ) + 'A' ))
-                         .arg( QChar( ( lcg.value() % 26 ) + 'a' ))
-                         .arg( QChar( ( lcg.value() % 26 ) + 'a' ));
-        QString id = QString("PID_%1").arg( lcg.value() % 100 );
+//        QString nm = QString("%1%2%3").arg( QChar( ( lcg.value() % 26 ) + 'A' ))
+//                         .arg( QChar( ( lcg.value() % 26 ) + 'a' ))
+//                         .arg( QChar( ( lcg.value() % 26 ) + 'a' ));
+//        QString id = QString("PID_%1").arg( lcg.value() % 100 );
 //        Patient::sex sex=Patient::sex::male;
 //        pp.reset(new Patient("998","fdsfds",sex,QDate::fromString("1988-05-11","yyyy-MM-dd")));
-        patient_2.reset(new Patient(id ,nm,Patient::sex::female,QDate::fromString("1988-05-11","yyyy-MM-dd")));
-        daoError = qx::dao::insert(patient_2, &db);
-    }
+//        patient_2.reset(new Patient(id ,nm,Patient::sex::female,QDate::fromString("1988-05-11","yyyy-MM-dd")));
+//        daoError = qx::dao::insert(patient_2, &db);
+//    }
     bCommit = (bCommit && ! daoError.isValid());
     qAssert(bCommit);
     db.commit();

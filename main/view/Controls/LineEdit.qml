@@ -12,6 +12,7 @@ Item{
     property alias textfeild: textfeild;
     width: parent.width;
     height:parent.height;
+    signal enterPressed();
     TextField{
         id:textfeild;
         anchors.fill: parent;
@@ -24,6 +25,8 @@ Item{
         selectByMouse: true
         selectionColor: "#999999"
         background: Rectangle {id:recbackground;border.width: 1;radius: root.radius;color: "white" ;border.color: "#bdc0c6"}
+        Keys.onPressed: { switch (event.key){/*EnterKey*/ case 16777220:root.enterPressed();break;};
+        }
     }
 
 }

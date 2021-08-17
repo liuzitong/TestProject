@@ -32,65 +32,6 @@ Column{
                         property int rowHight: height*0.05
 
                         Row{
-                            id:query; width: parent.width; height:patientManagement.rowHight;spacing: height*0.5
-                            CusComboBox{
-                                id:queryStrategy;height: parent.height;width: parent.height*5;
-                                borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
-                                imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                                model: ListModel {ListElement { text: "最近诊断" } ListElement { text: "患者ID" } ListElement { text: "姓名" }ListElement { text: "性别" }ListElement { text: "出生日期" }}
-                                onCurrentIndexChanged: {
-                                    if(currentIndex==0){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;dateSelection.opacity=0;}
-                                    if(currentIndex==1){patientID.visible=true;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;dateSelection.opacity=0;}
-                                    if(currentIndex==2)
-                                    {
-                                        console.log(language);
-                                        if(language=="Chinese"){
-                                            patientID.visible=false;chineseName.visible=true;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=false;dateSelection.opacity=1;
-                                        }
-                                        else{
-                                            patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=true;gender.visible=false;birthDateGroup.visible=false;dateSelection.opacity=1;
-                                        }
-                                    }
-                                    if(currentIndex==3){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=true;birthDateGroup.visible=false;dateSelection.opacity=1;}
-                                    if(currentIndex==4){patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;gender.visible=false;birthDateGroup.visible=true;dateSelection.opacity=0;}
-                                }
-
-                                Component.onCompleted: {
-                                    IcUiQmlApi.appCtrl.languageChanged.connect(onCurrentIndexChanged)
-                                }
-                            }
-
-                            LineEdit{id:patientID;radius:height/6;width: height*4}
-                            LineEdit{id:chineseName;radius:height/6;width: height*4}
-                            Flow{
-                                id:englishNameGroup;height: parent.height;spacing: height*0.4;
-                                CusText{text:"First Name:";width:height*2.5}
-                                LineEdit{id:firstName;radius:height/6;width: height*4}
-                                CusText{text:"Last Name:";width:height*2.5}
-                                LineEdit{id:lastName;radius:height/6;width: height*4}
-                            }
-                            CusComboBox{
-                                id:gender;height: parent.height;width: parent.height*3;
-                                borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
-                                imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                                model: ListModel {ListElement { text: "男" } ListElement { text: "女" } }
-                            }
-                            Flow{
-                                id:birthDateGroup;visible: false;height: parent.height;spacing: height*0.4;
-                                LineEdit{id:birthDate;height: parent.height;radius:height/6;width: height*4;visible: true;}
-                                CusButton{text:"选择";width:height*2;onClicked:{calendar.inputObj=birthDate;calendar.open();}}
-                            }
-                            CusButton{
-                                height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"
-                                onClicked:query.startQuery();
-                            }
-                            function startQuery()
-                            {
-                                IcUiQmlApi.appCtrl.databaseSvc.setPatientModel();
-//                                patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.patientListModel;
-                            }
-                        }
-                        Row{
                             id:dateSelection; width: parent.width;opacity: 0;
                             height: patientManagement.rowHight;spacing: height*0.4;
                             CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5;}
@@ -104,6 +45,69 @@ Column{
                                         dateTo.text=dateFrom.text;
                                     calendar.inputObj=dateTo;calendar.open();
                                 }}
+                        }
+                        Row{
+                            id:query; width: parent.width; height:patientManagement.rowHight;spacing: height*0.5
+                            CusComboBox{
+                                id:queryStrategy;height: parent.height;width: parent.height*5;
+                                borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
+                                imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
+                                model: ListModel {ListElement { text: "最近诊断" } ListElement { text: "患者ID" } ListElement { text: "姓名" }ListElement { text: "性别" }ListElement { text: "出生日期" }}
+                                onCurrentIndexChanged: {
+                                    patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;sex.visible=false;birthDateGroup.visible=false;dateSelection.opacity=0;
+                                    switch(currentIndex)
+                                    {
+                                    case 0:break;
+                                    case 1:patientID.visible=true;dateSelection.opacity=1;break;
+                                    case 2:if(language=="Chinese") {chineseName.visible=true;} else{englishNameGroup.visible=true;} dateSelection.opacity=1;break;
+                                    case 3:sex.visible=true;dateSelection.opacity=1;break;
+                                    case 4:birthDateGroup.visible=true;break;
+                                    }
+                                }
+                                Component.onCompleted: {
+                                    IcUiQmlApi.appCtrl.languageChanged.connect(onCurrentIndexChanged)
+                                }
+                            }
+
+                            LineEdit{id:patientID;radius:height/6;width: height*4}
+                            LineEdit{id:chineseName;radius:height/6;width: height*4;onEnterPressed:{query.startQuery();}}
+                            Flow{
+                                id:englishNameGroup;height: parent.height;spacing: height*0.4;
+                                CusText{text:"First Name:";width:height*2.5}
+                                LineEdit{id:firstName;radius:height/6;width: height*4}
+                                CusText{text:"Last Name:";width:height*2.5}
+                                LineEdit{id:lastName;radius:height/6;width: height*4}
+                            }
+                            CusComboBox{
+                                id:sex;height: parent.height;width: parent.height*3;
+                                borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
+                                imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
+                                model: ListModel {ListElement { text: "男" } ListElement { text: "女" } ListElement { text: "其它" } }
+                            }
+                            Flow{
+                                id:birthDateGroup;visible: false;height: parent.height;spacing: height*0.4;
+                                LineEdit{id:birthDate;height: parent.height;radius:height/6;width: height*4;visible: true;}
+                                CusButton{text:"选择";width:height*2;onClicked:{calendar.inputObj=birthDate;calendar.open();}}
+                            }
+                            CusButton{
+                                height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"
+                                onClicked:query.startQuery();
+                            }
+                            function startQuery()
+                            {
+                                console.log(patientID.text);
+                                switch (queryStrategy.currentIndex)
+                                {
+                                case 0:IcUiQmlApi.appCtrl.databaseSvc.recentDiagnosis(6);break;
+                                case 1:IcUiQmlApi.appCtrl.databaseSvc.getPatientByPatientId(patientID.text);break;
+                                case 2:
+                                    console.log(chineseName.text);
+                                    if(language=="Chinese") IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(chineseName.text,dateFrom.text,dateTo.text);
+                                    else IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(firstName.text+" "+lastName.text,dateFrom.text,dateTo.text);
+                                    break;
+                                case 3:IcUiQmlApi.appCtrl.databaseSvc.getPatientBySex(sex.currentIndex,dateFrom.text,dateTo.text);
+                                }
+                            }
                         }
                         Item{
                             width: parent.width;height: parent.height-6*patientManagement.rowHight
