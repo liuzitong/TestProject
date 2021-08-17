@@ -29,7 +29,9 @@ public:
     Q_INVOKABLE void getPatientByPatientId(QString id);
     Q_INVOKABLE void getPatientByName(QString name,QDate from,QDate to);
     Q_INVOKABLE void getPatientBySex(int sex,QDate from,QDate to);
-//    Q_INVOKABLE void getPatientByBirthDate(QDate date);
+    Q_INVOKABLE void getPatientByBirthDate(QDate date);
+private:
+    inline QString convertQDateToQString(QDate date){return QString("%1-%2-%3").arg(date.year()).arg(date.month()).arg(date.day());}
 //    Q_INVOKABLE QObject* getPatientModelByIndex(int startIndex,int count,QDate from,QDate to);
 //    Q_INVOKABLE QObject* getPatientModelByIndex(int startIndex,int count,QString name);
 //    Q_INVOKABLE QObject* getPatientModelByIndex(int startIndex,int count,int sex);

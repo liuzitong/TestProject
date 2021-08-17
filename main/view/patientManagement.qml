@@ -12,7 +12,7 @@ Column{
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
     property int pageSize: 14;
-
+    signal queryStarted;
     anchors.fill:parent;
     Item{
         width: parent.width;
@@ -105,8 +105,10 @@ Column{
                                     if(language=="Chinese") IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(chineseName.text,dateFrom.text,dateTo.text);
                                     else IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(firstName.text+" "+lastName.text,dateFrom.text,dateTo.text);
                                     break;
-                                case 3:IcUiQmlApi.appCtrl.databaseSvc.getPatientBySex(sex.currentIndex,dateFrom.text,dateTo.text);
+                                case 3:IcUiQmlApi.appCtrl.databaseSvc.getPatientBySex(sex.currentIndex,dateFrom.text,dateTo.text);break;
+                                case 4:IcUiQmlApi.appCtrl.databaseSvc.getPatientByBirthDate(birthDate.text);
                                 }
+                                queryStarted();
                             }
                         }
                         Item{
@@ -197,7 +199,7 @@ Column{
                             id:pageControl;width: parent.width;height:patientManagement.rowHight;
                             Flow{
                                 id:pageIndex;
-                                property int currentPage: 0;property int totalPage: 10;property int totalRecordCount: 100;anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;height:parent.height;
+                                property int currentPage: 0;property int totalPage:0;property int totalRecordCount: 0;anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;height:parent.height;
                                 CusText{id:currentPageNumberText;text:"第 "+pageIndex.currentPage+"/"+pageIndex.totalPage+" 页,共计 "+pageIndex.totalRecordCount+" 条纪录";width: height*6}
                             }
                             Flow{
@@ -210,15 +212,22 @@ Column{
                                     id:previousPage;
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_2previous_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_2previous_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_2previous_3press.svg";
                                 }
-                                LineEdit{id:currentPage;width: height*2;text:"1";radius: height*0.2;horizontalAlignment: Text.AlignHCenter}
+                                LineEdit{id:currentPage;width: height*2;text:pageIndex.currentPage;radius: height*0.2;horizontalAlignment: Text.AlignHCenter}
                                 CusButton{width: height; text:"Goto";fontSize: height*0.25;onEntered: {borderColor=hoverBorderColor;}onExited: {borderColor=commonBorderColor;}onClicked: {borderColor=pressBorderColor;}}
                                 CusButton{
                                     id:nextPage;
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_4next_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_4next_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_4next_3press.svg";
+                                    onClicked: {
+//                                        currentPage.text=currentPage.text
+                                    }
                                 }
                                 CusButton{id:endPage;
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_5end_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_5end_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_5end_3press.svg";
                                 }
+                            }
+                            Component.onCompleted: {queryStarted.connect(refresh)}
+                            function refresh(){
+                                console.log("hahaah");
                             }
                         }
                     }
