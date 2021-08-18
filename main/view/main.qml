@@ -13,24 +13,28 @@ Rectangle {
     property string backGroundBorderColor:"#bdc0c6"
     property string language:IcUiQmlApi.appCtrl.language
 
-    function switchContent(contentType)
-    {
-        if(contentType==="patientManagement")
-        {
-            contentSwitcher.contentType="patientManagement";
-            checkContentButton.image.source=checkContentButton.imageSrc;
-            seperator1.opacity=1;
-            seperator3.opacity=0;
-            pageLoader.changePage("patientManagement")
-        }
-        if(contentType==="check")
-        {
-            contentSwitcher.contentType="check";
-            patientContentButton.image.source=patientContentButton.imageSrc;
-            seperator1.opacity=0;
-            seperator3.opacity=1;
-            pageLoader.changePage("check")
-        }
+//    function switchContent(contentType)
+//    {
+//        if(contentType==="patientManagement")
+//        {
+//            contentSwitcher.contentType="patientManagement";
+//            checkContentButton.image.source=checkContentButton.imageSrc;
+//            seperator1.opacity=1;
+//            seperator3.opacity=0;
+//            pageLoader.changePage("patientManagement")
+//        }
+//        if(contentType==="check")
+//        {
+//            contentSwitcher.contentType="check";
+//            patientContentButton.image.source=patientContentButton.imageSrc;
+//            seperator1.opacity=0;
+//            seperator3.opacity=1;
+//            pageLoader.changePage("check")
+//        }
+//    }
+    Settings{
+        id:settings;
+        anchors.fill: parent;
     }
     Column {
         id: column;anchors.fill: parent
@@ -48,9 +52,6 @@ Rectangle {
                             Image {width: height;height: parent.height;source: "qrc:/Pics/user-svg/0syseye_logo.svg";}
                             CusText{text:"电脑自动视野仪系统"; horizontalAlignment: Text.AlignLeft;color: "white";font.pointSize: height*0.5;width: height*10;}
                         }
-                        Flow{
-                            height:parent.height*1.2; anchors.right: parent.right; layoutDirection: Qt.RightToLeft;spacing: height*0.2
-                        }
                     }
                     Item{
                         width: parent.width;height: parent.height*0.60;
@@ -64,9 +65,9 @@ Rectangle {
                             height: parent.height;
                             anchors.horizontalCenter: parent.horizontalCenter
                             Rectangle{ id:seperator1;height: parent.height; gradient: Gradient {GradientStop {position: 0;color: "#333e44"}GradientStop { position: 0.5;color: "#7e8588"}GradientStop {position: 1;color: "#333e44"; }} width: 2;}
-                            CusButton{id:patientContentButton;isAnime: false;image.source:pressImageSrc;underImageText.text: "患者";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width*2;imageSrc: "qrc:/Pics/base-svg/menu_patient.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_patient_select.svg";onClicked: {switchContent("patientManagement")}}
+                            CusButton{id:patientContentButton;isAnime: false;image.source:pressImageSrc;underImageText.text: "患者";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width*2;imageSrc: "qrc:/Pics/base-svg/menu_patient.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_patient_select.svg";enabled: false;/*onClicked: {switchContent("patientManagement")}*/}
                             Rectangle{ id:seperator2;height: parent.height; gradient: Gradient {GradientStop {position: 0;color: "#333e44"}GradientStop { position: 0.5;color: "#7e8588"}GradientStop {position: 1;color: "#333e44"; }} width: 2;}
-                            CusButton{id:checkContentButton;isAnime: false;underImageText.text: "检测";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width*2;imageSrc: "qrc:/Pics/base-svg/menu_capture.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_capture_select.svg";onClicked: {switchContent("check")}}
+                            CusButton{id:checkContentButton;isAnime: false;underImageText.text: "检测";underImageText.color: "white"; rec.visible: false;width:image.sourceSize.width*2; fontSize: height/4;imageSrc: "qrc:/Pics/base-svg/menu_capture.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_capture_select.svg";enabled: false;/*onClicked: {switchContent("check")}*/}
                             Rectangle{ id:seperator3;opacity: 0;height: parent.height; gradient: Gradient {GradientStop {position: 0;color: "#333e44"}GradientStop { position: 0.5;color: "#7e8588"}GradientStop {position: 1;color: "#333e44"; }} width: 2;}
                         }
                         Flow{
@@ -83,7 +84,11 @@ Rectangle {
                             CusButton{
                                 type:"click";isAnime: false;underImageText.text: "设置";underImageText.color: "white"; fontSize: height/4;rec.visible: false;
                                 width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_set.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_set_select.svg";
-                                onClicked: {if(language==="Chinese") {IcUiQmlApi.appCtrl.language="English" }else{ IcUiQmlApi.appCtrl.language="Chinese";}}
+                                onClicked:
+                                {
+                                    settings.open();
+                                    /*if(language==="Chinese") {IcUiQmlApi.appCtrl.language="English" }else{ IcUiQmlApi.appCtrl.language="Chinese";}*/
+                                }
                             }
                             CusButton{
                                 type:"click";isAnime: false;underImageText.text: "自定义";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_customize.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_customize_select.svg";
@@ -106,8 +111,19 @@ Rectangle {
                 {
                     case "patientManagement":
                         source="qrc:/perimeter/main/view/patientManagement.qml";
+                        checkContentButton.image.source=checkContentButton.imageSrc;
+                        patientContentButton.image.source=patientContentButton.pressImageSrc;
+                        seperator1.opacity=1;
+                        seperator3.opacity=0;
+                        pageLoader.changePage("patientManagement")
                         break;
-                    case "check": source="qrc:/perimeter/main/view/check.qml";break;
+                    case "check": source="qrc:/perimeter/main/view/check.qml";
+                        patientContentButton.image.source=patientContentButton.imageSrc;
+                        checkContentButton.image.source=checkContentButton.pressImageSrc;
+                        seperator1.opacity=0;
+                        seperator3.opacity=1;
+                        pageLoader.changePage("check")
+                        break;
                     case "programCustomize": source="qrc:/perimeter/main/view/programCustomize.qml";break;
                 }
             }

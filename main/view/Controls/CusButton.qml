@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQml 2.2
 Item{
     id:root
-    property string buttonColor: "#dcdee0"
+    property string buttonColor: enabled?"#dcdee0":"#787878"
     property string hoverBorderColor: "black"
     property string pressBorderColor: "#006486"
     property string commonBorderColor: "#bdc0c6"
@@ -28,6 +28,9 @@ Item{
     signal clicked()
     signal entered()
     signal exited()
+    onEnabledChanged: {
+        enabled?buttonColor="#dcdee0":buttonColor="#787878";
+    }
 
     MouseArea{
         anchors.fill: parent

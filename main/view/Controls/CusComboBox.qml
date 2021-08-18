@@ -7,6 +7,7 @@ ComboBox {
     property string borderColor:"black"
     property string borderColorPressed:"Brown"
     property string imageSrc
+    property string backgroundColor:"#dcdee0"
     font.family:"Microsoft YaHei"
     font.pointSize:height/3;
 
@@ -50,6 +51,7 @@ ComboBox {
         border.color:/* control.pressed ? "grey" :*/ control.borderColor
         border.width: control.visualFocus ? 2 : 1
         radius: height/6
+        color:control.backgroundColor;
     }
 
     popup: Popup {

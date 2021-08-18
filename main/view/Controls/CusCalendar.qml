@@ -8,6 +8,7 @@ import qxpack.indcom.ui_qml_control 1.0  // [HINT] ModalPopupDialog is in it
 ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
     id: idPopup;
     visible: false;
+    reqEnterEventLoop: false;
     property alias contentWidth : idContent.implicitWidth;
     property alias contentHeight: idContent.implicitHeight;
     property var   inputObj: null;

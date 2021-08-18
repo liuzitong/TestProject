@@ -13,7 +13,7 @@ Item {
     {
         if ( backgroundVisible ) { idPopupBg.open(); }
         idPopup.open ();
-        //if ( reqEnterEventLoop ) { IcUiQmlApi.enterEventLoop(); }  //有这条Calendar控件无法用
+        if ( reqEnterEventLoop ) { IcUiQmlApi.enterEventLoop(); }  //有这条Calendar控件无法用
     }
 
     function close( )

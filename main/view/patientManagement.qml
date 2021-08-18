@@ -9,11 +9,13 @@ import qxpack.indcom.ui_qml_base 1.0
 Column{
     id:root;
     property string language:IcUiQmlApi.appCtrl.language
+    property bool doubleName:IcUiQmlApi.appCtrl.doubleName
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
-    property int pageSize: 14;
+    property int pageSize: 12;
     signal queryStarted;
     anchors.fill:parent;
+
     Item{
         width: parent.width;
         height: parent.height*14/15
@@ -28,17 +30,17 @@ Column{
                 Item{
                     anchors.fill: parent;anchors.margins: content.layoutGroupMargin
                     Column{
-                        id:patientManagement;anchors.fill: parent;spacing: rowHight
-                        property int rowHight: height*0.05
+                        id:patientInfo;anchors.fill: parent;spacing: rowHight
+                        property int rowHight: height*0.06
 
                         Row{
                             id:dateSelection; width: parent.width;opacity: 1;
-                            height: patientManagement.rowHight;spacing: height*0.4;
+                            height: patientInfo.rowHight;spacing: height*0.4;
                             CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5;}
-                            LineEdit{property string name: "dateFrom";id:dateFrom;radius: height/6;width: height*3.3;}
+                            LineEdit{property string name: "dateFrom";id:dateFrom;radius: height/6;width: height*3.1;}
                             CusButton{id:dateFromButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateFrom;calendar.open();}}
                             CusText{text:"到";width: height*0.6;}
-                            LineEdit{property string name: "dateTo";id:dateTo;radius: height/6;width: height*3.3;}
+                            LineEdit{property string name: "dateTo";id:dateTo;radius: height/6;width: height*3.1;}
                             CusButton{id:dateToButton;text:"选择";width:height*2;
                                 onClicked:{
                                     if(dateFrom.text!==""&&dateTo.text=="")
@@ -47,7 +49,7 @@ Column{
                                 }}
                         }
                         Row{
-                            id:query; width: parent.width; height:patientManagement.rowHight;spacing: height*0.5
+                            id:query; width: parent.width; height:patientInfo.rowHight;spacing: height*0.5
                             CusComboBox{
                                 id:queryStrategy;height: parent.height;width: parent.height*5;
                                 borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
@@ -59,13 +61,13 @@ Column{
                                     {
                                     case 0:dateSelection.opacity=1;break;
                                     case 1:patientID.visible=true;dateSelection.opacity=0;break;
-                                    case 2:if(language=="Chinese") {chineseName.visible=true;} else{englishNameGroup.visible=true;} dateSelection.opacity=1;break;
+                                    case 2:if(!doubleName) {chineseName.visible=true;} else{englishNameGroup.visible=true;} dateSelection.opacity=1;break;
                                     case 3:sex.visible=true;dateSelection.opacity=1;break;
                                     case 4:birthDateGroup.visible=true;dateSelection.opacity=0;break;
                                     }
                                 }
                                 Component.onCompleted: {
-                                    IcUiQmlApi.appCtrl.languageChanged.connect(onCurrentIndexChanged)
+                                    IcUiQmlApi.appCtrl.doubleNameChanged.connect(onCurrentIndexChanged)
                                 }
                             }
 
@@ -73,9 +75,9 @@ Column{
                             LineEdit{id:chineseName;radius:height/6;width: height*4;onEnterPressed:{query.startQuery();}}
                             Flow{
                                 id:englishNameGroup;height: parent.height;spacing: height*0.4;
-                                CusText{text:"First Name:";width:height*2.5}
+                                CusText{text:"名字:";width:height*2.5}
                                 LineEdit{id:firstName;radius:height/6;width: height*4}
-                                CusText{text:"Last Name:";width:height*2.5}
+                                CusText{text:"姓氏:";width:height*2.5}
                                 LineEdit{id:lastName;radius:height/6;width: height*4}
                             }
                             CusComboBox{
@@ -102,7 +104,7 @@ Column{
                                 case 1:IcUiQmlApi.appCtrl.databaseSvc.getPatientByPatientId(patientID.text);break;
                                 case 2:
                                     console.log(chineseName.text);
-                                    if(language=="Chinese") IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(chineseName.text,dateFrom.text,dateTo.text);
+                                    if( !IcUiQmlApi.appCtrl.doubleName) IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(chineseName.text,dateFrom.text,dateTo.text);
                                     else IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(firstName.text+" "+lastName.text,dateFrom.text,dateTo.text);
                                     break;
                                 case 3:IcUiQmlApi.appCtrl.databaseSvc.getPatientBySex(sex.currentIndex,dateFrom.text,dateTo.text);break;
@@ -112,13 +114,13 @@ Column{
                             }
                         }
                         Item{
-                            width: parent.width;height: parent.height-6*patientManagement.rowHight
+                            width: parent.width;height: parent.height-6*patientInfo.rowHight
                             Column{
                                 id:patientInfoCol;
                                 anchors.fill:parent;spacing: -1;
                                 Row{
                                     id:header
-                                    width: parent.width; height:patientManagement.rowHight;spacing: -1;z:1;
+                                    width: parent.width; height:patientInfo.rowHight;spacing: -1;z:1;
                                     property bool isAllSelected: false;
                                     CusButton{
                                         width: parent.width*1/10;height: parent.height;buttonColor: "#D2D3D5"; borderColor: "#656566";radius:0;imageSrc:"qrc:/Pics/base-svg/btn_select_normal.svg"
@@ -142,13 +144,13 @@ Column{
                                 ListView{
                                     id:patientInfoListView
                                     property var seletedPatient:[];
-                                    width: parent.width;height:patientInfoCol.height-patientManagement.rowHight +1; interactive: false; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
+                                    width: parent.width;height:patientInfoCol.height-patientInfo.rowHight +1; interactive: false; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
                                     delegate: patientInfoDelegate
                                     model:IcUiQmlApi.appCtrl.databaseSvc.patientListModel;
                                     Component{
                                         id:patientInfoDelegate
                                         Item{
-                                            width: patientInfoListView.width;height: (patientInfoCol.height-patientManagement.rowHight)/14+1;
+                                            width: patientInfoListView.width;height: (patientInfoCol.height-patientInfo.rowHight)/pageSize+1;
                                             MouseArea{
                                                 anchors.fill: parent;
                                                 onClicked: {console.log("Ted Say hi id="+model.Id)}
@@ -196,7 +198,7 @@ Column{
                             }
                         }
                         Item{
-                            id:pageControl;width: parent.width;height:patientManagement.rowHight;
+                            id:pageControl;width: parent.width;height:patientInfo.rowHight;
                             Flow{
                                 id:pageIndex;
                                 property int currentPage: 0;property int totalPage:0;property int totalRecordCount: 0;anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;height:parent.height;
@@ -219,7 +221,7 @@ Column{
                                         if(pageIndex.currentPage>1)
                                         {
                                             pageIndex.currentPage-=1;
-                                            patientInfoListView.positionViewAtIndex((pageIndex.currentPage-1)*14,ListView.Beginning);
+                                            patientInfoListView.positionViewAtIndex((pageIndex.currentPage-1)*pageSize,ListView.Beginning);
                                         }
                                     }
                                 }
@@ -230,7 +232,7 @@ Column{
                                     {
                                         borderColor=pressBorderColor;
                                         pageIndex.currentPage=currentPage.text;
-                                        patientInfoListView.positionViewAtIndex((pageIndex.currentPage-1)*14,ListView.Beginning);
+                                        patientInfoListView.positionViewAtIndex((pageIndex.currentPage-1)*pageSize,ListView.Beginning);
                                     }
                                 }
                                 CusButton{
@@ -240,7 +242,7 @@ Column{
                                         if(pageIndex.currentPage<pageIndex.totalPage)
                                         {
                                             pageIndex.currentPage+=1;
-                                            patientInfoListView.positionViewAtIndex((pageIndex.currentPage-1)*14,ListView.Beginning);
+                                            patientInfoListView.positionViewAtIndex((pageIndex.currentPage-1)*pageSize,ListView.Beginning);
                                         }
                                     }
                                 }
@@ -248,7 +250,7 @@ Column{
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_5end_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_5end_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_5end_3press.svg";
                                     onClicked: {
                                         pageIndex.currentPage=pageIndex.totalPage;
-                                        patientInfoListView.positionViewAtIndex((pageIndex.currentPage-1)*14,ListView.Beginning);
+                                        patientInfoListView.positionViewAtIndex((pageIndex.currentPage-1)*pageSize,ListView.Beginning);
                                     }
                                 }
                             }
@@ -272,46 +274,46 @@ Column{
                     Item{
                         anchors.fill: parent;anchors.margins: content.layoutGroupMargin;
                         Column{
-                            id:newPatient;anchors.fill: parent;spacing: patientManagement.rowHight*1.5
+                            id:newPatient;anchors.fill: parent;spacing: patientInfo.rowHight
                             Component.onCompleted: {
                                 showControl();
-                                IcUiQmlApi.appCtrl.languageChanged.connect(showControl)
+                                IcUiQmlApi.appCtrl.doubleNameChanged.connect(showControl)
                             }
 
                             function showControl()
                             {
-                                if(language=="Chinese") {newChineseNameRow.visible=true;newEnglishFirstNameRow.visible=false;newEnglishLastNameRow.visible=false;}
+                                if(!doubleName) {newChineseNameRow.visible=true;newEnglishFirstNameRow.visible=false;newEnglishLastNameRow.visible=false;}
                                 else {newChineseNameRow.visible=false;newEnglishFirstNameRow.visible=true;newEnglishLastNameRow.visible=true;}
                             }
 
                             Row{
-                                width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
+                                width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
                                 CusText{text:"*患者ID "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                 LineEdit{id:newId;width: parent.width*0.6}
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
                             Row{
-                                id:newChineseNameRow;visible:false;width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
+                                id:newChineseNameRow;visible:false;width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
                                 CusText{text:"*姓名 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                 LineEdit{id:newChineseName;width: parent.width*0.6}
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
 
                             Row{
-                                id:newEnglishFirstNameRow;visible:false;width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*FirstName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                id:newEnglishFirstNameRow;visible:false;width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
+                                CusText{text:"*名字 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                 LineEdit{id:newEnglishFirstName;width: parent.width*0.6}
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
 
                             Row{
-                                id:newEnglishLastNameRow;visible:false;width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*LastName "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                id:newEnglishLastNameRow;visible:false;width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
+                                CusText{text:"*姓氏"; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                 LineEdit{id:newEnglishLastName;width: parent.width*0.6}
                             }
 
                             Row{
-                                width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
+                                width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
                                 CusText{text:"*性别 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                 Row{
                                     id:genderSelect;property int gender;
@@ -344,7 +346,7 @@ Column{
                             }
                             Row{
                                 id:newBirthDateRow
-                                width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
+                                width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
                                 CusText{text:"*出生日期 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                 Row{
                                     height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
@@ -352,7 +354,7 @@ Column{
                                         height: parent.height;width: 2*height;
                                         LineEdit
                                         {
-                                            id:newDateBirth;width: height*3.3;onTextChanged:
+                                            id:newDateBirth;width: height*3.1;onTextChanged:
                                             {
                                                 var birthDate=new Date(Date.parse(newDateBirth.text));
                                                 var now=new Date(Date.now());
@@ -377,10 +379,9 @@ Column{
                    Item{
                        anchors.fill: parent;anchors.margins: content.layoutGroupMargin;
                        Column{
-                           id:eyeBallCalc
-                           anchors.fill: parent;spacing: patientManagement.rowHight;
+                           anchors.fill: parent;
                            Row{
-                               width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
+                               width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
                                Item{height:parent.height;width:parent.width*0.20}
                                Row{
                                    height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
@@ -389,38 +390,42 @@ Column{
                                    CusText{ text:"轴向";width: 2*height}
                                }
                            }
-                           Row{
-                               width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
-                               CusText{text:"右眼";width:parent.width*0.20}
+                           Column{
+                               id:eyeBallCalc
+                               width: parent.width;height: parent.height-patientInfo.rowHight;spacing: patientInfo.rowHight;
                                Row{
-                                   height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
-                                   LineEdit{ width: 2*height}
-                                   LineEdit{ width: 2*height}
-                                   LineEdit{ width: 2*height}
+                                   width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
+                                   CusText{text:"右眼";width:parent.width*0.20}
+                                   Row{
+                                       height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
+                                       LineEdit{ width: 2*height}
+                                       LineEdit{ width: 2*height}
+                                       LineEdit{ width: 2*height}
+                                   }
+                               }
+                               Row{
+                                   width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
+                                   CusText{text:"左眼";width:parent.width*0.20}
+                                   Row{
+                                       height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
+                                       LineEdit{ width: 2*height}
+                                       LineEdit{ width: 2*height}
+                                       LineEdit{ width: 2*height}
+                                   }
+                               }
+                               Row{
+                                   width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
+                                   Item{height:parent.height;width:parent.width*0.20}
+                                   Row{
+                                       height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
+                                       Item{ height:parent.height;width: 2*height}
+                                       CusButton{text:"计算"; width: 2*height}
+                                       Item{ height:parent.height;width: 2*height}
+                                   }
                                }
                            }
-                           Row{
-                               width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
-                               CusText{text:"左眼";width:parent.width*0.20}
-                               Row{
-                                   height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
-                                   LineEdit{ width: 2*height}
-                                   LineEdit{ width: 2*height}
-                                   LineEdit{ width: 2*height}
-                               }
-                           }
-                           Row{
-                               width: parent.width;height:patientManagement.rowHight;spacing: parent.width*0.02
-                               Item{height:parent.height;width:parent.width*0.20}
-                               Row{
-                                   height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
-                                   Item{ height:parent.height;width: 2*height}
-                                   CusButton{text:"计算"; width: 2*height}
-                                   Item{ height:parent.height;width: 2*height}
-                               }
-                           }
-                       }
-                   }
+                        }
+                    }
                 }
             }
         }
@@ -443,7 +448,7 @@ Column{
                         onClicked:
                         {
                             var Name;
-                            if(language=="Chinese") Name=newChineseName.text;else {Name=newEnglishFirstName.text+" "+newEnglishLastName.text;}
+                            if(!doubleName) Name=newChineseName.text;else {Name=newEnglishFirstName.text+" "+newEnglishLastName.text;}
                             IcUiQmlApi.appCtrl.databaseSvc.updatePatient(IcUiQmlApi.appCtrl.currentPatient.id,newId.text,Name,genderSelect.gender,newDateBirth.text);
                             query.startQuery();
                         }
@@ -466,13 +471,13 @@ Column{
             }
             Flow{
                 height:parent.height; layoutDirection: Qt.RightToLeft;width:parent.width*0.4;spacing: height*0.8;
-                CusButton{text:"进入检测"}
+                CusButton{text:"进入检测";onClicked: {root.parent.changePage("check")}}
                 CusButton{
                     id:patientSaveButton;text:"保存";
                     enabled: false;
                     onClicked:{
                         var Name="";
-                        if(language=="Chinese"){ Name=newChineseName.text; }
+                        if(!doubleName){ Name=newChineseName.text; }
                         else {Name = newEnglishFirstName.text+" "+newEnglishLastName.text;}
                         IcUiQmlApi.appCtrl.databaseSvc.addPatient(newId.text,Name,genderSelect.gender,newDateBirth.text);
                         query.startQuery();

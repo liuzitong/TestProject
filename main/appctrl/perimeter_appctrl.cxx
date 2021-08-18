@@ -29,6 +29,7 @@ private:
     Main        m_main_mod;
     //Custom Code
     QString     m_language="Chinese";
+    bool        m_doubleName=false;
     QObject*    m_databaseSvc;
     QObject*    m_currentPatient;
 public :
@@ -43,6 +44,8 @@ public :
     QObject*    getDatabaseSvcObj() const           {return m_databaseSvc;}
     QString     getLanguage()                       {return m_language;}
     void        setLanguage(QString value)          {m_language=value;}
+    bool        getDoubleName()                     {return m_doubleName;}
+    void        setDoubleName(bool value)           {m_doubleName=value;}
     QObject*    getCurrentPatient()                 {return m_currentPatient;}
     void        setCurrentPatient(QObject *value)   {m_currentPatient=value;}
 };
@@ -118,10 +121,20 @@ QObject*  AppCtrl :: msgBusObj() const
 QObject*    AppCtrl::databaseSvcObj() const             {return T_PrivPtr( m_obj )-> getDatabaseSvcObj();}
 QString     AppCtrl::getLanguage()                      {return T_PrivPtr( m_obj )->getLanguage() ;}
 void        AppCtrl::setLanguage(QString value)         {T_PrivPtr( m_obj )->setLanguage(value) ;emit languageChanged(value);}
+
+bool AppCtrl::getDoubleName()
+{
+    return T_PrivPtr( m_obj )->getDoubleName();
+}
+
+void AppCtrl::setDoubleName(bool value)
+{
+    T_PrivPtr( m_obj )->setDoubleName(value);emit doubleNameChanged(value);
+}
 QObject*    AppCtrl::getCurrentPatient()                {
     return T_PrivPtr( m_obj )->getCurrentPatient();
 }
-void        AppCtrl::setCurrentPatient(QObject *value)  {T_PrivPtr( m_obj )->setCurrentPatient(value);emit CurrentPatientChanged(value);}
+void        AppCtrl::setCurrentPatient(QObject *value)  {T_PrivPtr( m_obj )->setCurrentPatient(value);emit currentPatientChanged(value);}
 
 // ============================================================================
 // instance name
