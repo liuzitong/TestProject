@@ -12,7 +12,7 @@ Column{
     property bool doubleName:IcUiQmlApi.appCtrl.doubleName
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
-    property int pageSize: 12;
+    property int pageSize: 10;
     signal queryStarted;
     anchors.fill:parent;
 

@@ -7,5 +7,6 @@
         <file>LineEdit.qml</file>
         <file>qmldir</file>
         <file>Settings.qml</file>
+        <file>About.qml</file>
     </qresource>
 </RCC>
