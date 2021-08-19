@@ -14,6 +14,7 @@ Column{
     property string backGroundBorderColor:"#bdc0c6"
     property int pageSize: 15;
     signal queryStarted;
+//    signal changePage(string pageName);
     anchors.fill:parent;
 
     Item{

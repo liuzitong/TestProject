@@ -13,6 +13,7 @@ Rectangle {
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
     property string language:IcUiQmlApi.appCtrl.language
+    signal changePage(string page);
 
 //    function switchContent(contentType)
 //    {
@@ -34,7 +35,7 @@ Rectangle {
 //        }
 //    }
     Settings{
-//        id:settings;
+        id:settings;
         anchors.fill: parent;
     }
 
@@ -65,7 +66,7 @@ Rectangle {
                         width: parent.width;height: parent.height*0.60;
                         CusButton{
                             type:"click";isAnime: false;underImageText.text: "登录";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_login.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_login_select.svg";
-//                            onClicked: {root.parent.changePage("login");}
+                            onClicked: {changePage("login");}
                         }
                         Flow{
                             id:contentSwitcher
@@ -96,7 +97,7 @@ Rectangle {
                             }
                             CusButton{
                                 type:"click";isAnime: false;underImageText.text: "自定义";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_customize.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_customize_select.svg";
-                                onClicked: pageLoader.changePage("programCustomize");
+                                onClicked: contentPage.changePage("programCustomize");
                             }
                             CusButton{type:"click";isAnime: false;underImageText.text: "关于";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_about.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_about_select.svg";onClicked: {about.open();}}
                         }
@@ -110,6 +111,42 @@ Rectangle {
             PatientManagement{id:patientPage;anchors.fill:parent; }
             Check{id:checkPage;anchors.fill: parent;visible: false;}
             ProgramCustomize{id:programPage;anchors.fill: parent;visible: false;}
+
+            Component.onCompleted: {
+                IcUiQmlApi.appCtrl.changePage.connect(changePage);
+            }
+
+            function changePage(pageName)
+            {
+                console.log(pageName);
+                switch(pageName)
+                {
+                    case "patientManagement":
+                        patientPage.visible=true;checkPage.visible=false;programPage.visible=false;
+                        checkContentButton.image.source=checkContentButton.imageSrc;
+                        patientContentButton.image.source=patientContentButton.pressImageSrc;
+                        seperator1.opacity=1;
+                        seperator2.opacity=1;
+                        seperator3.opacity=0;
+                        break;
+                    case "check":
+                        patientPage.visible=false;checkPage.visible=true;programPage.visible=false;
+                        patientContentButton.image.source=patientContentButton.imageSrc;
+                        checkContentButton.image.source=checkContentButton.pressImageSrc;
+                        seperator1.opacity=0;
+                        seperator2.opacity=1;
+                        seperator3.opacity=1;
+                        break;
+                    case "programCustomize":
+                        patientPage.visible=false;checkPage.visible=false;programPage.visible=true;
+                        seperator1.opacity=0;
+                        seperator2.opacity=0;
+                        seperator3.opacity=0;
+                        patientContentButton.image.source=patientContentButton.imageSrc;
+                        checkContentButton.image.source=checkContentButton.imageSrc;
+                        break;
+                }
+            }
         }
 
     }
@@ -152,13 +189,6 @@ Rectangle {
 //        }
 //     }
 //    Component.onCompleted: {IcUiQmlApi.appCtrl.changePage.connect(pageLoader.changePage)}
-
-
-
-
-
-
-
 
 
 

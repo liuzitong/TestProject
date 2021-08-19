@@ -13,12 +13,30 @@ Window {
     property string language: IcUiQmlApi.appCtrl.language
 
     Content{
+        id:content
         anchors.fill: parent;
     }
 
     Login{
+        id:login
         visible: false;
         anchors.fill: parent;
+    }
+
+    Component.onCompleted: {
+        idPriv.init();
+        content.changePage.connect(changePage);
+        login.changePage.connect(changePage);
+    }
+
+    function changePage(pageName)
+    {
+        console.log(pageName);
+        switch(pageName)
+        {
+            case "main":content.visible=true;login.visible=false;break;
+            case "login":content.visible=false;login.visible=true;break;
+        }
     }
 
 
@@ -28,7 +46,7 @@ Window {
 //        source: "qrc:/perimeter/main/view/Main.qml";
 //        function changePage(pageName)
 //        {
-////            console.log(pageName);
+//                console.log(pageName);
 //            switch(pageName)
 //            {
 //                case "main": source="qrc:/perimeter/main/view/main.qml";break;
@@ -40,22 +58,13 @@ Window {
     // ////////////////////////////////////////////////////////////////////////
     // logic
     // ////////////////////////////////////////////////////////////////////////
-    Component.onCompleted:   { idPriv.init();   }
 //    Component.onDestruction: { idPriv.deinit(); }
     QtObject{
         id: idPriv;
         property var patient_vm:null;
         function init()
         {
-
             IcUiQmlApi.appCtrl.databaseSvc.initDataBase();
-//            IcUiQmlApi.appCtrl.databaseSvc.test();
-//            console.log("sssss");
-//            patient_vm=IcUiQmlApi.appCtrl.databaseSvc.getPatientById("5001");
-//            console.log("sssss");
-//            console.log(patient_vm.name);
-//            console.log("sssss");
-//            delete patient_vm;
         }
     }
 

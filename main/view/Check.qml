@@ -10,6 +10,7 @@ import qxpack.indcom.ui_qml_base 1.0
 Column {
     id:root
     anchors.fill:parent;
+//    signal changePage(string pageName);
     Item{
         width: parent.width;
         height: parent.height*14/15

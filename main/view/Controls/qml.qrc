@@ -6,7 +6,7 @@
         <file>CusText.qml</file>
         <file>LineEdit.qml</file>
         <file>qmldir</file>
-        <file>Settings.qml</file>
         <file>About.qml</file>
+        <file>Settings.qml</file>
     </qresource>
 </RCC>
