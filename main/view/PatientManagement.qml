@@ -14,7 +14,7 @@ Column{
     property string backGroundBorderColor:"#bdc0c6"
     property int pageSize: 15;
     signal queryStarted;
-//    signal changePage(string pageName);
+    signal changePage(var pageName);
     anchors.fill:parent;
 
     Item{
@@ -473,7 +473,7 @@ Column{
             }
             Flow{
                 height:parent.height; layoutDirection: Qt.RightToLeft;width:parent.width*0.4;spacing: height*0.8;
-                CusButton{text:"进入检测";onClicked: {IcUiQmlApi.appCtrl.changePage("check");}}
+                CusButton{text:"进入检测";onClicked: {root.changePage("check");}}
                 CusButton{
                     id:patientSaveButton;text:"保存";
                     enabled: false;

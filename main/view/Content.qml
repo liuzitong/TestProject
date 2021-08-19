@@ -113,7 +113,10 @@ Rectangle {
             ProgramCustomize{id:programPage;anchors.fill: parent;visible: false;}
 
             Component.onCompleted: {
-                IcUiQmlApi.appCtrl.changePage.connect(changePage);
+//                IcUiQmlApi.appCtrl.changePage.connect(changePage);
+                patientPage.changePage.connect(changePage);
+                checkPage.changePage.connect(changePage);
+                programPage.changePage.connect(changePage);
             }
 
             function changePage(pageName)

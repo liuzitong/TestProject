@@ -10,7 +10,7 @@ import qxpack.indcom.ui_qml_base 1.0
 Column {
     id:root
     anchors.fill:parent;
-//    signal changePage(string pageName);
+    signal changePage(var pageName);
     Item{
         width: parent.width;
         height: parent.height*14/15
@@ -25,7 +25,7 @@ Column {
                     Item{
                         anchors.fill: parent
                         anchors.margins:parent.height*0.15;
-                        CusButton{text:"返回";onClicked:IcUiQmlApi.appCtrl.changePage("patientManagement");}
+                        CusButton{text:"返回";onClicked:root.changePage("patientManagement");}
                     }
                 }
 
