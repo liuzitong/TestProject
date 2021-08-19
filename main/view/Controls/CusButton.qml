@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQml 2.2
 Item{
     id:root
-    property string buttonColor: enabled?"#dcdee0":"#787878"
+    property alias buttonColor: rec.color;
     property string hoverBorderColor: "black"
     property string pressBorderColor: "#006486"
     property string commonBorderColor: "#bdc0c6"
@@ -33,12 +33,13 @@ Item{
     }
 
     MouseArea{
+        property string tempColor;
         anchors.fill: parent
         hoverEnabled: root.hoverEnabled
         onClicked:{ if(isAnime) anime.start();else root.clicked();}
         onPressed:{if(pressImageSrc!="") image.source=pressImageSrc;}
-        onEntered:{if(root.hoverEnabled) {rec.color=root.hoverColor;if(hoverImageSrc!="") image.source=hoverImageSrc;root.entered();}}
-        onExited:{if(root.hoverEnabled) {rec.color=root.buttonColor;if(hoverImageSrc!="") image.source=imageSrc;root.exited();}}
+        onEntered:{if(root.hoverEnabled) {tempColor=rec.color; rec.color=root.hoverColor;if(hoverImageSrc!="") image.source=hoverImageSrc;root.entered();}}
+        onExited:{if(root.hoverEnabled) {rec.color=tempColor;if(hoverImageSrc!="") image.source=imageSrc;root.exited();}}
         onReleased: {if(root.type=="click"){image.source=imageSrc;}}
     }
     Item{
@@ -92,7 +93,7 @@ Item{
         id:rec
         width:parent.width
         height:parent.height
-        color: root.buttonColor
+        color: enabled?"#dcdee0":"#787878"
         radius: root.radius
         border.color: root.borderColor
         border.width: root.borderWidth

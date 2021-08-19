@@ -186,8 +186,8 @@ Column{
                                                         IcUiQmlApi.appCtrl.currentPatient.birthDate=model.birthDate;
                                                         IcUiQmlApi.appCtrl.currentPatient.lastUpdate=model.lastUpdate;
                                                         console.log("current patient info:"+IcUiQmlApi.appCtrl.currentPatient.id+" "+IcUiQmlApi.appCtrl.currentPatient.patientId+" "+IcUiQmlApi.appCtrl.currentPatient.name+" "+IcUiQmlApi.appCtrl.currentPatient.sex+" "+IcUiQmlApi.appCtrl.currentPatient.birthDate+" "+IcUiQmlApi.appCtrl.currentPatient.lastUpdate)
-                                                        patientSaveButton.enabled=false;
-                                                        patientReviseButton.enabled=true;
+                                                        patientSaveButton.enabled=false;patientSaveButton.buttonColor = "#787878"
+                                                        patientReviseButton.enabled=true;patientReviseButton.buttonColor="#dcdee0"
                                                        /* patient.id=model.Id;*//*patient.patientId=model.patientId;patient.sex=model.sex;patient.birthDate=model.birtDate;*/
 
                                                     }
@@ -488,8 +488,8 @@ Column{
                 CusButton{
                     text:"新建";
                     onClicked: {
-                        patientReviseButton.enabled=false;
-                        patientSaveButton.enabled=true;
+                        patientReviseButton.enabled=false;patientReviseButton.buttonColor="#787878"
+                        patientSaveButton.enabled=true; patientSaveButton.buttonColor = "#dcdee0"
                         newId.text="";
                         newChineseName.text="";
                         newEnglishFirstName.text="";
