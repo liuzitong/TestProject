@@ -5,27 +5,37 @@ import QtQml 2.2
 import QtQuick.Controls.Styles 1.4
 import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0
+import perimeter.main.view.Controls 1.0
 
 Window {
     id: window;visible: true;width: 1366;height: 768;title: qsTr("Hello World");
     minimumWidth: 960;minimumHeight: 640;property string currentpage: "Login";
     property string language: IcUiQmlApi.appCtrl.language
 
-
-    Loader {
-        id: pageLoader
+    Content{
         anchors.fill: parent;
-        source: "qrc:/perimeter/main/view/main.qml";
-        function changePage(pageName)
-        {
-//            console.log(pageName);
-            switch(pageName)
-            {
-                case "main": source="qrc:/perimeter/main/view/main.qml";break;
-                case "login": source="qrc:/perimeter/main/view/login.qml";break;
-            }
-        }
     }
+
+    Login{
+        visible: false;
+        anchors.fill: parent;
+    }
+
+
+//    Loader {
+//        id: pageLoader
+//        anchors.fill: parent;
+//        source: "qrc:/perimeter/main/view/Main.qml";
+//        function changePage(pageName)
+//        {
+////            console.log(pageName);
+//            switch(pageName)
+//            {
+//                case "main": source="qrc:/perimeter/main/view/main.qml";break;
+//                case "login": source="qrc:/perimeter/main/view/login.qml";break;
+//            }
+//        }
+//    }
 
     // ////////////////////////////////////////////////////////////////////////
     // logic

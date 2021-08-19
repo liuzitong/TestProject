@@ -12,7 +12,7 @@ Column{
     property bool doubleName:IcUiQmlApi.appCtrl.doubleName
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
-    property int pageSize: 10;
+    property int pageSize: 15;
     signal queryStarted;
     anchors.fill:parent;
 
@@ -282,6 +282,7 @@ Column{
 
                             function showControl()
                             {
+                                console.log(doubleName);
                                 if(!doubleName) {newChineseNameRow.visible=true;newEnglishFirstNameRow.visible=false;newEnglishLastNameRow.visible=false;}
                                 else {newChineseNameRow.visible=false;newEnglishFirstNameRow.visible=true;newEnglishLastNameRow.visible=true;}
                             }
@@ -471,7 +472,7 @@ Column{
             }
             Flow{
                 height:parent.height; layoutDirection: Qt.RightToLeft;width:parent.width*0.4;spacing: height*0.8;
-                CusButton{text:"进入检测";onClicked: {root.parent.changePage("check")}}
+                CusButton{text:"进入检测";onClicked: {IcUiQmlApi.appCtrl.changePage("check");}}
                 CusButton{
                     id:patientSaveButton;text:"保存";
                     enabled: false;

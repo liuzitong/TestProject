@@ -134,7 +134,7 @@ int  main ( int argc, char *argv[] )
         QQmlApplicationEngine *eng = new QQmlApplicationEngine;
         eng->addImportPath(QStringLiteral("qrc:/") );
 
-        eng->load(QUrl(QLatin1String("qrc:/perimeter/main/view/application.qml")));
+        eng->load(QUrl(QLatin1String("qrc:/perimeter/main/view/Application.qml")));
 
         gPrintMemCntr("enter eventloop stage");
         ret = app.exec();

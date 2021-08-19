@@ -3,8 +3,9 @@ import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
 import QtQuick.Controls.Styles 1.4
-import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0
+import perimeter.main.view.Controls 1.0
+
 
 Rectangle {
     id: root;visible: true;width: 1366;height: 768;color: backGroundColor;
@@ -33,7 +34,7 @@ Rectangle {
 //        }
 //    }
     Settings{
-        id:settings;
+//        id:settings;
         anchors.fill: parent;
     }
 
@@ -41,6 +42,7 @@ Rectangle {
         id:about;
         anchors.fill: parent;
     }
+
 
     Column {
         id: column;anchors.fill: parent
@@ -63,7 +65,7 @@ Rectangle {
                         width: parent.width;height: parent.height*0.60;
                         CusButton{
                             type:"click";isAnime: false;underImageText.text: "登录";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_login.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_login_select.svg";
-                            onClicked: {root.parent.changePage("login");}
+//                            onClicked: {root.parent.changePage("login");}
                         }
                         Flow{
                             id:contentSwitcher
@@ -79,10 +81,6 @@ Rectangle {
                         Flow{
                             height: parent.height;anchors.right: parent.right;spacing: height*1
 
-//                            CusButton{
-//                                width: parent.height*3;text: "创建数据库表";
-//                                onClicked: {IcUiQmlApi.appCtrl.databaseSvc.createTable();}
-//                            }
                             CusButton{
                                 width: parent.height*2;text: "生成数据";
                                 onClicked: {IcUiQmlApi.appCtrl.databaseSvc.createData();}
@@ -107,40 +105,62 @@ Rectangle {
             }
         }
 
-        Loader {
-            id: pageLoader
-            width:parent.width;height: parent.height*0.90;
-            source: "qrc:/perimeter/main/view/patientManagement.qml";
-            function changePage(pageName)
-            {
-                switch(pageName)
-                {
-                    case "patientManagement":
-                        source="qrc:/perimeter/main/view/patientManagement.qml";
-                        checkContentButton.image.source=checkContentButton.imageSrc;
-                        patientContentButton.image.source=patientContentButton.pressImageSrc;
-                        seperator1.opacity=1;
-                        seperator3.opacity=0;
-                        pageLoader.changePage("patientManagement")
-                        break;
-                    case "check": source="qrc:/perimeter/main/view/check.qml";
-                        patientContentButton.image.source=patientContentButton.imageSrc;
-                        checkContentButton.image.source=checkContentButton.pressImageSrc;
-                        seperator1.opacity=0;
-                        seperator3.opacity=1;
-                        pageLoader.changePage("check")
-                        break;
-                    case "programCustomize": source="qrc:/perimeter/main/view/programCustomize.qml";break;
-                }
-            }
+        Item{
+            id:contentPage;width:parent.width;height: parent.height*0.90;
+            PatientManagement{id:patientPage;anchors.fill:parent; }
+            Check{id:checkPage;anchors.fill: parent;visible: false;}
+            ProgramCustomize{id:programPage;anchors.fill: parent;visible: false;}
         }
-     }
+
+    }
+
+
+
+//        Loader {
+//            id: pageLoader
+//            width:parent.width;height: parent.height*0.90;
+//            source: "qrc:/perimeter/main/view/patientManagement.qml";
+//            function changePage(pageName)
+//            {
+//                switch(pageName)
+//                {
+//                    case "patientManagement":
+//                        source="qrc:/perimeter/main/view/patientManagement.qml";
+//                        checkContentButton.image.source=checkContentButton.imageSrc;
+//                        patientContentButton.image.source=patientContentButton.pressImageSrc;
+//                        seperator1.opacity=1;
+//                        seperator2.opacity=1;
+//                        seperator3.opacity=0;
+//                        break;
+//                    case "check": source="qrc:/perimeter/main/view/check.qml";
+//                        patientContentButton.image.source=patientContentButton.imageSrc;
+//                        checkContentButton.image.source=checkContentButton.pressImageSrc;
+//                        seperator1.opacity=0;
+//                        seperator2.opacity=1;
+//                        seperator3.opacity=1;
+//                        break;
+//                    case "programCustomize":
+//                        source="qrc:/perimeter/main/view/programCustomize.qml";
+//                        seperator1.opacity=0;
+//                        seperator2.opacity=0;
+//                        seperator3.opacity=0;
+//                        patientContentButton.image.source=patientContentButton.imageSrc;
+//                        checkContentButton.image.source=checkContentButton.imageSrc;
+//                        break;
+//                }
+//            }
+//        }
+//     }
+//    Component.onCompleted: {IcUiQmlApi.appCtrl.changePage.connect(pageLoader.changePage)}
+
+
+
+
+
+
+
+
+
+
 }
-
-
-
-
-
-
-
 

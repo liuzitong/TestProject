@@ -1,1 +1,7 @@
 module perimeter.main.view
+Check 1.0                     Check.qml
+Content 1.0                   Content.qml
+Login 1.0                     Login.qml
+PatientManagement 1.0         PatientManagement.qml
+ProgramCustomize 1.0          ProgramCustomize.qml
+Check 1.0                     Check.qml

@@ -43,6 +43,7 @@ public:
     QString     getLanguage();          void setLanguage(QString value);            Q_SIGNAL void  languageChanged(QString value);
     bool        getDoubleName();        void setDoubleName(bool value);             Q_SIGNAL void  doubleNameChanged(bool value);
     QObject*    getCurrentPatient();    void setCurrentPatient(QObject* value);     Q_SIGNAL void  currentPatientChanged(QObject* value);
+    Q_SIGNAL void  changePage(QString value);
 protected:
     // override the name
     virtual QString   instanceName() const Q_DECL_OVERRIDE;
