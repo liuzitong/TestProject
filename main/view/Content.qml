@@ -111,21 +111,32 @@ Rectangle {
             PatientManagement{id:patientPage;anchors.fill:parent; }
             Check{id:checkPage;anchors.fill: parent;visible: false;}
             ProgramCustomize{id:programPage;anchors.fill: parent;visible: false;}
+            ReportAndAnalysis{id:reportPage;anchors.fill: parent;visible: false;}
 
             Component.onCompleted: {
 //                IcUiQmlApi.appCtrl.changePage.connect(changePage);
                 patientPage.changePage.connect(changePage);
                 checkPage.changePage.connect(changePage);
                 programPage.changePage.connect(changePage);
+                reportPage.changePage.connect(changePage);
             }
 
             function changePage(pageName)
             {
                 console.log(pageName);
+                patientPage.visible=false;checkPage.visible=false;programPage.visible=false;reportPage.visible=false;
                 switch(pageName)
                 {
                     case "patientManagement":
-                        patientPage.visible=true;checkPage.visible=false;programPage.visible=false;
+                        patientPage.visible=true;
+                        checkContentButton.image.source=checkContentButton.imageSrc;
+                        patientContentButton.image.source=patientContentButton.pressImageSrc;
+                        seperator1.opacity=1;
+                        seperator2.opacity=1;
+                        seperator3.opacity=0;
+                        break;
+                    case "reportAndAnalysis":
+                        reportPage.visible=true;
                         checkContentButton.image.source=checkContentButton.imageSrc;
                         patientContentButton.image.source=patientContentButton.pressImageSrc;
                         seperator1.opacity=1;
@@ -133,7 +144,7 @@ Rectangle {
                         seperator3.opacity=0;
                         break;
                     case "check":
-                        patientPage.visible=false;checkPage.visible=true;programPage.visible=false;
+                        checkPage.visible=true;
                         patientContentButton.image.source=patientContentButton.imageSrc;
                         checkContentButton.image.source=checkContentButton.pressImageSrc;
                         seperator1.opacity=0;
@@ -141,13 +152,14 @@ Rectangle {
                         seperator3.opacity=1;
                         break;
                     case "programCustomize":
-                        patientPage.visible=false;checkPage.visible=false;programPage.visible=true;
+                        programPage.visible=true;
                         seperator1.opacity=0;
                         seperator2.opacity=0;
                         seperator3.opacity=0;
                         patientContentButton.image.source=patientContentButton.imageSrc;
                         checkContentButton.image.source=checkContentButton.imageSrc;
                         break;
+
                 }
             }
         }

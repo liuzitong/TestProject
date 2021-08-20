@@ -468,7 +468,7 @@ Column{
                         }
 
                     }
-                    CusButton{text:"分析"}
+                    CusButton{text:"分析";onClicked: {root.changePage("reportAndAnalysis");}}
                 }
             }
             Flow{

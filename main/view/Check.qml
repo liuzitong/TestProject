@@ -46,6 +46,7 @@ Column {
                 Item{
                     height: parent.height;width:parent.width*0.50;
                     Item{
+                        id: item1
                         anchors.fill: parent
                         anchors.margins:parent.height*0.15;
                         Flow{
@@ -54,8 +55,8 @@ Column {
                             CusButton{text:"开始测试";}
                             CusButton{text:"停止测试";}
                             CusButton{text:"切换眼别";}
-                            CusButton{text:"打印";}
                         }
+                        CusButton{text:"打印"; anchors.right: parent.right; }
                     }
                 }
 
