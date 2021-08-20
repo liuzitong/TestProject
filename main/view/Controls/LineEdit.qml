@@ -12,23 +12,23 @@ Item{
     property alias textfeild: textfeild;
     width: parent.width;
     height:parent.height;
+    clip: true
     signal enterPressed();
     TextField{
         id:textfeild;
         anchors.fill: parent;
         text:"";
+        horizontalAlignment: Text.AlignLeft
         renderType: Text.NativeRendering
-        horizontalAlignment: Text.right
         verticalAlignment: Text.AlignVCenter
         font.pointSize: parent.height/3
         font.family:"Microsoft YaHei"
         selectByMouse: true
-        selectionColor: "#999999"
-        background: Rectangle {id:recbackground;border.width: 1;radius: root.radius;color: "white" ;border.color: "#bdc0c6"}
+        selectionColor: "yellow"
+        background: Rectangle {id:recbackground;border.width: 1;radius: root.radius;color:readOnly? "#e4e6e8":"white" ;border.color: "#bdc0c6"}
         Keys.onPressed: { switch (event.key){/*EnterKey*/ case 16777220:root.enterPressed();break;};
         }
     }
-
 }
 
 
