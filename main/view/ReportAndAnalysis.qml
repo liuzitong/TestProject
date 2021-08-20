@@ -16,6 +16,7 @@ Column {
         width: parent.width;
         height: parent.height*14/15
         id:content;
+
     }
     Rectangle
     {

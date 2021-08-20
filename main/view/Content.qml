@@ -59,7 +59,34 @@ Rectangle {
                         Flow{
                             height:parent.height;spacing: height*0.2
                             Image {width: height;height: parent.height;source: "qrc:/Pics/user-svg/0syseye_logo.svg";}
-                            CusText{text:"电脑自动视野仪系统"; horizontalAlignment: Text.AlignLeft;color: "white";font.pointSize: height*0.5;width: height*10;}
+                            CusText{text:"电脑自动视野仪系统"; horizontalAlignment: Text.AlignLeft;color: "white";font.pointSize: height*0.5;width:height*10;}
+
+                            Flow{
+                                id:patientInfo;visible: false;
+                                height: parent.height;
+                                spacing: height*0.5;
+                                Flow{
+                                    height: parent.height;
+                                    CusText{text:"姓名:  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
+                                    CusText{id:name;text:"张先生"; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: if(IcUiQmlApi.appCtrl.language!=="Chinese")  return text.length*4.7;}
+                                }
+                                Flow{
+                                    height: parent.height;
+                                    CusText{text:"性别:  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
+                                    CusText{id:sex;text:"男"; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1;}
+                                }
+                                Flow{
+                                    height: parent.height;
+                                    CusText{text:"年龄:  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
+                                    CusText{id:age;text:"40"; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1;}
+                                }
+
+                                Flow{
+                                    height: parent.height;
+                                    CusText{text:"ID:  "; horizontalAlignment: Text.AlignRight;color:"white";width: height;font.pointSize: height*0.4;}
+                                    CusText{id:id;text:"202107055362"; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1.5;}
+                                }
+                            }
                         }
                     }
                     Item{
@@ -134,6 +161,7 @@ Rectangle {
                         seperator1.opacity=1;
                         seperator2.opacity=1;
                         seperator3.opacity=0;
+                        patientInfo.visible=false;
                         break;
                     case "reportAndAnalysis":
                         reportPage.visible=true;
@@ -142,6 +170,7 @@ Rectangle {
                         seperator1.opacity=1;
                         seperator2.opacity=1;
                         seperator3.opacity=0;
+                        patientInfo.visible=true;
                         break;
                     case "check":
                         checkPage.visible=true;
@@ -150,6 +179,7 @@ Rectangle {
                         seperator1.opacity=0;
                         seperator2.opacity=1;
                         seperator3.opacity=1;
+                        patientInfo.visible=true;
                         break;
                     case "programCustomize":
                         programPage.visible=true;
@@ -158,6 +188,7 @@ Rectangle {
                         seperator3.opacity=0;
                         patientContentButton.image.source=patientContentButton.imageSrc;
                         checkContentButton.image.source=checkContentButton.imageSrc;
+                        patientInfo.visible=false;
                         break;
 
                 }
