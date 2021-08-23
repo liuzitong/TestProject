@@ -202,7 +202,7 @@ Column{
                             id:pageControl;width: parent.width;height:patientInfo.rowHight;
                             Flow{
                                 id:pageIndex;
-                                property int currentPage: 0;property int totalPage:0;property int totalRecordCount: 0;anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;height:parent.height;
+                                property int currentPage: 1;property int totalPage:1;property int totalRecordCount: 0;anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;height:parent.height;
                                 CusText{id:currentPageNumberText;text:"第 "+pageIndex.currentPage+"/"+pageIndex.totalPage+" 页,共计 "+pageIndex.totalRecordCount+" 条纪录";width: height*6}
                             }
                             Flow{

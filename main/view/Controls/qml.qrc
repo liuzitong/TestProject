@@ -8,6 +8,6 @@
         <file>qmldir</file>
         <file>About.qml</file>
         <file>Settings.qml</file>
-        <file>TextScroll.qml</file>
+        <file>CusCheckBox.qml</file>
     </qresource>
 </RCC>

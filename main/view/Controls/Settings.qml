@@ -9,9 +9,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_contro
     id:idPopup
     property alias color: idContent.color;
     reqEnterEventLoop:false;
-//    width:1280; height: 960;
-//    property alias contentWidth : idContent.implicitWidth;
-//    property alias contentHeight: idContent.implicitHeight;
+
 
    contentItem:
    Rectangle{
@@ -69,15 +67,16 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_contro
                             }
 
                             Flow{
-                                height: column.rowHeight;width: parent.width*0.7; anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.03
-                                CusText{text:"双姓名输入";width: parent.width*0.3}
-                                CheckBox{
-                                    id:doubleName;height: column.rowHeight;width: height;
-                                    onClicked:
-                                    {
-                                        console.log(doubleName.checked);
-                                    }
-                                }
+                                height: column.rowHeight;width: parent.width*0.7; anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
+                                CusText{text:"双姓名输入";width: parent.width*0.25}
+//                                CheckBox{
+//                                    id:doubleName;height: column.rowHeight;width: height;
+//                                    onClicked:
+//                                    {
+//                                        console.log(doubleName.checked);
+//                                    }
+//                                }
+                                CusCheckBox{/*text:"1234"*/}
                             }
                         }
                         Flow{

@@ -38,7 +38,10 @@ Item{
         hoverEnabled: root.hoverEnabled
         onClicked:{ if(isAnime) anime.start();else root.clicked();}
         onPressed:{if(pressImageSrc!="") image.source=pressImageSrc;}
-        onEntered:{if(root.hoverEnabled) {tempColor=rec.color; rec.color=root.hoverColor;if(hoverImageSrc!="") image.source=hoverImageSrc;root.entered();}}
+        onEntered:{
+            if(root.hoverEnabled) {
+                tempColor=rec.color;
+                rec.color=root.hoverColor;if(hoverImageSrc!="") image.source=hoverImageSrc;root.entered();}}
         onExited:{if(root.hoverEnabled) {rec.color=tempColor;if(hoverImageSrc!="") image.source=imageSrc;root.exited();}}
         onReleased: {if(root.type=="click"){image.source=imageSrc;}}
     }
