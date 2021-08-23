@@ -5,6 +5,7 @@ import QtQml 2.2
 import QtQuick.Controls.Styles 1.4
 import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0
+import QtMultimedia 5.8
 
 
 Column {
@@ -28,7 +29,6 @@ Column {
                     Item{
                         anchors.fill: parent;anchors.margins: parent.height*0.02
                         Column{
-                            id: column
                             anchors.fill: parent;spacing:height* 0.12
                             Rectangle{
                                 id: rectangle
@@ -126,6 +126,116 @@ Column {
                 }
                 Rectangle{
                     width: parent.width*0.25-2;height:parent.height;color: backGroundColor;
+                    Item{
+                        anchors.fill: parent;anchors.margins: parent.height*0.02
+                        Column{
+                            id: column
+                            anchors.fill: parent;spacing:height* 0.02
+                            Item{
+                                width: parent.width*0.83;height: width*3/4
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                Rectangle{
+                                    anchors.fill: parent;color:"black";
+                                }
+
+                                MediaPlayer{
+                                    id:vedio;
+                                }
+                            }
+                            Item{
+                                id:controlPanel;
+                                width:parent.width*0.6
+                                height: width*0.8
+                                anchors.horizontalCenter: parent.horizontalCenter
+
+//                                Rectangle{
+//                                    anchors.fill: parent;
+//                                    border.color: "black";border.width: 1;
+//                                }
+                                CusButton{
+                                    id:autoButton;width: parent.width*0.4;height: parent.height*0.25;buttonColor: backGroundColor;
+                                    text:"Auto";borderColor: "black";
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+
+
+                                Image {
+                                    id: upButton
+                                    anchors.left: parent.Top;
+                                    height: sourceSize.height*root.height/691;width: sourceSize.width*root.width/1366;
+                                    anchors.horizontalCenter: parent.horizontalCenter;
+                                    source: "qrc:/Pics/capture-svg/arrow_1up.svg";
+                                }
+
+                                Image {
+                                    id: downButton
+                                    anchors.bottom: parent.bottom;
+                                    height: sourceSize.height*root.height/691;width: sourceSize.width*root.width/1366;
+                                    anchors.horizontalCenter: parent.horizontalCenter;
+                                    source: "qrc:/Pics/capture-svg/arrow_2down.svg";
+                                }
+
+                                Image {
+                                    id: leftButton
+                                    anchors.left: parent.left;
+                                    anchors.verticalCenter: parent.verticalCenter;
+                                   height: sourceSize.height*root.height/691;width: sourceSize.width*root.width/1366;
+                                    source: "qrc:/Pics/capture-svg/arrow_3left.svg";
+                                }
+                                Image {
+                                    id: rightButton
+                                    anchors.right: parent.right;
+                                    height: sourceSize.height*root.height/691;width: sourceSize.width*root.width/1366;
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    source: "qrc:/Pics/capture-svg/arrow_4right.svg";
+                                }
+                            }
+
+
+
+                            Rectangle{
+                                width: parent.width*0.83;height: parent.height*0.40
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                border.color: backGroundBorderColor;
+                                color: backGroundColor;
+                                radius: width*0.03
+                                Item{
+                                    anchors.fill: parent;anchors.margins: parent.height*0.1;
+                                    Column{
+                                        anchors.fill: parent;spacing: 0.10*height;
+                                        Row{
+                                            width:parent.width;height: parent.height*0.65/4;spacing: width*0.05;
+                                            CusText{text:"假阳性率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                            LineEdit{text:"0/0";width: parent.width*0.7;textfeild.readOnly: true;}
+                                        }
+                                        Row{
+                                            width:parent.width;height: parent.height*0.65/4;spacing: width*0.05;
+                                            CusText{text:"假隐形率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                            LineEdit{text:"0/0";width: parent.width*0.7;textfeild.readOnly: true;}
+                                        }
+                                        Row{
+                                            width:parent.width;height: parent.height*0.65/4;spacing: width*0.05;
+                                            CusText{text:"固视丢失率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                            LineEdit{text:"0/0";width: parent.width*0.7;textfeild.readOnly: true;}
+                                        }
+                                        Row{
+                                            width:parent.width;height: parent.height*0.65/4;spacing: width*0.05;
+                                            CusText{text:"固视丢失率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                            LineEdit{text:"0/0";width: parent.width*0.7;textfeild.readOnly: true;}
+                                        }
+                                    }
+
+
+                                }
+
+                            }
+
+                        }
+                    }
+
+
+
                 }
                 Rectangle{
                     width: parent.width*0.5;height: parent.height;color:backGroundColorCheckPanel;
