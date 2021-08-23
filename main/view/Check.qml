@@ -93,23 +93,22 @@ Column {
                                 Item{ anchors.fill: parent;anchors.margins: parent.height*0.1;
                                     Column{anchors.fill: parent;spacing: 0.10*height;
                                         Row{width:parent.width;height: parent.height*0.7/4;spacing: width*0.05;
-                                            CusText{text:"瞳孔尺寸"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                             CusCheckBox{}
+                                            CusText{text:"瞳孔尺寸"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                             LineEdit{text:"0.0";width: parent.width*0.5;textfeild.readOnly: true;}
                                         }
                                         Row{id: row;width:parent.width;height: parent.height*0.7/4;spacing: width*0.05;
-                                            CusText{text:"眼动警报"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                             CusCheckBox{}
+                                            CusText{text:"眼动警报"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                             Image {source: "qrc:/Pics/capture-svg/btn_alarm.svg";height:parent.height*0.6; anchors.verticalCenter: parent.verticalCenter;width: height; }
                                         }
                                         Row{width:parent.width;height: parent.height*0.7/4;spacing: width*0.05;
-                                            CusText{text:"固视偏移"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                             CusCheckBox{}
+                                            CusText{text:"固视偏移"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                         }
                                         Row{
                                             width:parent.width;height: parent.height*0.7/4;spacing: width*0.05;
                                         }
-
                                     }
                                 }
                             }
@@ -117,9 +116,99 @@ Column {
                     }
                 }
                 Rectangle{
-                    width: parent.width*0.5;height: parent.height;color:backGroundColorCheckPanel;
+                    id: rectangle1;width: parent.width*0.5;height: parent.height;color:backGroundColorCheckPanel;
+                    CusText{text:"右眼"; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
+                    Item{
+                        anchors.fill: parent;anchors.margins: parent.height*0.03;
+                        Canvas{
+                            id:resultDisply;
+                            property int degreeRange: 30;
+                            anchors.fill: parent;
 
+                            function drawDashRound(x, y, radius, length)
+                            {
+//                                var count = Math.floor(360 / step);
+                                var step=length/radius
 
+//                                step = 5 / 180 * Math.PI * 2;
+                                for (var b = 0, e = step ; e <=Math.PI*2; b += step*2, e += step*2)
+                                {
+                                  var ctx = getContext("2d")
+                                  ctx.beginPath()
+                                  ctx.arc(x, y, radius, b, e);
+                                  ctx.stroke();
+                                }
+                            }
+
+                            function drawDbText(string,x_degree,y_degree)
+                            {
+                                var ctx = getContext("2d")
+                                ctx.textAlign = "center";
+                                ctx.font = "20px sans-serif";
+                                ctx.fillText(string, 0, 100);
+                            }
+
+                            function drawAxisText(type)
+                            {
+
+                            }
+
+                            onPaint: {
+                                var ctx = getContext("2d")
+                                    // get context to draw with
+                                    // setup the stroke
+    //                                ctx.lineWidth = 4
+    //                                ctx.strokeStyle = "blue"
+    //                                // setup the fill
+    //                                ctx.fillStyle = "steelblue"
+    //                                // begin a new path to draw
+    //                                ctx.beginPath()
+    //                                // top-left start point
+    //                                ctx.moveTo(50,50)
+    //                                // upper line
+    //                                ctx.lineTo(150,50)
+    //                                // right line
+    //                                ctx.lineTo(150,150)
+    //                                // bottom line
+    //                                ctx.lineTo(50,150)
+    //                                // left line through path closing
+    //                                ctx.closePath()
+    //                                // fill using fill style
+    //                                ctx.fill()
+    //                                // stroke using line width and stroke style
+    //                                ctx.stroke()
+
+    //                                ctx.arc(50,50,20,0,Math.PI*2);
+    //                                ctx.stroke()
+
+    //                                ctx.textAlign = "center";
+    //                                ctx.font = "50px sans-serif"
+    //                                ctx.fillText("50", 0, 100);
+                                ctx.lineWidth = 1;
+                                ctx.strokeStyle = "black";
+                                ctx.fillStyle="white";
+
+                                for(var i=3;i>=1;i--)
+                                {
+                                    if(i!=3)
+                                         drawDashRound(width/2,height/2, height*0.98/6*i, 3)
+                                    else{
+                                        ctx.beginPath();
+                                        ctx.arc(width/2,height/2,height*0.98/6*i,0,Math.PI*2);
+                                        ctx.stroke();
+                                        ctx.closePath();
+                                        ctx.fill();
+                                    }
+                                }
+                                ctx.beginPath();
+                                ctx.moveTo((width-height)/2+height*0.01,height/2);
+                                ctx.lineTo((width-height)/2+height*0.99,height/2);
+                                ctx.moveTo(width/2,height*0.01);
+                                ctx.lineTo(width/2,height*0.99);
+                                ctx.stroke();
+                            }
+                        }
+                    }
                 }
             }
         }

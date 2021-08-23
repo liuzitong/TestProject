@@ -36,7 +36,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_contro
                         ctx.arc(width-radius,radius,radius-1,Math.PI*1.5,0);
                         ctx.lineTo(width-1, height);
                         ctx.closePath();
-                        context.fillStyle = "#D2D2D3"
+                        ctx.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
                     CusText{text:"设置";width: height*1.4}
@@ -76,7 +76,11 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_contro
 //                                        console.log(doubleName.checked);
 //                                    }
 //                                }
-                                CusCheckBox{/*text:"1234"*/}
+                                CusCheckBox{id:doubleName;
+                                            onCheckedChanged:
+                                            {
+                                                console.log(doubleName.checked);
+                                            }}
                             }
                         }
                         Flow{
