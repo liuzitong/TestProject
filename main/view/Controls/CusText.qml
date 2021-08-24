@@ -4,7 +4,7 @@ Text {
     height: parent.height
     text: qsTr("text")
     width: parent.height*4
-    font.pointSize: height/3
+    font.pointSize: height*0.35
     fontSizeMode: Text.Fit
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignHCenter

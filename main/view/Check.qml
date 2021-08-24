@@ -8,9 +8,9 @@ import qxpack.indcom.ui_qml_base 1.0
 import QtMultimedia 5.8
 
 
-Column {
-    id:root; width: 1366;height: 691
+Column {id:root; width: 1366;height: 691
     signal changePage(var pageName);
+    function rePaintCanvas(){dbDisplay.displayCanvas.requestPaint();}
     property string backGroundColor:"#dcdee0"
     property string backGroundColorCheckPanel:"#cbced0"
     property string backGroundBorderColor:"#bdc0c6"
@@ -115,12 +115,10 @@ Column {
                         }
                     }
                 }
-                Rectangle{
-                    id:dbDisplay;width: parent.width*0.5;height: parent.height;color:backGroundColorCheckPanel;
+                Rectangle{width: parent.width*0.5;height: parent.height;color:backGroundColorCheckPanel;
                     CusText{text:"右眼"; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
-                    DbDisplay{}
+                    DbDisplay{id:dbDisplay;}
                 }
-
             }
         }
     }
@@ -139,8 +137,7 @@ Column {
                     }
                 }
             }
-            Item{
-                height: parent.height;width:parent.width*0.50;
+            Item{ height: parent.height;width:parent.width*0.50;
                 Item{id: item1; anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
                         CusButton{text:"开始测试";}

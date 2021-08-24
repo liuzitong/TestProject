@@ -174,6 +174,7 @@ Rectangle {
                         break;
                     case "check":
                         checkPage.visible=true;
+                        checkPage.rePaintCanvas();
                         patientContentButton.image.source=patientContentButton.imageSrc;
                         checkContentButton.image.source=checkContentButton.pressImageSrc;
                         seperator1.opacity=0;
@@ -183,6 +184,7 @@ Rectangle {
                         break;
                     case "programCustomize":
                         programPage.visible=true;
+                        programPage.rePaintCanvas();
                         seperator1.opacity=0;
                         seperator2.opacity=0;
                         seperator3.opacity=0;
