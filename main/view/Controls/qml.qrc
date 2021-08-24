@@ -9,5 +9,6 @@
         <file>About.qml</file>
         <file>Settings.qml</file>
         <file>CusCheckBox.qml</file>
+        <file>DbDisplay.qml</file>
     </qresource>
 </RCC>

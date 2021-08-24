@@ -7,4 +7,5 @@ CusCalendar 1.0     CusCalendar.qml
 Settings 1.0        Settings.qml
 About 1.0           About.qml
 CusCheckBox 1.0     CusCheckBox.qml
+DbDisplay 1.0       DbDisplay.qml
 
