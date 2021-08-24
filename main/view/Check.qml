@@ -124,88 +124,95 @@ Column {
                             id:resultDisply;
                             property int degreeRange: 30;
                             anchors.fill: parent;
-
+                            property double diameter: 0.98*height;
+                            property double widthMargin: (width-height)/2+height*0.01;
+                            property double heightMargin:height*0.01;
                             function drawDashRound(x, y, radius, length)
                             {
-//                                var count = Math.floor(360 / step);
                                 var step=length/radius
-
-//                                step = 5 / 180 * Math.PI * 2;
                                 for (var b = 0, e = step ; e <=Math.PI*2; b += step*2, e += step*2)
                                 {
                                   var ctx = getContext("2d")
                                   ctx.beginPath()
                                   ctx.arc(x, y, radius, b, e);
                                   ctx.stroke();
+                                  ctx.closePath();
                                 }
                             }
 
-                            function drawDbText(string,x_degree,y_degree)
+                            function drawText(string,x_degree,y_degree)
                             {
                                 var ctx = getContext("2d")
                                 ctx.textAlign = "center";
-                                ctx.font = "20px sans-serif";
-                                ctx.fillText(string, 0, 100);
+                                ctx.font = "12px sans-serif";
+                                ctx.fillStyle="white";
+                                ctx.fillRect(x_degree-8,y_degree-6,16,12)
+                                ctx.fillStyle="black";
+                                ctx.fillText(string, x_degree, y_degree+4);
                             }
 
-                            function drawAxisText(type)
+                            function drawAxisEndText(string,x_degree,y_degree)
                             {
-
+                                var ctx = getContext("2d")
+                                drawText(string,x_degree,y_degree);
+                                ctx.strokeStyle="black";
+                                ctx.lineWidth=1;
+                                ctx.beginPath();
+                                ctx.moveTo(x_degree-8,y_degree-6);
+                                ctx.lineTo(x_degree-8,y_degree+6);
+                                ctx.closePath();
+                                ctx.stroke();
+                                ctx.moveTo(x_degree+8,y_degree-6);
+                                ctx.lineTo(x_degree+8,y_degree+6);
+                                ctx.closePath();
+                                ctx.stroke();
                             }
+
 
                             onPaint: {
                                 var ctx = getContext("2d")
-                                    // get context to draw with
-                                    // setup the stroke
-    //                                ctx.lineWidth = 4
-    //                                ctx.strokeStyle = "blue"
-    //                                // setup the fill
-    //                                ctx.fillStyle = "steelblue"
-    //                                // begin a new path to draw
-    //                                ctx.beginPath()
-    //                                // top-left start point
-    //                                ctx.moveTo(50,50)
-    //                                // upper line
-    //                                ctx.lineTo(150,50)
-    //                                // right line
-    //                                ctx.lineTo(150,150)
-    //                                // bottom line
-    //                                ctx.lineTo(50,150)
-    //                                // left line through path closing
-    //                                ctx.closePath()
-    //                                // fill using fill style
-    //                                ctx.fill()
-    //                                // stroke using line width and stroke style
-    //                                ctx.stroke()
-
-    //                                ctx.arc(50,50,20,0,Math.PI*2);
-    //                                ctx.stroke()
-
-    //                                ctx.textAlign = "center";
-    //                                ctx.font = "50px sans-serif"
-    //                                ctx.fillText("50", 0, 100);
                                 ctx.lineWidth = 1;
                                 ctx.strokeStyle = "black";
                                 ctx.fillStyle="white";
-
-                                for(var i=3;i>=1;i--)
+                                var i;
+                                for(i=3;i>=1;i--)
                                 {
-                                    if(i!=3)
+                                    if(i!==3)
                                          drawDashRound(width/2,height/2, height*0.98/6*i, 3)
                                     else{
                                         ctx.beginPath();
                                         ctx.arc(width/2,height/2,height*0.98/6*i,0,Math.PI*2);
-                                        ctx.stroke();
                                         ctx.closePath();
+                                        ctx.stroke();
                                         ctx.fill();
                                     }
                                 }
                                 ctx.beginPath();
-                                ctx.moveTo((width-height)/2+height*0.01,height/2);
-                                ctx.lineTo((width-height)/2+height*0.99,height/2);
-                                ctx.moveTo(width/2,height*0.01);
-                                ctx.lineTo(width/2,height*0.99);
+                                ctx.moveTo(widthMargin,height/2);
+                                ctx.lineTo(widthMargin+diameter,height/2);
+                                ctx.closePath();
                                 ctx.stroke();
+                                ctx.beginPath();
+                                ctx.moveTo(width/2,heightMargin);
+                                ctx.lineTo(width/2,heightMargin+diameter);
+                                ctx.closePath();
+                                ctx.stroke();
+                                for(i=-3;i<=3;i++)
+                                {
+                                    if(i!==0)
+                                    {
+                                        if(Math.abs(i)===3)
+                                        {
+                                            drawAxisEndText(degreeRange/3*Math.abs(i),widthMargin+(i+3)*diameter/6,height/2);
+                                            drawAxisEndText(degreeRange/3*Math.abs(i),width/2,heightMargin+(i+3)*diameter/6);
+                                        }
+                                        else
+                                        {
+                                            drawText(degreeRange/3*Math.abs(i),widthMargin+(i+3)*diameter/6,height/2);
+                                            drawText(degreeRange/3*Math.abs(i),width/2,heightMargin+(i+3)*diameter/6);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
