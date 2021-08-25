@@ -14,6 +14,7 @@ DEFINES *= PERIMETER_CFG_STATIC
 include( $$PWD/../../base/perimeter_base.pri )
 include( $$PWD/../../main/perimeter_main.pri )
 include( $$PWD/../../third-part/qxpackic_all.pri )
+include( $$PWD/../../third-part/usbdev-build/usbdev/usbdev.pri )
 
 # ///////////////////////////////////////////////////////////////////////////
 # put the final app into /tmp for debug

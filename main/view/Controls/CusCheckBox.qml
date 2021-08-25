@@ -27,15 +27,15 @@ Item{
     MouseArea{
         hoverEnabled: true;
         anchors.fill: parent
-        onClicked:{if(!checked) {image.source=pressImageSrc;checked=true;}else{image.source=imageSrc;checked=false;}rec.color=backGroundColor}
+        onClicked:{if(!checked) {image.source=pressImageSrc;checked=true;}else{image.source=imageSrc;checked=false;}}
         onEntered:{
             if(!checked)
             {
                 image.source=hoverImageSrc;
-                rec.color="white";
             }
+            rec.color="white";
         }
-        onExited:{checked? image.source=pressImageSrc:image.source=imageSrc;console.log("exited...")}
+        onExited:{checked? image.source=pressImageSrc:image.source=imageSrc;console.log("exited...");rec.color=backGroundColor;}
     }
 }
 
