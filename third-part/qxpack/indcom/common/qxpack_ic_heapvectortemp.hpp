@@ -9,15 +9,19 @@
           <author>   <time>   <version>  <desc>
          nightwing  2018/08   0.1.0     build
          nigthwing  2018/09   0.2.0     fixed
+         nightwing  2020/09   0.3.0     add shrinkIf()
   @endverbatim
 */
 // ////////////////////////////////////////////////////////////////////////////
 #ifndef QXPACK_IC_HEAPVECTOR_TEMP_HPP
 #define QXPACK_IC_HEAPVECTOR_TEMP_HPP
 
-#include <stdint.h>
+#include <cstdint>
 #include <vector>
 #include <mutex>
+#include <memory>
+#include <string>
+#include <cassert>
 
 namespace QxPack {
 
@@ -26,37 +30,45 @@ namespace QxPack {
 // heap vector template
 // NOTE: multi-thread supported. and call clear() before DTOR
 //
+// Optimizer hints: \n
+//   1) use T's pointer as element for class/structure
+//   2) call shrinkIf() for memory space saving.
 // ////////////////////////////////////////////////////////////////////////////
 template <typename T>
 class IcHeapVectorLess {
 public:
-    bool  operator( ) ( const T& a, const T& b ) const
+    inline bool  operator( ) ( const T& a, const T& b ) const
     { return ( a < b ); }
 };
 
 template <typename T>
 class  IcHeapVectorGreat {
 public:
-    bool  operator( ) ( const T& a, const T& b ) const
+    inline bool  operator( ) ( const T& a, const T& b ) const
     { return ( a > b ); }
 };
 
 template <typename T, class Less >
-class  IcHeapVector {
+class  IcHeapVector  {
 private:
     std::vector<T>        m_data;
     std::recursive_mutex  m_locker;
     Less   m_is_less;
     void (* m_clear_func )( T&, void*); void *m_clear_ctxt;
+    bool   m_use_lock;
 protected:
+    inline void  _lock()   { if ( m_use_lock ) { m_locker.lock(); }}
+    inline void  _unlock() { if ( m_use_lock ) { m_locker.unlock();}}
     int   _indexOf ( bool(*enumFunc)(const T&,void*), void*ctxt );
     int   _siftUp  ( int i );
     int   _siftDown( int i );
+    bool  _rmvAt   ( int i, T& );
 public:
-    IcHeapVector ( void (*clearFunc)( T &, void *), void *ctxt, int pre_alloc = 0 );
-    virtual ~IcHeapVector( );
+    explicit IcHeapVector ( void (*clearFunc)( T &, void *), void *ctxt, int pre_alloc = 0, bool use_locker = true );
+    ~IcHeapVector( );
 
-    inline int  size( ) { m_locker.lock(); int sz = m_data.size(); m_locker.unlock(); return sz; }
+    inline int  size( )    { _lock(); int sz = int( m_data.size()); _unlock(); return sz; }
+    inline bool isEmpty()  { _lock(); bool ret = m_data.empty(); _unlock(); return ret; }
     void   clear ( void(*clearFunc )( T&, void*), void *ctxt );
     bool   searh ( bool(*searchFunc)( T&, void*), void *ctxt );
     bool   visit ( int idx, void(*visitFunc)( T&,void*), void*ctxt );
@@ -65,16 +77,21 @@ public:
     bool   removeByEnum( bool(*enumFunc)( const T&,void*), void*ctxt, T &item, int *rmv_pos_out = nullptr );
     void   enumAll( void(*enumFunc)( T&,void*), void*ctxt );
     int    insert ( const T &e );
+
+    // since 2020/09
+    int    shrinkIf ( int (*CondFunc)( const std::vector<T>&, void* ), void* );
+    T      takeTopIf( bool(*CondFunc)( const T&, void* ), void* );
 };
 
 // ============================================================================
 // CTOR
 // ============================================================================
 template <typename T, class Less>
-    IcHeapVector<T,Less> :: IcHeapVector ( void (*clearFunc)( T &, void *), void *ctxt, int pre_alloc )
+    IcHeapVector<T,Less> :: IcHeapVector ( void (*clearFunc)( T &, void *), void *ctxt, int pre_alloc, bool use_locker )
 {
     m_clear_func = clearFunc; m_clear_ctxt = ctxt;
     if ( pre_alloc > 0 ) { m_data.reserve( ( pre_alloc + 7 ) / 8 * 8 ); }
+    m_use_lock = use_locker;
 }
 
 // ============================================================================
@@ -94,7 +111,7 @@ template <typename T, class Less >
 template <typename T,class Less>
 void  IcHeapVector<T,Less> :: clear(void (*clearFunc)(T &, void *), void *ctxt )
 {
-    m_locker.lock();
+    _lock(); //m_locker.lock();
 
     int full_sz = int( m_data.size() );
     if ( clearFunc != nullptr ) {
@@ -104,7 +121,7 @@ void  IcHeapVector<T,Less> :: clear(void (*clearFunc)(T &, void *), void *ctxt )
     }
     m_data = std::vector<T>( );
 
-    m_locker.unlock();
+    _unlock(); //m_locker.unlock();
 }
 
 // ============================================================================
@@ -186,6 +203,28 @@ int  IcHeapVector<T,Less> :: _siftDown( int i )
 }
 
 // ============================================================================
+// remove item at spec. position
+// ============================================================================
+template <typename T, class Less>
+bool  IcHeapVector<T,Less> :: _rmvAt( int i, T &item )
+{
+   if ( i >= 0  &&  i < int( m_data.size())) {
+        item = m_data.at(i);
+        if ( i != int( m_data.size() - 1 )) { // i is not the last one.
+            m_data[i] = m_data.at( m_data.size() - 1 ); // move the last one to specified pos. i
+        }
+        m_data.pop_back();                              // decrease the total size
+        if ( i < int( m_data.size()) ) { // i is in range. if remove last one, do nothing.
+            this->_siftDown( i );
+            this->_siftUp( i );       // NOTE: do not remove this!
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// ============================================================================
 // search all elements until user found a item that match required
 // ============================================================================
 template <typename T,class Less>
@@ -194,16 +233,16 @@ bool  IcHeapVector<T,Less> :: searh ( bool(*searchFunc)( T&, void*), void *ctxt 
     bool is_found = false;
     if ( searchFunc == nullptr ) { return false; }
 
-    m_locker.lock();
+    _lock();  //m_locker.lock();
 
-    int sz  = m_data.size();
+    int sz  = int( m_data.size());
     for ( int x = 0; x < sz; x ++ ) {
         if ( ( is_found = (* searchFunc )( m_data.at(x), ctxt ))) {
             break;
         }
     }
 
-    m_locker.unlock();
+    _unlock(); //m_locker.unlock();
 
     return is_found;
 }
@@ -217,14 +256,14 @@ bool  IcHeapVector<T,Less> :: visit ( int idx, void(*visitFunc)( T&,void*), void
     bool is_found = false;
     if ( visitFunc == nullptr ) { return false; }
 
-    m_locker.lock();
+    _lock(); //m_locker.lock();
 
     if ( idx >= 0  && idx < int( m_data.size()) ) {
         (* visitFunc )( m_data.at(idx), ctxt );
         is_found = true;
     }
 
-    m_locker.unlock();
+    _unlock(); // m_locker.unlock();
     return is_found;
 }
 
@@ -235,22 +274,9 @@ template <typename T,class Less>
 bool   IcHeapVector<T,Less> :: removeAt( int i, T &item )
 {
     bool is_rmv = false;
-    m_locker.lock();
-
-    if ( i >= 0  &&  i < int( m_data.size())) {
-        item = m_data.at(i);
-        if ( i != int( m_data.size() - 1 )) { // i is not the last one.
-            m_data[i] = m_data.at( m_data.size() - 1 ); // move the last one to specified pos. i
-        }
-        m_data.pop_back();                              // decrease the total size
-        if ( i < int( m_data.size()) ) { // i is in range. if remove last one, do nothing.
-            this->_siftDown( i );
-            this->_siftUp( i );   // NOTE: do not remove this!
-        }
-        is_rmv = true;
-    }
-
-    m_locker.unlock();
+    _lock();    //m_locker.lock();
+    is_rmv = _rmvAt( i, item );
+    _unlock();  //m_locker.unlock();
     return is_rmv;
 }
 
@@ -261,7 +287,7 @@ template <typename T, class Less>
 bool   IcHeapVector<T,Less> :: removeLast( T &item )
 {
     bool is_rmv = false;
-    m_locker.lock();
+    _lock();   // m_locker.lock();
 
     if ( ! m_data.empty() ) { // nw: 2019/05/10, old is if ( m_data.size() > 0 ) {
         item = m_data.at( m_data.size() - 1 ); // the last one
@@ -269,7 +295,7 @@ bool   IcHeapVector<T,Less> :: removeLast( T &item )
         is_rmv = true;
     }
 
-    m_locker.unlock();
+    _unlock();  //m_locker.unlock();
     return is_rmv;
 }
 
@@ -280,12 +306,12 @@ template <typename T,class Less>
 bool  IcHeapVector<T,Less> :: removeByEnum( bool(*enumFunc)( const T&,void*), void*ctxt, T &item, int *rmv_pos_out )
 {
     bool is_rmv = false;
-    m_locker.lock();
+    _lock();  // m_locker.lock();
 
     int pos = this->_indexOf( enumFunc, ctxt );
     if ( pos >= 0 ) { this->removeAt( pos, item ); is_rmv = true; }
 
-    m_locker.unlock();
+    _unlock(); //m_locker.unlock();
     if ( is_rmv && rmv_pos_out != nullptr ) { *rmv_pos_out = pos; }
     return is_rmv;
 }
@@ -296,14 +322,14 @@ bool  IcHeapVector<T,Less> :: removeByEnum( bool(*enumFunc)( const T&,void*), vo
 template <typename T,class Less>
 void   IcHeapVector<T,Less> :: enumAll( void(*enumFunc)( T&,void*), void*ctxt )
 {
-    m_locker.lock();
+    _lock(); //m_locker.lock();
 
     size_t e_num = m_data.size();
     for ( size_t i = 0; i < e_num; i ++ ) {
         (* enumFunc )( m_data.at(i), ctxt );
     }
 
-    m_locker.unlock();
+    _unlock(); //m_locker.unlock();
 }
 
 
@@ -313,13 +339,54 @@ void   IcHeapVector<T,Less> :: enumAll( void(*enumFunc)( T&,void*), void*ctxt )
 template <typename T,class Less>
 int IcHeapVector<T, Less>::insert( const T &e )
 {
-    m_locker.lock();
+    _lock(); // m_locker.lock();
 
     m_data.push_back( e );
     int pos = this->_siftUp( int( m_data.size()) - 1 );
 
-    m_locker.unlock();
+    _unlock();  //m_locker.unlock();
     return pos; // return the current position about insert element
+}
+
+// ============================================================================
+// [ since 2020/09 ]  shrink memory if condition is meeting
+// ============================================================================
+template <typename T, class Less>
+int  IcHeapVector<T,Less> :: shrinkIf( int (*CondFunc)( const std::vector<T>&, void* ), void *ctxt )
+{
+    if ( CondFunc == nullptr ) { return -1; }
+
+    _lock();
+
+    int cap_sz = CondFunc( m_data, ctxt );
+    int e_sz   = int( m_data.size());
+
+    if ( cap_sz > 0  &&  cap_sz >= e_sz ) {
+        std::vector<T> tmp; tmp.reserve( cap_sz ); tmp.resize( e_sz );
+        for ( int i = 0; i < e_sz; i ++ ) { tmp[i] = m_data.at(i); }
+        m_data.swap( tmp );
+    }
+    _unlock();
+
+    return cap_sz;
+}
+
+// ============================================================================
+// [ since 2020/09 ] take the top element if condition meetting
+// ============================================================================
+template <typename T, class Less>
+T    IcHeapVector<T,Less> :: takeTopIf( bool(*CondFunc)( const T&, void* ), void *ctxt )
+{
+    if ( CondFunc == nullptr ) { return T(); }
+    T tmp;
+
+    _lock();
+    if ( m_data.size() > 0 ) {
+        if ( CondFunc( m_data.at(0), ctxt )) { _rmvAt(0, tmp); }
+    }
+    _unlock();
+
+    return tmp;
 }
 
 }

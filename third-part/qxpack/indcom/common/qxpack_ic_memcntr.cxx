@@ -7,7 +7,7 @@
 #include "qxpack/indcom/common/qxpack_ic_dequetemp.hpp"
 #include "qxpack/indcom/common/qxpack_ic_dyncinit_priv.hxx"
 
-#ifdef QXPACK_IC_QT5_ENABLED
+#ifdef QXPACK_IC_QT_ENABLED
 #  include <QDebug>
 #  include <QThread>
 #  include <QObject>
@@ -477,7 +477,7 @@ void    IcMemCntr :: freeMemory ( void *p )
 }
 
 
-#ifdef QXPACK_IC_QT5_ENABLED
+#ifdef QXPACK_IC_QT_ENABLED
 // ////////////////////////////////////////////////////////////////////////////
 //
 //             nw: 20190523 1032 added, for QT5

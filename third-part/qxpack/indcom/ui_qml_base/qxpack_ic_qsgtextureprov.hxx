@@ -37,7 +37,7 @@ public:
     IcQSGTextureProv ( );
 
     //! dtor
-    virtual ~IcQSGTextureProv( );
+    virtual ~IcQSGTextureProv( ) Q_DECL_OVERRIDE;
     
     /*!
      * @brief set the texture

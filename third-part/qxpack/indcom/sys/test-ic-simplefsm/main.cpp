@@ -140,7 +140,7 @@ void   TestSimpleFsm :: testTrafficSample()
     QxPack::IcAppDclPriv::barrier();
 
     //QxPack::IcMemCntr::saveTraceInfoToFile("z:/t.txt");;
-    QVERIFY2( QxPack::IcMemCntr::currNewCntr() == mem_cntr, "IcTimer::testCall() exist memory leak!" );
+    QVERIFY2( QxPack::IcMemCntr::currNewCntr() == mem_cntr, "exist memory leak!" );
 
 }
 

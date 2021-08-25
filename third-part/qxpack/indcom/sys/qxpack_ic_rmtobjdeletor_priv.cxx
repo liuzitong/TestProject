@@ -105,7 +105,7 @@ bool  IcRmtObjDeletor :: deleteObjInThread (
     } else if ( QThread::currentThread() != t ) {
         // check if thread is running or not
         if ( ! QThread::currentThread()->isRunning() ) {
-            qFatal("[ IcRmtObjDeletor::deleteObjInThread ] the target thread(0x%x) is not running!", size_t( QThread::currentThread()) );
+            qFatal("[ IcRmtObjDeletor::deleteObjInThread ] the target thread(0x%llx) is not running!", quintptr( QThread::currentThread()) );
         }
 
         // delete the target object

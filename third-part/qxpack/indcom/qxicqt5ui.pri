@@ -10,14 +10,14 @@
 
     contains( QT, core ) {
         QT *= network gui
-        DEFINES *= QXPACK_IC_QT5_ENABLE
+        DEFINES *= QXPACK_IC_QT_ENABLE
     }
     contains( QT, qml ) {
         message( qxicqt5ui detected used QML module ) 
         DEFINES *= QXPACK_IC_DETECTED_QML
     }
     contains( CONFIG, qt ) {
-        DEFINES *= QXPACK_IC_QT5_ENABLED
+        DEFINES *= QXPACK_IC_QT_ENABLED
     }
 
     # -------------------------------------------------------------------------
@@ -34,12 +34,15 @@
     ! contains( QXPACK_IC_CFG, qxicqt5ui_cfg_hdr_and_src ) {
         QXPACK_IC_CFG *= \
                indcom_ui_qml_base_cfg_no_src  \
-               indcom_ui_qml_control_cfg_no_src
+               indcom_ui_qml_control_cfg_no_src \
+               indcom_ui_qml_charts_cfg_no_src \
        
         contains( QXPACK_IC_CFG, qxicqt5ui_cfg_no_hdr ) {
             QXPACK_IC_CFG *= \
                indcom_ui_qml_base_cfg_no_hdr \
-               indcom_ui_qml_control_cfg_no_hdr 
+               indcom_ui_qml_control_cfg_no_hdr \
+               indcom_ui_qml_charts_cfg_no_hdr \
+
         }
         QXPACK_IC_CFG *= qxicqt5ui_cfg_only_lib
     } else {
@@ -52,6 +55,7 @@
     ! contains( QXPACK_IC_CFG, qxicqt5ui_cfg_only_lib ) {
         include( $$PWD/ui_qml_base/qxpack_indcom_ui_qml_base.pri )
         include( $$PWD/ui_qml_control/qxpack_indcom_ui_qml_control.pri )
+        include( $$PWD/ui_qml_charts/qxpack_indcom_ui_qml_charts.pri )
     } else {
         message( qxicqt5ui only contain library )
 

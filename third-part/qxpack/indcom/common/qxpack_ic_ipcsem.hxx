@@ -25,7 +25,7 @@ namespace QxPack {
    the system semaphore, used for communicate between 2 process
 */
 // //////////////////////////////////////////////////////////////////////////// 
-class QXPACK_IC_API IcIpcSem {
+class QXPACK_IC_API IcIpcSem QXPACK_IC_FINAL {
 
 public:
     /*!
@@ -44,7 +44,7 @@ public:
     /*!
      * @brief destroy semaphore
      */
-    virtual ~IcIpcSem( );
+    ~IcIpcSem( );
 
     //! return the semaphore is worked or not
     bool  isWorked( ) const;

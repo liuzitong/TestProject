@@ -23,6 +23,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 DEFINES *= QXPACK_CFG_STATIC
 
+DEFINES *= QXPACK_IC_NO_UI_QML_CONTROL QXPACK_IC_NO_UI_QML_CHARTS
+
 QXPACK_IC_CFG *= qxiccore_cfg_hdr_and_src
 include( $$PWD/../../qxiccore.pri )
 QXPACK_IC_CFG *= qxicqt5_cfg_hdr_and_src

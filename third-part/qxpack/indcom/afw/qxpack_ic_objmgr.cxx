@@ -11,6 +11,7 @@
 #include "qxpack/indcom/common/qxpack_ic_memcntr.hxx"
 #include "qxpack/indcom/sys/qxpack_ic_rmtobjcreator_priv.hxx"
 #include "qxpack/indcom/sys/qxpack_ic_rmtobjdeletor_priv.hxx"
+#include "qxpack/indcom/sys/qxpack_ic_recurmutex_p.hxx"
 
 #include <QMap>
 #include <QMutex>
@@ -33,7 +34,7 @@ private:
     QAtomicInt   m_ref_cntr;  QString  m_name;
     QObject     *m_obj;       QThread *m_thread_affi;
     const QMetaObject *m_mo;  QVariantList m_last_va;
-    QMutex       m_locker;    bool     m_is_with_ref;
+    IcRecurMutex  m_locker;    bool     m_is_with_ref;
 protected:
     Q_SLOT void onThreadFinished();
     Q_SLOT void onThreadDeleted(QObject*);
@@ -43,10 +44,10 @@ public :
     // ========================================================================
     IcObjMgr_RegObjItem (
         const QString &nm, QThread *t, const QMetaObject *mo, bool is_with_ref
-    ) : m_locker( QMutex::Recursive )
+    )
     { 
         m_name = nm;         m_thread_affi = t;
-        m_obj  = Q_NULLPTR;  m_ref_cntr.store(0);
+        m_obj  = Q_NULLPTR;  m_ref_cntr.storeRelease(0);
         m_mo   = mo;         m_is_with_ref = is_with_ref;
 
         // --------------------------------------------------------------------
@@ -135,7 +136,7 @@ QObject *   IcObjMgr_RegObjItem :: attach (
         // 2) req_global( false)
         // --------------------------------------------------------------------
         if ( req_global ) {
-            m_ref_cntr.store(1);
+            m_ref_cntr.storeRelease(1);
             m_obj = cr_obj;
         } else {
             ;
@@ -208,7 +209,7 @@ typedef QMap<QString,IcObjMgr_RegObjItem*> IcObjMgr_ObjMap;
 class QXPACK_IC_HIDDEN IcObjMgrPriv {
 private:
     IcObjMgr_ObjMap  m_obj_map;
-    QMutex           m_locker;
+    IcRecurMutex     m_locker;
     IcObjMgr::SetObjOwnershipFunc  m_soos_func;
 protected:
     IcObjMgr_RegObjItem*  findItemByName( const QString & );
@@ -226,8 +227,7 @@ public :
 // ============================================================================
 // ctor
 // ============================================================================
-    IcObjMgrPriv :: IcObjMgrPriv ( IcObjMgr::SetObjOwnershipFunc func )
-                  : m_locker( QMutex::Recursive )
+    IcObjMgrPriv :: IcObjMgrPriv ( IcObjMgr::SetObjOwnershipFunc func )                   
 {
    m_soos_func = func;
 }

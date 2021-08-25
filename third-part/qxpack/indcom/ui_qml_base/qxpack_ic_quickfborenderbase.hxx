@@ -39,7 +39,7 @@ public:
     virtual ~IcQuickFboRenderBase( ) Q_DECL_OVERRIDE;
 
     //! override the create render
-    Renderer virtual *createRenderer() const Q_DECL_OVERRIDE;
+    virtual Renderer*  createRenderer() const Q_DECL_OVERRIDE;
 
 protected:
     virtual QOpenGLFramebufferObject *  createFbo_qsg( const QSize & );

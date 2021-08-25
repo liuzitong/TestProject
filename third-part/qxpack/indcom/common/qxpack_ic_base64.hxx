@@ -4,18 +4,18 @@
 #include "qxpack/indcom/common/qxpack_ic_def.h"
 #include "qxpack/indcom/common/qxpack_ic_bytearray.hxx"
 
-#if defined( QXPACK_IC_QT5_ENABLED )
+#if defined( QXPACK_IC_QT_ENABLED )
 #include <QString>
 #include <QByteArray>
 #endif
 
 namespace QxPack {
 
-// ///////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
 //
 // base64 encoder
 //
-// ///////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
 class QXPACK_IC_API  Base64Enc {
 
 public:
@@ -33,7 +33,7 @@ public:
     // static functions
     static int    estimEncLength( int src_length );
 
-#if defined( QXPACK_IC_QT5_ENABLED )
+#if defined( QXPACK_IC_QT_ENABLED )
     static QString    encodeStr  ( const char *src, int src_len );
     static QByteArray encodeByte ( const char *src, int src_len );
 #endif
@@ -43,11 +43,11 @@ private:
 };
 
 
-// ///////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
 //
 //  base64 decoder
 //
-// ///////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
 class  QXPACK_IC_API  Base64Dec {
 
 public:
@@ -63,7 +63,7 @@ public:
 
     static int estimDecLength( int src_length );
 
-#if defined( QXPACK_IC_QT5_ENABLED )
+#if defined( QXPACK_IC_QT_ENABLED )
     static QByteArray  decode( const QString & src   );
     static QByteArray  decode( const QByteArray &src );
 #endif

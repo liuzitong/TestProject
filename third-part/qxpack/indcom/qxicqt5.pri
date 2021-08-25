@@ -10,14 +10,14 @@
 
     contains( QT, core ) {
         QT *= network gui
-        DEFINES *= QXPACK_IC_QT5_ENABLE
+        DEFINES *= QXPACK_IC_QT_ENABLE
     }
     contains( QT, qml ) {
         message( qxicqt5 detected used QML module ) 
         DEFINES *= QXPACK_IC_DETECTED_QML
     }
     contains( CONFIG, qt ) {
-        DEFINES *= QXPACK_IC_QT5_ENABLED
+        DEFINES *= QXPACK_IC_QT_ENABLED
     }
 
     # -------------------------------------------------------------------------

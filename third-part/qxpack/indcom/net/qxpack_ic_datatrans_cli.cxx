@@ -263,16 +263,17 @@ bool IcDataTransCli :: isWorking() const
 {
     if ( T_PrivPtr( m_obj )->implement() == Q_NULLPTR ) {
         return false;
-    } else {
-        bool ret = false;
-        // @20191105-1402 nw: fixed due to thread maybe not same
-        bool call_ret = QMetaObject::invokeMethod (
-            T_PrivPtr( m_obj )->implement(), "isWorking",
-            ( QThread::currentThread() != T_PrivPtr(m_obj)->implement()->thread() ?
-            Qt::BlockingQueuedConnection : Qt::AutoConnection ),
-            Q_RETURN_ARG( bool, ret )
-        );
-        return ( call_ret ? ret : false );
+    } else { // @20191218 nw: directly visite it due to the calling is not change the object ( isWorking() const )
+        return T_PrivPtr( m_obj )->implement()->isWorking();
+//        bool ret = false;
+        // @20191105-1402 nw: fixed due to thread maybe not same        
+//        bool call_ret = QMetaObject::invokeMethod (
+//            T_PrivPtr( m_obj )->implement(), "isWorking",
+//            ( QThread::currentThread() != T_PrivPtr(m_obj)->implement()->thread() ?
+//            Qt::BlockingQueuedConnection : Qt::AutoConnection ),
+//            Q_RETURN_ARG( bool, ret )
+//        );
+//        return ( call_ret ? ret : false );
     }
 }
 

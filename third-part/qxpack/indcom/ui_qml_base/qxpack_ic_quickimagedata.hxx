@@ -3,7 +3,6 @@
 
 #include "qxpack/indcom/common/qxpack_ic_def.h"
 #include "qxpack/indcom/ui_qml_base/qxpack_ic_qsgimtexture.hxx"
-#include "qxpack/indcom/common/qxpack_ic_objectcache.hxx"
 #include "qxpack/indcom/sys/qxpack_ic_imagedata.hxx"
 #include <QSharedPointer>
 
@@ -16,6 +15,7 @@ namespace QxPack {
 // ////////////////////////////////////////////////////////////////////////////
 class QXPACK_IC_API  IcQuickImageData : public QObject {
     Q_OBJECT
+    Q_PROPERTY( QSize   imageDataImSize  READ  imageDataImSize  NOTIFY imageDataChanged )
 public:
     //! operate mode
     enum UseMode { UseMode_Normal = 0, UseMode_DeleteIfEndUse };
@@ -36,6 +36,9 @@ public:
 
     //! check if it is null
     bool  isNull( ) const;
+
+    //! @since 0.5.10
+    QSize  imageDataImSize() const;
 
     //! @brief set the image data
     //! @note  if UseMode is Normal, and existed a old IcImageData, the old IcImageData \n

@@ -22,7 +22,7 @@ namespace QxPack {
  * @brief this class is a wrap of the QVariant
  */
 // ////////////////////////////////////////////////////////////////////////////
-class QXPACK_IC_API  IcVarData {
+class QXPACK_IC_API  IcVarData QXPACK_IC_FINAL {
 public:
     //! empty ctro
     IcVarData ( );
@@ -37,7 +37,8 @@ public:
     IcVarData &  operator = ( const IcVarData & );
 
     //! dtor
-    virtual ~IcVarData( );
+    //virtual ~IcVarData( ); // since 0.4.8, changed to non-virtual
+    ~IcVarData();
 
     //! check if an null object
     bool     isNull ( ) const;

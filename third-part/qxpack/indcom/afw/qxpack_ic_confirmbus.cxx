@@ -642,7 +642,7 @@ void                    IcConfirmBusPkg :: setResult   ( const QJsonObject &jo )
     QEventLoop *evt_ptr = reinterpret_cast<QEventLoop*>(priv->evtPtrRef().loadAcquire());
     if ( evt_ptr != Q_NULLPTR ) {
         evt_ptr->quit();
-        priv->evtPtrRef().store(Q_NULLPTR);
+        priv->evtPtrRef().storeRelease(Q_NULLPTR);
     }
 
     // semaphore release
@@ -694,7 +694,7 @@ bool                    IcConfirmBusPkg :: grab()
 void                    IcConfirmBusPkg :: setEvtLoop( QEventLoop *evt )
 {
     IcConfirmBusPkgPriv::buildIfNull(&m_obj)->lockerRef().lock();
-    T_MsgPkgPriv(m_obj)->evtPtrRef().store(evt);
+    T_MsgPkgPriv(m_obj)->evtPtrRef().storeRelease(evt);
     T_MsgPkgPriv(m_obj)->lockerRef().unlock();
 }
 
@@ -706,7 +706,7 @@ QSemaphore*             IcConfirmBusPkg :: ensureWaitSem( )
     IcConfirmBusPkgPriv::buildIfNull(&m_obj)->lockerRef().lock();
     IcConfirmBusPkgPriv *priv = T_MsgPkgPriv(m_obj);
     if ( priv->semPtrRef() == Q_NULLPTR ) {
-        priv->semPtrRef().store( qxpack_ic_new( QSemaphore, 0 ));
+        priv->semPtrRef().storeRelease(qxpack_ic_new( QSemaphore, 0 ));
     }
     QSemaphore *sem = reinterpret_cast<QSemaphore*>( priv->semPtrRef().loadAcquire() );
     priv->lockerRef().unlock();

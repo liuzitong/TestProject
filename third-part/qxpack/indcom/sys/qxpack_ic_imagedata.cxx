@@ -4,7 +4,7 @@
 #include "qxpack_ic_imagedata.hxx"
 #include "qxpack/indcom/common/qxpack_ic_memcntr.hxx"
 #include "qxpack/indcom/common/qxpack_ic_pimplprivtemp.hpp"
-#include "qxpack/indcom/common/qxpack_ic_objectcache.hxx"
+//#include "qxpack/indcom/common/qxpack_ic_objectcache.hxx"
 #include "qxpack/indcom/common/qxpack_ic_queuetemp.hpp"
 
 #include <QVector>

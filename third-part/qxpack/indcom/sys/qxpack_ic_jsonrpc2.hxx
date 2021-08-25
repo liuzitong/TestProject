@@ -5,6 +5,7 @@
   @date    2018/09, 2019/02, 2019/03, 2019/04
   @brief   define the objects about Json RPC 2
   @version 0.2.1.0
+  @deprecated this class is obsoleted, the Rpc should use JRpcPlat library.
   @verbatim
       <author>    <date>    <history memo.>
       nightwing  2019/02    fixed bugs refe. to JsonRpc2 Spec.

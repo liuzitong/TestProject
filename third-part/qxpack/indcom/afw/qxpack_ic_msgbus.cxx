@@ -12,6 +12,7 @@
 #include "qxpack/indcom/common/qxpack_ic_pimplprivtemp.hpp"
 #include "qxpack/indcom/sys/qxpack_ic_workercreatortemp_priv.hpp"
 #include "qxpack/indcom/sys/qxpack_ic_sysevtqthread_priv.hxx"
+#include "qxpack/indcom/sys/qxpack_ic_recurmutex_p.hxx"
 
 #include <QDebug>
 #include <QtGlobal>
@@ -32,7 +33,7 @@ typedef QMap<QObject*,void*>  IcMsgBus_GroupMemberPair_Map;
 class QXPACK_IC_HIDDEN IcMsgBus_Group : public QObject {
     Q_OBJECT
 private:
-    QMutex   m_locker; IcMsgBus_GroupMemberPair_Map m_member_map;
+    IcRecurMutex m_locker; IcMsgBus_GroupMemberPair_Map m_member_map;
 protected:
     Q_SLOT void member_onDestoryed( QObject *o ) { this->rmv( o ); }
 public :
@@ -48,7 +49,7 @@ public :
 // ctor
 // ============================================================================
 IcMsgBus_Group :: IcMsgBus_Group ( QObject *pa )
-               : QObject( pa ), m_locker( QMutex::Recursive )
+               : QObject( pa )
 { }
 
 // ============================================================================
@@ -205,7 +206,9 @@ bool   IcMsgBusWorker :: add( QObject *m, const QString &grp_name )
 bool  IcMsgBusWorker :: rmv ( QObject *m, const QString &grp_name )
 {
     bool is_rmv = false;
-    if ( m != Q_NULLPTR || grp_name.isEmpty() ) { return is_rmv; }
+//    if ( m != Q_NULLPTR || grp_name.isEmpty() ) { return is_rmv; }
+    if ( m == Q_NULLPTR || grp_name.isEmpty() ) { return is_rmv; } // 2020/11/12 fixed.
+
 
     IcMsgBus_Group *group = Q_NULLPTR;
     QMap<QString,IcMsgBus_Group*>::iterator itr = m_groups_map.find( grp_name );

@@ -4,6 +4,7 @@
 //      author     date           memo.
 //      nightwing  2019/05/07     changed data source !
 //      nightwing  2019/06/05     add fill mode
+//      nightwing  2021/03/22     add geometryChanged
 // @endvarbatim
 // ////////////////////////////////////////////////////////////////////////////
 #ifndef QXPACK_IC_QUICKIMAGEITEM_HXX
@@ -18,6 +19,7 @@
 #include <QSizeF>
 #include <QSGTextureProvider>
 #include <QSGSimpleTextureNode>
+#include <QRectF>
 
 namespace QxPack {
 
@@ -39,15 +41,11 @@ class QXPACK_IC_API  IcQuickImageItem : public QQuickItem {
     Q_PROPERTY( QString   fillModeStr      READ  fillModeStr         NOTIFY fillModeChanged )
     Q_PROPERTY( int       fillMode         READ  fillMode            WRITE  setFillMode      NOTIFY fillModeChanged )
 public:
-//     enum FillMode {
-//         FillMode_KeepAspectRatio = 0, FillMode_Stretch = 1
-//     };
-
      //! ctor
-     IcQuickImageItem ( QQuickItem *pa = 0 );
+     IcQuickImageItem ( QQuickItem *pa = Q_NULLPTR );
 
      //! dtor
-     virtual ~IcQuickImageItem (  );
+     virtual ~IcQuickImageItem () Q_DECL_OVERRIDE;
 
      //! return the data
      QObject*  imageData() const;
@@ -60,6 +58,8 @@ public:
      void      setFlipVertical  ( bool sw );
 
      //! the fill mode
+     // "KeepAspectRatio"   ( Qt::KeepAspectRatio )
+     // "IgnoreAspectRatio" ( Qt::IgnoreAspectRatio )
      QString   fillModeStr() const;
      int       fillMode( ) const;
      void      setFillMode ( int );
@@ -76,7 +76,10 @@ public:
      // =======================================================================
      // override functions
      // =======================================================================
+protected:
      virtual QSGNode*   updatePaintNode(QSGNode*,UpdatePaintNodeData*) Q_DECL_OVERRIDE;
+
+public:
      virtual QSGTextureProvider *  textureProvider() const Q_DECL_OVERRIDE;
      virtual bool       isTextureProvider() const Q_DECL_OVERRIDE;
 
@@ -89,15 +92,28 @@ public:
      //! emit the fill mode change
      Q_SIGNAL  void  fillModeChanged( );
 
+     //! the hold API for static library
+     static  void    _reg();
+
 protected:
     QSGNode*  qsgUpnImSourceDataNull( QSGNode* );
     QSGNode*  qsgUpnNullNode    ( QSGNode *old, const QImage &im );
     QSGNode*  qsgUpnExistedNode ( QSGNode *old, const QImage &im );
-    void      qsgEnsureFlipMode ( QSGNode* );
-    void      qsgRemapTexture   ( QSGSimpleTextureNode *, const QSizeF & );
+    void      qsgEnsureFlipMode ( QSGNode * );
+    void      qsgRemapTexture   ( QSGNode *, const QSizeF & );
 private:
     void *m_obj;
     Q_DISABLE_COPY( IcQuickImageItem )
+
+protected:
+
+// since 0.5.12 added
+#if  QT_VERSION_MAJOR < 6
+     virtual void       geometryChanged ( const QRectF &newGeometry, const QRectF &oldGeometry ) Q_DECL_OVERRIDE;
+#else
+     virtual void       geometryChange  ( const QRectF &newGeometry, const QRectF &oldGeometry ) Q_DECL_OVERRIDE;
+#endif
+
 };
 
 }

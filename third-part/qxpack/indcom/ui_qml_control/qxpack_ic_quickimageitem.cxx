@@ -1,5 +1,5 @@
-#ifndef  _QXPACK_IC_QUICKIMAGEITEM_CXX
-#define  _QXPACK_IC_QUICKIMAGEITEM_CXX
+#ifndef  QXPACK_IC_QUICKIMAGEITEM_CXX
+#define  QXPACK_IC_QUICKIMAGEITEM_CXX
 
 #include "qxpack_ic_quickimageitem.hxx"
 #include "qxpack/indcom/common/qxpack_ic_memcntr.hxx"
@@ -28,9 +28,9 @@ static void QxPack_IcQuickImageItem_Reg( )
     if ( ! is_reg ) {
         is_reg = true;
         qmlRegisterType<QxPack::IcQuickImageItem>("qxpack.indcom.ui_qml_control", 1, 0, "IcQuickImageItem");
+        qDebug() << "qxpack_ic_quickimageitem registered."; // nw: 2019/05/07 added
     }
 }
-Q_COREAPP_STARTUP_FUNCTION( QxPack_IcQuickImageItem_Reg )
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ static IcQSGImTexture*  allocTex( int  width,  int  height, QImage::Format fmt_i
     // ------------------------------------------------------------------------
     if ( ( width > max_tex_sz ) | ( height > max_tex_sz )) {
         QSizeF tex_sz = fitSize ( QSizeF( width, height ), QSizeF( max_tex_sz, max_tex_sz ) );
-        width = ( int )( tex_sz.width() );  height = ( int )( tex_sz.height() );
+        width = int( tex_sz.width() );  height = int( tex_sz.height() );
     }
 
     // ------------------------------------------------------------------------
@@ -89,13 +89,14 @@ static IcQSGImTexture*  allocTex( int  width,  int  height, QImage::Format fmt_i
 // ////////////////////////////////////////////////////////////////////////////
 //    private object
 // ////////////////////////////////////////////////////////////////////////////
-#define T_PrivPtr( o )  (( IcQuickImageItemPriv *) o )
+#define T_PrivPtr( o )  T_ObjCast( IcQuickImageItemPriv*, o )
 class QXPACK_IC_HIDDEN  IcQuickImageItemPriv {
     friend class IcQuickImageItem;
 private:
     IcQuickImageItem  *m_parent;
     IcQuickImageData   m_im_source;
-    IcQSGTextureProv   m_qsg_tex_prov;
+    IcQSGTextureProv  *m_qsg_tex_prov;
+    QSGTexture        *m_qsg_tex; // just temp. used.
     QAtomicInt         m_im_source_req_cntr;
     QSizeF  m_node_sz, m_fit_im_sz, m_im_sz;
     int  m_fill_mode;
@@ -108,7 +109,16 @@ public:
     IcQuickImageItemPriv ( IcQuickImageItem * );
     ~IcQuickImageItemPriv( );
 
-    inline IcQSGTextureProv *  textureProv( ) { return &m_qsg_tex_prov; }
+    inline IcQSGTextureProv *  textureProv( )
+    {
+        if ( m_qsg_tex_prov == nullptr ) {
+            m_qsg_tex_prov = new IcQSGTextureProv;
+            if ( m_qsg_tex != nullptr ) { m_qsg_tex_prov->setTexture( m_qsg_tex, false ); }
+        }
+        return m_qsg_tex_prov;
+    }
+    inline auto  qsgTexPtrRef() -> QSGTexture*& { return m_qsg_tex; }
+
     inline QObject *   imageDataObj ( )       { return &m_im_source; }
            void  setImageData ( QObject *obj );
 
@@ -142,14 +152,16 @@ IcQuickImageItemPriv :: IcQuickImageItemPriv ( IcQuickImageItem *pa )
     m_parent = pa;
     m_req_v_flip  = false; m_req_h_flip = false;
     m_curr_v_flip = false; m_curr_h_flip= false;
-    m_im_source_req_cntr.store(0); // the image source is not emitted signal
+    m_im_source_req_cntr.storeRelease(0); // the image source is not emitted signal
     m_fill_mode = Qt::KeepAspectRatio;
+    m_qsg_tex_prov = nullptr;
+    m_qsg_tex      = nullptr;
 
     // ------------------------------------------------------------------------
     // DO NOT directly call upate() due to read image source
     // ------------------------------------------------------------------------
     QObject::connect(
-        & m_im_source, & IcQuickImageData::imageDataChanged,
+        & m_im_source, & IcQuickImageData::imageDataChanged, & m_im_source,
         [this]() { this->onNewDataReady(); }
     );
 }
@@ -159,7 +171,8 @@ IcQuickImageItemPriv :: IcQuickImageItemPriv ( IcQuickImageItem *pa )
 // ============================================================================
     IcQuickImageItemPriv :: ~IcQuickImageItemPriv ( )
 {
-    QObject::disconnect( & m_im_source, 0, m_parent, 0 );
+    m_im_source.blockSignals(true);
+    if ( m_qsg_tex_prov != nullptr ) { m_qsg_tex_prov->deleteLater(); }
 }
 
 // ============================================================================
@@ -174,7 +187,7 @@ void  IcQuickImageItemPriv :: setImageData( QObject *obj )
         IcQuickImageData tmp;
         m_im_source.attach( tmp ); // drop current
     }
-    m_im_source_req_cntr.store(0);
+    m_im_source_req_cntr.storeRelease(0);
     emit m_parent->imageDataChanged();
     this->onNewDataReady(); // force read an image
 }
@@ -185,7 +198,7 @@ void  IcQuickImageItemPriv :: setImageData( QObject *obj )
 void  IcQuickImageItemPriv :: onNewDataReady()
 {
     if ( m_im_source_req_cntr.loadAcquire() == 0 ) {
-        m_im_source_req_cntr.store(1);
+        m_im_source_req_cntr.storeRelease(1);
         m_parent->update();
     }
 }
@@ -332,14 +345,15 @@ bool   IcQuickImageItem :: isTextureProvider() const
 // ============================================================================
 // QSG functions
 // ============================================================================
-void       IcQuickImageItem :: qsgRemapTexture( QSGSimpleTextureNode *node, const QSizeF &im_sz )
+void       IcQuickImageItem :: qsgRemapTexture( QSGNode *node, const QSizeF &im_sz )
 {
     QSizeF  bd_sz( this->width(), this->height() );
+    QSGSimpleTextureNode *tex_node = static_cast<QSGSimpleTextureNode*>(node);
 
     if ( T_PrivPtr( m_obj )->fillMode() == Qt::KeepAspectRatio ) {
         QSizeF  fit_sz  = fitSize( im_sz, bd_sz );
         if ( fit_sz.width() * fit_sz.height() > 0 ) {
-            node->setRect ( ( bd_sz.width() - fit_sz.width()) * 0.5f, ( bd_sz.height() - fit_sz.height()) * 0.5f, fit_sz.width(), fit_sz.height() );
+            tex_node->setRect ( ( bd_sz.width() - fit_sz.width()) * 0.5, ( bd_sz.height() - fit_sz.height()) * 0.5, fit_sz.width(), fit_sz.height() );
             T_PrivPtr( m_obj )->setLastNodeSize ( bd_sz  );
             T_PrivPtr( m_obj )->setLastFitImSize( fit_sz );
         } else {
@@ -347,7 +361,7 @@ void       IcQuickImageItem :: qsgRemapTexture( QSGSimpleTextureNode *node, cons
             T_PrivPtr( m_obj )->setLastFitImSize( QSizeF());
         }
     } else { // strech
-        node->setRect( 0, 0, this->width(), this->height() );
+        tex_node->setRect( 0, 0, this->width(), this->height() );
         T_PrivPtr( m_obj )->setLastNodeSize( bd_sz );
         T_PrivPtr( m_obj )->setLastFitImSize( bd_sz );
     }
@@ -404,6 +418,17 @@ QSGNode*  IcQuickImageItem :: qsgUpnNullNode ( QSGNode *old, const QImage &im )
             node->markDirty( QSGNode::DirtyMaterial | QSGNode::DirtyGeometry );
         }
         im_tex->updateTexture( im );
+    } else {
+        qFatal("allocTex() called failed!");
+    }
+
+    // ------------------------------------------------------------------------
+    // setup the texture for provider if existed
+    // ------------------------------------------------------------------------
+    auto priv = T_PrivPtr(m_obj);
+    priv->qsgTexPtrRef() = im_tex;
+    if ( priv->textureProv() != nullptr ) {
+        priv->textureProv()->setTexture( im_tex, true );
     }
 
     return node;
@@ -412,7 +437,7 @@ QSGNode*  IcQuickImageItem :: qsgUpnNullNode ( QSGNode *old, const QImage &im )
 QSGNode*   IcQuickImageItem :: qsgUpnExistedNode ( QSGNode *old, const QImage &im )
 {
     QSGSimpleTextureNode *node = Q_NULLPTR;
-    //IcQuickImageItemPriv *priv = T_PrivPtr( m_obj );
+
     QSGTexture *tex = Q_NULLPTR;
     IcQSGImTexture *im_tex = Q_NULLPTR;
 
@@ -436,6 +461,7 @@ QSGNode*   IcQuickImageItem :: qsgUpnExistedNode ( QSGNode *old, const QImage &i
     // ------------------------------------------------------------------------
     // create texture and upload image data
     // ------------------------------------------------------------------------
+    auto is_alloc_tex = false;
     if ( tex == Q_NULLPTR ) {
         im_tex = allocTex ( im.width(), im.height(), im.format( ) );
         if ( im_tex != Q_NULLPTR ) {
@@ -444,7 +470,10 @@ QSGNode*   IcQuickImageItem :: qsgUpnExistedNode ( QSGNode *old, const QImage &i
             if ( this->isVisible()) {
                 node->markDirty( QSGNode::DirtyMaterial | QSGNode::DirtyGeometry );
             }
+        } else {
+            qFatal("allocTex() called failed!");
         }
+        is_alloc_tex = true;
     } else {
         im_tex = static_cast< IcQSGImTexture *>( tex );
         if ( this->isVisible() ) {
@@ -452,6 +481,13 @@ QSGNode*   IcQuickImageItem :: qsgUpnExistedNode ( QSGNode *old, const QImage &i
         }
     }
     if ( im_tex != Q_NULLPTR ) { im_tex->updateTexture( im ); }
+
+    // ------------------------------------------------------------------------
+    // update provider if we changed texture
+    // ------------------------------------------------------------------------
+    auto priv = T_PrivPtr(m_obj);
+    priv->qsgTexPtrRef() = im_tex;
+    if ( priv->textureProv() != nullptr ) { priv->textureProv()->setTexture( im_tex ); }
 
     return node;
 }
@@ -504,7 +540,7 @@ QSGNode*  IcQuickImageItem :: updatePaintNode ( QSGNode *old,UpdatePaintNodeData
     if ( t_this->m_im_source_req_cntr.loadAcquire() > 0 ) {
         IcImageData im_data;
         t_this->m_im_source.beginUseImageData( im_data );
-        t_this->m_im_source_req_cntr.store(0);
+        t_this->m_im_source_req_cntr.storeRelease(0);
 
         if ( im_data.isNull()) {
             if ( old == Q_NULLPTR ) { // A-1-2
@@ -522,6 +558,8 @@ QSGNode*  IcQuickImageItem :: updatePaintNode ( QSGNode *old,UpdatePaintNodeData
         im_data = IcImageData();
         t_this->m_im_source.endUseImageData();
     } else {
+        qsgRemapTexture( old, t_this->lastImageSize() );
+        qsgEnsureFlipMode( node );
         return old;
     }
 
@@ -530,16 +568,38 @@ QSGNode*  IcQuickImageItem :: updatePaintNode ( QSGNode *old,UpdatePaintNodeData
     // ------------------------------------------------------------------------
     // check if the texture provider
     // ------------------------------------------------------------------------
-    if ( t_this->textureProv() != Q_NULLPTR ) {
-        QSGSimpleTextureNode *tex_node = static_cast< QSGSimpleTextureNode *>( node );
-        if ( tex_node != Q_NULLPTR ) {
-            t_this->textureProv()->setTexture( tex_node->texture(), true );
-        }
-    }
+//    if ( t_this->textureProv() != Q_NULLPTR ) {
+//        QSGSimpleTextureNode *tex_node = static_cast< QSGSimpleTextureNode *>( node );
+//        if ( tex_node != Q_NULLPTR && tex_node->texture() == nullptr ) {
+//            t_this->textureProv()->setTexture( tex_node->texture(), true );
+//        }
+//    }
 
     return node;
 }
 
+
+void IcQuickImageItem :: _reg ( ) { QxPack_IcQuickImageItem_Reg(); }
+
+// ============================================================================
+// [ protected ] geometry changing
+// ============================================================================
+#if    QT_VERSION_MAJOR < 6
+auto     IcQuickImageItem :: geometryChanged( const QRectF &new_geom, const QRectF &old_geom ) -> void
+#else
+auto     IcQuickImageItem :: geometryChange ( const QRectF &new_geom, const QRectF &old_geom ) -> void
+#endif
+{
+//    auto priv = T_PrivPtr( m_obj );
+//    priv->onNewParamReady(); // re-generate the vertex data
+//    priv->textItem().setSize( new_geom.size());
+    this->update();
+#if    QT_VERSION_MAJOR < 6
+    QQuickItem::geometryChanged( new_geom, old_geom );
+#else
+    QQuickItem::geometryChange( new_geom, old_geom );
+#endif
+}
 
 }
 

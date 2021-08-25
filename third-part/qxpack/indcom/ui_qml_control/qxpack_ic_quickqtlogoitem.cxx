@@ -20,7 +20,7 @@ static void QxPack_IcQuickQtLogoItem_Reg( )
         qmlRegisterType<QxPack::IcQuickQtLogoItem>("qxpack.indcom.ui_qml_control", 1, 0, "IcQuickQtLogoItem");
     }
 }
-Q_COREAPP_STARTUP_FUNCTION( QxPack_IcQuickQtLogoItem_Reg )
+//Q_COREAPP_STARTUP_FUNCTION( QxPack_IcQuickQtLogoItem_Reg )
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -56,6 +56,8 @@ IcQuickQtLogoItem :: ~IcQuickQtLogoItem( )
 
 }
 
+
+void  IcQuickQtLogoItem :: _reg() {QxPack_IcQuickQtLogoItem_Reg(); }
 
 }
 

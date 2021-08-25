@@ -37,14 +37,15 @@ public :
     public :
         Node() { m_next = this; }
         Node( const T &d ) { m_dat = d; }
-        inline T    data() { return m_dat; }
-        inline T &  dataRef() { return m_dat; } // nw: 2019/05/25 added
-        inline void setData( const T &d ) { m_dat = d; }
+        inline T     data() { return m_dat; }
+        inline T &   dataRef() { return m_dat; } // nw: 2019/05/25 added
+        inline Node* setData( const T &d ) { m_dat = d; return this; }
     friend class IcNodeQueueTemp<T>;
     };
 
 private:
-    std::atomic<int>    m_cntr;
+   // std::atomic_flag    m_lck_flag = ATOMIC_FLAG_INIT;
+    std::atomic_int     m_cntr;
     std::atomic<Node*>  m_tail;
     void (*m_cb_func)( Node*, void* ); void *m_ctxt;
     Node m_tmp;
@@ -72,6 +73,9 @@ public :
         void (* nodeHandle )( Node*, void* ), void *n_ctxt,
         bool (* preCheck   )( Node*, void* ), void *p_ctxt
     );
+
+    //! enum all items
+    void   blockEnumAll ( void (*nodeHandle)( Node*, void* ), void *ctxt );
 
     //! push an element pointer
     void   takeAndEnqueue( Node* );
@@ -107,12 +111,6 @@ IcNodeQueueTemp<T> :: ~IcNodeQueueTemp( )
 template <typename T>
 void  IcNodeQueueTemp<T> :: clear( )
 {
-//    while ( ! isEmpty() && m_cb_func != nullptr ) {
-//        Node* n = dequeue();
-//        if ( n != nullptr ) {
-//            m_cb_func( n, m_ctxt );
-//        }
-//    }
     blockDequeueUntil(
         []( Node* n, void *ctxt ) {
             IcNodeQueueTemp<T> *t_this = reinterpret_cast<IcNodeQueueTemp<T>*>( ctxt );
@@ -131,8 +129,8 @@ template <typename T>
 typename IcNodeQueueTemp<T>::Node* IcNodeQueueTemp<T>::tryReadTail( IcLCG &lcd )
 {
     Node *n = nullptr;
-    int cnt = static_cast<int>( lcd.value() % 100 ) + 50;
-    if ( cnt < 1 ) { cnt = 2 + 50; } // nw: 20190630 fixed.
+    int cnt = int( lcd.value() % 253 ) + 50;
+    if ( cnt < 1 ) { cnt = 50; } // nw: 20190630 fixed.
 
     // ------------------------------------------------------------------------
     // n is nullptr -- no nodes in list.
@@ -141,8 +139,8 @@ typename IcNodeQueueTemp<T>::Node* IcNodeQueueTemp<T>::tryReadTail( IcLCG &lcd )
     do {
         if ( -- cnt < 1 ) {
             std::this_thread::yield();
-            cnt = static_cast<int>( lcd.value() % 100 ) + 50;
-            if ( cnt < 1 ) { cnt = 2 + 50; } // nw: 20190630 fixed
+            cnt = int( lcd.value() % 253 ) + 50;
+            if ( cnt < 1 ) { cnt = 50; } // nw: 20190630 fixed
         }
         n = m_tail.load ( std::memory_order_seq_cst );
         if ( n == nullptr || n != &m_tmp ) { break; }
@@ -222,6 +220,8 @@ void IcNodeQueueTemp<T> :: blockDequeueUntil (
     do {
         // --------------------------------------------------------------------
         // try get the tail node, if failed, means no node
+        // NOTE: tail may not be nullptr but other threads changed it!!!
+        //       so m_tail should check it again!
         // --------------------------------------------------------------------
         Node *tail = tryReadTail( lcd );
         if ( tail == nullptr ) { break; }
@@ -262,6 +262,51 @@ void IcNodeQueueTemp<T> :: blockDequeueUntil (
 
     } while( true );
 }
+
+// ============================================================================
+// since 20200930
+// ============================================================================
+template <typename T>
+void  IcNodeQueueTemp<T> :: blockEnumAll ( void (*nodeHandle)( Node*, void* ), void *n_ctxt )
+{
+    Node *tmp = &m_tmp; IcLCG lcd;
+    if ( nodeHandle == nullptr ) { return; }
+
+    do {
+        // --------------------------------------------------------------------
+        // try get the tail node, if failed, means no node
+        // NOTE: tail may not be nullptr but other threads changed it!!!
+        //       so m_tail should check it again!
+        // --------------------------------------------------------------------
+        Node *tail = tryReadTail( lcd );
+        if ( tail == nullptr ) { break; }
+
+        // --------------------------------------------------------------------
+        // try lock the tail node, if failed, continue next loop
+        // --------------------------------------------------------------------
+        if ( ! m_tail.compare_exchange_strong( tail, tmp, std::memory_order_seq_cst )) {
+            continue;
+        }
+
+        // --------------------------------------------------------------------
+        // we has locked tail node, now enum all nodes
+        // --------------------------------------------------------------------
+        Node *n = tail;
+        do {
+            n = n->m_next;
+            nodeHandle( n, n_ctxt );
+        } while ( n != tail ); // already enum all..
+
+        // --------------------------------------------------------------------
+        // unlock tail node
+        // --------------------------------------------------------------------
+        while ( ! m_tail.compare_exchange_strong( tmp, tail, std::memory_order_seq_cst ))
+        { }
+        break;
+
+    } while( true );
+}
+
 
 // ============================================================================
 // enqueue a node
@@ -312,7 +357,7 @@ private:
     class IcArrayQueueTempPriv {
     private:
         IcNodeQueueTemp<T*> m_free_list, m_queue;
-        typename IcNodeQueueTemp<T*>::Node  m_node[ N ];
+        typename IcNodeQueueTemp<T*>::Node  m_node[ N + 1 ];
         T  m_slot[ N + 1 ]; // the addition one is used for restore the slot object to default
     friend class IcArrayQueueTemp;
 
@@ -325,6 +370,11 @@ private:
                 m_node[i].setData( ptr );
                 m_free_list.takeAndEnqueue( & m_node[i] );
             }
+        }
+
+        ~IcArrayQueueTempPriv( )
+        {
+            m_free_list.clear(); m_queue.clear();
         }
     };
 
@@ -482,9 +532,9 @@ private:
             m_free_list( nullptr, nullptr ), m_queue( nullptr, nullptr )
         {
             m_node_num = sz;
-            m_node = new typename IcNodeQueueTemp<T*>::Node[ sz ];
+            m_node = new typename IcNodeQueueTemp<T*>::Node[ sz + 1 ];
             m_slot = new T [ sz + 1 ];
-            for ( int i = 0; i < sz; i ++ ) {
+            for ( size_t i = 0; i < sz; i ++ ) {
                 T* ptr = & m_slot[i];
                 m_node[i].setData( ptr );
                 m_free_list.takeAndEnqueue( & m_node[i] );
@@ -496,8 +546,10 @@ private:
         // --------------------------------------------------------------------
         ~IcArrayQueuePsTempPriv ( )
         {
-            delete[] m_slot;
+            m_free_list.clear();
+            m_queue.clear();
             delete[] m_node;
+            delete[] m_slot;
         }
     };
 

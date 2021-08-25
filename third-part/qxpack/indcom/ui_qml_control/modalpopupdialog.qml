@@ -1,6 +1,6 @@
-import QtQuick 2.7
+import QtQuick 2.9
 import QtQml   2.2
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.2
 import qxpack.indcom.ui_qml_base  1.0
 
 Item {
@@ -9,11 +9,11 @@ Item {
     // ////////////////////////////////////////////////////////////////////////
     //  export property & functions
     // ////////////////////////////////////////////////////////////////////////
-    function open ( )
+    function open( )
     {
         if ( backgroundVisible ) { idPopupBg.open(); }
-        idPopup.open ();
-        if ( reqEnterEventLoop ) { IcUiQmlApi.enterEventLoop(); }  //有这条Calendar控件无法用
+        idPopup.open();
+        if ( reqEnterEventLoop ) { IcUiQmlApi.enterEventLoop(); }
     }
 
     function close( )
@@ -62,7 +62,7 @@ Item {
         // normally, user item must provide the implicitWidth and implictHeight
         // Popup always use them to calc. the popup area size.
         // ====================================================================
-        id: idPopup; modal: true; dim: false; background: Item { }
+        id: idPopup; modal: true; dim: false; background: Item {} //;Rectangle { id: idBgRect; opacity: 0.6; color: "#000000"; anchors.fill: parent; }
         padding: 0; margins: 0; closePolicy: Popup.NoAutoClose;
         x : ( parent.width - width ) / 2; y: ( parent.height - height) / 2;
 
@@ -91,8 +91,3 @@ Item {
     }
 
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

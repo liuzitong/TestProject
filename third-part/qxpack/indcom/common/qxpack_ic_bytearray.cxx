@@ -22,20 +22,21 @@
 #include <cassert>
 
 #include "qxpack_ic_bytearray.hxx"
-#include <qxpack/indcom/common/qxpack_ic_memcntr.hxx>
-#include <qxpack/indcom/common/qxpack_ic_dyncinit_priv.hxx>
-#include <qxpack/indcom/common/qxpack_ic_logging.hxx>
+#include "qxpack/indcom/common/qxpack_ic_memcntr.hxx"
+#include "qxpack/indcom/common/qxpack_ic_dyncinit_priv.hxx"
+#include "qxpack/indcom/common/qxpack_ic_logging.hxx"
 
-#ifdef __GNUC__ // in GCC 5, close below warnings
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpadded"
-#endif
+//#ifdef __GNUC__ // in GCC 5, close below warnings
+//#pragma GCC diagnostic push
+//#pragma GCC diagnostic ignored "-Wpadded"
+//#endif
 
 
-namespace QxPack { static void  gFreeBa( void *obj ); }
-#define RecycleFreeBa( o, t )         do{ QxPack::gFreeBa( ( t *) o ); }while(0)
+namespace QxPack { /* static void  gFreeBa( void *obj );*/ }
+//#define RecycleFreeBa( o, t )         do{ QxPack::gFreeBa( ( t *) o ); }while(0)
 #define QXPACK_IcPImplPrivTemp_new    qxpack_ic_new
-#define QXPACK_IcPImplPrivTemp_delete RecycleFreeBa
+//#define QXPACK_IcPImplPrivTemp_delete RecycleFreeBa
+#define QXPACK_IcPImplPrivTemp_delete qxpack_ic_delete
 #include "qxpack_ic_pimplprivtemp.hpp"
 
 #define USERDATA_SLOT_NUM  6
@@ -288,6 +289,17 @@ IcByteArray :: IcByteArray( const IcByteArray &other )
 {
     m_obj = nullptr;
     QXPACK_IcPImplPrivTemp_AttachPtr( IcByteArrayPriv, & m_obj, & other.m_obj );
+}
+
+// ============================================================================
+// make object null
+// ============================================================================
+void           IcByteArray :: makeNull()
+{
+    if ( m_obj != nullptr ) {
+        IcByteArrayPriv::attach( & m_obj, nullptr );
+        m_obj = nullptr;
+    }
 }
 
 // ============================================================================
@@ -548,69 +560,69 @@ bool   IcByteArray :: operator == ( const IcByteArray &other )
 // static buffer manager about ByteArray, used for fromConstString()
 //
 // ////////////////////////////////////////////////////////////////////////////
-static std::deque<void*>  g_free_ba;
-static std::mutex         g_locker;
+//static std::deque<void*>  g_free_ba;
+//static std::mutex         g_locker;
 
-static void  gDeInitRes( )
-{
-    // do not do lock/unlock at dync.deinit()
-    while ( ! g_free_ba.empty() ) {
-        IcByteArrayPriv *ptr = T_ObjCast( IcByteArrayPriv*,  g_free_ba.front());
-        g_free_ba.pop_front();
-        qxpack_ic_delete( ptr, IcByteArrayPriv );
-    }
-}
-static IcDyncInit g_dync_init( nullptr, & gDeInitRes );
+//static void  gDeInitRes( )
+//{
+//    // do not do lock/unlock at dync.deinit()
+//    while ( ! g_free_ba.empty() ) {
+//        IcByteArrayPriv *ptr = T_ObjCast( IcByteArrayPriv*,  g_free_ba.front());
+//        g_free_ba.pop_front();
+//        qxpack_ic_delete( ptr, IcByteArrayPriv );
+//    }
+//}
+//static IcDyncInit g_dync_init( nullptr, & gDeInitRes );
 
 // ============================================================================
 // allocate the buffer
 // ============================================================================
-static IcByteArrayPriv *   gAllocFreeBa( )
-{
-    IcByteArrayPriv *ptr = nullptr;
+//static IcByteArrayPriv *   gAllocFreeBa( )
+//{
+//    IcByteArrayPriv *ptr = nullptr;
 
-    // ------------------------------------------------------------------------
-    // do allocate from list or heap
-    // ------------------------------------------------------------------------
-    g_locker.lock();
-    if ( ! g_free_ba.empty() ) {
-        IcByteArrayPriv *tmp = T_ObjCast( IcByteArrayPriv*, g_free_ba.front()); g_free_ba.pop_front();
-        QXPACK_IcPImplPrivTemp_AttachPtr( IcByteArrayPriv, &ptr, &tmp );
-    }
-    g_locker.unlock();
-    if ( ptr == nullptr ) {
-        QXPACK_IcPImplPrivTemp_BuildIfNull( IcByteArrayPriv, &ptr );
-    }
+//    // ------------------------------------------------------------------------
+//    // do allocate from list or heap
+//    // ------------------------------------------------------------------------
+//    g_locker.lock();
+//    if ( ! g_free_ba.empty() ) {
+//        IcByteArrayPriv *tmp = T_ObjCast( IcByteArrayPriv*, g_free_ba.front()); g_free_ba.pop_front();
+//        QXPACK_IcPImplPrivTemp_AttachPtr( IcByteArrayPriv, &ptr, &tmp );
+//    }
+//    g_locker.unlock();
+//    if ( ptr == nullptr ) {
+//        QXPACK_IcPImplPrivTemp_BuildIfNull( IcByteArrayPriv, &ptr );
+//    }
 
-    return ptr;
-}
+//    return ptr;
+//}
 
-// ============================================================================
-// free the buffer, this function is called form PImpl mech.
-// the obj must be zero referenced.
-// ============================================================================
-static void  gFreeBa( void *obj )
-{
-    if ( obj == nullptr ) { return; }
-    if ( ! T_PrivPtr( obj )->isConstStr()) {
-        // --------------------------------------------------------------------
-        // free any non-const string object
-        // --------------------------------------------------------------------
-        qxpack_ic_delete( obj, IcByteArrayPriv );
+//// ============================================================================
+//// free the buffer, this function is called form PImpl mech.
+//// the obj must be zero referenced.
+//// ============================================================================
+//static void  gFreeBa( void *obj )
+//{
+//    if ( obj == nullptr ) { return; }
+//    if ( ! T_PrivPtr( obj )->isConstStr()) {
+//        // --------------------------------------------------------------------
+//        // free any non-const string object
+//        // --------------------------------------------------------------------
+//        qxpack_ic_delete( obj, IcByteArrayPriv );
 
-    } else {
-        // --------------------------------------------------------------------
-        // recycle const string object for re-use
-        // --------------------------------------------------------------------
-        g_locker.lock( );
-        if ( g_free_ba.size() < 128 ) {
-            g_free_ba.push_back( obj );
-        } else {
-            qxpack_ic_delete( obj, IcByteArrayPriv );
-        }
-        g_locker.unlock();
-    }
-}
+//    } else {
+//        // --------------------------------------------------------------------
+//        // recycle const string object for re-use
+//        // --------------------------------------------------------------------
+//        g_locker.lock( );
+//        if ( g_free_ba.size() < 128 ) {
+//            g_free_ba.push_back( obj );
+//        } else {
+//            qxpack_ic_delete( obj, IcByteArrayPriv );
+//        }
+//        g_locker.unlock();
+//    }
+//}
 
 // ============================================================================
 // point to the const data  [ static ]
@@ -618,10 +630,10 @@ static void  gFreeBa( void *obj )
 IcByteArray  IcByteArray :: fromConstData( const char *data, int e_num )
 {
     IcByteArray ba;
-    ba.m_obj = gAllocFreeBa();
-    if ( ba.m_obj != nullptr ) {
+    IcByteArrayPriv::buildIfNull( &ba.m_obj ); // ba.m_obj = gAllocFreeBa();
+    //if ( ba.m_obj != nullptr ) {
         T_PrivPtr( ba.m_obj )->initRefStr( true, data, e_num );
-    }
+    //}
     return ba;
 }
 
@@ -631,10 +643,10 @@ IcByteArray  IcByteArray :: fromConstData( const char *data, int e_num )
 IcByteArray  IcByteArray :: fromConstData( const uint16_t *data, int num )
 {
     IcByteArray ba;
-    ba.m_obj = gAllocFreeBa();
-    if ( ba.m_obj != nullptr ) {
+    IcByteArrayPriv::buildIfNull( &ba.m_obj );  //ba.m_obj = gAllocFreeBa();
+    //if ( ba.m_obj != nullptr ) {
         T_PrivPtr( ba.m_obj )->initRefStr( true, data, num );
-    }
+    //}
     return ba;
 }
 
@@ -643,13 +655,12 @@ IcByteArray  IcByteArray :: fromConstData( const uint16_t *data, int num )
 // ============================================================================
 IcByteArray  IcByteArray :: fromConstData (
     const char *data, int len, CleanUpFunction cl_func, void *cl_obj
-)
-{
+) {
     IcByteArray ba;
-    ba.m_obj = gAllocFreeBa();
-    if ( ba.m_obj != nullptr ) {
+    IcByteArrayPriv::buildIfNull( &ba.m_obj ); //ba.m_obj = gAllocFreeBa();
+    //if ( ba.m_obj != nullptr ) {
         T_PrivPtr( ba.m_obj )->initRefStr( true, data, len, cl_func, cl_obj );
-    }
+    //}
     return ba;
 }
 
@@ -658,13 +669,12 @@ IcByteArray  IcByteArray :: fromConstData (
 // ======================================================
 IcByteArray   IcByteArray :: fromData (
     char *data, int len, CleanUpFunction cl_func, void *cl_obj
-)
-{
+) {
     IcByteArray ba;
-    ba.m_obj = gAllocFreeBa();
-    if ( ba.m_obj != nullptr ) {
+    IcByteArrayPriv::buildIfNull( &ba.m_obj ); //ba.m_obj = gAllocFreeBa();
+    //if ( ba.m_obj != nullptr ) {
         T_PrivPtr( ba.m_obj )->initRefStr( false, data, len, cl_func, cl_obj );
-    }
+    //}
     return ba;
 }
 
@@ -673,16 +683,16 @@ IcByteArray   IcByteArray :: fromData (
 // free the cache [ static ]
 // ======================================================
 void   IcByteArray :: cleanupCache() {
-    g_locker.lock();
-    gDeInitRes();
-    g_locker.unlock();
+//    g_locker.lock();
+//    gDeInitRes();
+//    g_locker.unlock();
 }
 
 
 }
 
-#ifdef __GNUC__ // in GCC 5, close below warnings
-#pragma GCC diagnostic pop
-#endif
+//#ifdef __GNUC__ // in GCC 5, close below warnings
+//#pragma GCC diagnostic pop
+//#endif
 
 #endif

@@ -57,6 +57,8 @@ public:
     //! @note  'io_dev' only used QIODevice::bytesAvailable(), QIODevice::read(),  QIODevice::readyRead()
     explicit IcDataTransPkgReadBuff ( QSharedPointer<QIODevice> &io_dev, QObject *pa = Q_NULLPTR );
 
+    //! ctor 2 ( custom the maximum read buffer )??
+
     //! dtor
     virtual ~IcDataTransPkgReadBuff ( ) Q_DECL_OVERRIDE;
 
@@ -73,19 +75,27 @@ public:
      * @return true means found data, otherwise means no data or data is not completed
      * @note  user can override it as custom analysis
      */
-    virtual  bool  analyData ( const QByteArray &ba, AnalyInfo &ai );
+    virtual  bool    analyData ( const QByteArray &ba, AnalyInfo &ai );
 
     //! check if need do filter the read data, default return false
-    virtual  bool  isReqFilterData( ) const;
+    virtual  bool    isReqFilterData( ) const;
 
     //! do the data filter
     //! @param ba    [in] the current hole data
     //! @param rd_ba [in] current read data
     //! @return true means can append the rd_ba
     //! @cond  if isReqFilterData( ) return true, this function can work, otherwise ignore this function
-    virtual  bool  filterData( const QByteArray &ba, QByteArray &rd_ba );
+    virtual  bool    filterData( const QByteArray &ba, QByteArray &rd_ba );
+
+    //! get the default maximum reader concatenate buffer size, normally return 16MB
+    //! nw: 2019/12/31 added.
+    //! @note  While analy data failed, the inner buffer will be increased if remote client sends \n
+    //!  more and more data. This function return the maximum size of the inner buffer.
+    virtual  int     maxCatBuffSize( ) const;
 
     //! a signal that means got a new package
+    //! @warning if user want to limit the recv. data package, should \n
+    //!  DO IT on the upper layer!
     Q_SIGNAL void    newPackage( const QByteArray & );
 
 private:

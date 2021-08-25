@@ -18,7 +18,7 @@
 #include <stdint.h>
 #include <atomic>    // C++11
 #include <cstdlib>
-#include <qxpack/indcom/common/qxpack_ic_pimplprivtemp.hpp>
+#include "qxpack/indcom/common/qxpack_ic_pimplprivtemp.hpp"
 
 namespace QxPack {
 
@@ -87,7 +87,7 @@ void  IcTripleObjTempPriv<T> :: swap ( bool is_data_on, bool *is_old_data_picked
         }
     } while ( true );
 
-    if ( is_old_data_picked != 0 ) { *is_old_data_picked = ( tmp_idx & 0x80 ? false : true ); }
+    if ( is_old_data_picked != nullptr ) { *is_old_data_picked = ( tmp_idx & 0x80 ? false : true ); }
 }
 
 // //////////////////////////////////////////////////////////////
@@ -103,10 +103,10 @@ public :
     { m_obj = nullptr; IcTripleObjTempPriv<T>::buildIfNull( &m_obj ); }
 
     IcTripleObjTemp ( const IcTripleObjTemp<T> &other )
-    { m_obj = nullptr; IcTripleObjTempPriv<T>::attach( & m_obj, ( void **) & other.m_obj ); }
+    { m_obj = nullptr; IcTripleObjTempPriv<T>::attach( & m_obj, const_cast< void **>( & other.m_obj )); }
 
     IcTripleObjTemp &  operator = ( const IcTripleObjTemp<T> &other )
-    { IcTripleObjTempPriv<T>::attach( & m_obj, ( void **) & other.m_obj ); return *this; }
+    { IcTripleObjTempPriv<T>::attach( & m_obj, const_cast<void **>( & other.m_obj )); return *this; }
 
     virtual ~IcTripleObjTemp( )
     {
@@ -115,11 +115,11 @@ public :
         }
     }
 
-    inline T* writable()     { return (( IcTripleObjTempPriv<T> *)( m_obj ))->writable(); }
-    inline T* lastReadable() { return (( IcTripleObjTempPriv<T> *)( m_obj ))->lastReadable(); }
-    inline T* readable()     { return (( IcTripleObjTempPriv<T> *)( m_obj ))->readable(); }
+    inline T* writable()     { return static_cast< IcTripleObjTempPriv<T> *>( m_obj )->writable(); }
+    inline T* lastReadable() { return static_cast< IcTripleObjTempPriv<T> *>( m_obj )->lastReadable(); }
+    inline T* readable()     { return static_cast< IcTripleObjTempPriv<T> *>( m_obj )->readable(); }
     inline void swap( bool is_data_on, bool *last_data_picked = nullptr )
-    { (( IcTripleObjTempPriv<T> *) m_obj )->swap( is_data_on, last_data_picked ); }
+    { static_cast< IcTripleObjTempPriv<T> *>( m_obj )->swap( is_data_on, last_data_picked ); }
     inline bool isDataOn()   {  }
 };
 

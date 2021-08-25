@@ -41,7 +41,7 @@ public :
     Q_INVOKABLE virtual QString  rsType( ) const;
 
     //! check if it is working
-    Q_INVOKABLE virtual bool     isWorking( );
+    Q_INVOKABLE virtual bool     isWorking( ) const;
 
     //! open the target host by string
     Q_SLOT virtual void open (

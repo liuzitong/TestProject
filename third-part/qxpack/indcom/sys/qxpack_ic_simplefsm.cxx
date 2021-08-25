@@ -13,6 +13,7 @@
 #include "qxpack/indcom/common/qxpack_ic_memcntr.hxx"
 #include "qxpack/indcom/common/qxpack_ic_pimplprivtemp.hpp"
 #include "qxpack_ic_simplefsm.hxx"
+#include "qxpack_ic_recurmutex_p.hxx"
 
 #include <QMetaObject>
 #include <QMetaMethod>
@@ -88,12 +89,12 @@ public :
 typedef QPair<int,IcSimpleFsm_Temp*>  IcSimpleFsm_TempPair;
 class QXPACK_IC_HIDDEN  IcSimpleFsm_TempMgr {
 private:
-    QMap<QString, IcSimpleFsm_TempPair>  m_temp_map; QMutex m_locker;
+    QMap<QString, IcSimpleFsm_TempPair>  m_temp_map; IcRecurMutex m_locker;
     int  m_all_incr_cnt;
 protected:
     IcSimpleFsm_Temp*   createTemp( const QMetaObject &mo );
 public :
-    explicit IcSimpleFsm_TempMgr( ) : m_locker( QMutex::Recursive ) { m_all_incr_cnt = 0; }
+    explicit IcSimpleFsm_TempMgr( )   { m_all_incr_cnt = 0; }
     virtual ~IcSimpleFsm_TempMgr( );
     void                incrAllTemp( );
     void                decrAllTemp( );
@@ -317,7 +318,7 @@ static QSharedPointer<IcSimpleFsm_TempMgr>  gGetInstance( )
                qxpack_ic_delete( obj, IcSimpleFsm_TempMgr );
            }
        );
-       g_ref_cntr.store(1);
+       g_ref_cntr.storeRelease(1);
     } else {
        g_ref_cntr.fetchAndAddOrdered(1);
     }
@@ -769,8 +770,8 @@ IcSimpleFsmTempCache *   IcSimpleFsmTempCache :: getInstance()
 
     g_cache_locker.lock();
     if ( ( ptr = g_cache_ptr.loadAcquire()) == Q_NULLPTR ) {
-        g_cache_ptr.store( ( ptr = new IcSimpleFsmTempCache ));
-        g_cache_ref.store(1);
+        g_cache_ptr.storeRelease(( ptr = new IcSimpleFsmTempCache ));
+        g_cache_ref.storeRelease(1);
     } else {
         g_cache_ref.fetchAndAddOrdered(1);
     }
@@ -790,7 +791,7 @@ void  IcSimpleFsmTempCache :: freeInstance()
     if ( ( ptr = g_cache_ptr.loadAcquire()) != Q_NULLPTR ) {
         if ( g_cache_ref.fetchAndSubOrdered(1) - 1 < 1 ) {
             delete ptr;
-            g_cache_ptr.store(Q_NULLPTR);
+            g_cache_ptr.storeRelease(Q_NULLPTR);
         }
     }
     g_cache_locker.unlock();

@@ -1,5 +1,5 @@
-#ifndef _QXPACK_IC_QSGIMTEXTURE_CXX
-#define _QXPACK_IC_QSGIMTEXTURE_CXX
+#ifndef QXPACK_IC_QSGIMTEXTURE_CXX
+#define QXPACK_IC_QSGIMTEXTURE_CXX
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -82,7 +82,7 @@ static const GLenum  qim2gl_fmt[ ] = {
 // ============================================================================
 // the QImage to opengl format byte format
 // ============================================================================
-static const int     qim2gl_bt[ ] = {
+static const uint     qim2gl_bt[ ] = {
     // invalid, mono, monolsb, index8,  rgb32,  argb32,  argb32_prem, rgb16
     0, 0, 0, GL_UNSIGNED_BYTE,   0, 0, 0, GL_UNSIGNED_SHORT_5_6_5,
 	
@@ -135,20 +135,21 @@ static const int   fmt_bytes[ ] = {
 // ////////////////////////////////////////////////////////////////////////////
 // private object
 // ////////////////////////////////////////////////////////////////////////////
-#define T_PrivPtr( o ) (( IcQSGImTexturePriv *) o )
+#define T_PrivPtr( o ) T_ObjCast(IcQSGImTexturePriv*, o )
 class QXPACK_IC_HIDDEN IcQSGImTexturePriv : public IcPImplPrivTemp< IcQSGImTexturePriv > {
 private:
     uint  m_tex_id;
-    int   m_tex_width, m_tex_height, m_tex_fmt;
+    int   m_tex_width, m_tex_height;
+    uint  m_tex_fmt;
     bool  m_has_alpha, m_is_red_and_es;
     int   m_gl_major_ver;
     QOpenGLFunctions *m_func;
 protected:
-    static int  texFmtFromPxFmt   ( int px_fmt ){ return ( size_t( px_fmt ) < sizeof( gltex_fmt )   / sizeof( gltex_fmt[0]    ) ? gltex_fmt[ px_fmt ]    : GL_NONE ); }
-    static bool hasAlphaFromPxFmt ( int px_fmt ){ return ( size_t( px_fmt ) < sizeof( has_alpha_ch )/ sizeof( has_alpha_ch[0] ) ? has_alpha_ch[ px_fmt ] : false  ); }
-    static int  fmtBytesFromPxFmt ( int px_fmt ){ return ( size_t( px_fmt ) < sizeof( fmt_bytes )   / sizeof( fmt_bytes[0]    ) ? fmt_bytes[ px_fmt ]    : 1 ); }
-    static int  qim2glFmtFromPxFmt( int px_fmt ){ return ( size_t( px_fmt ) < sizeof( qim2gl_fmt )  / sizeof( qim2gl_fmt[0]   ) ? qim2gl_fmt[ px_fmt ]   : GL_RGBA ); }
-    static int  qim2glBtFromPxFmt ( int px_fmt ){ return ( size_t( px_fmt ) < sizeof( qim2gl_bt  )  / sizeof( qim2gl_bt[0]    ) ? qim2gl_bt[ px_fmt ]    : GL_UNSIGNED_BYTE ); }
+    static uint  texFmtFromPxFmt   ( int px_fmt ){ return ( size_t( px_fmt ) < sizeof( gltex_fmt )   / sizeof( gltex_fmt[0]    ) ? gltex_fmt[ px_fmt ]    : GL_NONE ); }
+    static bool  hasAlphaFromPxFmt ( int px_fmt ){ return ( size_t( px_fmt ) < sizeof( has_alpha_ch )/ sizeof( has_alpha_ch[0] ) ? has_alpha_ch[ px_fmt ] : false  ); }
+    static int   fmtBytesFromPxFmt ( int px_fmt ){ return ( size_t( px_fmt ) < sizeof( fmt_bytes )   / sizeof( fmt_bytes[0]    ) ? fmt_bytes[ px_fmt ]    : 1 ); }
+    static uint  qim2glFmtFromPxFmt( int px_fmt ){ return ( size_t( px_fmt ) < sizeof( qim2gl_fmt )  / sizeof( qim2gl_fmt[0]   ) ? qim2gl_fmt[ px_fmt ]   : GL_RGBA ); }
+    static uint  qim2glBtFromPxFmt ( int px_fmt ){ return ( size_t( px_fmt ) < sizeof( qim2gl_bt  )  / sizeof( qim2gl_bt[0]    ) ? qim2gl_bt[ px_fmt ]    : GL_UNSIGNED_BYTE ); }
 public :
     IcQSGImTexturePriv(  );
     IcQSGImTexturePriv( const IcQSGImTexturePriv & )
@@ -156,10 +157,10 @@ public :
     virtual ~IcQSGImTexturePriv( );
     bool   initalize( int w, int h, QImage::Format fmt, bool gen_mip = false );
     
-    inline int   textureId( ) const { return ( int ) m_tex_id; }
+    inline int   textureId( ) const { return int( m_tex_id ); }
     inline int   texWidth( )  const { return m_tex_width;  }
     inline int   texHeight( ) const { return m_tex_height; }
-    inline int   texFormat( ) const { return m_tex_fmt;    }
+    inline uint  texFormat( ) const { return m_tex_fmt;    }
     inline bool  hasAlpha( )  const { return m_has_alpha;  }
     inline QSize texSize( )   const { return QSize( m_tex_width, m_tex_height ); }
     inline bool  isGLRedAndOpenGLES( ) const { return m_is_red_and_es; }
@@ -223,8 +224,8 @@ bool    IcQSGImTexturePriv :: initalize( int width, int height, QImage::Format p
             m_func->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, GL_ONE  );
         }
     }
-    m_func->glTexImage2D ( GL_TEXTURE_2D, 0, m_tex_fmt, m_tex_width, m_tex_height, 0, IcQSGImTexturePriv::qim2glFmtFromPxFmt( px_fmt ),
-                           GL_UNSIGNED_BYTE, NULL );
+    m_func->glTexImage2D ( GL_TEXTURE_2D, 0,GLint( m_tex_fmt ), m_tex_width, m_tex_height, 0, IcQSGImTexturePriv::qim2glFmtFromPxFmt( px_fmt ),
+                           GL_UNSIGNED_BYTE, nullptr );
     m_func->glBindTexture( GL_TEXTURE_2D, 0 ); 
 
     return true;
@@ -300,7 +301,7 @@ IcQSGImTexture :: IcQSGImTexture ( const IcQSGImTexture &other ) : QSGTexture()
 // ============================================================================
 IcQSGImTexture &  IcQSGImTexture :: operator = ( const IcQSGImTexture &other )
 {
-    IcQSGImTexturePriv::attach( & m_obj, ( void **)( & other.m_obj));
+    IcQSGImTexturePriv::attach( & m_obj, const_cast< void **>( & other.m_obj));
     return *this;
 }
 

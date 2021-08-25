@@ -49,7 +49,7 @@ void   IcRmtObjCreator_Impl :: doCreate( qintptr obj_pptr )
     QAtomicPointer<QObject> *pptr = reinterpret_cast<QAtomicPointer<QObject>*>( obj_pptr );
     if ( pptr->loadAcquire() == Q_NULLPTR ) {
         if ( m_func != Q_NULLPTR ) {
-            pptr->store( m_func( m_ctxt ) );
+            pptr->storeRelease( m_func( m_ctxt ) );
         }
     }
 }
@@ -98,7 +98,7 @@ QObject*  IcRmtObjCreator :: createObjInThread( QThread *t, CreateFunc f, void *
 
     } else if ( QThread::currentThread() != t ) {
         if ( ! QThread::currentThread()->isRunning() ) {
-            qFatal("[ IcRmtObjCreator::createObjInThread ] target thread(0x%x) is not running!", size_t( QThread::currentThread()) );
+            qFatal("[ IcRmtObjCreator::createObjInThread ] target thread(0x%llx) is not running!", quintptr( QThread::currentThread()) );
         }
 
         if ( req_evt_loop ) {

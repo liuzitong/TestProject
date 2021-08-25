@@ -87,7 +87,7 @@ private:
 
 }
 
-#if defined( QXPACK_IC_QT5_ENABLED )
+#if defined( QXPACK_IC_QT_ENABLED )
 
 #include <QObject>
 #include <QProcess>

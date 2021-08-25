@@ -157,7 +157,7 @@ QString  IcDataTransRsHdeBase :: rsType( ) const { return QString(); }
 // ============================================================================
 // check if this object is working or not
 // ============================================================================
-bool     IcDataTransRsHdeBase :: isWorking( ) { return false; }
+bool     IcDataTransRsHdeBase :: isWorking( ) const { return false; }
 
 // ============================================================================
 // open the target

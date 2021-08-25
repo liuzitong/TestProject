@@ -33,6 +33,12 @@ void  IcQSGRenderWorker :: render() { }
 // ============================================================================
 bool  IcQSGRenderWorker :: isReqUpdateAfterRender() { return false; }
 
+// ============================================================================
+// This function will be called on the render thread while the GUI thread is blocked
+// ============================================================================
+void  IcQSGRenderWorker :: synchronize( QQuickFramebufferObject * )
+{  }
+
 }
 
 #endif

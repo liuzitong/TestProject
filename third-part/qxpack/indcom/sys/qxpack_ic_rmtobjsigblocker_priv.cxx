@@ -109,7 +109,7 @@ void   IcRmtObjSigBlocker :: blockSignals( QObject *obj, bool sw, bool req_evt_l
     if ( QThread::currentThread() != t ) {
         // check if thread is running or not
         if ( ! QThread::currentThread()->isRunning() ) {
-            qFatal("[ IcRmtObjSigBlocker::deleteObjInThread ] the target thread(0x%x) is not running!", size_t( QThread::currentThread()) );
+            qFatal("[ IcRmtObjSigBlocker::deleteObjInThread ] the target thread(0x%llx) is not running!", quintptr( QThread::currentThread()) );
         }
 
         // send to the target object

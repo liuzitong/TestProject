@@ -9,6 +9,7 @@
  *     nightwing  2019/05     fixed.
  *     nightwing  2019/05     check point
  *     nightwing  2019/06     fixed
+ *     nightwing  2019/12     fixe the package checking error..
  * @endverbatim
  */
 // ////////////////////////////////////////////////////////////////////////////
@@ -158,10 +159,11 @@ protected:
 public :
     explicit IcDataTransPkgReadBuffPriv ( IcDataTransPkgReadBuff *, QSharedPointer<QIODevice> & );
     virtual ~IcDataTransPkgReadBuffPriv ( ) Q_DECL_OVERRIDE;
-    void   clear ( ) { m_wr_pos = 0; m_buff = QByteArray(); }
+    inline void   clear()             { m_wr_pos = 0; m_buff = QByteArray(); }
+    inline void   resetWrPos( int p ) { m_wr_pos = ( p >= m_buff.size() ? m_buff.size() : ( p > 0 ? p : 0 )); }
+
     bool   appendData  ( );
     bool   dumpPackage ( IcDataTransPkgReadBuff::AnalyInfo & );
-
     inline QByteArray &  dataBuff( ) { return m_buff; }
 };
 
@@ -348,9 +350,28 @@ void   IcDataTransPkgReadBuff :: readData ( )
     // ------------------------------------------------------------------------
     bool ret = T_ReadPriv( m_obj )->appendData( ); // first, we should read all data from IODevice
     while ( ret ) {
-        IcDataTransPkgReadBuff::AnalyInfo ai;
+        IcDataTransPkgReadBuff::AnalyInfo ai; ai.m_cb_size = -1;
         if ( ( ret = this->analyData( T_ReadPriv( m_obj )->dataBuff(), ai )) ) {
             ret = T_ReadPriv( m_obj )->dumpPackage( ai );
+        } else {
+            int  lmt_sz = this->maxCatBuffSize();// -1 means no limit
+            if ( lmt_sz < 0 || T_ReadPriv( m_obj )->dataBuff().size() < lmt_sz ) { continue; }  // need more data..
+
+            // ----------------------------------------------------------------
+            // ( nw: 20191228-1523 added )
+            // bad data, we need search in data buffer to find a header ??
+            // ----------------------------------------------------------------
+            QByteArray &ba = T_ReadPriv( m_obj )->dataBuff();
+            for ( int test_ofv = 8, ba_sz = ba.size() - 8; ba_sz > 0 && ! ret; test_ofv += 8, ba_sz -= 8 ) {
+
+                // build tmp ref. byte array to analysis..
+                QByteArray tmp = QByteArray::fromRawData( ba.constData() + test_ofv, ba_sz );
+                if ( ( ret = this->analyData( tmp, ai )) ) {
+                     ba = ba.mid( test_ofv, ba_sz );         // found header, now we got the correct offset.
+                     T_ReadPriv( m_obj )->resetWrPos( ba_sz );
+                }
+            }
+            if ( ! ret ) { T_ReadPriv( m_obj )->clear(); }   // found nothing, clear all data..
         }
     }
 }
@@ -364,18 +385,18 @@ bool   IcDataTransPkgReadBuff :: analyData (
     // ------------------------------------------------------------------------
     // in default, we added a header before the data.
     // ------------------------------------------------------------------------
-    if ( size_t( ba.size()) < sizeof( IcDataTransPkg_HeaderWrap ) ) { return false; }
+    if ( size_t( ba.size()) < sizeof( IcDataTransPkg_HeaderWrap ) ) { ai.m_cb_size = -1; return false; }
     IcDataTransPkg_HeaderWrap  hdr;
     std::memcpy( hdr.headerAddr(), ba.constData(), sizeof( hdr ) );
     if ( hdr.verify() ) {
         ai.m_cb_size   = sizeof( IcDataTransPkgReadBuff::AnalyInfo );
         ai.m_sect_ofv  = 0;
-        ai.m_sect_size = sizeof( hdr ) + hdr.dataSize();
+        ai.m_sect_size = int( sizeof( hdr ) + hdr.dataSize() );
         ai.m_data_ofv_in_sect = sizeof( hdr );
-        ai.m_data_size = hdr.dataSize();
+        ai.m_data_size = int( hdr.dataSize());
         return true;
     } else {
-        ai.m_cb_size = 0;
+        ai.m_cb_size = 0; // bad header
         return false;
     }
 }
@@ -391,8 +412,11 @@ bool    IcDataTransPkgReadBuff :: isReqFilterData( ) const { return false; }
 bool    IcDataTransPkgReadBuff :: filterData( const QByteArray &, QByteArray & )
 { return false; }
 
-
-
+// ============================================================================
+// return the data buffer limit size
+// ============================================================================
+int     IcDataTransPkgReadBuff :: maxCatBuffSize() const
+{ return 16 * 1024 * 1024; }
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -627,7 +651,7 @@ bool   IcDataTransPkgWriteBuff :: packData(
     const QByteArray &dat, QVector<QPair<bool,QByteArray> > &ba_list
 ) {
     QByteArray def_hdr( sizeof( IcDataTransPkg_HeaderWrap ), 0 );
-    new( def_hdr.data() ) IcDataTransPkg_HeaderWrap( dat.constData(), dat.size() );
+    new( def_hdr.data() ) IcDataTransPkg_HeaderWrap( dat.constData(), quint64( dat.size()) );
 
     ba_list.reserve( 2 );
     ba_list.append( QPair<bool,QByteArray>( false, def_hdr ));

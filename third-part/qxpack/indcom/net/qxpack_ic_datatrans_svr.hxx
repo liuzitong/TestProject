@@ -64,6 +64,9 @@ public:
     //! return all supported rs type
     static QStringList avaliableRsTypeList( );
 
+    //! return the full server name,  added by nw: 2019/12/13
+    QString  fullSvrName( ) const;
+
 protected:
     //! user can override it to get custom handler, default is  IcDataTransHandler
     //! @note the returned object can use delete or deleteLater() to destory
@@ -115,7 +118,6 @@ public:
 
     Q_SIGNAL void  errorMessage ( int, const QString &err_msg );
 
-protected:
     //! ctor
     explicit IcDataTransHandler(
         const QString &rs_type,  qintptr sck_dscr,

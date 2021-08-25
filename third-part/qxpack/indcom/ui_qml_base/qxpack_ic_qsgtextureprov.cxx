@@ -1,5 +1,5 @@
-#ifndef  _QXPACK_IC_QSGTEXTUREPROV_CXX
-#define  _QXPACK_IC_QSGTEXTUREPROV_CXX
+#ifndef  QXPACK_IC_QSGTEXTUREPROV_CXX
+#define  QXPACK_IC_QSGTEXTUREPROV_CXX
 
 #include "qxpack_ic_qsgtextureprov.hxx"
 
@@ -29,8 +29,8 @@ IcQSGTextureProv :: ~IcQSGTextureProv ( )
 void  IcQSGTextureProv :: setTexture ( QSGTexture *tex , bool force_dirty )
 {
     bool is_chg = false;
-    if ( m_obj != (void*)tex ) { m_obj = tex; is_chg = true; }
-    if ( is_chg || force_dirty ) { emit this->textureChanged(); }
+    if ( m_obj != reinterpret_cast<void*>(tex) ) { m_obj = tex; is_chg = true; }
+    if ( is_chg || force_dirty ) { QMetaObject::invokeMethod( this, "textureChanged", Qt::QueuedConnection ); }
 }
 
 // ============================================================================

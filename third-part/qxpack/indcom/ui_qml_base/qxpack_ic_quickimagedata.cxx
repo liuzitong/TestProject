@@ -2,7 +2,7 @@
 #define QXPACK_IC_QUICKIMAGEDATA_CXX
 
 #include "qxpack_ic_quickimagedata.hxx"
-#include <qDebug>
+#include <QDebug>
 #include <QReadWriteLock>
 
 namespace QxPack { static void  gDeletePrivObj( void *obj ); }
@@ -76,6 +76,8 @@ public :
         }
     }
 
+    inline auto    imageDataSize() const -> QSize { return m_im_data.image().size(); }
+
     Q_SIGNAL void imageDataChanged( );
 };
 
@@ -107,7 +109,7 @@ IcQuickImageData :: IcQuickImageData ( IcQuickImageData::UseMode m )
     m_obj = nullptr;
     IcQuickImageDataPriv::buildIfNull( & m_obj );
     T_PrivPtr( m_obj )->init( m );
-    QObject::connect( T_PrivPtr( m_obj ), SIGNAL(imageDataChanged()), this, SIGNAL(imageDataChanged()));
+    QObject::connect( T_PrivPtr( m_obj ), SIGNAL(imageDataChanged()), this, SIGNAL(imageDataChanged()), Qt::QueuedConnection );
 }
 
 // ============================================================================
@@ -116,7 +118,7 @@ IcQuickImageData :: IcQuickImageData ( IcQuickImageData::UseMode m )
 IcQuickImageData :: ~IcQuickImageData ( )
 {
     if ( m_obj != nullptr ) {
-        QObject::disconnect( T_PrivPtr( m_obj ), 0, this, 0 );
+        QObject::disconnect( T_PrivPtr( m_obj ), Q_NULLPTR, this, Q_NULLPTR );
         IcQuickImageDataPriv::attach( & m_obj, nullptr );
     }
 }
@@ -128,13 +130,13 @@ bool  IcQuickImageData :: attach ( const IcQuickImageData &other )
 {
     // free old connections
     if ( m_obj != nullptr ) {
-        QObject::disconnect( T_PrivPtr( m_obj ), 0 , this,  0 );
+        QObject::disconnect( T_PrivPtr( m_obj ), Q_NULLPTR, this, Q_NULLPTR );
         IcQuickImageDataPriv::attach( & m_obj, nullptr );
         m_obj = nullptr;
     }
 
     // attach to other object
-    IcQuickImageDataPriv::attach( & m_obj, ( void **) & other.m_obj );
+    IcQuickImageDataPriv::attach( & m_obj, const_cast< void **>( & other.m_obj ));
     if ( m_obj != nullptr ) {
         QObject::connect( T_PrivPtr( m_obj ), SIGNAL(imageDataChanged()), this, SIGNAL(imageDataChanged()));
     }
@@ -177,6 +179,17 @@ void   IcQuickImageData :: endUseImageData()
     }
 }
 
+// ============================================================================
+// access the image data image size
+// ============================================================================
+auto     IcQuickImageData :: imageDataImSize() const -> QSize
+{
+    if ( m_obj != nullptr ) {
+        return T_PrivPtr(m_obj)->imageDataSize();
+    } else {
+        return QSize(0,0);
+    }
+}
 
 }
 

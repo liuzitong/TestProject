@@ -78,7 +78,7 @@ public:
 {
     if ( m_sem != SEM_FAILED ) {
         sem_close ( m_sem );
-        sem_unlink( m_nm_ptr );
+        sem_unlink( m_nm_ptr ); // 20210714 think: maybe do not call this is better.
         m_sem = SEM_FAILED;
         if ( m_nm_ptr != m_name ) { std::free( m_nm_ptr ); }
     }

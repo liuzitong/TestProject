@@ -84,7 +84,7 @@ IcFileMon_Worker :: IcFileMon_Worker ( const QStringList &file_pattern )
                  : QObject( Q_NULLPTR )
 {
     m_fn_name_filter = file_pattern;
-    m_work_path_tag.store(0);
+    m_work_path_tag.storeRelease(0);
     m_file_watcher = Q_NULLPTR;
 }
 

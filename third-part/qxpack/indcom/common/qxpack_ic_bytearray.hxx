@@ -69,7 +69,7 @@ public:
      * @note DTOR only detached from the shared data, if the shared data is zero,\n
      *       it will be free.
      */
-    virtual ~IcByteArray( );
+    ~IcByteArray( );
 
     /*!
      * @brief resize current space, change inner space to 'size'
@@ -91,7 +91,6 @@ public:
      * @return true means no data in the object
      */
     bool    isEmpty( ) const;
-
 
     //! check if current data is const
     //! @return true or false. for empty object, return true.
@@ -147,6 +146,10 @@ public:
      */
     bool operator ==( const IcByteArray & );
 
+    //! move ptr from other object
+    inline void   movePtrFrom( IcByteArray &ot )
+    { if ( m_obj != nullptr ){ makeNull(); } m_obj = ot.m_obj; ot.m_obj = nullptr; }
+
     /*!
      * @brief   construct a IcByteArray point to static const data.
      * @details only point to the const data, do not allocate memory to copy data
@@ -183,6 +186,11 @@ public:
 
     //! free the cached IcByteArray object
     static void  cleanupCache( );
+
+
+protected:
+    //! @brief make this object is null
+    void  makeNull();
 
 private:
     void *m_obj;

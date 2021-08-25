@@ -13,9 +13,10 @@
     # 'qxiccore_cfg_no_hdr'     : all modules, do not include headers. ( defined by parent )
     # -----------------------------------------------
     ! contains ( QXPACK_IC_CFG, qxiccore_cfg_hdr_and_src ) {
-        QXPACK_IC_CFG *= indcom_common_cfg_no_src 
+        QXPACK_IC_CFG *= indcom_common_cfg_no_src  indcom_algor_cfg_no_src
+
         contains( QXPACK_IC_CFG, qxiccore_cfg_no_hdr ) {
-            QXPACK_IC_CFG *= indcom_common_cfg_no_hdr 
+            QXPACK_IC_CFG *= indcom_common_cfg_no_hdr indcom_algor_cfg_no_hdr
         }
         QXPACK_IC_CFG *= qxiccore_cfg_only_lib
 
@@ -28,6 +29,7 @@
     # -----------------------------------------------
     ! contains( QXPACK_IC_CFG, qxiccore_cfg_only_lib ) {
         include( $$PWD/common/qxpack_indcom_common.pri  )
+        include( $$PWD/algor/qxpack_indcom_algor.pri )
 
     } else {
         message( qxiccore only contain library )

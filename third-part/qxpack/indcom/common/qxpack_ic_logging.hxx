@@ -3,7 +3,7 @@
 
 #include "qxpack/indcom/common/qxpack_ic_def.h"
 
-#ifdef QXPACK_IC_QT5_ENABLED
+#ifdef QXPACK_IC_QT_ENABLED
 #  include <QDebug>
 #endif
 
@@ -35,7 +35,7 @@ private:
 
 }
 
-#if defined( QXPACK_IC_QT5_ENABLED )
+#if defined( QXPACK_IC_QT_ENABLED )
 
 #define qxpack_ic_fatal   qFatal
 #define qxpack_ic_info    qInfo

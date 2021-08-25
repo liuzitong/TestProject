@@ -22,7 +22,7 @@ namespace QxPack {
  * @brief  the image data object, used to store user image and user variant data
  */
 // ////////////////////////////////////////////////////////////////////////////
-class QXPACK_IC_API IcImageData {
+class QXPACK_IC_API IcImageData QXPACK_IC_FINAL {
 
 public:
     //! create empty object
@@ -35,7 +35,8 @@ public:
     IcImageData &  operator = ( const IcImageData & );
 
     //! dtor
-    virtual ~IcImageData( );
+    //virtual ~IcImageData( ); // since 0.4.8, changed to non-virtual
+    ~IcImageData( );
 
     //! check if the object is null or not
     bool         isNull()    const;

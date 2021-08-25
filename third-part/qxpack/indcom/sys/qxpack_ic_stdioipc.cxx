@@ -14,7 +14,7 @@
 #define ASCII_ESC      0x1b
 #define ASCII_ESC_HEAD 0x80
 
-#if defined( QXPACK_IC_QT5_ENABLED )
+#if defined( QXPACK_IC_QT_ENABLED )
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
@@ -238,7 +238,7 @@ bool     IcStdioIpc :: isStdInClosed()
 
 
 
-#if defined( QXPACK_IC_QT5_ENABLED )
+#if defined( QXPACK_IC_QT_ENABLED )
 
 #include <QProcess>
 #include <QDebug>

@@ -314,7 +314,7 @@ class QXPACK_IC_HIDDEN  IcDataTransSvrPriv : public QObject {
     Q_OBJECT
 private:
     QThread *m_thread; IcDataTransRsSvrBase *m_impl;
-    QString  m_host;   quint16  m_port; QString m_rs_type;
+    QString  m_host, m_full_svr_name;  quint16  m_port; QString m_rs_type;
     QMutex   m_hde_locker;  QList<QObject*>  m_hde_list;
     IcDataTransFactory m_fact; void *m_fact_ctxt;
     IcDataTransSvr *m_parent;  bool  m_is_self_thread;
@@ -331,8 +331,9 @@ public :
     inline quint16  port( ) const  { return m_port; }
     inline QString  host( ) const  { return m_host; }
     inline IcDataTransRsSvrBase* implement() { return m_impl; }
-    QObject*  takeNextPendingHandler( );
-    bool      hasPendingHandler( );
+    inline QString & fullSvrNameRef() { return m_full_svr_name; }
+    QObject*         takeNextPendingHandler( );
+    bool             hasPendingHandler( );
 
     Q_SIGNAL void newHandler( );
     Q_SIGNAL void accpetError( int err, const QString & );
@@ -352,6 +353,7 @@ IcDataTransSvrPriv :: IcDataTransSvrPriv (
     m_parent = parent;
     m_port = port; m_host = host;
     m_fact = fact; m_fact_ctxt = ctxt; m_rs_type = rs_type;
+
     this->initImpl();
 }
 
@@ -570,13 +572,15 @@ bool  IcDataTransSvr :: hasPendingHandler() const
 // ============================================================================
 bool  IcDataTransSvr :: isListening() const
 {
-    if ( T_SvrPriv( m_obj )->implement() != Q_NULLPTR ) {
+    IcDataTransSvrPriv *priv = T_SvrPriv( m_obj );
+
+    if ( priv->implement() != Q_NULLPTR ) {
         bool ret = false;
-        bool call_ret = QMetaObject::invokeMethod(
-            T_SvrPriv( m_obj )->implement(), "isListening",
-            ( T_SvrPriv(m_obj)->implement()->thread() != QThread::currentThread() ?
-             Qt::BlockingQueuedConnection : Qt::AutoConnection ),
-            Q_RETURN_ARG( bool, ret )
+        bool call_ret = QMetaObject::invokeMethod (
+            priv->implement(), "isListening",
+            ( priv->implement()->thread() != QThread::currentThread() ?
+              Qt::BlockingQueuedConnection : Qt::AutoConnection ),
+              Q_RETURN_ARG( bool, ret )
         );
         return ( call_ret ? ret : false );
     } else {
@@ -607,6 +611,30 @@ QObject* IcDataTransSvr :: createHandler (
 QStringList  IcDataTransSvr :: avaliableRsTypeList ( )
 { return IcDataTransRsSvrBase::avaliableRsTypeList(); }
 
+// ============================================================================
+// return the full server name, nw: 2019/12/13 added
+// ============================================================================
+QString                 IcDataTransSvr :: fullSvrName() const
+{
+    IcDataTransSvrPriv *priv = T_SvrPriv( m_obj );
+    if ( priv->implement() != Q_NULLPTR ) {
+        if ( priv->fullSvrNameRef().isEmpty()) {
+            QString nm;
+            bool call_ret = QMetaObject::invokeMethod(
+                priv->implement(), "fullServerName",
+                ( priv->implement()->thread() != QThread::currentThread() ?
+                 Qt::BlockingQueuedConnection : Qt::AutoConnection ),
+                Q_RETURN_ARG( QString, nm )
+            );
+            priv->fullSvrNameRef() = nm;
+            return ( call_ret ? nm : QString() );
+        } else {
+            return priv->fullSvrNameRef();
+        }
+    } else {
+        return QString();
+    }
+}
 
 
 }

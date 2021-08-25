@@ -20,6 +20,8 @@ public:
     //! dtor
     virtual ~IcQuickQtLogoItem( ) Q_DECL_OVERRIDE;
 
+    static void  _reg();
+
 private:
     void *m_obj;
     Q_DISABLE_COPY( IcQuickQtLogoItem )

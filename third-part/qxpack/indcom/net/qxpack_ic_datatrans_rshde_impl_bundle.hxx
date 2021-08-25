@@ -31,9 +31,9 @@ public :
     virtual void     open ( const QString &host_name, quint16 port, int om ) Q_DECL_OVERRIDE;
     virtual bool     initByDscr ( QVariant ) Q_DECL_OVERRIDE;
     virtual bool     post ( const QByteArray &, bool = true ) Q_DECL_OVERRIDE;
-    virtual void     close( )        Q_DECL_OVERRIDE { m_loc_sck->close(); }
-    virtual bool     isWorking( )    Q_DECL_OVERRIDE { return m_is_work; }
-    virtual QString  rsType( ) const Q_DECL_OVERRIDE { return rsTypeName(); }
+    virtual void     close( )             Q_DECL_OVERRIDE { m_loc_sck->close(); }
+    virtual bool     isWorking( ) const   Q_DECL_OVERRIDE { return m_is_work; }
+    virtual QString  rsType( ) const      Q_DECL_OVERRIDE { return rsTypeName(); }
     virtual QString  fullHostName() const Q_DECL_OVERRIDE;
     static  QString  rsTypeName( ) { return QStringLiteral("rsLoc"); }
 };
@@ -69,8 +69,8 @@ public :
     virtual  bool    initByDscr ( QVariant ) Q_DECL_OVERRIDE;
     virtual  bool    post ( const QByteArray &, bool = true ) Q_DECL_OVERRIDE;
     virtual  void    close( )       Q_DECL_OVERRIDE { m_tcp_sck->close(); }
-    virtual  bool    isWorking( )   Q_DECL_OVERRIDE { return m_is_work; }
-    virtual  QString rsType() const Q_DECL_OVERRIDE { return rsTypeName(); }
+    virtual  bool    isWorking( ) const  Q_DECL_OVERRIDE { return m_is_work; }
+    virtual  QString rsType() const      Q_DECL_OVERRIDE { return rsTypeName(); }
     virtual  QString fullHostName() const Q_DECL_OVERRIDE { return m_host_name; }
     static QString rsTypeName() { return QStringLiteral("rsTcp"); }
 };

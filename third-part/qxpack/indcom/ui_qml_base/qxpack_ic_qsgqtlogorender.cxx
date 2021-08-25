@@ -62,6 +62,8 @@ bool IcQSGQtLogoRender::initialize()
     program1.addShader(vshader1);
     program1.addShader(fshader1);
     program1.link();
+   // program1.removeAllShaders();
+
 
     vertexAttr1 = program1.attributeLocation("vertex");
     normalAttr1 = program1.attributeLocation("normal");
@@ -111,10 +113,10 @@ void IcQSGQtLogoRender::render()
     glEnable(GL_DEPTH_TEST);
 
     QMatrix4x4 modelview;
-    modelview.rotate(m_fAngle, 0.0f, 1.0f, 0.0f);
-    modelview.rotate(m_fAngle, 1.0f, 0.0f, 0.0f);
-    modelview.rotate(m_fAngle, 0.0f, 0.0f, 1.0f);
-    modelview.scale(m_fScale);
+    modelview.rotate( float(m_fAngle), 0.0f, 1.0f, 0.0f);
+    modelview.rotate( float(m_fAngle), 1.0f, 0.0f, 0.0f);
+    modelview.rotate( float(m_fAngle), 0.0f, 0.0f, 1.0f);
+    modelview.scale( float(m_fScale));
     modelview.translate(0.0f, -0.2f, 0.0f);
 
     program1.bind();
@@ -125,7 +127,7 @@ void IcQSGQtLogoRender::render()
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
-    m_fAngle += 1.0f;
+    m_fAngle += 1.0;
 }
 
 // ============================================================================
@@ -137,14 +139,14 @@ void   IcQSGQtLogoRender :: createGeometry()
     vertices.clear();
     normals.clear();
 
-    qreal x1 = +0.06f;
-    qreal y1 = -0.14f;
-    qreal x2 = +0.14f;
-    qreal y2 = -0.06f;
-    qreal x3 = +0.08f;
-    qreal y3 = +0.00f;
-    qreal x4 = +0.30f;
-    qreal y4 = +0.22f;
+    qreal x1 = +0.06;
+    qreal y1 = -0.14;
+    qreal x2 = +0.14;
+    qreal y2 = -0.06;
+    qreal x3 = +0.08;
+    qreal y3 = +0.00;
+    qreal x4 = +0.30;
+    qreal y4 = +0.22;
 
     quad(x1, y1, x2, y2, y2, x2, y1, x1);
     quad(x3, y3, x4, y4, y4, x4, y3, x3);
@@ -157,7 +159,7 @@ void   IcQSGQtLogoRender :: createGeometry()
     extrude(x4, y4, y4, x4);
     extrude(y4, x4, y3, x3);
 
-    const qreal Pi = 3.14159f;
+    const qreal Pi = 3.14159;
     const int NumSectors = 100;
 
     for (int i = 0; i < NumSectors; ++i) {
@@ -188,16 +190,16 @@ void   IcQSGQtLogoRender :: createGeometry()
 // ============================================================================
 void IcQSGQtLogoRender::quad( qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal x4, qreal y4)
 {
-    vertices << QVector3D(x1, y1, -0.05f);
-    vertices << QVector3D(x2, y2, -0.05f);
-    vertices << QVector3D(x4, y4, -0.05f);
+    vertices << QVector3D( float(x1), float(y1), -0.05f);
+    vertices << QVector3D( float(x2), float(y2), -0.05f);
+    vertices << QVector3D( float(x4), float(y4), -0.05f);
 
-    vertices << QVector3D(x3, y3, -0.05f);
-    vertices << QVector3D(x4, y4, -0.05f);
-    vertices << QVector3D(x2, y2, -0.05f);
+    vertices << QVector3D( float(x3), float(y3), -0.05f);
+    vertices << QVector3D( float(x4), float(y4), -0.05f);
+    vertices << QVector3D( float(x2), float(y2), -0.05f);
 
     QVector3D n = QVector3D::normal
-        (QVector3D(x2 - x1, y2 - y1, 0.0f), QVector3D(x4 - x1, y4 - y1, 0.0f));
+        (QVector3D( float(x2 - x1), float(y2 - y1), 0.0f), QVector3D(float(x4 - x1), float(y4 - y1), 0.0f));
 
     normals << n;
     normals << n;
@@ -207,16 +209,16 @@ void IcQSGQtLogoRender::quad( qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, 
     normals << n;
     normals << n;
 
-    vertices << QVector3D(x4, y4, 0.05f);
-    vertices << QVector3D(x2, y2, 0.05f);
-    vertices << QVector3D(x1, y1, 0.05f);
+    vertices << QVector3D( float(x4), float(y4), 0.05f);
+    vertices << QVector3D( float(x2), float(y2), 0.05f);
+    vertices << QVector3D( float(x1), float(y1), 0.05f);
 
-    vertices << QVector3D(x2, y2, 0.05f);
-    vertices << QVector3D(x4, y4, 0.05f);
-    vertices << QVector3D(x3, y3, 0.05f);
+    vertices << QVector3D( float(x2), float(y2), 0.05f);
+    vertices << QVector3D( float(x4), float(y4), 0.05f);
+    vertices << QVector3D( float(x3), float(y3), 0.05f);
 
     n = QVector3D::normal
-        (QVector3D(x2 - x4, y2 - y4, 0.0f), QVector3D(x1 - x4, y1 - y4, 0.0f));
+        (QVector3D( float(x2 - x4), float(y2 - y4), 0.0f), QVector3D(float(x1 - x4), float(y1 - y4), 0.0f));
 
     normals << n;
     normals << n;
@@ -232,16 +234,16 @@ void IcQSGQtLogoRender::quad( qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, 
 // ============================================================================
 void IcQSGQtLogoRender::extrude(qreal x1, qreal y1, qreal x2, qreal y2)
 {
-    vertices << QVector3D(x1, y1, +0.05f);
-    vertices << QVector3D(x2, y2, +0.05f);
-    vertices << QVector3D(x1, y1, -0.05f);
+    vertices << QVector3D( float(x1), float(y1), +0.05f);
+    vertices << QVector3D( float(x2), float(y2), +0.05f);
+    vertices << QVector3D( float(x1), float(y1), -0.05f);
 
-    vertices << QVector3D(x2, y2, -0.05f);
-    vertices << QVector3D(x1, y1, -0.05f);
-    vertices << QVector3D(x2, y2, +0.05f);
+    vertices << QVector3D( float(x2), float(y2), -0.05f);
+    vertices << QVector3D( float(x1), float(y1), -0.05f);
+    vertices << QVector3D( float(x2), float(y2), +0.05f);
 
     QVector3D n = QVector3D::normal
-        (QVector3D(x2 - x1, y2 - y1, 0.0f), QVector3D(0.0f, 0.0f, -0.1f));
+        (QVector3D( float(x2 - x1), float(y2 - y1), 0.0f), QVector3D(0.0f, 0.0f, -0.1f));
 
     normals << n;
     normals << n;

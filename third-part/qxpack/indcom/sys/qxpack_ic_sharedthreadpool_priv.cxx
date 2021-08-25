@@ -40,7 +40,7 @@ static QThreadPool *   getInstance( )
         }
         g_obj_ptr->setMaxThreadCount(MAX_THREAD_NUM);
         g_obj_ptr->setExpiryTimeout (5000);
-        g_ref_cntr.store(1);
+        g_ref_cntr.storeRelease(1);
     }
     g_locker.unlock();
     return g_obj_ptr;

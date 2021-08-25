@@ -1,8 +1,8 @@
 #ifndef QXPACK_IC_GLOBAL_CXX
 #define QXPACK_IC_GLOBAL_CXX
 
-#include <qxpack/indcom/common/qxpack_ic_def.h>
-#include <qxpack/indcom/common/qxpack_ic_dyncinit_priv.hxx>
+#include "qxpack/indcom/common/qxpack_ic_def.h"
+#include "qxpack_ic_global.hxx"
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
@@ -69,6 +69,43 @@ QXPACK_IC_API void tailPath (
     }
     dst[ read_cnt ] = 0;
 }
+
+// ============================================================================
+// decimal number round
+// ============================================================================
+static const double  deci_scale[] = {
+    1, 1e-1, 1e-2, 1e-3, 1e-4,  1e-5, 1e-6, 1e-7, 1e-8
+};
+QXPACK_IC_API  double  decimalRound( double v, int n )
+{
+    double  sc; bool is_neg = false;
+    double  rsl;
+
+    if ( v < 0 ) { v = -v; is_neg = true;}
+    if ( n < 0 ) { n = -n; }
+
+    if ( n < 8 ) { sc = deci_scale[ n ]; }
+    else {
+      sc = 1.0; while ( n -- > 0  &&  sc > 0 ) { sc *= 0.1; }
+    }
+
+    if ( ! fuzzyIsNull( sc )  &&  sc * 0.1 > 0 ) {
+        rsl = v + sc * 0.5;
+        rsl = rsl - std::fmod( rsl, sc );
+    } else {
+        rsl = v;
+    }
+
+    return ( ! is_neg ? rsl : -rsl );
+}
+
+
+
+
+
+
+
+
 
 
 

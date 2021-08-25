@@ -3,7 +3,7 @@
  
 #include "qxpack/indcom/common/qxpack_ic_def.h"
 
-#ifdef QXPACK_IC_QT5_ENABLED
+#ifdef QXPACK_IC_QT_ENABLED
 #include <QObject>
 #endif
 
@@ -24,7 +24,7 @@ namespace QxPack {
 // 3) use qxpack_ic_new_qobj() / qxpack_ic_delete_qobj() to manage qobject
 //
 // ////////////////////////////////////////////////////////////////////////////
-class QXPACK_IC_API IcMemCntr {
+class QXPACK_IC_API IcMemCntr QXPACK_IC_FINAL {
 public:
     static int    currNewCntr( );
     static void*  _assertNonNullPtr( void* p, bool is_alloc ); // nw: 20180807 added
@@ -42,16 +42,17 @@ public:
     static void   enableMemCntr( bool sw ); // default is true
 
     // nw: 2019/05/23 added for QT5
-#if defined( QXPACK_IC_QT5_ENABLED )
+#if defined( QXPACK_IC_QT_ENABLED )
     static QObject*  memCntOnQObj  ( QObject*, const char *file, const char *func, int ln, const char *type );
     static void      memCntOnDelObj( QObject *o, bool is_later = false );
 #endif
 
 protected:
     IcMemCntr ( );
-    virtual ~IcMemCntr( );
+    ~IcMemCntr( );
 private:
     void *m_obj;
+    QXPACK_IC_DISABLE_COPY( IcMemCntr )
 };
 
 }
@@ -87,7 +88,7 @@ private:
 
 
 
-#ifdef QXPACK_IC_QT5_ENABLED
+#ifdef QXPACK_IC_QT_ENABLED
 // ////////////////////////////////////////////////////////////////////////////
 //
 //             added for QT5

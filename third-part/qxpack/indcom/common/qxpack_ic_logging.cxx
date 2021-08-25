@@ -55,10 +55,10 @@ void   IcLogging :: fatal ( const char *fmt, ... )
 
     va_list args1;
     va_start( args1, fmt );
-    int vect_sz = 0; std::vector<char> buf;
-    do {
+    int vect_sz = 1024; std::vector<char> buf; buf.reserve(vect_sz);
+    while ( std::vsprintf( buf.data(), fmt, args1 ) < 0 ) {
         buf = std::vector<char>( ( vect_sz += 1024 ));
-    } while ( std::vsprintf( buf.data(), fmt, args1 ) < 0 );
+    }
     va_end( args1 );
 
     std::fprintf( stderr, "[ln] %d in %s\n", m_ln_num, m_file_ptr );
@@ -71,13 +71,13 @@ void   IcLogging :: fatal ( const char *fmt, ... )
 // output the information
 // ============================================================================
 void    IcLogging :: info ( const char *fmt, ... )
-{
+{   
     va_list args1;
     va_start( args1, fmt );
-    int vect_sz = 0; std::vector<char> buf;
-    do {
-        buf = std::vector<char>( (vect_sz += 1024 ));
-    } while ( std::vsprintf( buf.data(), fmt, args1 ) < 0 );
+    int vect_sz = 1024; std::vector<char> buf; buf.reserve(vect_sz);
+    while ( std::vsprintf( buf.data(), fmt, args1 ) < 0 ) {
+        buf = std::vector<char>( ( vect_sz += 1024 ));
+    }
     va_end( args1 );
 
     std::fprintf( stdout, "[info]: %s\n", buf.data());

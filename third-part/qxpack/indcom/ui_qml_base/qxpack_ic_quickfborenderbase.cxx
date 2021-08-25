@@ -6,6 +6,10 @@
 #include <QQuickWindow>
 #include "qxpack/indcom/ui_qml_base/qxpack_ic_qsgrenderworker.hxx"
 
+#if defined( QXPACK_IC_QT6 )
+#include <QQuickOpenGLUtils>
+#endif
+
 namespace QxPack {
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -22,6 +26,7 @@ public :
     );
     virtual ~IcQuickFboRenderBase_Render( ) Q_DECL_OVERRIDE;
     virtual void render() Q_DECL_OVERRIDE;
+    virtual void synchronize(QQuickFramebufferObject *item) Q_DECL_OVERRIDE;
     QOpenGLFramebufferObject *createFramebufferObject( const QSize &size ) Q_DECL_OVERRIDE
     { return m_item->createFbo_qsg( size ); }
 };
@@ -65,7 +70,11 @@ void  IcQuickFboRenderBase_Render :: render()
         m_worker->render();        
         if ( m_item != Q_NULLPTR ) {
             // this is recommended by Laszlo Agocs's tutorial
+        #if defined( QXPACK_IC_QT5 )
             m_item->window()->resetOpenGLState();
+        #else
+            QQuickOpenGLUtils::resetOpenGLState();
+        #endif
         }
         if ( m_worker->isReqUpdateAfterRender()) {
             this->update();
@@ -73,7 +82,15 @@ void  IcQuickFboRenderBase_Render :: render()
     }
 }
 
-
+// ===========================================================================
+// sync. function
+// ===========================================================================
+void  IcQuickFboRenderBase_Render :: synchronize(QQuickFramebufferObject *item )
+{
+    if ( m_worker != Q_NULLPTR ) {
+        m_worker->synchronize( item );
+    }
+}
 
 
 // ////////////////////////////////////////////////////////////////////////////

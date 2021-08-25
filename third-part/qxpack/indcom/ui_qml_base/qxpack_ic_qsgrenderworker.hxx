@@ -3,6 +3,7 @@
 
 #include "qxpack/indcom/common/qxpack_ic_def.h"
 #include <QOpenGLFramebufferObject>
+#include <QQuickFramebufferObject>
 #include <QMetaType>
 
 namespace QxPack {
@@ -39,6 +40,12 @@ public:
      * @return default return false
      */
     virtual bool isReqUpdateAfterRender( );
+
+    /*!
+     * @brief this is called once before render() called
+     * @note used to copy value from QML scene due to render maybe in dedicated thread.
+     */
+    virtual void  synchronize( QQuickFramebufferObject *item );
 
 private:
     void *m_obj;

@@ -31,6 +31,12 @@ public:
         m_im[1].load( ":/bmp1.bmp"); m_im[1] = m_im[1].convertToFormat( QImage::Format_RGBA8888 );
         m_im[2].load( ":/bmp2.bmp"); m_im[2] = m_im[2].convertToFormat( QImage::Format_RGBA8888 );
         m_im[3].load( ":/bmp3.bmp"); m_im[3] = m_im[3].convertToFormat( QImage::Format_RGBA8888 );
+
+//        m_im[0] = m_im[0].scaled(5000,4000);
+//        m_im[1] = m_im[1].scaled(5000,4000);
+//        m_im[2] = m_im[2].scaled(5000,4000);
+//        m_im[3] = m_im[3].scaled(5000,4000);
+        m_emit_once = false;
     }
     virtual ~Grabber ( ) { }
 
@@ -61,10 +67,13 @@ protected:
         im_data = QxPack::IcImageData();
 
         // finished, tell parent
-        emit this->newImage();
+        if ( ! m_emit_once ) {
+            emit this->newImage();
+            m_emit_once = true;
+        }
     }
 private:
-    uint m_im_idx; QImage m_im[4];
+    uint m_im_idx; QImage m_im[4]; bool m_emit_once;
     QSharedPointer<VideoSwapBuffer> m_vb_swp;
 };
 

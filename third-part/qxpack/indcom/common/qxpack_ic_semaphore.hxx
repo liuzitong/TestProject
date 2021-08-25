@@ -10,7 +10,7 @@
 #define  QXPACK_IC_SEMAPHORE_HXX
 
 #include "qxpack/indcom/common/qxpack_ic_def.h"
-#include <stdint.h>
+#include <cstdint>
 
 namespace QxPack {
 
@@ -20,7 +20,7 @@ namespace QxPack {
  * @details manage the resource of shared.
 */
 // ////////////////////////////////////////////////////////////////////////////
-class QXPACK_IC_API IcSemaphore {
+class QXPACK_IC_API IcSemaphore QXPACK_IC_FINAL {
 
 public:
     /*!
@@ -30,7 +30,7 @@ public:
     IcSemaphore( int init_val = 0 );
 
     //! dtor
-    virtual ~IcSemaphore(  );
+    ~IcSemaphore(  );
 
     /*!
      * @brief  post 1 resource counter

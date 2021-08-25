@@ -29,7 +29,6 @@ TestCase {
                     contentItem: Rectangle {
                         implicitWidth: 100; implicitHeight: 100; color:"green";
                         onVisibleChanged: { if( visible ) { idTmr.start(); }}
-
                         Timer {
                             id: idTmr; interval: 3000;
                             onTriggered: { idPopup.close(); }

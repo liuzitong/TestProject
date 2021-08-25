@@ -13,6 +13,11 @@
 #include <QDebug>
 
 namespace QxPack {
+    void QXPACK_IC_HIDDEN IcUiQmlBase_staticInit();
+    void QXPACK_IC_HIDDEN IcUiQmlControl_staticInit();
+    void QXPACK_IC_HIDDEN IcUiQmlCharts_staticInit();
+}
+
 
 // ////////////////////////////////////////////////////////////////////////////
 //
@@ -27,6 +32,15 @@ static void gRegUiQmlApi( )
         qmlRegisterSingletonType<QxPack::IcUiQmlApi>( "qxpack.indcom.ui_qml_base", 1, 0, "IcUiQmlApi", & QxPack::IcUiQmlApi::createInstance );
         qInfo() << "qxpack_ic_ui_qml_api registered."; // nw: 2019/05/07 added
     }
+
+    QxPack::IcUiQmlBase_staticInit();
+#ifndef QXPACK_IC_NO_UI_QML_CONTROL
+    QxPack::IcUiQmlControl_staticInit();
+#endif
+#ifndef QXPACK_IC_NO_UI_QML_CHARTS
+    QxPack::IcUiQmlCharts_staticInit();
+#endif
+
 }
 
 // ============================================================================
@@ -36,6 +50,7 @@ static void gRegUiQmlApi( )
 Q_COREAPP_STARTUP_FUNCTION( gRegUiQmlApi )
 
 
+namespace QxPack {
 
 // ////////////////////////////////////////////////////////////////////////////
 // local functions
@@ -153,7 +168,7 @@ void  IcUiQmlApi  :: enterEventLoop ( )
 void  IcUiQmlApi  :: leaveEventLoop()
 {
     if ( T_PrivPtr( m_obj )->evtLoopStack().isEmpty()) { return; }
-    QEventLoop *evt = ( QEventLoop *) T_PrivPtr( m_obj )->evtLoopStack().pop();
+    QEventLoop *evt = static_cast<QEventLoop*>( T_PrivPtr( m_obj )->evtLoopStack().pop());
     evt->quit();
 }
 
