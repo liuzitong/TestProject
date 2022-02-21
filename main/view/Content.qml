@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -81,6 +81,7 @@ Rectangle {
                                     CusText{id:age;text:"40"; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1;}
                                 }
 
+                                
                                 Flow{
                                     height: parent.height;
                                     CusText{text:"ID:  "; horizontalAlignment: Text.AlignRight;color:"white";width: height;font.pointSize: height*0.4;}

@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -117,10 +117,11 @@ Column {id:root; width: 1366;height: 691
                 }
                 Rectangle{width: parent.width*0.5;height: parent.height;color:backGroundColorCheckPanel;
                     CusText{text:"右眼"; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
-                    DbDisplay{id:dbDisplay;}
+                    DbDisplay{id:dbDisplay;onPainted:{console.log("hello123");dbDisplay.displayCanvas.drawText("hahaah",300,300,14);}}
                 }
             }
         }
+
     }
     Rectangle{id:bottomRibbon;width: parent.width;height: parent.height*1/15;color: "#333e44";
         Row{anchors.fill: parent;
@@ -140,7 +141,7 @@ Column {id:root; width: 1366;height: 691
             Item{ height: parent.height;width:parent.width*0.50;
                 Item{id: item1; anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
-                        CusButton{text:"开始测试";}
+                        CusButton{text:"开始测试";onClicked:{console.log("hllo.");dbDisplay.putText();}}
                         CusButton{text:"停止测试";}
                         CusButton{text:"切换眼别";}
                     }

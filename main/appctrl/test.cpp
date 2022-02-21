@@ -1,4 +1,4 @@
-#include "perimeter/main/database/precompiled.h"
+﻿#include "perimeter/main/database/precompiled.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <iostream>
@@ -64,7 +64,7 @@ public:
 
         std::cout<<"*****checkResult_list****"<<std::endl;
         for(auto& i:CheckResult_List)
-            std::cout<<i->m_id<<" "<<i->m_strategy<<" "<<i->m_params.toStdString()<<" "<<i->m_data.toStdString()<<" "
+            std::cout<<i->m_id<<" "<<" "<<i->m_params.toStdString()<<" "<<i->m_data.toStdString()<<" "
                      <<i->m_time.toString("yyyy-MM-dd HH:mm::ss").toStdString()<<" "<<i->m_patient->m_patinetId.toStdString()<<" "<<i->m_program->m_id<<std::endl;
         std::cout<<std::endl;
     }
@@ -96,7 +96,7 @@ public:
         query.bind(":name","30-2");
         qx::dao::execute_query(query,Program_List);
 
-        CheckResult_ptr checkResult(new CheckResult(5,CheckResult::Strategy::strategy3,"params1","data1",QDateTime::currentDateTime(),Patient_List.front(),Program_List.front()));
+        CheckResult_ptr checkResult(new CheckResult(5,"params1","data1",QDateTime::currentDateTime(),Patient_List.front(),Program_List.front()));
         QSqlError daoError = qx::dao::insert(checkResult);
 
     }
@@ -164,7 +164,7 @@ public:
         CheckResult_ptr checkResult_1,checkResult_2,checkResult_3,checkResult_4;
         Program_ptr program_1,program_2;
         program_1.reset(new Program);
-        program_2.reset(new Program(2,true,Program::Type::Screening,"30-2","program2 params","program2 data"));
+        program_2.reset(new Program(2,Program::Type::Screening,"30-2","program2 params","program2 data",true));
 
         program_1->m_id=1;
         program_1->m_data="program1data";
@@ -177,10 +177,10 @@ public:
         patient_2.reset(new Patient("5003","yangzhiqun",Patient::sex::female,QDate::currentDate()));
 
 
-        checkResult_1.reset(new CheckResult(1,CheckResult::Strategy::strategy1,"params1","data1",QDateTime::currentDateTime(),patient_1,program_1));
-        checkResult_2.reset(new CheckResult(2,CheckResult::Strategy::strategy1,"params2","data2",QDateTime::currentDateTime(),patient_2,program_1));
-        checkResult_3.reset(new CheckResult(3,CheckResult::Strategy::strategy2,"params3","data3",QDateTime::currentDateTime(),patient_1,program_2));
-        checkResult_4.reset(new CheckResult(4,CheckResult::Strategy::strategy3,"params4","data4",QDateTime::currentDateTime(),patient_2,program_2));
+        checkResult_1.reset(new CheckResult(1,"params1","data1",QDateTime::currentDateTime(),patient_1,program_1));
+        checkResult_2.reset(new CheckResult(2,"params2","data2",QDateTime::currentDateTime(),patient_2,program_1));
+        checkResult_3.reset(new CheckResult(3,"params3","data3",QDateTime::currentDateTime(),patient_1,program_2));
+        checkResult_4.reset(new CheckResult(4,"params4","data4",QDateTime::currentDateTime(),patient_2,program_2));
 
         QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
         bool bCommit = db.transaction();

@@ -41,7 +41,11 @@
 }
 
 SOURCES += \
-    $$PWD/appctrl/test.cpp
+    $$PWD/appctrl/test.cpp \
+    $$PWD/utils/pdf_creator.cpp
+
+HEADERS += \
+    $$PWD/utils/pdf_creator.h
 
 
 

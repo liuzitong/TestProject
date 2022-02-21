@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -6,7 +6,7 @@ import QtQuick.Controls.Styles 1.4
 import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0
 
-Column{
+Item{
     id:root;
     property string language:IcUiQmlApi.appCtrl.language
     property bool doubleName:IcUiQmlApi.appCtrl.doubleName
@@ -15,11 +15,14 @@ Column{
     property int pageSize: 15;
     signal queryStarted;
     signal changePage(var pageName);
+    width: 1440
+    height: 700
     anchors.fill:parent;
 
     Item{
         width: parent.width;
         height: parent.height*14/15
+        anchors.top: parent.top
         id:content;
         property int layoutGroupMargin: 0.03*height
         CusCalendar{id: calendar;width: parent.width;height: parent.height;}
@@ -434,6 +437,7 @@ Column{
     }
     Rectangle{
         id:bottomRibbon;width: parent.width;height: parent.height*1/15;color: "#333e44";
+        anchors.bottom: parent.bottom
         Row{
             anchors.fill: parent;anchors.margins:parent.height*0.15;
             Item{
@@ -502,8 +506,3 @@ Column{
         }
     }
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

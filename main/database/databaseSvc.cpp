@@ -1,4 +1,4 @@
-#include "precompiled.h"
+﻿#include "precompiled.h"
 #include "databaseSvc.h"
 #include "checkResult.h"
 #include "patient.h"
@@ -25,10 +25,10 @@ databaseSvc::~databaseSvc()
 
 void databaseSvc::initDataBase()
 {
-    QFileInfo fi((R"(./test.sqlite)"));
+    QFileInfo fi((R"(./db.sqlite)"));
     bool isDbThere=fi.exists();
     qx::QxSqlDatabase::getSingleton()->setDriverName("QSQLITE");
-    qx::QxSqlDatabase::getSingleton()->setDatabaseName(R"(./test.sqlite)");
+    qx::QxSqlDatabase::getSingleton()->setDatabaseName(R"(./db.sqlite)");
     qx::QxSqlDatabase::getSingleton()->setHostName("localhost");
     qx::QxSqlDatabase::getSingleton()->setUserName("root");
     qx::QxSqlDatabase::getSingleton()->setPassword("");
@@ -175,6 +175,15 @@ void databaseSvc::getPatientByBirthDate(QDate date)
     emit patientListChanged();
 }
 
+void databaseSvc::addProgram(Program::Type type, QString name, QString params, QString data, bool isPredefined)
+{
+
+    Program_ptr program_ptr(new Program(type,name,params,data,isPredefined));
+    QSqlError daoError = qx::dao::insert(program_ptr);
+}
+
+
+
 QObject *databaseSvc::getPatientListModel()
 {
     return m_plm;
@@ -199,7 +208,7 @@ void databaseSvc::createData()
     CheckResult_ptr checkResult_1,checkResult_2,checkResult_3,checkResult_4;
     Program_ptr program_1,program_2;
     program_1.reset(new Program);
-    program_2.reset(new Program(2,true,Program::Type::Screening,"30-2","program2 params","program2 data"));
+    program_2.reset(new Program(2,Program::Type::Screening,"30-2","program2 params","program2 data",true));
 
     program_1->m_id=1;
     program_1->m_data="program1data";
@@ -213,10 +222,10 @@ void databaseSvc::createData()
 
 
 
-    checkResult_1.reset(new CheckResult(1,CheckResult::Strategy::strategy1,"params1","data1",QDateTime::currentDateTime(),patient_1,program_1));
-    checkResult_2.reset(new CheckResult(2,CheckResult::Strategy::strategy1,"params2","data2",QDateTime::currentDateTime(),patient_2,program_1));
-    checkResult_3.reset(new CheckResult(3,CheckResult::Strategy::strategy2,"params3","data3",QDateTime::currentDateTime(),patient_1,program_2));
-    checkResult_4.reset(new CheckResult(4,CheckResult::Strategy::strategy3,"params4","data4",QDateTime::currentDateTime(),patient_2,program_2));
+    checkResult_1.reset(new CheckResult(1,"params1","data1",QDateTime::currentDateTime(),patient_1,program_1));
+    checkResult_2.reset(new CheckResult(2,"params2","data2",QDateTime::currentDateTime(),patient_2,program_1));
+    checkResult_3.reset(new CheckResult(3,"params3","data3",QDateTime::currentDateTime(),patient_1,program_2));
+    checkResult_4.reset(new CheckResult(4,"params4","data4",QDateTime::currentDateTime(),patient_2,program_2));
 
     QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
     bool bCommit = db.transaction();

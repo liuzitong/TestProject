@@ -1,4 +1,4 @@
-#ifndef DATABASEVM_H
+﻿#ifndef DATABASEVM_H
 #define DATABASEVM_H
 #include "perimeter/base/common/perimeter_def.h"
 #include "qxpack/indcom/afw/qxpack_ic_viewmodelbase.hxx"
@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include "perimeter/main/database/patientVm.h"
 #include "patientListModel.h"
+#include "program.h"
 
 namespace Perimeter {
 class databaseSvc:public QObject
@@ -30,6 +31,10 @@ public:
     Q_INVOKABLE void getPatientByName(QString name,QDate from,QDate to);
     Q_INVOKABLE void getPatientBySex(int sex,QDate from,QDate to);
     Q_INVOKABLE void getPatientByBirthDate(QDate date);
+
+    Q_INVOKABLE void addProgram(Program::Type type,QString name,QString params,QString data,bool isPredefined=false);
+//    Q_INVOKABLE void addCheckResult(QString params,QString data,QDateTime time,Patient_ptr patient,Program_ptr program);
+
 private:
    inline QString convertQDateToQString(QDate date);
 //    Q_INVOKABLE QObject* getPatientModelByIndex(int startIndex,int count,QDate from,QDate to);

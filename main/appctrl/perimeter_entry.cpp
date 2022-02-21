@@ -1,4 +1,4 @@
-#include <QCoreApplication>
+﻿#include <QCoreApplication>
 #include <QDebug>
 #include <QMessageLogContext>
 #include <QThread>
@@ -104,10 +104,10 @@ int  main ( int argc, char *argv[] )
     signal( SIGTERM, & gSigTerm_Handler );
     qInstallMessageHandler( & gMsgHandler );
 
-//    Test::connectDataBase();
-//    Test::createTable();
-//    Test::createData();
-//    Test::displayInfo();
+    Test::connectDataBase();
+    Test::createTable();
+    Test::createData();
+    Test::displayInfo();
 //    Test::updateInfo();
 //    Test::query();
 //    Test::insertData();
@@ -115,38 +115,38 @@ int  main ( int argc, char *argv[] )
 //    Test::query2();
 
     // start the application
-    gPrintMemCntr("pre-stage");
-    {
-        QGuiApplication app(argc, argv);
+//    gPrintMemCntr("pre-stage");
+//    {
+//        QGuiApplication app(argc, argv);
 
-        Perimeter::AppCtrl *app_ctrl = new Perimeter::AppCtrl;
-        app_ctrl->doInit();
+//        Perimeter::AppCtrl *app_ctrl = new Perimeter::AppCtrl;
+//        app_ctrl->doInit();
 
-        // --------------------------------------------------------------------
-        // share the application controller into QML
-        // --------------------------------------------------------------------
-        QSharedPointer<QObject> s_app_ctrl( app_ctrl, [](QObject*){});
-        QxPack::IcUiQmlApi::setAppCtrl( s_app_ctrl );
+//        // --------------------------------------------------------------------
+//        // share the application controller into QML
+//        // --------------------------------------------------------------------
+//        QSharedPointer<QObject> s_app_ctrl( app_ctrl, [](QObject*){});
+//        QxPack::IcUiQmlApi::setAppCtrl( s_app_ctrl );
 
-        // --------------------------------------------------------------------
-        //  here create the main view
-        // --------------------------------------------------------------------
-        QQmlApplicationEngine *eng = new QQmlApplicationEngine;
-        eng->addImportPath(QStringLiteral("qrc:/") );
+//        // --------------------------------------------------------------------
+//        //  here create the main view
+//        // --------------------------------------------------------------------
+//        QQmlApplicationEngine *eng = new QQmlApplicationEngine;
+//        eng->addImportPath(QStringLiteral("qrc:/") );
 
-        eng->load(QUrl(QLatin1String("qrc:/perimeter/main/view/Application.qml")));
+//        eng->load(QUrl(QLatin1String("qrc:/perimeter/main/view/Application.qml")));
 
-        gPrintMemCntr("enter eventloop stage");
-        ret = app.exec();
-        eng->deleteLater();
+//        gPrintMemCntr("enter eventloop stage");
+//        ret = app.exec();
+//        eng->deleteLater();
 
 
-        QxPack::IcAppDclPriv::barrier( 32 );
-        app_ctrl->doDeinit();
-        delete app_ctrl;
-        QxPack::IcAppDclPriv::barrier( 32 );
-    }
-    gPrintMemCntr("post-stage");
+//        QxPack::IcAppDclPriv::barrier( 32 );
+//        app_ctrl->doDeinit();
+//        delete app_ctrl;
+//        QxPack::IcAppDclPriv::barrier( 32 );
+//    }
+//    gPrintMemCntr("post-stage");
 
 
     return ret;

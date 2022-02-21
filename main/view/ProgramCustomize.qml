@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -7,10 +7,11 @@ import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0
 import QtQuick.Layouts 1.3
 
-Column {id:root; width: 1366;height: 691;anchors.fill:parent;
+Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
     signal changePage(var pageName);
     function rePaintCanvas(){dbDisplay.displayCanvas.requestPaint();}
     Rectangle{id:content;width: parent.width;height: parent.height*14/15
+        anchors.top: parent.top
         Item{anchors.fill: parent;anchors.margins: 2;
             Row{anchors.fill: parent;spacing: 2;
                 Column{width:parent.width*0.235;height: parent.height;spacing:2;
@@ -18,14 +19,14 @@ Column {id:root; width: 1366;height: 691;anchors.fill:parent;
                         Rectangle{height: parent.height*0.1;width: parent.width;color:"#D2D2D3"
                             TabBar {id: bar;height: parent.height*0.8;anchors.bottom: parent.bottom;anchors.right: parent.right; anchors.rightMargin:0.03*parent.width;
                                 anchors.left: parent.left; anchors.leftMargin: 0.03*parent.width;spacing: 0;currentIndex: 0;
-//                                Repeater { model:["阈值","筛选","特殊","动态"]
-                                    TabButton {width: bar.width*0.25;height: parent.height;
+                                Repeater { model:["阈值","筛选","特殊","动态","自定义"]
+                                    TabButton {width: bar.width*0.20;height: parent.height;
                                         Rectangle{anchors.fill: parent;color:parent.checked? "#E3E5E8":"#D2D2D3";
                                             Rectangle{width: parent.width;height: 3;color: "#0064B6";visible: parent.parent.checked? true:false; }
                                             CusText{text:modelData; anchors.fill: parent;color:parent.parent.checked?"#0064B6":"black";font.pointSize: height*0.3}
                                         }
                                     }
-//                                }
+                                }
                             }
                         }
                         Rectangle{width: parent.width;height: parent.height*0.9;color: "#DCDEE0";
@@ -140,6 +141,8 @@ Column {id:root; width: 1366;height: 691;anchors.fill:parent;
         }
     }
     Rectangle{id:bottomRibbon;width: parent.width;height: parent.height*1/15;color: "#333e44";
+        anchors.bottom: parent.bottom
+        visible: true
         Row{anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.235;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;

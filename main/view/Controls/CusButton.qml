@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtQml 2.2
 Item{
     id:root
@@ -9,7 +9,7 @@ Item{
     property string borderColor:commonBorderColor
     property bool hoverEnabled: true
     property string text
-    property int fontSize:height/3
+    property int fontSize:height*0.3
     property int radius:height/6
     property int borderWidth:1
     property string hoverColor: "white"

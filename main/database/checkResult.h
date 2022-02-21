@@ -1,4 +1,4 @@
-#ifndef CHECK_RESULT_H
+﻿#ifndef CHECK_RESULT_H
 #define CHECK_RESULT_H
 #include "precompiled.h"
 #include <QxOrm_Impl.h>
@@ -9,21 +9,21 @@ class Program;
 
 class QX_DLL_EXPORT_API CheckResult{
 public:
-    enum Strategy { strategy1, strategy2, strategy3 };
 // -- typedef
     typedef std::shared_ptr<Patient> Patient_ptr;
     typedef std::shared_ptr<Program> Program_ptr;
 
     long m_id;
-    Strategy m_strategy;
     QString m_params;
     QString m_data;
     QDateTime m_time;
     Patient_ptr m_patient;
     Program_ptr m_program;
     CheckResult() = default;
-    CheckResult(long id,Strategy strategy,QString params,QString data,QDateTime time,Patient_ptr patient,Program_ptr program):
-    m_id(id),m_strategy(strategy),m_params(params),m_data(data),m_time(time),m_patient(patient),m_program(program){}
+    CheckResult(QString params,QString data,QDateTime time,Patient_ptr patient,Program_ptr program):
+    m_params(params),m_data(data),m_time(time),m_patient(patient),m_program(program){}
+    CheckResult(long id,QString params,QString data,QDateTime time,Patient_ptr patient,Program_ptr program):
+    m_id(id),m_params(params),m_data(data),m_time(time),m_patient(patient),m_program(program){}
     virtual ~CheckResult(){}
 };
 
