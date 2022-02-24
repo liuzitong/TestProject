@@ -59,7 +59,7 @@ public:
 
         std::cout<<"*****program_list****"<<std::endl;
         for(auto& i:Program_List)
-            std::cout<<i->m_id<<" "<<i->m_predefined<<" "<<i->m_type<<" "<<i->m_name.toStdString()<<" "<<i->m_data.toStdString()<<std::endl;
+            std::cout<<i->m_id<<" "<<int(i->m_category)<<" "<<int(i->m_type)<<" "<<i->m_name.toStdString()<<" "<<i->m_data.toStdString()<<std::endl;
         std::cout<<std::endl;
 
         std::cout<<"*****checkResult_list****"<<std::endl;
@@ -164,7 +164,7 @@ public:
         CheckResult_ptr checkResult_1,checkResult_2,checkResult_3,checkResult_4;
         Program_ptr program_1,program_2;
         program_1.reset(new Program);
-        program_2.reset(new Program(2,Program::Type::Screening,"30-2","program2 params","program2 data",true));
+        program_2.reset(new Program(Program::Type::ThreshHold,"30-2","program2 params","program2 data"));
 
         program_1->m_id=1;
         program_1->m_data="program1data";

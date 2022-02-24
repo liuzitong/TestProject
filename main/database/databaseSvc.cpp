@@ -175,10 +175,10 @@ void databaseSvc::getPatientByBirthDate(QDate date)
     emit patientListChanged();
 }
 
-void databaseSvc::addProgram(Program::Type type, QString name, QString params, QString data, bool isPredefined)
+void databaseSvc::addProgram(Program::Type type, QString name, QString params, QString data, Program::Category category)
 {
 
-    Program_ptr program_ptr(new Program(type,name,params,data,isPredefined));
+    Program_ptr program_ptr(new Program(type,name,params,data,category));
     QSqlError daoError = qx::dao::insert(program_ptr);
 }
 
@@ -208,7 +208,7 @@ void databaseSvc::createData()
     CheckResult_ptr checkResult_1,checkResult_2,checkResult_3,checkResult_4;
     Program_ptr program_1,program_2;
     program_1.reset(new Program);
-    program_2.reset(new Program(2,Program::Type::Screening,"30-2","program2 params","program2 data",true));
+    program_2.reset(new Program(2,Program::Type::Screening,"30-2","program2 params","program2 data"));
 
     program_1->m_id=1;
     program_1->m_data="program1data";

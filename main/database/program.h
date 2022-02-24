@@ -8,8 +8,8 @@
 class CheckResult;
 class QX_DLL_EXPORT_API Program{
 public:
-    enum Type { ThreshHold=0, Screening  };
-//    enum Category { ThreshHold=0, Screening  };
+    enum class Type { ThreshHold=0, Screening,Move  };
+    enum class Category { ThreshHold=0, Screening,Special,Move,Custom  };
 // -- typedef
     typedef std::shared_ptr<CheckResult> CheckResult_ptr;
     typedef std::vector<CheckResult_ptr> CheckResult_List;
@@ -19,13 +19,13 @@ public:
     QString m_name;
     QString m_params;
     QString m_data;
-    bool m_predefined;
+    Category m_category;
     CheckResult_List m_checkResultX;
     Program()=default;
-    Program(Type type,QString name,QString params,QString data,bool predefined):
-        m_type(type),m_name(name),m_params(params),m_data(data),m_predefined(predefined){}
-    Program(long id,Type type,QString name,QString params,QString data,bool predefined):
-        m_id(id),m_type(type),m_name(name),m_params(params),m_data(data),m_predefined(predefined){}
+    Program(Type type,QString name,QString params,QString data,Category category=Category::Custom):
+        m_type(type),m_name(name),m_params(params),m_data(data),m_category(category){}
+    Program(long id,Type type,QString name,QString params,QString data,Category category=Category::Custom):
+        m_id(id),m_type(type),m_name(name),m_params(params),m_data(data),m_category(category){}
     virtual ~Program(){}
 };
 

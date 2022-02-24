@@ -38,6 +38,7 @@
         $$PWD/view/assets/assets.qrc
 
     include( $$PWD/database/database.pri )
+    include( $$PWD/model/model.pri )
 }
 
 SOURCES += \
@@ -46,6 +47,8 @@ SOURCES += \
 
 HEADERS += \
     $$PWD/utils/pdf_creator.h
+
+DISTFILES +=
 
 
 
