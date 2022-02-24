@@ -4,17 +4,19 @@
 #include <tuple>
 #include <array>
 #include <vector>
+#include "commondef.h"
 
+namespace Model{
 struct StaticProgramData
 {
-    StaticParams::CommonParams::Strategy strategies[3];
-    std::vector<std::tuple<float,float>> dots;
+    std::vector<StaticParams::CommonParams::Strategy> strategies;
+    std::vector<Point> dots;
 };
 
 struct MoveProgramData
 {
-    std::vector<std::tuple<float,float>> dots;
+    std::vector<Point> dots;
 };
-
+}
 
 #endif // PROGRAMDATA_H

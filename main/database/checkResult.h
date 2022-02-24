@@ -7,6 +7,8 @@
 class Patient;
 class Program;
 
+
+
 class QX_DLL_EXPORT_API CheckResult{
 public:
 // -- typedef

@@ -28,14 +28,20 @@ INSTALLS += target
 
 # QxOrm 库相关配置
 INCLUDEPATH += $$PWD/../../../perimeter/third-part/QxOrm/include
+INCLUDEPATH += $$PWD/../../../perimeter/third-part/
 LIBS += -L$$PWD/../../../perimeter/third-part/QxOrm/lib
+LIBS += -L$$PWD/../../../perimeter/third-part/boost/lib
+
+
 
 # 设置生成的目标名称、添加依赖库
 CONFIG(debug, debug|release) {
     LIBS += -l"QxOrmd"
+#    LIBS += -l"libboost_serialization-vc140-mt-gd-x32-1_78"
     DESTDIR=$$PWD/../../bin/debug
 } else {
     LIBS += -l"QxOrm"
+#    LIBS += -l"libboost_serialization-vc140-mt-x32-1_78"
     DESTDIR=$$PWD/../../bin/release
 }
 

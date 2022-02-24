@@ -8,8 +8,8 @@ HEADERS += \
     $$PWD/Params.h \
     $$PWD/commonDef.h \
     $$PWD/programData.h \
-    $$PWD/program.h \
-    $$PWD/resultData.h
+    $$PWD/resultData.h \
+    $$PWD/programModel.h
 
 SOURCES +=
 

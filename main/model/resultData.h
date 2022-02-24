@@ -3,7 +3,7 @@
 #include <tuple>
 #include <vector>
 #include "Params.h"
-
+namespace Model{
 struct ResultData
 {
     int alarm;
@@ -20,6 +20,6 @@ struct ResultData
     int E_Light_pv;
     int T_Light_pv;
 };
-
+}
 
 #endif // CHECKRESULTDATA_H

@@ -93,60 +93,92 @@ static void gMsgHandler( QtMsgType type, const QMessageLogContext &ctxt, const Q
 
 }
 
+
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/serialization/list.hpp>
+#include <boost/serialization/vector.hpp>
+#include <perimeter/main/model/Params.h>
+int  main ( int argc, char *argv[] )
+{
+    //    Test::connectDataBase();
+    //    Test::createTable();
+    //    Test::createData();
+    //    Test::displayInfo();
+    //    Test::updateInfo();
+    //    Test::query();
+    //    Test::insertData();
+    //    Test::DeleteData();
+    //    Test::query2();
+    {
+        std::ofstream file("archive.xml");
+        std::stringstream str;
+        Model::StaticParams param{{{3,2},0},{}};
+        boost::archive::xml_oarchive oa(str);
+        boost::archive::xml_oarchive oa2(file);
+        oa& BOOST_SERIALIZATION_NVP(param);
+        oa2& BOOST_SERIALIZATION_NVP(param);
+        std::cout << str.str() << std::endl;
+    }
+
+
+    {
+        Model::StaticParams param2;
+        std::ifstream file2("archive.xml");
+        boost::archive::xml_iarchive ia(file2);
+        ia>>BOOST_SERIALIZATION_NVP(param2);
+        std::cout<<param2.commonParams.Range.x<<std::endl;
+    }
+
+    std::cout<<"heelfdsfsdfsfo\n"<<std::endl;
+}
+
+
 // ============================================================================
 // main entry
 // ============================================================================
 
-int  main ( int argc, char *argv[] )
+int  main2 ( int argc, char *argv[] )
 {
     int ret = 0;
     //handle the terminate signal
     signal( SIGTERM, & gSigTerm_Handler );
     qInstallMessageHandler( & gMsgHandler );
 
-    Test::connectDataBase();
-    Test::createTable();
-    Test::createData();
-    Test::displayInfo();
-//    Test::updateInfo();
-//    Test::query();
-//    Test::insertData();
-//    Test::DeleteData();
-//    Test::query2();
 
     // start the application
-//    gPrintMemCntr("pre-stage");
-//    {
-//        QGuiApplication app(argc, argv);
+    gPrintMemCntr("pre-stage");
+    {
+        QGuiApplication app(argc, argv);
 
-//        Perimeter::AppCtrl *app_ctrl = new Perimeter::AppCtrl;
-//        app_ctrl->doInit();
+        Perimeter::AppCtrl *app_ctrl = new Perimeter::AppCtrl;
+        app_ctrl->doInit();
 
-//        // --------------------------------------------------------------------
-//        // share the application controller into QML
-//        // --------------------------------------------------------------------
-//        QSharedPointer<QObject> s_app_ctrl( app_ctrl, [](QObject*){});
-//        QxPack::IcUiQmlApi::setAppCtrl( s_app_ctrl );
+        // --------------------------------------------------------------------
+        // share the application controller into QML
+        // --------------------------------------------------------------------
+        QSharedPointer<QObject> s_app_ctrl( app_ctrl, [](QObject*){});
+        QxPack::IcUiQmlApi::setAppCtrl( s_app_ctrl );
 
-//        // --------------------------------------------------------------------
-//        //  here create the main view
-//        // --------------------------------------------------------------------
-//        QQmlApplicationEngine *eng = new QQmlApplicationEngine;
-//        eng->addImportPath(QStringLiteral("qrc:/") );
+        // --------------------------------------------------------------------
+        //  here create the main view
+        // --------------------------------------------------------------------
+        QQmlApplicationEngine *eng = new QQmlApplicationEngine;
+        eng->addImportPath(QStringLiteral("qrc:/") );
 
-//        eng->load(QUrl(QLatin1String("qrc:/perimeter/main/view/Application.qml")));
+        eng->load(QUrl(QLatin1String("qrc:/perimeter/main/view/Application.qml")));
 
-//        gPrintMemCntr("enter eventloop stage");
-//        ret = app.exec();
-//        eng->deleteLater();
+        gPrintMemCntr("enter eventloop stage");
+        ret = app.exec();
+        eng->deleteLater();
 
 
-//        QxPack::IcAppDclPriv::barrier( 32 );
-//        app_ctrl->doDeinit();
-//        delete app_ctrl;
-//        QxPack::IcAppDclPriv::barrier( 32 );
-//    }
-//    gPrintMemCntr("post-stage");
+        QxPack::IcAppDclPriv::barrier( 32 );
+        app_ctrl->doDeinit();
+        delete app_ctrl;
+        QxPack::IcAppDclPriv::barrier( 32 );
+    }
+    gPrintMemCntr("post-stage");
 
 
     return ret;
