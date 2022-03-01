@@ -1,10 +1,7 @@
-﻿#ifndef COMMONDEF_H
-#define COMMONDEF_H
+﻿#ifndef POINT_H
+#define POINT_H
 
-const int MAXCHECK=400;
-const int MAXGRAY=400;
-const int MAXDB=40;
-
+namespace Model{
 struct Point
 {
     float x;
@@ -17,6 +14,8 @@ struct Point
     }
 
 };
+}
+
 
 #endif // COMMONDEF_H
 

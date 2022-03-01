@@ -98,39 +98,90 @@ static void gMsgHandler( QtMsgType type, const QMessageLogContext &ctxt, const Q
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/binary_object.hpp>
 #include <perimeter/main/model/Params.h>
+#include <perimeter/main/model/programData.h>
+//#include <perimeter/main/model/utility.h>
+
+void save()
+{
+    std::ofstream file("archive.xml");
+    std::stringstream str;
+    boost::archive::xml_oarchive oa(file);
+    float array[] = { 34.2, 78.1, 22.221, 1.0, -910.88 };
+    std::list<float> L1(array, array + 5);
+    std::vector<float> V1(array, array + 5);
+    oa<< BOOST_SERIALIZATION_NVP(L1);
+    oa<< BOOST_SERIALIZATION_NVP(V1);
+
+//    std::cout << str.str() << std::endl;
+}
+
+
+void load()
+{
+    std::ifstream file("archive.xml");
+    boost::archive::xml_iarchive ia(file);
+    std::list<float> L2;
+    ia >> BOOST_SERIALIZATION_NVP(L2); // No size/range needed
+
+    std::vector<float> V2;
+    ia >> BOOST_SERIALIZATION_NVP(V2); // No size/range needed
+
+    std::ostream_iterator<float> oi(std::cout, " ");
+    std::copy(L2.begin(), L2.end(), oi);
+    std::copy(V2.begin(), V2.end(), oi);
+}
+
+std::string  global_str;
+void save2()
+{
+    Model::StaticParams param{{{3,2},0},{}};
+    using strategy=Model::StaticParams::CommonParams::Strategy;
+    Model::StaticProgramData data{{strategy::fullThreshold,strategy::fastInterative},{{3.2f,2.5f},{4.5f,1.2f}}};
+    std::stringstream ss;
+    {                                           //必须括号主动调用析构函数,不然写入不全
+        boost::archive::xml_oarchive oa(ss);
+        oa<< BOOST_SERIALIZATION_NVP(param);
+    }
+    global_str=ss.str();
+    std::cout<<ss.str().c_str()<<std::endl;
+
+}
+
+void load2()
+{
+    Model::StaticParams t;
+    std::stringstream ss(global_str);
+    std::cout<<ss.str()<<std::endl;
+    boost::archive::xml_iarchive ia(ss);
+    ia>> BOOST_SERIALIZATION_NVP(t);
+
+//    std::ifstream file2("archive.xml");
+//    boost::archive::xml_iarchive ia2(file2);
+//    ia2>> BOOST_SERIALIZATION_NVP(t);
+    std::cout<<t.commonParams.Range.x<<std::endl;
+    std::cout<<std::endl;
+
+
+}
+
+
 int  main ( int argc, char *argv[] )
 {
-    //    Test::connectDataBase();
-    //    Test::createTable();
-    //    Test::createData();
-    //    Test::displayInfo();
-    //    Test::updateInfo();
-    //    Test::query();
-    //    Test::insertData();
-    //    Test::DeleteData();
-    //    Test::query2();
-    {
-        std::ofstream file("archive.xml");
-        std::stringstream str;
-        Model::StaticParams param{{{3,2},0},{}};
-        boost::archive::xml_oarchive oa(str);
-        boost::archive::xml_oarchive oa2(file);
-        oa& BOOST_SERIALIZATION_NVP(param);
-        oa2& BOOST_SERIALIZATION_NVP(param);
-        std::cout << str.str() << std::endl;
-    }
+
+//    save2();
+//    load2();
+//    system("pause");
 
 
-    {
-        Model::StaticParams param2;
-        std::ifstream file2("archive.xml");
-        boost::archive::xml_iarchive ia(file2);
-        ia>>BOOST_SERIALIZATION_NVP(param2);
-        std::cout<<param2.commonParams.Range.x<<std::endl;
-    }
+    Test::removeDataBase();
+    Test::connectDataBase();
+    Test::createTable();
+    Test::createData();
+    Test::displayInfo();
 
-    std::cout<<"heelfdsfsdfsfo\n"<<std::endl;
+    return  0;
 }
 
 

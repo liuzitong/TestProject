@@ -8,8 +8,11 @@
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/vector.hpp>
 #include <utility>
-#include "commondef.h"
-
+#include "Point.h"
+#include <QString>
+#include <sstream>
+#include <exception>
+#include <iostream>
 
 namespace Model{
 enum class CursorColor{white,red,blue};
@@ -20,6 +23,7 @@ enum class EyeMoveAlarmMode{dontAlarm,onlyAlarm,alarmAndPause};
 
 struct StaticParams
 {
+
     struct CommonParams
     {
         enum class Strategy{fullThreshold,smartInteractive,fastInterative,oneStage,twoStages,quantifyDefects};
@@ -29,7 +33,8 @@ struct StaticParams
         StrategyMode            strategyMode;               ON_OFF                      shortTermFluctuation;
         CursorColor             cursorColor;                FixationViewSelection       fixationViewSelection;
         BackGroundColor         backGroundColor;            EyeMoveAlarmMode            eyeMoveAlarmMode;
-        ON_OFF                  cyanYellowTest;               ON_OFF                      blindDotTest;
+        ON_OFF                  cyanYellowTest;             ON_OFF                      blindDotTest;
+
 
         template<class Archive>
         void serialize(Archive& archive, const unsigned int version)
@@ -86,6 +91,8 @@ struct StaticParams
         archive & BOOST_SERIALIZATION_NVP(commonParams);
         archive & BOOST_SERIALIZATION_NVP(fixedParams);
     }
+
+
 };
 
 struct MoveParams
@@ -95,12 +102,38 @@ struct MoveParams
     enum class CursorSize{I,_II,III,IV,V};
     enum class MoveMethod{_4Lines,_6Lines,_8Lines};
     enum class MoveDistance{_5,_10,_15};
-    std::tuple<int,int>         Range;                      FixationViewSelection   fixationViewSelection;
+    Point                       Range;                      FixationViewSelection   fixationViewSelection;
                                                             float                   spead;
     Strategy                    strategy;                   int                     brightness;
     CursorColor                 cursorColor;                MoveMethod              moveMethod;
     CursorSize                  cursorSize;                 MoveDistance            moveDistance;
     BackGroundColor             backGroudColor;             EyeMoveAlarmMode        eyeMoveAlarmMode;
+
+    template<class Archive>
+    void serialize(Archive& archive, const unsigned int version)
+    {
+        archive & BOOST_SERIALIZATION_NVP(Range);
+        archive & BOOST_SERIALIZATION_NVP(strategy);
+        archive & BOOST_SERIALIZATION_NVP(cursorColor);
+        archive & BOOST_SERIALIZATION_NVP(cursorSize);
+        archive & BOOST_SERIALIZATION_NVP(backGroudColor);
+        archive & BOOST_SERIALIZATION_NVP(fixationViewSelection);
+        archive & BOOST_SERIALIZATION_NVP(spead);
+        archive & BOOST_SERIALIZATION_NVP(brightness);
+        archive & BOOST_SERIALIZATION_NVP(moveMethod);
+        archive & BOOST_SERIALIZATION_NVP(moveDistance);
+        archive & BOOST_SERIALIZATION_NVP(eyeMoveAlarmMode);
+    }
+
+//    QString ToQString()
+//    {
+//        std::stringstream ss;
+//        boost::archive::xml_oarchive oa(ss);
+//        oa& BOOST_SERIALIZATION_NVP(*this);
+//        return ss.str().c_str();
+//    }
 };
+
+
 }
 #endif // PARAMS_H

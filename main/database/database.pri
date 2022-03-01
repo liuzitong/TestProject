@@ -17,11 +17,9 @@ HEADERS += \
     $$PWD/patientVm.h
 
 SOURCES += \
-    $$PWD/patient.cpp \
-    $$PWD/program.cpp \
-    $$PWD/checkResult.cpp \
     $$PWD/checkResultVm.cpp \
     $$PWD/databaseSvc.cpp \
     $$PWD/patientListModel.cpp \
-    $$PWD/patientVm.cpp
+    $$PWD/patientVm.cpp \
+    $$PWD/qx_register.cpp
 

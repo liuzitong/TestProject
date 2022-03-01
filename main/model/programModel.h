@@ -3,6 +3,7 @@
 #include "Params.h"
 #include "programData.h"
 #include "../database/program.h"
+#include <string>
 namespace Model{
 
 template <Program::Type T>
@@ -34,6 +35,7 @@ template <Program::Type type>
 struct ProgramModel
 {
 public:
+
     typename ProgramTraits<type>::params params;
     typename ProgramTraits<type>::data data;
     Program::Category category;
