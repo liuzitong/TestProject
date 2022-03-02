@@ -8,23 +8,21 @@
 class CheckResult;
 class QX_DLL_EXPORT_API Program{
 public:
-    enum class Type { ThreshHold=0, Screening,Move  };
-    enum class Category { ThreshHold=0, Screening,Special,Move,Custom  };
 // -- typedef
     typedef std::shared_ptr<CheckResult> CheckResult_ptr;
     typedef std::vector<CheckResult_ptr> CheckResult_List;
 
     long m_id;
-    Type m_type;
+    int m_type;
     QString m_name;
     QString m_params;
     QString m_data;
-    Category m_category;
+    int m_category;
     CheckResult_List m_checkResultX;
     Program()=default;
-    Program(Type type,QString name,QString params,QString data,Category category=Category::Custom):
+    Program(int type,QString name,QString params,QString data,int category=4):
         m_type(type),m_name(name),m_params(params),m_data(data),m_category(category){}
-    Program(long id,Type type,QString name,QString params,QString data,Category category=Category::Custom):
+    Program(long id,int type,QString name,QString params,QString data,int category=4):
         m_id(id),m_type(type),m_name(name),m_params(params),m_data(data),m_category(category){}
     virtual ~Program(){}
 };

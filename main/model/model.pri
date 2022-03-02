@@ -6,12 +6,10 @@ DEFINES += _BUILDING_QX_API
 
 HEADERS += \
     $$PWD/Params.h \
-    $$PWD/programData.h \
-    $$PWD/resultData.h \
     $$PWD/programModel.h \
     $$PWD/Point.h \
-    $$PWD/utility.h
+    $$PWD/utility.h \
+    $$PWD/checkResultModel.h
 
-SOURCES += \
-    $$PWD/utility.cpp
+SOURCES +=
 

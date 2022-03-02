@@ -164,12 +164,12 @@ public:
         CheckResult_ptr checkResult_1,checkResult_2,checkResult_3,checkResult_4;
         Program_ptr program_1,program_2;
         program_1.reset(new Program);
-        program_2.reset(new Program(Program::Type::ThreshHold,"30-2","program2 params","program2 data"));
+        program_2.reset(new Program(4,"30-2","program2 params","program2 data"));
 
         program_1->m_id=1;
         program_1->m_data="program1data";
         program_1->m_name="24-2";
-        program_1->m_type=Program::Type::ThreshHold;
+        program_1->m_type=4;
         program_1->m_params="ttt";
         program_1->m_data="bbbb";
 

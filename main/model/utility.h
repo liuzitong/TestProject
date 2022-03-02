@@ -18,12 +18,15 @@ class Utility
 public:
     Utility()=default;
     template<typename T>
-    std::string static entityToQString(T t)
+    QString static entityToQString(T t)
     {
         std::stringstream ss;
-        boost::archive::xml_oarchive oa(ss);
-        oa<< BOOST_SERIALIZATION_NVP(t);
-        return ss.str();
+        {
+            boost::archive::xml_oarchive oa(ss);
+            oa<< BOOST_SERIALIZATION_NVP(t);
+        }
+//        std::cout<<ss.str()<<std::endl;
+        return QString(ss.str().c_str());
 //        return ss.str().c_str();
     }
     template<typename T>

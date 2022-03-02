@@ -90,7 +90,6 @@ static void gMsgHandler( QtMsgType type, const QMessageLogContext &ctxt, const Q
 #else
     std::fprintf( stderr, fmt_str.toUtf8().constData() );
 #endif
-
 }
 
 
@@ -100,8 +99,8 @@ static void gMsgHandler( QtMsgType type, const QMessageLogContext &ctxt, const Q
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/binary_object.hpp>
 #include <perimeter/main/model/Params.h>
-#include <perimeter/main/model/programData.h>
-//#include <perimeter/main/model/utility.h>
+#include <perimeter/main/model/utility.h>
+#include <perimeter/main/model/programModel.h>
 
 void save()
 {
@@ -137,8 +136,8 @@ std::string  global_str;
 void save2()
 {
     Model::StaticParams param{{{3,2},0},{}};
-    using strategy=Model::StaticParams::CommonParams::Strategy;
-    Model::StaticProgramData data{{strategy::fullThreshold,strategy::fastInterative},{{3.2f,2.5f},{4.5f,1.2f}}};
+    using strategy=Model::Strategy;
+    Model::StaticProgramData<Model::Type::ThreshHold> data{{strategy::fullThreshold,strategy::fastInterative},{{3.2f,2.5f},{4.5f,1.2f}}};
     std::stringstream ss;
     {                                           //必须括号主动调用析构函数,不然写入不全
         boost::archive::xml_oarchive oa(ss);
@@ -146,7 +145,6 @@ void save2()
     }
     global_str=ss.str();
     std::cout<<ss.str().c_str()<<std::endl;
-
 }
 
 void load2()
@@ -156,30 +154,42 @@ void load2()
     std::cout<<ss.str()<<std::endl;
     boost::archive::xml_iarchive ia(ss);
     ia>> BOOST_SERIALIZATION_NVP(t);
-
-//    std::ifstream file2("archive.xml");
-//    boost::archive::xml_iarchive ia2(file2);
-//    ia2>> BOOST_SERIALIZATION_NVP(t);
     std::cout<<t.commonParams.Range.x<<std::endl;
     std::cout<<std::endl;
-
-
 }
 
 
 int  main ( int argc, char *argv[] )
 {
+    Model::ProgramModel<Model::Type::ThreshHold> pm;
+    pm.m_type=Model::Type::Screening;pm.m_params={{{3,2},0},{}};
+    pm.m_name="30-2";
+    using strategy=Model::Strategy;
+    pm.m_data.strategies={strategy::fullThreshold,strategy::fastInterative};
+    pm.m_data.dots={{2,3},{55,2}};
+    pm.m_category=Model::Category::Custom;
 
-//    save2();
-//    load2();
-//    system("pause");
+    auto pp=pm.ModelToDB();
+    std::cout<<pp->m_params.toStdString()<<std::endl;
+    std::cout<<pp->m_data.toStdString()<<std::endl;
+
+    Model::ProgramModel<Model::Type::Screening> pm2(pp);
+    std::cout<<pm2.m_data.dots[0].x<<std::endl;
+    std::cout<<pm2.m_data.dots[0].y<<std::endl;
 
 
-    Test::removeDataBase();
+//    Test::removeDataBase();
     Test::connectDataBase();
-    Test::createTable();
-    Test::createData();
+//    Test::createTable();
+//    Test::createData();
     Test::displayInfo();
+
+    QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
+    bool bCommit = db.transaction();
+    QSqlError daoError = qx::dao::insert(pp, &db);
+    bCommit = (bCommit && ! daoError.isValid());
+    qAssert(bCommit);
+    db.commit();
 
     return  0;
 }

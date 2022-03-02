@@ -16,6 +16,7 @@ public:
     typedef std::shared_ptr<Program> Program_ptr;
 
     long m_id;
+    int m_type;
     QString m_params;
     QString m_data;
     QDateTime m_time;

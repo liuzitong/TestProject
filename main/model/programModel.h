@@ -1,46 +1,84 @@
 ﻿#ifndef PROGRAM_MODEL
 #define PROGRAM_MODEL
 #include "Params.h"
-#include "programData.h"
+#include "Point.h"
 #include "../database/program.h"
-#include <string>
+#include "utility.h"
+
 namespace Model{
-
-template <Program::Type T>
-struct ProgramTraits{};
-
-template <>
-struct ProgramTraits<Program::Type::ThreshHold>
+template <Type type>
+struct StaticProgramData
 {
-    typedef StaticParams params;
-    typedef StaticProgramData data;
+    std::vector<typename Model::Strategy> strategies;
+    std::vector<Point> dots;
+    template<class Archive>
+    void serialize(Archive& archive, const unsigned int version)
+    {
+        archive & BOOST_SERIALIZATION_NVP(strategies);
+        archive & BOOST_SERIALIZATION_NVP(dots);
+    }
+};
+
+struct MoveProgramData
+{
+    std::vector<Point> dots;
+    template<class Archive>
+    void serialize(Archive& archive, const unsigned int version)
+    {
+        archive & BOOST_SERIALIZATION_NVP(dots);
+    }
+};
+
+
+template <Type type>
+struct ProgramDataTraits
+{
+    typedef StaticProgramData<type> data;
 };
 
 template <>
-struct ProgramTraits<Program::Type::Screening>
+struct ProgramDataTraits<Type::Move>
 {
-    typedef StaticParams params;
-    typedef StaticProgramData data;
-};
-
-template <>
-struct ProgramTraits<Program::Type::Move>
-{
-    typedef MoveParams params;
     typedef MoveProgramData data;
 };
 
 
-template <Program::Type type>
+
+template <Type type>
 struct ProgramModel
 {
 public:
+    long m_id;
+    Type m_type;
+    QString m_name;
+    typename ParamTraits<type>::params m_params;
+    typename ProgramDataTraits<type>::data m_data;
+    Category m_category;
 
-    typename ProgramTraits<type>::params params;
-    typename ProgramTraits<type>::data data;
-    Program::Category category;
+    ProgramModel()=default;
+
+    ProgramModel(Program_ptr pp)
+    {
+        m_id=pp->m_id;
+        m_type=static_cast<Type>(pp->m_type);
+        m_name=pp->m_name;
+        m_params=Utility::QStringToEntity<ParamTraits<type>::params>(pp->m_params);
+        m_data=Utility::QStringToEntity<ProgramDataTraits<type>::data>(pp->m_data);
+        m_category=static_cast<Category>(pp->m_category);
+    }
+
+    Program_ptr ModelToDB()
+    {
+        auto pp=Program_ptr(new Program());
+        pp->m_id=m_id;
+        pp->m_type=static_cast<int>(m_type);
+        pp->m_name=m_name;
+        pp->m_params=Utility::entityToQString(m_params);
+        pp->m_data=Utility::entityToQString(m_data);
+        pp->m_category=static_cast<int>(m_category);
+        return pp;
+    }
 };
-
 }
 #endif // PROGRAM_H
 

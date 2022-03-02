@@ -16,20 +16,21 @@
 
 namespace Model{
 enum class CursorColor{white,red,blue};
-enum class StrategyMode{ageRelated,ThresholdRelated,singleStimulation};
 enum class BackGroundColor{white,yellow};
 enum class FixationViewSelection{centerPoint,smallDiamond,bigDiamond,bottomPoint};
 enum class EyeMoveAlarmMode{dontAlarm,onlyAlarm,alarmAndPause};
+enum class Type { ThreshHold=0, Screening,Move  };
+enum class Category { ThreshHold=0, Screening,Special,Move,Custom  };
+enum class Strategy{oneStage,twoStages,quantifyDefects,singleStimulation,fullThreshold,smartInteractive,fastInterative};
 
 struct StaticParams
 {
-
     struct CommonParams
     {
-        enum class Strategy{fullThreshold,smartInteractive,fastInterative,oneStage,twoStages,quantifyDefects};
+        enum class StrategyMode{ageRelated,ThresholdRelated};
         Point        Range;                                 ON_OFF                      responseAutoAdapt;
         /*int                     DotCount;*/               int                         intervalTime;
-        Strategy                strategy;                   ON_OFF                      centeralDotCheck;
+        Strategy                strategy;                 ON_OFF                        centeralDotCheck;
         StrategyMode            strategyMode;               ON_OFF                      shortTermFluctuation;
         CursorColor             cursorColor;                FixationViewSelection       fixationViewSelection;
         BackGroundColor         backGroundColor;            EyeMoveAlarmMode            eyeMoveAlarmMode;
@@ -91,8 +92,6 @@ struct StaticParams
         archive & BOOST_SERIALIZATION_NVP(commonParams);
         archive & BOOST_SERIALIZATION_NVP(fixedParams);
     }
-
-
 };
 
 struct MoveParams
@@ -134,6 +133,18 @@ struct MoveParams
 //    }
 };
 
+template <Type T>
+struct ParamTraits
+{
+    typedef StaticParams params;
+};
+
+
+template <>
+struct ParamTraits<Type::Move>
+{
+    typedef MoveParams params;
+};
 
 }
 #endif // PARAMS_H

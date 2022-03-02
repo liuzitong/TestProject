@@ -32,7 +32,7 @@ public:
     Q_INVOKABLE void getPatientBySex(int sex,QDate from,QDate to);
     Q_INVOKABLE void getPatientByBirthDate(QDate date);
 
-    Q_INVOKABLE void addProgram(Program::Type type,QString name,QString params,QString data,Program::Category category=Program::Category::Custom);
+    Q_INVOKABLE void addProgram(int type,QString name,QString params,QString data,int category=4);
 //    Q_INVOKABLE void addCheckResult(QString params,QString data,QDateTime time,Patient_ptr patient,Program_ptr program);
 
 private:
