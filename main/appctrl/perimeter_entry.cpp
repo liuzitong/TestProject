@@ -17,7 +17,7 @@
 #include "qxpack/indcom/sys/qxpack_ic_eventloopbarrier.hxx"
 #include "qxpack/indcom/sys/qxpack_ic_appdcl_priv.hxx"
 #include "qxpack/indcom/ui_qml_base/qxpack_ic_ui_qml_api.hxx"
-#include "perimeter/main/appctrl/test.cpp"
+#include "perimeter/main/appctrl/test.hpp"
 
 
 #include <cstdio>
@@ -154,42 +154,44 @@ void load2()
     std::cout<<ss.str()<<std::endl;
     boost::archive::xml_iarchive ia(ss);
     ia>> BOOST_SERIALIZATION_NVP(t);
-    std::cout<<t.commonParams.Range.x<<std::endl;
+    std::cout<<t.commonParams.Range[0]<<std::endl;
     std::cout<<std::endl;
 }
 
 
-int  main ( int argc, char *argv[] )
+int  main2 ( int argc, char *argv[] )
 {
-    Model::ProgramModel<Model::Type::ThreshHold> pm;
-    pm.m_type=Model::Type::Screening;pm.m_params={{{3,2},0},{}};
-    pm.m_name="30-2";
-    using strategy=Model::Strategy;
-    pm.m_data.strategies={strategy::fullThreshold,strategy::fastInterative};
-    pm.m_data.dots={{2,3},{55,2}};
-    pm.m_category=Model::Category::Custom;
+//    Model::ProgramModel<Model::Type::ThreshHold> pm;
+//    pm.m_type=Model::Type::Screening;pm.m_params={{{3,2},0},{}};
+//    pm.m_name="30-2";
+//    using strategy=Model::Strategy;
+//    pm.m_data.strategies={strategy::fullThreshold,strategy::fastInterative};
+//    pm.m_data.dots={{2,3},{55,2}};
+//    pm.m_category=Model::Category::Custom;
 
-    auto pp=pm.ModelToDB();
-    std::cout<<pp->m_params.toStdString()<<std::endl;
-    std::cout<<pp->m_data.toStdString()<<std::endl;
+//    auto pp=pm.ModelToDB();
+//    std::cout<<pp->m_params.toStdString()<<std::endl;
+//    std::cout<<pp->m_data.toStdString()<<std::endl;
 
-    Model::ProgramModel<Model::Type::Screening> pm2(pp);
-    std::cout<<pm2.m_data.dots[0].x<<std::endl;
-    std::cout<<pm2.m_data.dots[0].y<<std::endl;
+//    Model::ProgramModel<Model::Type::Screening> pm2(pp);
+//    std::cout<<pm2.m_data.dots[0].x<<std::endl;
+//    std::cout<<pm2.m_data.dots[0].y<<std::endl;
 
 
-//    Test::removeDataBase();
+
+    Test::removeDataBase();
     Test::connectDataBase();
-//    Test::createTable();
-//    Test::createData();
-    Test::displayInfo();
+    Test::createTable();
+    Test::createEntityData();
+    Test::GetEntityData();
+//    Test::displayInfo();
 
-    QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
-    bool bCommit = db.transaction();
-    QSqlError daoError = qx::dao::insert(pp, &db);
-    bCommit = (bCommit && ! daoError.isValid());
-    qAssert(bCommit);
-    db.commit();
+//    QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
+//    bool bCommit = db.transaction();
+//    QSqlError daoError = qx::dao::insert(pp, &db);
+//    bCommit = (bCommit && ! daoError.isValid());
+//    qAssert(bCommit);
+//    db.commit();
 
     return  0;
 }
@@ -199,7 +201,7 @@ int  main ( int argc, char *argv[] )
 // main entry
 // ============================================================================
 
-int  main2 ( int argc, char *argv[] )
+int  main ( int argc, char *argv[] )
 {
     int ret = 0;
     //handle the terminate signal

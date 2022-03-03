@@ -41,7 +41,6 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 //                                    ListModel {id:ggg
 //                                        ListElement {name: "Bill Smith";number: "555 3264" }
 //                                        ListElement { name: "John Brown"; number: "555 8426";}
-//                                        }
 //                                    }
                                 }
                             }
@@ -131,7 +130,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                 CusButton{text:"取消";height: parent.width*0.3;width: parent.width;}
                                 CusButton{text:"保存";height: parent.width*0.3;width: parent.width;}
                                 CusButton{text:"删除";height: parent.width*0.3;width: parent.width;}
-                                CusButton{text:"清除";height: parent.width*0.3;width: parent.width;}
+//                                CusButton{text:"清除";height: parent.width*0.3;width: parent.width;}
                                 CusButton{text:"复制";height: parent.width*0.3;width: parent.width;}
                             }
                         }

@@ -10,7 +10,10 @@
 #include "perimeter/main/database/patient.h"
 #include "perimeter/main/database/program.h"
 #include "perimeter/main/database/patient.h"
-
+#include <perimeter/main/model/Params.h>
+#include <perimeter/main/model/utility.h>
+#include <perimeter/main/model/programModel.h>
+#include <perimeter/main/model/checkresultmodel.h>
 
 class Test{
 public:
@@ -66,6 +69,7 @@ public:
         for(auto& i:CheckResult_List)
             std::cout<<i->m_id<<" "<<" "<<i->m_params.toStdString()<<" "<<i->m_data.toStdString()<<" "
                      <<i->m_time.toString("yyyy-MM-dd HH:mm::ss").toStdString()<<" "<<i->m_patient->m_patinetId.toStdString()<<" "<<i->m_program->m_id<<std::endl;
+
         std::cout<<std::endl;
     }
 
@@ -207,5 +211,74 @@ public:
         bCommit = (bCommit && ! daoError.isValid());
         qAssert(bCommit);
         db.commit();
+
+
+    }
+
+
+    void static createEntityData()
+    {
+        Model::ProgramModel<Model::Type::ThreshHold> pm;
+        pm.m_type=Model::Type::ThreshHold;pm.m_params={{{3,2},0},{}};
+        pm.m_name="30-2";
+        using strategy=Model::Strategy;
+        pm.m_data.strategies={strategy::fullThreshold,strategy::fastInterative};
+        pm.m_data.dots={{2,3},{55,2}};
+        pm.m_category=Model::Category::Custom;
+        auto pm_ptr=pm.ModelToDB();
+
+        Patient_ptr pp_ptr(new Patient("50022","lzt",Patient::sex::male,QDate::currentDate()));
+
+        Model::CheckResultModel<Model::Type::ThreshHold> crm;
+        crm.m_type=Model::Type::ThreshHold;
+        crm.m_params={{{3,2},0,60,Model::Strategy::fullThreshold,false,Model::StaticParams::CommonParams::StrategyMode::ageRelated,false,Model::CursorColor::red},{300,30,100,20,20,10,30,10}};
+        crm.m_data={1,2,3,4,10,5,3,2,3,1,3,{3,2,3,2},{11,223,11,22,33,22},{2,4,2,3,5,2,33,55,32,33}};
+        crm.m_time=QDateTime::currentDateTime();
+        auto cr_ptr=crm.ModelToDB(pp_ptr,pm_ptr);
+
+        QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
+        bool bCommit = db.transaction();
+
+        QSqlError daoError;
+        daoError = qx::dao::insert(pp_ptr, &db);
+        daoError = qx::dao::insert(pm_ptr, &db);
+        daoError = qx::dao::insert(cr_ptr, &db);
+        bCommit = (bCommit && ! daoError.isValid());
+        qAssert(bCommit);
+        db.commit();
+    }
+
+    void static GetEntityData()
+    {
+        CheckResult_List CheckResult_List;
+
+        qx_query query("select * from checkResult");
+        QSqlError daoError = qx::dao::execute_query(query, CheckResult_List);
+
+//        std::cout<<"*****checkResult_list****"<<std::endl;
+//        for(auto& i:CheckResult_List)
+//            std::cout<<i->m_id<<" "<<" "<<i->m_params.toStdString()<<" "<<i->m_data.toStdString()<<" "
+//                     <<i->m_time.toString("yyyy-MM-dd HH:mm::ss").toStdString()<<" "<<i->m_patient->m_patinetId.toStdString()<<" "<<i->m_program->m_id<<std::endl;
+
+        auto checkResult_ptr=CheckResult_List.front();
+        std::cout<<checkResult_ptr->m_params.toStdString()<<std::endl;
+        std::cout<<checkResult_ptr->m_data.toStdString()<<std::endl;
+
+        query.clear();
+        query.where("program_id").isEqualTo(int(checkResult_ptr->m_program->m_id));
+        daoError = qx::dao::fetch_by_query(query, checkResult_ptr->m_program);;
+
+        std::cout<<checkResult_ptr->m_program->m_name.toStdString()<<std::endl;
+
+
+        query.clear();
+        query.where("id").isEqualTo(int(checkResult_ptr->m_patient->m_id));
+        daoError = qx::dao::fetch_by_query(query, checkResult_ptr->m_patient);
+
+        std::cout<<checkResult_ptr->m_patient->m_name.toStdString()<<std::endl;
+
+
+        auto checkresultModel=Model::CheckResultModel<Model::Type::ThreshHold>(checkResult_ptr);
+        std::cout<<checkresultModel.m_programModel.m_params.commonParams.Range[0]<<std::endl;
     }
 };

@@ -21,16 +21,16 @@ enum class FixationViewSelection{centerPoint,smallDiamond,bigDiamond,bottomPoint
 enum class EyeMoveAlarmMode{dontAlarm,onlyAlarm,alarmAndPause};
 enum class Type { ThreshHold=0, Screening,Move  };
 enum class Category { ThreshHold=0, Screening,Special,Move,Custom  };
-enum class Strategy{oneStage,twoStages,quantifyDefects,singleStimulation,fullThreshold,smartInteractive,fastInterative};
+enum class Strategy{fullThreshold,smartInteractive,fastInterative,oneStage,twoStages,quantifyDefects,singleStimulation};
 
 struct StaticParams
 {
     struct CommonParams
     {
         enum class StrategyMode{ageRelated,ThresholdRelated};
-        Point        Range;                                 ON_OFF                      responseAutoAdapt;
+        int                     Range[2];                   ON_OFF                      responseAutoAdapt;
         /*int                     DotCount;*/               int                         intervalTime;
-        Strategy                strategy;                 ON_OFF                        centeralDotCheck;
+        Strategy                strategy;                   ON_OFF                        centeralDotCheck;
         StrategyMode            strategyMode;               ON_OFF                      shortTermFluctuation;
         CursorColor             cursorColor;                FixationViewSelection       fixationViewSelection;
         BackGroundColor         backGroundColor;            EyeMoveAlarmMode            eyeMoveAlarmMode;
