@@ -1,4 +1,4 @@
-#include "PatientVm.h"
+﻿#include "PatientVm.h"
 #include "patient.h"
 #include "perimeter/base/common/perimeter_def.h"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
@@ -55,12 +55,12 @@ void PatientVm::setID(long value)
 
 QString PatientVm::getPatientID()
 {
-   return T_PrivPtr( m_patient )->m_patinetId;
+   return T_PrivPtr( m_patient )->m_patientId;
 }
 
 void PatientVm::setPatientID(QString value)
 {
-    T_PrivPtr( m_patient )->m_patinetId=value;
+    T_PrivPtr( m_patient )->m_patientId=value;
 }
 
 QString PatientVm::getName()
@@ -75,7 +75,7 @@ void PatientVm::setName(QString value)
 
 int PatientVm::getSex()
 {
-    return T_PrivPtr( m_patient )->m_sex;
+    return static_cast<int>(T_PrivPtr( m_patient )->m_sex);
 }
 
 void PatientVm::setSex(int value)

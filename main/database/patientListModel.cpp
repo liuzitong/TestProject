@@ -1,4 +1,4 @@
-#include "patientListModel.h"
+﻿#include "patientListModel.h"
 #include "patientVm.h"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
 #include <QList>
@@ -23,10 +23,10 @@ public:
         switch (role)
         {
         case (PatientRoles::Id):return (int)pp->m_id;
-        case (PatientRoles::patientId): return pp->m_patinetId;
+        case (PatientRoles::patientId): return pp->m_patientId;
         case (PatientRoles::name): return pp->m_name;
         case (PatientRoles::birthDate): return pp->m_birthDate.toString("yyyy-MM-dd");
-        case (PatientRoles::sex): return pp->m_sex;
+        case (PatientRoles::sex): return static_cast<int>(pp->m_sex);
         case (PatientRoles::lastUpdate): return pp->m_lastUpdate;
         default:return QVariant();
         }

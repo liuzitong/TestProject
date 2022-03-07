@@ -69,8 +69,8 @@ static void gMsgHandler( QtMsgType type, const QMessageLogContext &ctxt, const Q
     } break;
 
     case QtWarningMsg : {
-        fmt_str = QString("[Warn ] 0x%1 %2 ( ln:%3, %4 %5 )\n")
-                  .arg( t_id, 0, 16 ).arg( msg ).arg( ctxt.line ).arg( QString( ctxt.function )).arg( tmp );
+//        fmt_str = QString("[Warn ] 0x%1 %2 ( ln:%3, %4 %5 )\n")
+//                  .arg( t_id, 0, 16 ).arg( msg ).arg( ctxt.line ).arg( QString( ctxt.function )).arg( tmp );
     } break;
 
     case QtCriticalMsg : {
@@ -85,11 +85,14 @@ static void gMsgHandler( QtMsgType type, const QMessageLogContext &ctxt, const Q
     }   abort();
     }
 
-#if defined(_MSC_VER)
-    OutputDebugStringW( reinterpret_cast<LPCWSTR>( fmt_str.constData()) );
-#else
-    std::fprintf( stderr, fmt_str.toUtf8().constData() );
-#endif
+
+std::fprintf( stderr, fmt_str.toUtf8().constData() );
+
+//#if defined(_MSC_VER)
+//    OutputDebugStringW( reinterpret_cast<LPCWSTR>( fmt_str.constData()) );
+//#else
+//    std::fprintf( stderr, fmt_str.toUtf8().constData() );
+//#endif
 }
 
 
@@ -135,9 +138,9 @@ void load()
 std::string  global_str;
 void save2()
 {
-    Model::StaticParams param{{{3,2},0},{}};
-    using strategy=Model::Strategy;
-    Model::StaticProgramData<Model::Type::ThreshHold> data{{strategy::fullThreshold,strategy::fastInterative},{{3.2f,2.5f},{4.5f,1.2f}}};
+    StaticParams param{{{3,2},0},{}};
+    using strategy=StaticParams::CommonParams::Strategy;
+    StaticProgramData<Type::ThreshHold> data{{strategy::fullThreshold,strategy::fastInterative},{{3.2f,2.5f},{4.5f,1.2f}}};
     std::stringstream ss;
     {                                           //必须括号主动调用析构函数,不然写入不全
         boost::archive::xml_oarchive oa(ss);
@@ -149,7 +152,7 @@ void save2()
 
 void load2()
 {
-    Model::StaticParams t;
+    StaticParams t;
     std::stringstream ss(global_str);
     std::cout<<ss.str()<<std::endl;
     boost::archive::xml_iarchive ia(ss);
@@ -159,21 +162,21 @@ void load2()
 }
 
 
-int  main2 ( int argc, char *argv[] )
+int  main1 ( int argc, char *argv[] )
 {
-//    Model::ProgramModel<Model::Type::ThreshHold> pm;
-//    pm.m_type=Model::Type::Screening;pm.m_params={{{3,2},0},{}};
+//    Program<Type::ThreshHold> pm;
+//    pm.m_type=Type::Screening;pm.m_params={{{3,2},0},{}};
 //    pm.m_name="30-2";
-//    using strategy=Model::Strategy;
+//    using strategy=Strategy;
 //    pm.m_data.strategies={strategy::fullThreshold,strategy::fastInterative};
 //    pm.m_data.dots={{2,3},{55,2}};
-//    pm.m_category=Model::Category::Custom;
+//    pm.m_category=Category::Custom;
 
 //    auto pp=pm.ModelToDB();
 //    std::cout<<pp->m_params.toStdString()<<std::endl;
 //    std::cout<<pp->m_data.toStdString()<<std::endl;
 
-//    Model::ProgramModel<Model::Type::Screening> pm2(pp);
+//    Program<Type::Screening> pm2(pp);
 //    std::cout<<pm2.m_data.dots[0].x<<std::endl;
 //    std::cout<<pm2.m_data.dots[0].y<<std::endl;
 

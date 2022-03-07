@@ -10,7 +10,6 @@
 #include "utility.h"
 
 
-namespace Model{
 
 template<Type T>
 struct CheckDataTraits
@@ -106,7 +105,7 @@ struct CheckResultModel
 
 
 };
-}
+
 
 
 

@@ -9,6 +9,8 @@
 #include <QFile>
 #include "qxpack/indcom/common/qxpack_ic_global.hxx"
 #include <QDebug.h>
+#include "../model/Params.h"
+#include "../viewModel/paramsvm.h"
 
 namespace Perimeter {
 
@@ -182,6 +184,21 @@ void databaseSvc::addProgram(int type, QString name, QString params, QString dat
     QSqlError daoError = qx::dao::insert(program_ptr);
 }
 
+QObject *databaseSvc::getParams()
+{
+    StaticParams* param=new StaticParams{{{3,2},false,100,StaticParams::CommonParams::Strategy::fullThreshold},{100,200}};
+    StaticParamsVM* paramVM=new StaticParamsVM(param);
+    return paramVM;
+}
+
+QObject *databaseSvc::getPatient()
+{
+    auto patient_ptr=new Patient();
+    patient_ptr->m_name="gauss dog";
+    patient_ptr->m_patientId="5001";
+    return new PatientVm(patient_ptr);
+}
+
 
 
 QObject *databaseSvc::getPatientListModel()
@@ -197,7 +214,7 @@ void databaseSvc::updatePatient(long id,QString patientId, QString name, int sex
     query.bind(":id",QString::number(id));
     QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
     Patient_ptr pp = Patient_List.front();
-    pp->m_patinetId=patientId;pp->m_name=name;pp->m_sex=Patient::sex(sex);pp->m_birthDate=date;pp->m_lastUpdate=QDateTime::currentDateTime();
+    pp->m_patientId=patientId;pp->m_name=name;pp->m_sex=Patient::sex(sex);pp->m_birthDate=date;pp->m_lastUpdate=QDateTime::currentDateTime();
     daoError = qx::dao::update(pp);
 }
 

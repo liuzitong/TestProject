@@ -5,11 +5,11 @@
 #include "../database/program.h"
 #include "utility.h"
 
-namespace Model{
+
 template <Type type>
 struct StaticProgramData
 {
-    std::vector<typename Model::Strategy> strategies;
+    std::vector<typename StaticParams::CommonParams::Strategy> strategies;
     std::vector<Point> dots;
     template<class Archive>
     void serialize(Archive& archive, const unsigned int version)
@@ -79,6 +79,6 @@ public:
         return pp;
     }
 };
-}
+
 #endif // PROGRAM_H
 

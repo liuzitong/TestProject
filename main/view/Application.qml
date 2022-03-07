@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -27,6 +27,12 @@ Window {
         idPriv.init();
         content.changePage.connect(changePage);
         login.changePage.connect(changePage);
+        var patient=IcUiQmlApi.appCtrl.databaseSvc.getPatient();
+        console.log("ssss");
+        console.log(patient.name);
+        var param=IcUiQmlApi.appCtrl.databaseSvc.getParams();
+        console.log(param.commonParams.Range[0]);
+        console.log(param.commonParams.Range[1]);
     }
 
     function changePage(pageName)

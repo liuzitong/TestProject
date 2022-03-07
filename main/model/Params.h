@@ -13,29 +13,34 @@
 #include <sstream>
 #include <exception>
 #include <iostream>
+#include <QObject>
 
-namespace Model{
+
 enum class CursorColor{white,red,blue};
 enum class BackGroundColor{white,yellow};
 enum class FixationViewSelection{centerPoint,smallDiamond,bigDiamond,bottomPoint};
 enum class EyeMoveAlarmMode{dontAlarm,onlyAlarm,alarmAndPause};
 enum class Type { ThreshHold=0, Screening,Move  };
 enum class Category { ThreshHold=0, Screening,Special,Move,Custom  };
-enum class Strategy{fullThreshold,smartInteractive,fastInterative,oneStage,twoStages,quantifyDefects,singleStimulation};
 
-struct StaticParams
+
+struct StaticParams/*:public QObject*/
 {
-    struct CommonParams
+//    Q_OBJECT
+//    Q_PROPERTY(QObject commonParams READ getCommonParams WRITE setCommonParams)
+//    Q_PROPERTY(QObject patientId READ getPatientID WRITE setPatientID)
+    struct CommonParams/*:public QObject*/
     {
+        enum class Strategy{fullThreshold,smartInteractive,fastInterative,oneStage,twoStages,quantifyDefects,singleStimulation};
+//        Q_OBJECT
         enum class StrategyMode{ageRelated,ThresholdRelated};
         int                     Range[2];                   ON_OFF                      responseAutoAdapt;
         /*int                     DotCount;*/               int                         intervalTime;
-        Strategy                strategy;                   ON_OFF                        centeralDotCheck;
+        Strategy                strategy;                   ON_OFF                      centerDotCheck;
         StrategyMode            strategyMode;               ON_OFF                      shortTermFluctuation;
         CursorColor             cursorColor;                FixationViewSelection       fixationViewSelection;
         BackGroundColor         backGroundColor;            EyeMoveAlarmMode            eyeMoveAlarmMode;
         ON_OFF                  cyanYellowTest;             ON_OFF                      blindDotTest;
-
 
         template<class Archive>
         void serialize(Archive& archive, const unsigned int version)
@@ -44,7 +49,7 @@ struct StaticParams
             archive & BOOST_SERIALIZATION_NVP(responseAutoAdapt);
             archive & BOOST_SERIALIZATION_NVP(intervalTime);
             archive & BOOST_SERIALIZATION_NVP(strategy);
-            archive & BOOST_SERIALIZATION_NVP(centeralDotCheck);
+            archive & BOOST_SERIALIZATION_NVP(centerDotCheck);
             archive & BOOST_SERIALIZATION_NVP(strategyMode);
             archive & BOOST_SERIALIZATION_NVP(shortTermFluctuation);
             archive & BOOST_SERIALIZATION_NVP(cursorColor);
@@ -58,8 +63,10 @@ struct StaticParams
 
     };
 
-    struct FixedParams
+    struct FixedParams/*:public QObject*/
     {
+//        Q_OBJECT
+
         int stimulationTime;            int singleStimulationDB;
         int intervalTime;               int blindDotStimulationDB;
         int falsePositiveCycle;         int shortTermFluctuationCount;
@@ -82,9 +89,10 @@ struct StaticParams
     };
 
 
-
     CommonParams commonParams;
     FixedParams  fixedParams;
+
+//    CommonParams& getCommonParams(){return commonParams;}
 
     template<class Archive>
     void serialize(Archive& archive, const unsigned int version)
@@ -101,7 +109,7 @@ struct MoveParams
     enum class CursorSize{I,_II,III,IV,V};
     enum class MoveMethod{_4Lines,_6Lines,_8Lines};
     enum class MoveDistance{_5,_10,_15};
-    Point                       Range;                      FixationViewSelection   fixationViewSelection;
+    int                         Range[2];                   FixationViewSelection   fixationViewSelection;
                                                             float                   spead;
     Strategy                    strategy;                   int                     brightness;
     CursorColor                 cursorColor;                MoveMethod              moveMethod;
@@ -146,5 +154,6 @@ struct ParamTraits<Type::Move>
     typedef MoveParams params;
 };
 
-}
+
+
 #endif // PARAMS_H

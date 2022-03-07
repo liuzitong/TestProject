@@ -39,6 +39,7 @@
 
     include( $$PWD/database/database.pri )
     include( $$PWD/model/model.pri )
+    include( $$PWD/viewModel/viewModel.pri )
 }
 
 SOURCES += \

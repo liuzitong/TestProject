@@ -8,11 +8,13 @@
 #include "patientListModel.h"
 #include "program.h"
 
+
 namespace Perimeter {
 class databaseSvc:public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QObject* patientListModel READ getPatientListModel NOTIFY patientListChanged)
+
 public:
     PatientListModel* m_plm;
     databaseSvc( );
@@ -20,7 +22,8 @@ public:
     Q_INVOKABLE void initDataBase();
     Q_INVOKABLE void createTable();
     Q_INVOKABLE void createData();
-    QObject* getPatientListModel();Q_SIGNAL void patientListChanged();
+    QObject* getPatientListModel();
+    Q_SIGNAL void patientListChanged();
 //    Q_INVOKABLE QObject* getPatientObjByPatientId(QString id);
     Q_INVOKABLE void setPatientModel();
     Q_INVOKABLE void addPatient(QString patientId,QString name,int sex,QDate date,QDateTime updateTime=QDateTime::currentDateTime());
@@ -31,8 +34,11 @@ public:
     Q_INVOKABLE void getPatientByName(QString name,QDate from,QDate to);
     Q_INVOKABLE void getPatientBySex(int sex,QDate from,QDate to);
     Q_INVOKABLE void getPatientByBirthDate(QDate date);
-
     Q_INVOKABLE void addProgram(int type,QString name,QString params,QString data,int category=4);
+    Q_INVOKABLE QObject* getPatient();
+
+    Q_INVOKABLE QObject* getParams();
+
 //    Q_INVOKABLE void addCheckResult(QString params,QString data,QDateTime time,Patient_ptr patient,Program_ptr program);
 
 private:

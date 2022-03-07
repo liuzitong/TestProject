@@ -1,7 +1,7 @@
 ﻿#ifndef POINT_H
 #define POINT_H
 
-namespace Model{
+
 struct Point
 {
     float x;
@@ -14,7 +14,7 @@ struct Point
     }
 
 };
-}
+
 
 
 #endif // COMMONDEF_H
