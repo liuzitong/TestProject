@@ -17,6 +17,7 @@
 
 
 enum class CursorColor{white,red,blue};
+enum class CursorSize{I,II,III,IV,V};
 enum class BackGroundColor{white,yellow};
 enum class FixationViewSelection{centerPoint,smallDiamond,bigDiamond,bottomPoint};
 enum class EyeMoveAlarmMode{dontAlarm,onlyAlarm,alarmAndPause};
@@ -39,8 +40,9 @@ struct StaticParams/*:public QObject*/
         Strategy                strategy;                   ON_OFF                      centerDotCheck;
         StrategyMode            strategyMode;               ON_OFF                      shortTermFluctuation;
         CursorColor             cursorColor;                FixationViewSelection       fixationViewSelection;
-        BackGroundColor         backGroundColor;            EyeMoveAlarmMode            eyeMoveAlarmMode;
-        ON_OFF                  cyanYellowTest;             ON_OFF                      blindDotTest;
+        CursorSize              cursorSize;                 EyeMoveAlarmMode            eyeMoveAlarmMode;
+        BackGroundColor         backGroundColor;            ON_OFF                      blindDotTest;
+        ON_OFF                  cyanYellowTest;
 
         template<class Archive>
         void serialize(Archive& archive, const unsigned int version)
@@ -105,8 +107,6 @@ struct StaticParams/*:public QObject*/
 struct MoveParams
 {
     enum class Strategy{standard,blindArea,darkArea,straightLine};
-    enum class CursorColor{white,red,blue};
-    enum class CursorSize{I,_II,III,IV,V};
     enum class MoveMethod{_4Lines,_6Lines,_8Lines};
     enum class MoveDistance{_5,_10,_15};
     int                         Range[2];                   FixationViewSelection   fixationViewSelection;
@@ -114,7 +114,7 @@ struct MoveParams
     Strategy                    strategy;                   int                     brightness;
     CursorColor                 cursorColor;                MoveMethod              moveMethod;
     CursorSize                  cursorSize;                 MoveDistance            moveDistance;
-    BackGroundColor             backGroudColor;             EyeMoveAlarmMode        eyeMoveAlarmMode;
+    BackGroundColor             backGroundColor;            EyeMoveAlarmMode        eyeMoveAlarmMode;
 
     template<class Archive>
     void serialize(Archive& archive, const unsigned int version)
@@ -123,7 +123,7 @@ struct MoveParams
         archive & BOOST_SERIALIZATION_NVP(strategy);
         archive & BOOST_SERIALIZATION_NVP(cursorColor);
         archive & BOOST_SERIALIZATION_NVP(cursorSize);
-        archive & BOOST_SERIALIZATION_NVP(backGroudColor);
+        archive & BOOST_SERIALIZATION_NVP(backGroundColor);
         archive & BOOST_SERIALIZATION_NVP(fixationViewSelection);
         archive & BOOST_SERIALIZATION_NVP(spead);
         archive & BOOST_SERIALIZATION_NVP(brightness);

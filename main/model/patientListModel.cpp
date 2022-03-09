@@ -1,8 +1,8 @@
 ﻿#include "patientListModel.h"
-#include "patientVm.h"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
 #include <QList>
 #include "roles.h"
+
 namespace Perimeter{
 #define T_PrivPtr( o )  perimeter_objcast( PatientListModelPriv*, o )
 class PERIMETER_API PatientListModelPriv
@@ -43,6 +43,7 @@ public:
            roles[lastUpdate]="lastUpdate";
            return roles;
     }
+
     void setPatientList(Patient_List patient_list)
     {
         m_parent->beginResetModel();
@@ -54,6 +55,12 @@ public:
 PatientListModel::PatientListModel()
 {
     m_obj = perimeter_new( PatientListModelPriv, this );
+}
+
+PatientListModel::PatientListModel(Patient_List patient_list)
+{
+    m_obj = perimeter_new( PatientListModelPriv, this );
+    setPatientList(patient_list);
 }
 
 void PatientListModel::setPatientList(Patient_List patient_list)

@@ -1,9 +1,9 @@
-#ifndef PATIENTMODELLIST_H
+﻿#ifndef PATIENTMODELLIST_H
 #define PATIENTMODELLIST_H
 #include "perimeter/base/common/perimeter_def.h"
 #include <QAbstractListModel>
 //#include "patientVm.h"
-#include "patient.h"
+#include <perimeter/main/database/patient.h>
 
 namespace Perimeter{
 class PERIMETER_API PatientListModel:public QAbstractListModel
@@ -14,6 +14,7 @@ public:
     PatientListModel();
 //    int current();
 //    void setCurrent();
+    PatientListModel(Patient_List patient_list);
     void setPatientList(Patient_List patient_list);
 //    Q_SIGNAL void currentChanged();
 

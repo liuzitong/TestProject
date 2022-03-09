@@ -104,15 +104,15 @@ Item{
                                 console.log(patientID.text);
                                 switch (queryStrategy.currentIndex)
                                 {
-                                case 0:IcUiQmlApi.appCtrl.databaseSvc.getPatientByTimeSpan(dateFrom.text,dateTo.text);break;
-                                case 1:IcUiQmlApi.appCtrl.databaseSvc.getPatientByPatientId(patientID.text);break;
+                                case 0:patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientByTimeSpan(dateFrom.text,dateTo.text);break;
+                                case 1:patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientByPatientId(patientID.text);break;
                                 case 2:
                                     console.log(chineseName.text);
-                                    if( !IcUiQmlApi.appCtrl.doubleName) IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(chineseName.text,dateFrom.text,dateTo.text);
-                                    else IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(firstName.text+" "+lastName.text,dateFrom.text,dateTo.text);
+                                    if( !IcUiQmlApi.appCtrl.doubleName) patientInfoListView.model= IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(chineseName.text,dateFrom.text,dateTo.text);
+                                    else patientInfoListView.model= IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(firstName.text+" "+lastName.text,dateFrom.text,dateTo.text);
                                     break;
-                                case 3:IcUiQmlApi.appCtrl.databaseSvc.getPatientBySex(sex.currentIndex,dateFrom.text,dateTo.text);break;
-                                case 4:IcUiQmlApi.appCtrl.databaseSvc.getPatientByBirthDate(birthDate.text);
+                                case 3:patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientBySex(sex.currentIndex,dateFrom.text,dateTo.text);break;
+                                case 4:patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientByBirthDate(birthDate.text);
                                 }
                                 queryStarted();
                             }
@@ -150,7 +150,7 @@ Item{
                                     property var seletedPatient:[];
                                     width: parent.width;height:patientInfoCol.height-patientInfo.rowHight +1; interactive: false; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
                                     delegate: patientInfoDelegate
-                                    model:IcUiQmlApi.appCtrl.databaseSvc.patientListModel;
+//                                    model:IcUiQmlApi.appCtrl.databaseSvc.patientListModel;
                                     Component{
                                         id:patientInfoDelegate
                                         Item{

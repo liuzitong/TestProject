@@ -3,7 +3,6 @@ QT -= gui
 CONFIG += console thread
 CONFIG += c++11  qml_debug
 CONFIG -= app_bundle
-QT += widgets
 DEFINES += QT_DEPRECATED_WARNINGS QT_MESSAGELOGCONTEXT _QX_NO_PRECOMPILED_HEADER
 
 INCLUDEPATH *= $$PWD/../../../

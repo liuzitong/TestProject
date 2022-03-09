@@ -1,9 +1,9 @@
-#ifndef PERIMETER_MAIN_CXX
+﻿#ifndef PERIMETER_MAIN_CXX
 #define PERIMETER_MAIN_CXX
 
 #include "perimeter_main.hxx"
 #include "../Control/Calendar/perimeter_calendarvm.hxx"
-#include "perimeter/main/database/patientVm.h"
+#include "perimeter/main/viewModel/patientVm.h"
 #include "perimeter/main/database/databaseSvc.h"
 // services list
 
