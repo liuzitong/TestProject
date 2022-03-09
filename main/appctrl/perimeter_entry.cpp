@@ -159,7 +159,7 @@ void load2()
 }
 
 
-int  main ( int argc, char *argv[] )
+int  main2 ( int argc, char *argv[] )
 {
     Model::ProgramModel<Model::Type::ThreshHold> pm;
     pm.m_type=Model::Type::Screening;pm.m_params={{{3,2},0},{}};
@@ -199,7 +199,7 @@ int  main ( int argc, char *argv[] )
 // main entry
 // ============================================================================
 
-int  main2 ( int argc, char *argv[] )
+int  main ( int argc, char *argv[] )
 {
     int ret = 0;
     //handle the terminate signal
