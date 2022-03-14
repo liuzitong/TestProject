@@ -104,15 +104,16 @@ Item{
                                 console.log(patientID.text);
                                 switch (queryStrategy.currentIndex)
                                 {
-                                case 0:patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientByTimeSpan(dateFrom.text,dateTo.text);break;
-                                case 1:patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientByPatientId(patientID.text);break;
+                                case 0:patientInfoListView.patientListModelVm.getPatientListByTimeSpan(dateFrom.text,dateTo.text);break;
+                                case 1:
+                                    patientInfoListView.patientListModelVm.getPatientListByPatientId(patientID.text);break;
                                 case 2:
                                     console.log(chineseName.text);
-                                    if( !IcUiQmlApi.appCtrl.doubleName) patientInfoListView.model= IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(chineseName.text,dateFrom.text,dateTo.text);
-                                    else patientInfoListView.model= IcUiQmlApi.appCtrl.databaseSvc.getPatientByName(firstName.text+" "+lastName.text,dateFrom.text,dateTo.text);
+                                    if( !IcUiQmlApi.appCtrl.doubleName) patientInfoListView.patientListModelVm.getPatientListByName(chineseName.text,dateFrom.text,dateTo.text);
+                                    else  patientInfoListView.patientListModelVm.getPatientListByName(firstName.text+" "+lastName.text,dateFrom.text,dateTo.text);
                                     break;
-                                case 3:patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientBySex(sex.currentIndex,dateFrom.text,dateTo.text);break;
-                                case 4:patientInfoListView.model=IcUiQmlApi.appCtrl.databaseSvc.getPatientByBirthDate(birthDate.text);
+                                case 3:patientInfoListView.patientListModelVm.getPatientListBySex(sex.currentIndex,dateFrom.text,dateTo.text);break;
+                                case 4:patientInfoListView.patientListModelVm.getPatientListByBirthDate(birthDate.text);
                                 }
                                 queryStarted();
                             }
@@ -148,9 +149,16 @@ Item{
                                 ListView{
                                     id:patientInfoListView
                                     property var seletedPatient:[];
+                                    property var patientListModelVm:null;
                                     width: parent.width;height:patientInfoCol.height-patientInfo.rowHight +1; interactive: false; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
                                     delegate: patientInfoDelegate
-//                                    model:IcUiQmlApi.appCtrl.databaseSvc.patientListModel;
+                                    model:patientListModelVm;
+                                    Component.onCompleted: {
+                                        patientListModelVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::PatientListModelVm", true);
+//                                        patientListModelVm.getPatientListByTimeSpan(dateFrom.text,dateTo.text);
+                                        patientListModelVm.hello();
+                                    }
+                                    Component.onDestruction: {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientListModelVm",patientListModelVm);}
                                     Component{
                                         id:patientInfoDelegate
                                         Item{
@@ -286,7 +294,7 @@ Item{
 
                             function showControl()
                             {
-                                console.log(doubleName);
+//                                console.log(doubleName);
                                 if(!doubleName) {newChineseNameRow.visible=true;newEnglishFirstNameRow.visible=false;newEnglishLastNameRow.visible=false;}
                                 else {newChineseNameRow.visible=false;newEnglishFirstNameRow.visible=true;newEnglishLastNameRow.visible=true;}
                             }

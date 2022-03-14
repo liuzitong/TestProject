@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -44,7 +44,8 @@ Column {
                             id:queryStrategy;height: parent.height;width: parent.height*4;
                             borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                             imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                            model: ListModel {ListElement { text: "常规分析" } ListElement { text: "三合一图" } ListElement { text: "总览图" }}}
+                            model: ListModel {ListElement { text: "常规分析" } ListElement { text: "三合一图" } ListElement { text: "总览图" }}
+                        }
                         CusButton{text:"进展分析";}
                         CusButton{text:"视岛图";}
                         }

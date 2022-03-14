@@ -37,6 +37,7 @@ CalendarVmPriv::~CalendarVmPriv()
 CalendarVm::CalendarVm(const QVariantList &)
 {
     m_obj = perimeter_new( CalendarVmPriv, this );
+//    qDebug()<<"calcendarVm says hi";
 }
 
 CalendarVm::~CalendarVm()

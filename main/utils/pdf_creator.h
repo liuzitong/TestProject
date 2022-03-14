@@ -2,7 +2,7 @@
 #define PDF_CREATOR_H
 
 #include <QObject>
-#include <QWidget>
+
 
 
 class PDFCreator

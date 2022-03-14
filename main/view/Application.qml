@@ -27,12 +27,9 @@ Window {
         idPriv.init();
         content.changePage.connect(changePage);
         login.changePage.connect(changePage);
-        var patient=IcUiQmlApi.appCtrl.databaseSvc.getPatient();
-        console.log("ssss");
-        console.log(patient.name);
-        var param=IcUiQmlApi.appCtrl.databaseSvc.getParams();
-        console.log(param.commonParams.Range[0]);
-        console.log(param.commonParams.Range[1]);
+//        var param=IcUiQmlApi.appCtrl.databaseSvc.getParams();
+//        console.log(param.commonParams.Range[0]);
+//        console.log(param.commonParams.Range[1]);
     }
 
     function changePage(pageName)
@@ -68,9 +65,16 @@ Window {
     QtObject{
         id: idPriv;
         property var patient_vm:null;
+        property var patientList_vm:null;
         function init()
         {
             IcUiQmlApi.appCtrl.databaseSvc.initDataBase();
+//            patient_vm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::PatientVm", true);
+//            patient_vm.hello();
+//            IcUiQmlApi.appCtrl.objMgr.detachObj( "Perimeter::PatientVm", patient_vm );
+//            patientList_vm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::PatientListModelVm", true);
+//            patientList_vm.hello();
+//            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientListModelVm", patientList_vm);
         }
     }
 

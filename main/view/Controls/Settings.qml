@@ -1,4 +1,4 @@
-import QtQuick 2.7
+﻿import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
@@ -84,7 +84,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_contro
                             }
                         }
                         Flow{
-                            height: column.rowHeight; anchors.right: parent.right;  anchors.bottom: parent.bottom;spacing: 1.2*column.rowHeight;
+                            height: column.rowHeight; anchors.right: parent.right;  anchors.bottom: parent.bottom;spacing: 1.2*column.rowHeight
                             CusButton
                             {
                                 text:"确定";

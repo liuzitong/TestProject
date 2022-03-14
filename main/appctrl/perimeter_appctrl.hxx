@@ -1,4 +1,4 @@
-#ifndef PERIMETER_APPCTRL_HXX
+﻿#ifndef PERIMETER_APPCTRL_HXX
 #define PERIMETER_APPCTRL_HXX
 
 #include "perimeter/base/common/perimeter_def.h"

@@ -1,4 +1,4 @@
-#ifndef PERIMETER_APPCTRL_CXX
+﻿#ifndef PERIMETER_APPCTRL_CXX
 #define PERIMETER_APPCTRL_CXX
 
 #include "perimeter_appctrl.hxx"
@@ -61,7 +61,7 @@ AppCtrlPriv :: AppCtrlPriv ( AppCtrl *pa )
     m_obj_mgr_svc = ObjMgrSvc::getInstance();
 //    m_databaseSvc = static_cast<QObject*>(new databaseSvc());
     m_databaseSvc = perimeter_new(databaseSvc);
-    m_currentPatient=perimeter_new(PatientVm);
+//    m_currentPatient=perimeter_new(PatientVm);
 }
 
 // ============================================================================
@@ -75,7 +75,7 @@ AppCtrlPriv :: ~AppCtrlPriv ( )
     AppSettingsSvc::freeInstance();
 //    delete m_databaseSvc;
     perimeter_delete(m_databaseSvc,databaseSvc);
-    perimeter_delete(m_currentPatient,PatientVm);
+//    perimeter_delete(m_currentPatient,PatientVm);
 }
 
 // ============================================================================

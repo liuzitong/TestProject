@@ -1,4 +1,4 @@
-import QtQuick 2.7
+﻿import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
@@ -68,7 +68,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_contro
                             Item{ height:parent.height*0.065;width: parent.width;
                                 Image {
                                     id: name
-                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.horizontalCenter: parent.horizontalCenter;
                                     source: "qrc:/Pics/base-svg/2logo_version.svg"
                                     height: parent.height;width:height/sourceSize.height*sourceSize.width;
                                 }

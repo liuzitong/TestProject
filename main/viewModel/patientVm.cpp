@@ -1,5 +1,5 @@
 ﻿#include "PatientVm.h"
-#include "patient.h"
+#include "perimeter/main/database/patient.h"
 #include "perimeter/base/common/perimeter_def.h"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
 #include <QDate>
@@ -7,14 +7,20 @@
 
 namespace Perimeter {
 
-PatientVm::PatientVm()
+void PatientVm::hello()
 {
-    m_patient=perimeter_new(Patient);
+    qDebug()<<"patient says hello.";
 }
 
-PatientVm::PatientVm(void* patient)
+//PatientVm::PatientVm()
+//{
+//    m_patient=perimeter_new(Patient);
+//}
+
+PatientVm::PatientVm(const QVariantList &)
 {
-    m_patient=patient;
+//    m_patient=new Patient();
+//    qDebug()<<"gogogogogo";
 }
 
 PatientVm &PatientVm::operator=(const PatientVm &other)
@@ -23,23 +29,23 @@ PatientVm &PatientVm::operator=(const PatientVm &other)
     return *this;
 }
 
-PatientVm::PatientVm(PatientVm &&other)
-{
-    this->m_patient=other.m_patient;
-    other.m_patient=nullptr;
-}
+//PatientVm::PatientVm(PatientVm &&other)
+//{
+//    this->m_patient=other.m_patient;
+//    other.m_patient=nullptr;
+//}
 
-PatientVm::PatientVm(const PatientVm &other)
-{
-    this->m_patient=other.m_patient;
-}
+//PatientVm::PatientVm(const PatientVm &other)
+//{
+//    this->m_patient=other.m_patient;
+//}
 
 PatientVm::~PatientVm()
 {
 //    m_patient=0;
 //    qDebug()<<"patient  destructed";
-    if(m_patient!=nullptr)
-        perimeter_delete(m_patient,Patient);
+//    if(m_patient!=nullptr)
+//        delete (Patient*)m_patient;
 
 }
 

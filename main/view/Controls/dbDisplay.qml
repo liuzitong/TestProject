@@ -26,7 +26,7 @@ Item{
 
         function drawDashRound(x, y, radius, length)
         {
-            console.log("drawDsh");
+//            console.log("drawDsh");
             var step=length/radius
             for (var b = 0, e = step ; e <=Math.PI*2; b += step*2, e += step*2)
             {
@@ -127,7 +127,7 @@ Item{
             }
             dotList.forEach(function(item)
             {
-                console.log(item.x_Coord);
+//                console.log(item.x_Coord);
                 drawDB(item);
             })
             root.painted();

@@ -1,5 +1,5 @@
-#include "checkResultVm.h"
-#include "checkResult.h"
+﻿#include "checkResultVm.h"
+
 checkResultVm::checkResultVm()
 {
 

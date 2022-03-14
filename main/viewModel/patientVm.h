@@ -1,13 +1,14 @@
-#ifndef PATIENTVM_H
+﻿#ifndef PATIENTVM_H
 #define PATIENTVM_H
 #include "perimeter/base/common/perimeter_def.h"
 //#include "qxpack/indcom/afw/qxpack_ic_viewmodelbase.hxx"
 #include <memory>
 #include <QDate>
 #include <QDateTime>
+#include "qxpack/indcom/afw/qxpack_ic_viewmodelbase.hxx"
 
 namespace Perimeter{
-class PERIMETER_API PatientVm:public QObject
+class PERIMETER_API PatientVm: public QObject
 {
     Q_OBJECT
     Q_PROPERTY(long id READ getID WRITE setID)
@@ -18,12 +19,12 @@ class PERIMETER_API PatientVm:public QObject
     Q_PROPERTY(QDateTime lastUpdate READ getLastUpdate WRITE setLastUpdate)
 
 public:
-    PatientVm();
-    PatientVm(void* patient);
-    PatientVm(const PatientVm& other);
-    PatientVm(PatientVm&& other);
+//    Q_INVOKABLE PatientVm();
+    Q_INVOKABLE explicit PatientVm(const QVariantList &);
+    Q_INVOKABLE virtual ~PatientVm() Q_DECL_OVERRIDE;
+
+    Q_INVOKABLE void hello();
     PatientVm& operator=(const PatientVm& other);
-    ~PatientVm();
     long getID();void setID(long value);
     QString getPatientID();void setPatientID(QString value);
     QString getName();void setName(QString value);

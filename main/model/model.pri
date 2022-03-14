@@ -10,11 +10,8 @@ HEADERS += \
     $$PWD/utility.h \
     $$PWD/checkResultModel.h \
     $$PWD/programModel.h \
-    $$PWD/patientListModel.h \
-    $$PWD/roles.h \
     $$PWD/programListModel.h
 
 SOURCES += \
-    $$PWD/patientListModel.cpp \
     $$PWD/programListModel.cpp
 
