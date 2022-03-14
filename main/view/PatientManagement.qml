@@ -101,7 +101,7 @@ Item{
                             }
                             function startQuery()
                             {
-                                console.log(patientID.text);
+//                                console.log(patientID.text);
                                 switch (queryStrategy.currentIndex)
                                 {
                                 case 0:patientInfoListView.patientListModelVm.getPatientListByTimeSpan(dateFrom.text,dateTo.text);break;
@@ -115,7 +115,7 @@ Item{
                                 case 3:patientInfoListView.patientListModelVm.getPatientListBySex(sex.currentIndex,dateFrom.text,dateTo.text);break;
                                 case 4:patientInfoListView.patientListModelVm.getPatientListByBirthDate(birthDate.text);
                                 }
-                                queryStarted();
+//                                queryStarted();
                             }
                         }
                         Item{
@@ -165,7 +165,7 @@ Item{
                                             width: patientInfoListView.width;height: (patientInfoCol.height-patientInfo.rowHight)/pageSize+1;
                                             MouseArea{
                                                 anchors.fill: parent;
-                                                onClicked: {console.log("Ted Say hi id="+model.Id)}
+//                                                onClicked: {console.log("Ted Say hi id="+model.Id)}
                                             }
                                             Row{
                                                 id:patientInfoRow;anchors.fill: parent;spacing: -1;

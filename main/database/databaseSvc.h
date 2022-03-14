@@ -6,7 +6,7 @@
 #include <QDateTime>
 //#include <perimeter/main/model/patientListModel.h>
 #include <perimeter/main/viewModel/patientVm.h>
-#include <perimeter/main/viewModel/paramsvm.h>
+#include <perimeter/main/viewModel/paramsVm.h>
 #include "program.h"
 
 

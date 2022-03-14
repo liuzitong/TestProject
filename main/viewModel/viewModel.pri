@@ -5,20 +5,20 @@
 DEFINES += _BUILDING_QX_API
 
 HEADERS += \
-    $$PWD/paramsvm.h \
-    $$PWD/programvm.h \
     $$PWD/checkResultVm.h \
-    $$PWD/paramsvm.h \
     $$PWD/patientVm.h \
-    $$PWD/programvm.h \
-    $$PWD/patientListModelVm.h
+    $$PWD/patientListModelVm.h \
+    $$PWD/programListModelVm.h \
+    $$PWD/programVm.h \
+    $$PWD/paramsVm.h
 
 SOURCES += \
-    $$PWD/paramsvm.cpp \
     $$PWD/checkResultVm.cpp \
-    $$PWD/paramsvm.cpp \
     $$PWD/patientVm.cpp \
-    $$PWD/patientListModelVm.cpp
+    $$PWD/patientListModelVm.cpp \
+    $$PWD/programListModelVm.cpp \
+    $$PWD/paramsVm.cpp \
+    $$PWD/programVm.cpp
 
 DISTFILES += \
     $$PWD/viewModel.pri

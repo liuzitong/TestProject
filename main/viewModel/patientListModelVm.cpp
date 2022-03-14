@@ -187,13 +187,6 @@ void PatientListModelVm::getPatientListBySex(int sex, QDate from, QDate to)
     emit patientListChanged();
 }
 
-inline QString PatientListModelVm::convertQDateToQString(QDate date){
-    int year=date.year(),month=date.month(),day=date.day();
-    QString dateStr=QString("%1-%2-%3").arg(year).arg(month).arg(day);
-    return dateStr;
-}
-
-
 void PatientListModelVm::getPatientListByBirthDate(QDate date)
 {
     qx_query query("select * from patient where birthDate=:birthDate ORDER BY lastUpdate DESC");

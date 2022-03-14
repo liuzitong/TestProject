@@ -15,7 +15,7 @@ public:
 //    int current();
 //    void setCurrent();
 //    PatientListModelVm(Patient_List patient_list);
-    void setPatientList(Patient_List patient_list);
+
     Q_SIGNAL void patientListChanged();
     Q_INVOKABLE void getPatientListByTimeSpan(QDate from,QDate to);
     Q_INVOKABLE void getPatientListByPatientId(QString id);
@@ -48,7 +48,15 @@ public:
 //    virtual Qt::ItemFlags  flags ( const QModelIndex & ) const Q_DECL_OVERRIDE;
 
 private:
-    QString convertQDateToQString(QDate date);
+    void setPatientList(Patient_List patient_list);
+
+    inline QString convertQDateToQString(QDate date)
+    {
+        int year=date.year(),month=date.month(),day=date.day();
+        QString dateStr=QString("%1-%2-%3").arg(year).arg(month).arg(day);
+        return dateStr;
+    }
+
     void* m_obj;
     friend class PatientListModelVmPriv;
     Q_DISABLE_COPY(PatientListModelVm);

@@ -19,7 +19,7 @@ void PatientVm::hello()
 
 PatientVm::PatientVm(const QVariantList &)
 {
-//    m_patient=new Patient();
+     m_patient=perimeter_new(Patient);
 //    qDebug()<<"gogogogogo";
 }
 
@@ -46,7 +46,8 @@ PatientVm::~PatientVm()
 //    qDebug()<<"patient  destructed";
 //    if(m_patient!=nullptr)
 //        delete (Patient*)m_patient;
-
+    if(m_patient!=nullptr)
+        perimeter_delete(m_patient,Patient);
 }
 
 long PatientVm::getID()

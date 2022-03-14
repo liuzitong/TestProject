@@ -5,6 +5,7 @@
 #include "../Control/Calendar/perimeter_calendarvm.hxx"
 #include "perimeter/main/viewModel/patientVm.h"
 #include "perimeter/main/viewModel/patientListModelVm.h"
+#include <perimeter/main/viewModel/programListModelVm.h>
 // services list
 
 namespace Perimeter {
@@ -48,6 +49,7 @@ void  Main :: registerTypes( QxPack::IcAppCtrlBase *app_base )
     obj_mgr->registerType<Perimeter::CalendarVm>(QStringLiteral("Perimeter::CalendarVm"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::PatientVm>(QStringLiteral("Perimeter::PatientVm"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::PatientListModelVm>(QStringLiteral("Perimeter::PatientListModelVm"), Q_NULLPTR);
+    obj_mgr->registerType<Perimeter::PatientListModelVm>(QStringLiteral("Perimeter::programListModelVm"), Q_NULLPTR);
 }
 
 

@@ -10,8 +10,7 @@ HEADERS += \
     $$PWD/utility.h \
     $$PWD/checkResultModel.h \
     $$PWD/programModel.h \
-    $$PWD/programListModel.h
+
 
 SOURCES += \
-    $$PWD/programListModel.cpp
 
