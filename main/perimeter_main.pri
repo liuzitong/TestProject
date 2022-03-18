@@ -16,7 +16,8 @@
     $$PWD/perimeter_main.cxx \
 
     RESOURCES += $$PWD/view/perimeter_main_view.qrc\
-                 $$PWD/view/Controls/qml.qrc
+                 $$PWD/view/Controls/qml.qrc\
+                 $$PWD/view/assets/assets.qrc
 
     # Additional import path used to resolve QML modules in Qt Creator's code model
     QML_IMPORT_PATH *= $$PWD/../../
@@ -34,8 +35,7 @@
        $$PWD/Control/Calendar/perimeter_calendarvm.cxx \
        $$PWD/Control/Calendar/perimeter_ymdlistmodel.cxx
 
-   RESOURCES += \
-        $$PWD/view/assets/assets.qrc
+
 
     include( $$PWD/database/database.pri )
     include( $$PWD/model/model.pri )
@@ -49,7 +49,9 @@ HEADERS += \
     $$PWD/utils/pdf_creator.h \
     $$PWD/appctrl/test.hpp
 
-DISTFILES +=
+RESOURCES += \
+    $$PWD/view/utils/utils.qrc
+
 
 
 

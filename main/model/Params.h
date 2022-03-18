@@ -48,18 +48,18 @@ struct StaticParams/*:public QObject*/
         void serialize(Archive& archive, const unsigned int version)
         {
             archive & BOOST_SERIALIZATION_NVP(Range);
+            archive & BOOST_SERIALIZATION_NVP(strategy);
+            archive & BOOST_SERIALIZATION_NVP(strategyMode);
+            archive & BOOST_SERIALIZATION_NVP(cursorColor);
+            archive & BOOST_SERIALIZATION_NVP(cursorSize);
+            archive & BOOST_SERIALIZATION_NVP(backGroundColor);
+            archive & BOOST_SERIALIZATION_NVP(cyanYellowTest);
             archive & BOOST_SERIALIZATION_NVP(responseAutoAdapt);
             archive & BOOST_SERIALIZATION_NVP(intervalTime);
-            archive & BOOST_SERIALIZATION_NVP(strategy);
             archive & BOOST_SERIALIZATION_NVP(centerDotCheck);
-            archive & BOOST_SERIALIZATION_NVP(strategyMode);
             archive & BOOST_SERIALIZATION_NVP(shortTermFluctuation);
-            archive & BOOST_SERIALIZATION_NVP(cursorColor);
             archive & BOOST_SERIALIZATION_NVP(fixationViewSelection);
-            archive & BOOST_SERIALIZATION_NVP(fixationViewSelection);
-            archive & BOOST_SERIALIZATION_NVP(backGroundColor);
             archive & BOOST_SERIALIZATION_NVP(eyeMoveAlarmMode);
-            archive & BOOST_SERIALIZATION_NVP(cyanYellowTest);
             archive & BOOST_SERIALIZATION_NVP(blindDotTest);
         }
 
@@ -79,13 +79,13 @@ struct StaticParams/*:public QObject*/
         void serialize(Archive& archive, const unsigned int version)
         {
             archive & BOOST_SERIALIZATION_NVP(stimulationTime);
-            archive & BOOST_SERIALIZATION_NVP(singleStimulationDB);
             archive & BOOST_SERIALIZATION_NVP(intervalTime);
-            archive & BOOST_SERIALIZATION_NVP(blindDotStimulationDB);
             archive & BOOST_SERIALIZATION_NVP(falsePositiveCycle);
-            archive & BOOST_SERIALIZATION_NVP(shortTermFluctuationCount);
             archive & BOOST_SERIALIZATION_NVP(falseNegativeCycle);
             archive & BOOST_SERIALIZATION_NVP(fixationViewLossCycle);
+            archive & BOOST_SERIALIZATION_NVP(singleStimulationDB);
+            archive & BOOST_SERIALIZATION_NVP(blindDotStimulationDB);
+            archive & BOOST_SERIALIZATION_NVP(shortTermFluctuationCount);
         }
 
     };
@@ -110,7 +110,7 @@ struct MoveParams
     enum class MoveMethod{_4Lines,_6Lines,_8Lines};
     enum class MoveDistance{_5,_10,_15};
     int                         Range[2];                   FixationViewSelection   fixationViewSelection;
-                                                            float                   spead;
+                                                            float                   speed;
     Strategy                    strategy;                   int                     brightness;
     CursorColor                 cursorColor;                MoveMethod              moveMethod;
     CursorSize                  cursorSize;                 MoveDistance            moveDistance;
@@ -125,7 +125,7 @@ struct MoveParams
         archive & BOOST_SERIALIZATION_NVP(cursorSize);
         archive & BOOST_SERIALIZATION_NVP(backGroundColor);
         archive & BOOST_SERIALIZATION_NVP(fixationViewSelection);
-        archive & BOOST_SERIALIZATION_NVP(spead);
+        archive & BOOST_SERIALIZATION_NVP(speed);
         archive & BOOST_SERIALIZATION_NVP(brightness);
         archive & BOOST_SERIALIZATION_NVP(moveMethod);
         archive & BOOST_SERIALIZATION_NVP(moveDistance);

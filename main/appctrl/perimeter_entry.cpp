@@ -164,37 +164,51 @@ void load2()
 
 int  main1 ( int argc, char *argv[] )
 {
-//    Program<Type::ThreshHold> pm;
-//    pm.m_type=Type::Screening;pm.m_params={{{3,2},0},{}};
-//    pm.m_name="30-2";
-//    using strategy=Strategy;
-//    pm.m_data.strategies={strategy::fullThreshold,strategy::fastInterative};
-//    pm.m_data.dots={{2,3},{55,2}};
-//    pm.m_category=Category::Custom;
+    ProgramModel<Type::ThreshHold> pm;
+    pm.m_type=Type::ThreshHold;pm.m_params={{{3,2},0},{}};
+    pm.m_name="Threshold";
+    using strategy=StaticParams::CommonParams::Strategy;
+    pm.m_data.strategies={strategy::fullThreshold,strategy::fastInterative};
+    pm.m_data.dots={{2,3},{55,2}};
+    pm.m_category=Category::ThreshHold;
 
-//    auto pp=pm.ModelToDB();
-//    std::cout<<pp->m_params.toStdString()<<std::endl;
-//    std::cout<<pp->m_data.toStdString()<<std::endl;
+    auto pp=pm.ModelToDB();
+    std::cout<<pp->m_params.toStdString()<<std::endl;
+    std::cout<<pp->m_data.toStdString()<<std::endl;
 
-//    Program<Type::Screening> pm2(pp);
-//    std::cout<<pm2.m_data.dots[0].x<<std::endl;
-//    std::cout<<pm2.m_data.dots[0].y<<std::endl;
+    ProgramModel<Type::Screening> pm2;
+    pm2.m_type=Type::Screening;pm2.m_params={{{3,2},0},{}};
+    pm2.m_data.strategies={strategy::oneStage,strategy::twoStages};
+    pm2.m_data.dots={{44,3},{55,2}};
+    pm2.m_category=Category::Screening;
+    pm2.m_name="screening";
+    auto pp2=pm2.ModelToDB();
+
+    ProgramModel<Type::Move> pm3;
+    pm3.m_type=Type::Move;
+    pm3.m_params={{3,5},FixationViewSelection::centerPoint};
+//    pm3.m_data.dots={{44,3},{55,2}};
+    pm3.m_name="move";
+    pm3.m_category=Category::Move;
+    auto pp3=pm3.ModelToDB();
 
 
 
     Test::removeDataBase();
     Test::connectDataBase();
     Test::createTable();
-    Test::createEntityData();
-    Test::GetEntityData();
+//    Test::createEntityData();
+//    Test::GetEntityData();
 //    Test::displayInfo();
 
-//    QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
-//    bool bCommit = db.transaction();
-//    QSqlError daoError = qx::dao::insert(pp, &db);
-//    bCommit = (bCommit && ! daoError.isValid());
-//    qAssert(bCommit);
-//    db.commit();
+    QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
+    bool bCommit = db.transaction();
+    QSqlError daoError = qx::dao::insert(pp, &db);
+    daoError = qx::dao::insert(pp2, &db);
+    daoError = qx::dao::insert(pp3, &db);
+    bCommit = (bCommit && ! daoError.isValid());
+    qAssert(bCommit);
+    db.commit();
 
     return  0;
 }
@@ -233,6 +247,7 @@ int  main ( int argc, char *argv[] )
         eng->addImportPath(QStringLiteral("qrc:/") );
 
         eng->load(QUrl(QLatin1String("qrc:/perimeter/main/view/Application.qml")));
+        qmlRegisterSingletonType(QUrl("qrc:/perimeter/main/view/Utils/CusUtils.qml"), "perimeter.main.view.Utils", 1, 0, "CusUtils");
 
         gPrintMemCntr("enter eventloop stage");
         ret = app.exec();

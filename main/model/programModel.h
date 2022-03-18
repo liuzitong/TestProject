@@ -7,7 +7,7 @@
 
 
 template <Type type>
-struct StaticProgramData
+struct StaticProgramData      //ot
 {
     std::vector<typename StaticParams::CommonParams::Strategy> strategies;
     std::vector<Point> dots;
@@ -21,7 +21,7 @@ struct StaticProgramData
 
 struct MoveProgramData
 {
-    std::vector<Point> dots;
+    std::vector<Point> dots;  //Only For Standard,other don't have this
     template<class Archive>
     void serialize(Archive& archive, const unsigned int version)
     {

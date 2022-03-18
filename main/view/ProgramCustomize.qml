@@ -3,11 +3,15 @@ import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
 import QtQuick.Controls.Styles 1.4
-import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0
 import QtQuick.Layouts 1.3
+import perimeter.main.view.Controls 1.0
+import perimeter.main.view.Utils 1.0
+
 
 Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
+    property var currentProgram: null;
+    property int type;
     signal changePage(var pageName);
     function rePaintCanvas(){dbDisplay.displayCanvas.requestPaint();}
     Rectangle{id:content;width: parent.width;height: parent.height*14/15
@@ -29,19 +33,87 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                 }
                             }
                         }
-                        Rectangle{width: parent.width;height: parent.height*0.9;color: "#DCDEE0";
-                            StackLayout {anchors.fill: parent;currentIndex: bar.currentIndex
-                                Item {id: homeTab;anchors.fill: parent;anchors.margins: height*0.03;
-                                    ListView {id:listView;spacing: -1;anchors.fill: parent;model: ggg;delegate: delegatebb;clip:true;snapMode: ListView.SnapPosition;}
-                                    Component{id:delegatebb;
-                                        Rectangle{height: (homeTab.height-1)*1/10+1;width: listView.width;color: white;border.color: "black";
-                                            CusText{width: parent.width;text:model.name}
+                        Rectangle{id:programSelection;width: parent.width;height: parent.height*0.9;color: "#DCDEE0";
+                            property var selectedProgram: null;
+                            StackLayout {
+                                anchors.fill: parent;currentIndex: bar.currentIndex;
+                                Repeater {
+                                    property var programListModelVmThreshold: null;
+                                    property var programListModelVmScreening: null;
+                                    property var programListModelVmSpecial: null;
+                                    property var programListModelVmMove: null;
+                                    property var programListModelVmCustom: null;
+                                    Component.onCompleted: {
+                                        programListModelVmThreshold=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[0]);
+                                        programListModelVmScreening=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[1]);
+                                        programListModelVmSpecial=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[2])
+                                        programListModelVmMove=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[3]);
+                                        programListModelVmCustom=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[4]);
+                                    }
+                                    Component.onDestruction: {
+                                        IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmThreshold);
+                                        IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmScreening);
+                                        IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmSpecial);
+                                        IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmMove);
+                                        IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmCustom);
+
+                                    }
+                                    model:[programListModelVmThreshold,programListModelVmScreening,programListModelVmSpecial,programListModelVmMove,programListModelVmCustom]
+                                    Item {id: homeTab;anchors.fill: parent;anchors.margins: height*0.03;
+                                        ListView {
+                                            id:listView;spacing: -1;anchors.fill: parent;
+                                            model: modelData;delegate: delegateProg;clip:true;snapMode: ListView.SnapPosition;
+                                        }
+                                        Component{id:delegateProg;
+                                            Rectangle{height: (homeTab.height-1)*1/10+1;width: listView.width;color:"white";border.color: "black";
+                                                CusText{width: parent.width;text:model.name}
+                                                MouseArea{ anchors.fill: parent;
+                                                    onClicked:
+                                                    {
+                                                        console.log(model.name+"  "+model.program_id+" "+model.type);
+                                                        if(programSelection.selectedProgram!=null){programSelection.selectedProgram.color="white";}
+                                                        programSelection.selectedProgram=parent;
+                                                        programSelection.selectedProgram.color=CusUtils.rgb(220,222,224);
+//                                                        currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false);
+//                                                        currentProgram.hello();
+                                                        if (currentProgram!=null)
+                                                        {
+                                                            if(type!=2)
+                                                            {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
+                                                            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::MoveProgramVM", currentProgram);}
+                                                        }
+
+                                                        type=model.type;
+                                                        if(type!=2)
+                                                        {currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[model.program_id]);}
+                                                        else{currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false,[model.program_id]);}
+                                                        var temp=currentProgram.Params;
+                                                        var temp2=temp.commonParams;
+                                                        var temp3=temp2.Range;
+                                                        var strats=currentProgram.strategies;
+                                                        var dots=currentProgram.dots;
+
+
+                                                        console.log(temp3[0]);
+                                                        console.log(dots[3].x);
+                                                    }
+                                                    Component.onDestruction: {
+                                                        if (currentProgram!=null)
+                                                        {
+                                                            if(type!=2)
+                                                            {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
+                                                            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::MoveProgramVM", currentProgram);}
+                                                        }
+                                                        if (currentProgram!=null)
+                                                        {
+                                                            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);
+                                                        }
+                                                    }
+                                                }
+
+                                            }
                                         }
                                     }
-//                                    ListModel {id:ggg
-//                                        ListElement {name: "Bill Smith";number: "555 3264" }
-//                                        ListElement { name: "John Brown"; number: "555 8426";}
-//                                    }
                                 }
                             }
                         }
@@ -51,65 +123,87 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                             CusText{text:"策略"; horizontalAlignment: Text.AlignHCenter; anchors.fill: parent}
                         }
                         Rectangle{width: parent.width;height: parent.height*0.89;color:"#DCDEE0";
-                            StackLayout {anchors.fill: parent;currentIndex: switch(bar.currentIndex) {case 0:return 0;case 1:case 2:return 1;case 3: return 2;}
-                                Item{anchors.fill: parent;anchors.margins: 0.1*height;
-                                    Column{anchors.fill: parent;spacing: height/7;
-                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
-                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
-                                            CusText{text:qsTr("阈值"); horizontalAlignment: Text.AlignLeft}
-                                        }
-                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
-                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
-                                            CusText{text:qsTr("智能交互式"); horizontalAlignment: Text.AlignLeft}
-                                        }
-                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
-                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
-                                            CusText{text:qsTr("快速智能交互式"); horizontalAlignment: Text.AlignLeft}
-                                        }
+                            StackLayout {
+                                id:strategyStack;anchors.fill: parent;
+                                property var strategyNames;
+                                function  changeProgram()
+                                {
+                                    switch(currentProgram.type)
+                                    {
+                                        case 0:strategyNames=[{name:qsTr("fullTreshold"),strategy:0},{name:qsTr("smart interactive"),strategy:1},{name:qsTr("fast interactive"),strategy:2}];break;
+                                        case 1:strategyNames=[{name:qsTr("one stage"),strategy:3},{name:qsTr("two stages"),strategy:4},{name:qsTr("quantify defects"),strategy:5},{name:qsTr("single stimulation"),strategy:6}];break;
+                                        case 2:break;
                                     }
                                 }
 
                                 Item{anchors.fill: parent;anchors.margins: 0.1*height;
                                     Column{anchors.fill: parent;spacing: height/7;
-                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
-                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
-                                            CusText{text:qsTr("二区法"); horizontalAlignment: Text.AlignLeft}
-                                        }
-                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
-                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
-                                            CusText{text:qsTr("三区法"); horizontalAlignment: Text.AlignLeft}
-                                        }
-                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
-                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
-                                            CusText{text:qsTr("量化缺损"); horizontalAlignment: Text.AlignLeft}
-                                        }
-                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
-                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
-                                            CusText{text:qsTr("单刺激"); horizontalAlignment: Text.AlignLeft}
-                                        }
+//                                        Repeater {
+//                                            model:strategyStack.strategyNames;
+//                                            Row{
+//                                                width: parent.width;height: parent.height/7;spacing: 0.5*height;
+//                                                CusCheckBox{
+//                                                    property var strategy:modelData.strategy;
+//                                                    height: parent.height;checked:currentProgram.strategies.contains(strategy);width: parent.height;
+//                                                    onCheckedChanged: checked?currentProgram.strategies.append(strategy):currentProgram.strategies.remove(strategy);
+//                                                }
+//                                                CusText{text:modelData.name; horizontalAlignment: Text.AlignLeft}
+//                                            }
+//                                        }
+
+
+//                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
+//                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
+//                                            CusText{text:qsTr("智能交互式"); horizontalAlignment: Text.AlignLeft}
+//                                        }
+//                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
+//                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
+//                                            CusText{text:qsTr("快速智能交互式"); horizontalAlignment: Text.AlignLeft}
+//                                        }
                                     }
                                 }
 
-                                Item{anchors.fill: parent;anchors.margins: 0.1*height;
-                                    Column{anchors.fill: parent;spacing: height/7;
-                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
-                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
-                                            CusText{text:qsTr("标准动态"); horizontalAlignment: Text.AlignLeft}
-                                        }
-                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
-                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
-                                            CusText{text:qsTr("盲区动态"); horizontalAlignment: Text.AlignLeft}
-                                        }
-                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
-                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
-                                            CusText{text:qsTr("暗区动态"); horizontalAlignment: Text.AlignLeft}
-                                        }
-                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
-                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
-                                            CusText{text:qsTr("直线动态"); horizontalAlignment: Text.AlignLeft}
-                                        }
-                                    }
-                                }
+//                                Item{anchors.fill: parent;anchors.margins: 0.1*height;
+//                                    Column{anchors.fill: parent;spacing: height/7;
+//                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
+//                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
+//                                            CusText{text:qsTr("二区法"); horizontalAlignment: Text.AlignLeft}
+//                                        }
+//                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
+//                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
+//                                            CusText{text:qsTr("三区法"); horizontalAlignment: Text.AlignLeft}
+//                                        }
+//                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
+//                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
+//                                            CusText{text:qsTr("量化缺损"); horizontalAlignment: Text.AlignLeft}
+//                                        }
+//                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
+//                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
+//                                            CusText{text:qsTr("单刺激"); horizontalAlignment: Text.AlignLeft}
+//                                        }
+//                                    }
+//                                }
+
+//                                Item{anchors.fill: parent;anchors.margins: 0.1*height;
+//                                    Column{anchors.fill: parent;spacing: height/7;
+//                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
+//                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
+//                                            CusText{text:qsTr("标准动态"); horizontalAlignment: Text.AlignLeft}
+//                                        }
+//                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
+//                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
+//                                            CusText{text:qsTr("盲区动态"); horizontalAlignment: Text.AlignLeft}
+//                                        }
+//                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
+//                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
+//                                            CusText{text:qsTr("暗区动态"); horizontalAlignment: Text.AlignLeft}
+//                                        }
+//                                        Row{width: parent.width;height: parent.height/7;spacing: 0.5*height;
+//                                            CusCheckBox{height: parent.height; checked: true;width: parent.height;}
+//                                            CusText{text:qsTr("直线动态"); horizontalAlignment: Text.AlignLeft}
+//                                        }
+//                                    }
+//                                }
 
                             }
                         }

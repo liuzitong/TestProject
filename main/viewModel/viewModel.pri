@@ -20,6 +20,4 @@ SOURCES += \
     $$PWD/paramsVm.cpp \
     $$PWD/programVm.cpp
 
-DISTFILES += \
-    $$PWD/viewModel.pri
 

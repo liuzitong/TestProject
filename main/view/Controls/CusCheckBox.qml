@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtQml 2.2
 Item{
     id:root
@@ -13,7 +13,7 @@ Item{
 
     Image {
         id: image
-        source: imageSrc
+        source: checked?"qrc:/Pics/base-svg/btn_checkbox_3press.svg":"qrc:/Pics/base-svg/btn_checkbox_1normal.svg";
         anchors.fill: parent;
         Rectangle{
             id:rec;
@@ -27,7 +27,7 @@ Item{
     MouseArea{
         hoverEnabled: true;
         anchors.fill: parent
-        onClicked:{if(!checked) {image.source=pressImageSrc;checked=true;}else{image.source=imageSrc;checked=false;}}
+        onClicked:{if(checked) {image.source=imageSrc}else{image.source=pressImageSrc;}checked=!checked;}
         onEntered:{
             if(!checked)
             {
@@ -35,7 +35,7 @@ Item{
             }
             rec.color="white";
         }
-        onExited:{checked? image.source=pressImageSrc:image.source=imageSrc;console.log("exited...");rec.color=backGroundColor;}
+        onExited:{if(!checked)/* image.source=pressImageSrc:*/image.source=imageSrc;console.log("exited...");rec.color=backGroundColor;}
     }
 }
 

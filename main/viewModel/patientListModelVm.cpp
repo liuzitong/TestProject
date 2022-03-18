@@ -68,7 +68,7 @@ public:
 PatientListModelVm::PatientListModelVm(const QVariantList &)
 {
     m_obj = perimeter_new( PatientListModelVmPriv, this );
-    qDebug()<<"PatientListModelVm gogogogogo";
+//    qDebug()<<"PatientListModelVm gogogogogo";
 }
 
 PatientListModelVm::~PatientListModelVm()
@@ -112,7 +112,7 @@ void PatientListModelVm::addPatient(QString patientId, QString name, int sex, QD
 
 void PatientListModelVm::hello()
 {
- qDebug()<<"patientModelList says hello";
+// qDebug()<<"patientModelList says hello";
 }
 
 void PatientListModelVm:: deletePatient(long id)

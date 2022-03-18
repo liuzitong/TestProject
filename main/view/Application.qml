@@ -66,6 +66,7 @@ Window {
         id: idPriv;
         property var patient_vm:null;
         property var patientList_vm:null;
+        property var currentProgram:null;
         function init()
         {
             IcUiQmlApi.appCtrl.databaseSvc.initDataBase();
@@ -75,6 +76,9 @@ Window {
 //            patientList_vm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::PatientListModelVm", true);
 //            patientList_vm.hello();
 //            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientListModelVm", patientList_vm);
+//            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false);
+//            currentProgram.hello();
+//            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);
         }
     }
 
