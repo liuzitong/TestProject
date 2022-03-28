@@ -36,10 +36,8 @@ public:
 //    Q_INVOKABLE QObject* getPatientByName(QString name,QDate from,QDate to);
 //    Q_INVOKABLE QObject* getPatientBySex(int sex,QDate from,QDate to);
 //    Q_INVOKABLE QObject* getPatientByBirthDate(QDate date);
-    Q_INVOKABLE void addProgram(int type,QString name,QString params,QString data,int category=4);
 //    Q_INVOKABLE QObject* getPatient();
 
-    Q_INVOKABLE QObject* getParams();
 
 //    Q_INVOKABLE void addCheckResult(QString params,QString data,QDateTime time,Patient_ptr patient,Program_ptr program);
 

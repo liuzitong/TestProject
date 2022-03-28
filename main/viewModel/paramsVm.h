@@ -105,7 +105,7 @@ class MoveParamVM:public QObject
     Q_PROPERTY(int cursorColor READ getCursorColor WRITE setCursorColor)
     Q_PROPERTY(int cursorSize READ getCursorSize WRITE setCursorSize)
     Q_PROPERTY(int backGroundColor READ getBackGroundColor WRITE setBackGroundColor)
-    Q_PROPERTY(int fixationViewSelection READ getFixationViewSelection WRITE setFixationViewSelection)
+//    Q_PROPERTY(int fixationViewSelection READ getFixationViewSelection WRITE setFixationViewSelection)
     Q_PROPERTY(float spead READ getSpeed WRITE setSpeed)
     Q_PROPERTY(int brightness READ getBrightness WRITE setBrightness)
     Q_PROPERTY(int moveMethod READ getMoveMethod WRITE setMoveMethod)
@@ -113,22 +113,21 @@ class MoveParamVM:public QObject
     Q_PROPERTY(int eyeMoveAlarmMode READ getEyeMoveAlarmMode WRITE setEyeMoveAlarmMode)
 
 public:
-    MoveParamVM(){m_moveParams=new MoveParams();}
-    MoveParamVM(MoveParams* moveParams){m_moveParams=moveParams;}
-    ~MoveParamVM(){delete m_moveParams;}
-    QList<int> getRange(){return QList<int>{m_moveParams->Range[0],m_moveParams->Range[1]};}void setRange(QList<int> value){m_moveParams->Range[0]=value[0];m_moveParams->Range[1]=value[1];}
-    int getStrategy(){return int(m_moveParams->strategy);}void setStrategy(int value){m_moveParams->strategy=MoveParams::Strategy(value);}
-    int getCursorColor(){return int(m_moveParams->cursorColor);}void setCursorColor(int value){m_moveParams->cursorColor=CursorColor(value);}
-    int getCursorSize(){return int(m_moveParams->cursorSize);}void setCursorSize(int value){m_moveParams->cursorSize=CursorSize(value);}
-    int getBackGroundColor(){return int(m_moveParams->backGroundColor);}void setBackGroundColor(int value){m_moveParams->backGroundColor=BackGroundColor(value);}
-    int getFixationViewSelection(){return int(m_moveParams->fixationViewSelection);}void setFixationViewSelection(int value){m_moveParams->fixationViewSelection=FixationViewSelection(value);}
-    float getSpeed(){return m_moveParams->speed;}void setSpeed(float value){m_moveParams->speed=value;}
-    int getBrightness(){return m_moveParams->brightness;}void setBrightness(int value){m_moveParams->brightness=value;}
-    int getMoveMethod(){return int(m_moveParams->moveMethod);}void setMoveMethod(int value){m_moveParams->moveMethod=MoveParams::MoveMethod(value);}
-    int getMoveDistance(){return int(m_moveParams->moveDistance);}void setMoveDistance(int value){m_moveParams->moveDistance=MoveParams::MoveDistance(value);}
-    int getEyeMoveAlarmMode(){return int(m_moveParams->eyeMoveAlarmMode);}void setEyeMoveAlarmMode(int value){m_moveParams->eyeMoveAlarmMode=EyeMoveAlarmMode(value);}
+    MoveParamVM();
+    MoveParamVM(MoveParams& moveParams){m_moveParams=moveParams;}
+    QList<int> getRange(){return QList<int>{m_moveParams.Range[0],m_moveParams.Range[1]};}void setRange(QList<int> value){m_moveParams.Range[0]=value[0];m_moveParams.Range[1]=value[1];}
+    int getStrategy(){return int(m_moveParams.strategy);}void setStrategy(int value){m_moveParams.strategy=MoveParams::Strategy(value);}
+    int getCursorColor(){return int(m_moveParams.cursorColor);}void setCursorColor(int value){m_moveParams.cursorColor=CursorColor(value);}
+    int getCursorSize(){return int(m_moveParams.cursorSize);}void setCursorSize(int value){m_moveParams.cursorSize=CursorSize(value);}
+    int getBackGroundColor(){return int(m_moveParams.backGroundColor);}void setBackGroundColor(int value){m_moveParams.backGroundColor=BackGroundColor(value);}
+//    int getFixationViewSelection(){return int(m_moveParams->fixationViewSelection);}void setFixationViewSelection(int value){m_moveParams->fixationViewSelection=FixationViewSelection(value);}
+    float getSpeed(){return m_moveParams.speed;}void setSpeed(float value){m_moveParams.speed=value;}
+    int getBrightness(){return m_moveParams.brightness;}void setBrightness(int value){m_moveParams.brightness=value;}
+    int getMoveMethod(){return int(m_moveParams.moveMethod);}void setMoveMethod(int value){m_moveParams.moveMethod=MoveParams::MoveMethod(value);}
+    int getMoveDistance(){return int(m_moveParams.moveDistance);}void setMoveDistance(int value){m_moveParams.moveDistance=MoveParams::MoveDistance(value);}
+    int getEyeMoveAlarmMode(){return int(m_moveParams.eyeMoveAlarmMode);}void setEyeMoveAlarmMode(int value){m_moveParams.eyeMoveAlarmMode=EyeMoveAlarmMode(value);}
 private:
-    MoveParams* m_moveParams;
+    MoveParams m_moveParams;
 };
 
 #endif // PARAMSVM_H

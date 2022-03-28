@@ -178,19 +178,7 @@ void databaseSvc::createTable(){
 //    emit patientListChanged();
 //}
 
-void databaseSvc::addProgram(int type, QString name, QString params, QString data, int category)
-{
 
-    Program_ptr program_ptr(new Program(type,name,params,data,category));
-    QSqlError daoError = qx::dao::insert(program_ptr);
-}
-
-QObject *databaseSvc::getParams()
-{
-    StaticParams* param=new StaticParams{{{3,2},false,100,StaticParams::CommonParams::Strategy::fullThreshold},{100,200}};
-    StaticParamsVM* paramVM=new StaticParamsVM(*param);
-    return paramVM;
-}
 
 //QObject *databaseSvc::getPatient()
 //{

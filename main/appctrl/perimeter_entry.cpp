@@ -105,98 +105,117 @@ static void gMsgHandler( QtMsgType type, const QMessageLogContext &ctxt, const Q
 #include <perimeter/main/model/utility.h>
 #include <perimeter/main/model/programModel.h>
 
-void save()
-{
-    std::ofstream file("archive.xml");
-    std::stringstream str;
-    boost::archive::xml_oarchive oa(file);
-    float array[] = { 34.2, 78.1, 22.221, 1.0, -910.88 };
-    std::list<float> L1(array, array + 5);
-    std::vector<float> V1(array, array + 5);
-    oa<< BOOST_SERIALIZATION_NVP(L1);
-    oa<< BOOST_SERIALIZATION_NVP(V1);
+//void save()
+//{
+//    std::ofstream file("archive.xml");
+//    std::stringstream str;
+//    boost::archive::xml_oarchive oa(file);
+//    float array[] = { 34.2, 78.1, 22.221, 1.0, -910.88 };
+//    std::list<float> L1(array, array + 5);
+//    std::vector<float> V1(array, array + 5);
+//    oa<< BOOST_SERIALIZATION_NVP(L1);
+//    oa<< BOOST_SERIALIZATION_NVP(V1);
 
-//    std::cout << str.str() << std::endl;
-}
+////    std::cout << str.str() << std::endl;
+//}
 
 
-void load()
-{
-    std::ifstream file("archive.xml");
-    boost::archive::xml_iarchive ia(file);
-    std::list<float> L2;
-    ia >> BOOST_SERIALIZATION_NVP(L2); // No size/range needed
+//void load()
+//{
+//    std::ifstream file("archive.xml");
+//    boost::archive::xml_iarchive ia(file);
+//    std::list<float> L2;
+//    ia >> BOOST_SERIALIZATION_NVP(L2); // No size/range needed
 
-    std::vector<float> V2;
-    ia >> BOOST_SERIALIZATION_NVP(V2); // No size/range needed
+//    std::vector<float> V2;
+//    ia >> BOOST_SERIALIZATION_NVP(V2); // No size/range needed
 
-    std::ostream_iterator<float> oi(std::cout, " ");
-    std::copy(L2.begin(), L2.end(), oi);
-    std::copy(V2.begin(), V2.end(), oi);
-}
+//    std::ostream_iterator<float> oi(std::cout, " ");
+//    std::copy(L2.begin(), L2.end(), oi);
+//    std::copy(V2.begin(), V2.end(), oi);
+//}
 
-std::string  global_str;
-void save2()
-{
-    StaticParams param{{{3,2},0},{}};
-    using strategy=StaticParams::CommonParams::Strategy;
-    StaticProgramData<Type::ThreshHold> data{{strategy::fullThreshold,strategy::fastInterative},{{3.2f,2.5f},{4.5f,1.2f}}};
-    std::stringstream ss;
-    {                                           //必须括号主动调用析构函数,不然写入不全
-        boost::archive::xml_oarchive oa(ss);
-        oa<< BOOST_SERIALIZATION_NVP(param);
-    }
-    global_str=ss.str();
-    std::cout<<ss.str().c_str()<<std::endl;
-}
+//std::string  global_str;
+//void save2()
+//{
+//    StaticParams param{{{3,2},0},{}};
+//    using strategy=StaticParams::CommonParams::Strategy;
+//    StaticProgramData<Type::ThreshHold> data{{strategy::fullThreshold,strategy::fastInterative},{{3.2f,2.5f},{4.5f,1.2f}}};
+//    std::stringstream ss;
+//    {                                           //必须括号主动调用析构函数,不然写入不全
+//        boost::archive::xml_oarchive oa(ss);
+//        oa<< BOOST_SERIALIZATION_NVP(param);
+//    }
+//    global_str=ss.str();
+//    std::cout<<ss.str().c_str()<<std::endl;
+//}
 
-void load2()
-{
-    StaticParams t;
-    std::stringstream ss(global_str);
-    std::cout<<ss.str()<<std::endl;
-    boost::archive::xml_iarchive ia(ss);
-    ia>> BOOST_SERIALIZATION_NVP(t);
-    std::cout<<t.commonParams.Range[0]<<std::endl;
-    std::cout<<std::endl;
-}
+//void load2()
+//{
+//    StaticParams t;
+//    std::stringstream ss(global_str);
+//    std::cout<<ss.str()<<std::endl;
+//    boost::archive::xml_iarchive ia(ss);
+//    ia>> BOOST_SERIALIZATION_NVP(t);
+//    std::cout<<t.commonParams.Range[0]<<std::endl;
+//    std::cout<<std::endl;
+//}
 
 
 int  main1 ( int argc, char *argv[] )
 {
-    ProgramModel<Type::ThreshHold> pm;
-    pm.m_type=Type::ThreshHold;pm.m_params={{{3,2},0},{}};
-    pm.m_name="Threshold";
-    using strategy=StaticParams::CommonParams::Strategy;
-    pm.m_data.strategies={strategy::fullThreshold,strategy::fastInterative};
-    pm.m_data.dots={{2,3},{55,2}};
-    pm.m_category=Category::ThreshHold;
+    using StaticStrategy=StaticParams::CommonParams::Strategy;
+    using StaticStrategyMode=StaticParams::CommonParams::StrategyMode;
+    using MoveStrategy=MoveParams::Strategy;
+    ProgramModel<Type::Move> pm;
+    pm.m_name="Straight Line";
+    pm.m_type=Type::Move;
+//    pm.m_params=
+//    {{{0,80},StaticStrategy::Standard,StaticStrategyMode::ageRelated,CursorColor::white,CursorSize::I,BackGroundColor::white,
+//     0,1,500,0,0,FixationViewSelection::centerPoint,EyeMoveAlarmMode::dontAlarm,1},
+//     {180,1000,20,20,10,10,10,10}};
+    pm.m_params={{0,30},MoveStrategy::straightLine,CursorColor::white,CursorSize::I,BackGroundColor::white,
+                1.0,0,MoveParams::MoveMethod::_4Lines,MoveParams::MoveDistance::_5,EyeMoveAlarmMode::dontAlarm};
+
+//    pm.m_data.strategies={StaticStrategy::oneStage,StaticStrategy::twoStages,StaticStrategy::quantifyDefects,StaticStrategy::singleStimulation};
+    pm.m_data.dots={
+//        {42,85},{42,85},{48,60},{48,120},{60,265},{60,275},{62,240},{62,300},
+//        {66,30},{66,160},{75,5},{75,175},{75,185},{75,210},{75,330},{75,355}
+
+
+    };
+    pm.m_category=Category::Move;
 
     auto pp=pm.ModelToDB();
     std::cout<<pp->m_params.toStdString()<<std::endl;
     std::cout<<pp->m_data.toStdString()<<std::endl;
 
-    ProgramModel<Type::Screening> pm2;
-    pm2.m_type=Type::Screening;pm2.m_params={{{3,2},0},{}};
-    pm2.m_data.strategies={strategy::oneStage,strategy::twoStages};
-    pm2.m_data.dots={{44,3},{55,2}};
-    pm2.m_category=Category::Screening;
-    pm2.m_name="screening";
-    auto pp2=pm2.ModelToDB();
 
-    ProgramModel<Type::Move> pm3;
-    pm3.m_type=Type::Move;
-    pm3.m_params={{3,5},FixationViewSelection::centerPoint};
+
+
+
+
+//    ProgramModel<Type::Screening> pm2;
+//    pm2.m_type=Type::Screening;pm2.m_params={{{3,2},0},{}};
+//    pm2.m_data.strategies={StaticStrategy::oneStage,StaticStrategy::twoStages};
+//    pm2.m_data.dots={{44,3},{55,2}};
+//    pm2.m_category=Category::Screening;
+//    pm2.m_name="screening";
+//    auto pp2=pm2.ModelToDB();
+
+//    ProgramModel<Type::Move> pm3;
+//    pm3.m_type=Type::Move;
+//    pm3.m_params={{3,5},FixationViewSelection::centerPoint};
 //    pm3.m_data.dots={{44,3},{55,2}};
-    pm3.m_name="move";
-    pm3.m_category=Category::Move;
-    auto pp3=pm3.ModelToDB();
+//    pm3.m_name="move";
+//    pm3.m_category=Category::Move;
+//    auto pp3=pm3.ModelToDB();
 
 
 
-    Test::removeDataBase();
+//    Test::removeDataBase();
     Test::connectDataBase();
-    Test::createTable();
+//    Test::createTable();
 //    Test::createEntityData();
 //    Test::GetEntityData();
 //    Test::displayInfo();
@@ -204,8 +223,8 @@ int  main1 ( int argc, char *argv[] )
     QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
     bool bCommit = db.transaction();
     QSqlError daoError = qx::dao::insert(pp, &db);
-    daoError = qx::dao::insert(pp2, &db);
-    daoError = qx::dao::insert(pp3, &db);
+//    daoError = qx::dao::insert(pp2, &db);
+//    daoError = qx::dao::insert(pp3, &db);
     bCommit = (bCommit && ! daoError.isValid());
     qAssert(bCommit);
     db.commit();

@@ -15,7 +15,7 @@ class StaticProgramVM:public QObject
     Q_PROPERTY(long id READ getID WRITE setID)
     Q_PROPERTY(int type READ getType WRITE setType)
     Q_PROPERTY(QString name READ getName WRITE setName);
-    Q_PROPERTY(QObject* Params READ getParams)
+    Q_PROPERTY(QObject* params READ getParams)
     Q_PROPERTY(QVariantList strategies READ getStrategies  WRITE setStrategies)
     Q_PROPERTY(QVariantList dots READ getDots WRITE setDots )
 
@@ -48,14 +48,25 @@ class MoveProgramVM:public QObject
     Q_OBJECT
 public:
     Q_INVOKABLE explicit MoveProgramVM(const QVariantList &);
-    Q_INVOKABLE virtual ~MoveProgramVM() Q_DECL_OVERRIDE=default;
+    Q_INVOKABLE virtual ~MoveProgramVM();
+    Q_PROPERTY(long id READ getID WRITE setID);
+    Q_PROPERTY(int type READ getType WRITE setType);
+    Q_PROPERTY(QString name READ getName WRITE setName);
+    Q_PROPERTY(QObject* params READ getParams);
+    Q_PROPERTY(QVariantList dots READ getDots WRITE setDots);
+
+    long getID(){return m_id;}void setID(int value){m_id=value;}
+    long getType(){return m_type;}void setType(int value){m_type=value;}
+    QString getName(){return m_name;}void setName(QString value){m_name=value;}
+    QObject* getParams(){return m_moveParamsVm;}
+    QVariantList getDots(){return m_dots;}void setDots(QVariantList value){m_dots=value;}
 private:
     long m_id;
     int m_type;
     QString m_name;
-    MoveParamVM* m_moveParamsVm;
-    QVector<QPoint> m_dots;
-    QSharedPointer<ProgramModel<Type::Move>> programModel;
+    QObject* m_moveParamsVm;
+    QVariantList m_dots;
+//    QSharedPointer<ProgramModel<Type::Move>> programModel;
     Q_DISABLE_COPY(MoveProgramVM);
 };
 }

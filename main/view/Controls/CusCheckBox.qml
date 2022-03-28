@@ -9,33 +9,21 @@ Item{
     property string hoverImageSrc: "qrc:/Pics/base-svg/btn_checkbox_2hover.svg";
     property string pressImageSrc: "qrc:/Pics/base-svg/btn_checkbox_3press.svg";
     property string backGroundColor: "#f0f2f3"
-
+    signal clicked;
 
     Image {
         id: image
         source: checked?"qrc:/Pics/base-svg/btn_checkbox_3press.svg":"qrc:/Pics/base-svg/btn_checkbox_1normal.svg";
         anchors.fill: parent;
-        Rectangle{
-            id:rec;
-            anchors.fill: parent;
-            color:backGroundColor;
-            z:-1;
-            radius:parent.height/5;
-        }
-        }
+        Rectangle{id:rec;anchors.fill: parent;color:backGroundColor;z:-1;radius:parent.height/5;}
+    }
 
     MouseArea{
         hoverEnabled: true;
         anchors.fill: parent
-        onClicked:{if(checked) {image.source=imageSrc}else{image.source=pressImageSrc;}checked=!checked;}
-        onEntered:{
-            if(!checked)
-            {
-                image.source=hoverImageSrc;
-            }
-            rec.color="white";
-        }
-        onExited:{if(!checked)/* image.source=pressImageSrc:*/image.source=imageSrc;console.log("exited...");rec.color=backGroundColor;}
+        onClicked:{if(checked) {image.source=imageSrc}else{image.source=pressImageSrc;} checked=!checked;root.clicked();}
+        onEntered:{if(!checked){image.source=hoverImageSrc;} rec.color="white";}
+        onExited:{if(!checked)/* image.source=pressImageSrc:*/image.source=imageSrc;rec.color=backGroundColor;}
     }
 }
 

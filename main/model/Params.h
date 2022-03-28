@@ -35,14 +35,22 @@ struct StaticParams/*:public QObject*/
         enum class Strategy{fullThreshold,smartInteractive,fastInterative,oneStage,twoStages,quantifyDefects,singleStimulation};
 //        Q_OBJECT
         enum class StrategyMode{ageRelated,ThresholdRelated};
-        int                     Range[2];                   ON_OFF                      responseAutoAdapt;
-        /*int                     DotCount;*/               int                         intervalTime;
-        Strategy                strategy;                   ON_OFF                      centerDotCheck;
-        StrategyMode            strategyMode;               ON_OFF                      shortTermFluctuation;
-        CursorColor             cursorColor;                FixationViewSelection       fixationViewSelection;
-        CursorSize              cursorSize;                 EyeMoveAlarmMode            eyeMoveAlarmMode;
-        BackGroundColor         backGroundColor;            ON_OFF                      blindDotTest;
-        ON_OFF                  cyanYellowTest;
+
+        int                         Range[2];
+        Strategy                    strategy;
+        StrategyMode                strategyMode;
+        CursorColor                 cursorColor;
+        CursorSize                  cursorSize;
+        BackGroundColor             backGroundColor;
+
+        ON_OFF                      cyanYellowTest;
+        ON_OFF                      responseAutoAdapt;
+        int                         intervalTime;
+        ON_OFF                      centerDotCheck;
+        ON_OFF                      shortTermFluctuation;
+        FixationViewSelection       fixationViewSelection;
+        EyeMoveAlarmMode            eyeMoveAlarmMode;
+        ON_OFF                      blindDotTest;
 
         template<class Archive>
         void serialize(Archive& archive, const unsigned int version)
@@ -69,11 +77,15 @@ struct StaticParams/*:public QObject*/
     {
 //        Q_OBJECT
 
-        int stimulationTime;            int singleStimulationDB;
-        int intervalTime;               int blindDotStimulationDB;
-        int falsePositiveCycle;         int shortTermFluctuationCount;
+        int stimulationTime;
+        int intervalTime;
+        int falsePositiveCycle;
         int falseNegativeCycle;
         int fixationViewLossCycle;
+
+        int singleStimulationDB;
+        int blindDotStimulationDB;
+        int shortTermFluctuationCount;
 
         template<class Archive>
         void serialize(Archive& archive, const unsigned int version)
@@ -109,12 +121,18 @@ struct MoveParams
     enum class Strategy{standard,blindArea,darkArea,straightLine};
     enum class MoveMethod{_4Lines,_6Lines,_8Lines};
     enum class MoveDistance{_5,_10,_15};
-    int                         Range[2];                   FixationViewSelection   fixationViewSelection;
-                                                            float                   speed;
-    Strategy                    strategy;                   int                     brightness;
-    CursorColor                 cursorColor;                MoveMethod              moveMethod;
-    CursorSize                  cursorSize;                 MoveDistance            moveDistance;
-    BackGroundColor             backGroundColor;            EyeMoveAlarmMode        eyeMoveAlarmMode;
+    int                         Range[2];
+    Strategy                    strategy;
+    CursorColor                 cursorColor;
+    CursorSize                  cursorSize;
+    BackGroundColor             backGroundColor;
+
+//    FixationViewSelection       fixationViewSelection;
+    float                       speed;
+    int                         brightness;
+    MoveMethod                  moveMethod;
+    MoveDistance                moveDistance;
+    EyeMoveAlarmMode            eyeMoveAlarmMode;
 
     template<class Archive>
     void serialize(Archive& archive, const unsigned int version)
@@ -124,7 +142,7 @@ struct MoveParams
         archive & BOOST_SERIALIZATION_NVP(cursorColor);
         archive & BOOST_SERIALIZATION_NVP(cursorSize);
         archive & BOOST_SERIALIZATION_NVP(backGroundColor);
-        archive & BOOST_SERIALIZATION_NVP(fixationViewSelection);
+//        archive & BOOST_SERIALIZATION_NVP(fixationViewSelection);
         archive & BOOST_SERIALIZATION_NVP(speed);
         archive & BOOST_SERIALIZATION_NVP(brightness);
         archive & BOOST_SERIALIZATION_NVP(moveMethod);

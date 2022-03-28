@@ -218,34 +218,34 @@ public:
 
     void static createEntityData()
     {
-        ProgramModel<Type::ThreshHold> pm;
-        pm.m_type=Type::ThreshHold;pm.m_params={{{3,2},0},{}};
-        pm.m_name="30-2";
-        using strategy=StaticParams::CommonParams::Strategy;
-        pm.m_data.strategies={strategy::fullThreshold,strategy::fastInterative};
-        pm.m_data.dots={{2,3},{55,2}};
-        pm.m_category=Category::Custom;
-        auto pm_ptr=pm.ModelToDB();
+//        ProgramModel<Type::ThreshHold> pm;
+//        pm.m_type=Type::ThreshHold;pm.m_params={{{3,2},0},{}};
+//        pm.m_name="30-2";
+//        using strategy=StaticParams::CommonParams::Strategy;
+//        pm.m_data.strategies={strategy::fullThreshold,strategy::fastInterative};
+//        pm.m_data.dots={{2,3},{55,2}};
+//        pm.m_category=Category::Custom;
+//        auto pm_ptr=pm.ModelToDB();
 
-        Patient_ptr pp_ptr(new Patient("50022","lzt",Patient::sex::male,QDate::currentDate()));
+//        Patient_ptr pp_ptr(new Patient("50022","lzt",Patient::sex::male,QDate::currentDate()));
 
-        CheckResultModel<Type::ThreshHold> crm;
-        crm.m_type=Type::ThreshHold;
-        crm.m_params={{{3,2},0,60,strategy::fullThreshold,false,StaticParams::CommonParams::StrategyMode::ageRelated,false,CursorColor::red},{300,30,100,20,20,10,30,10}};
-        crm.m_data={1,2,3,4,10,5,3,2,3,1,3,{3,2,3,2},{11,223,11,22,33,22},{2,4,2,3,5,2,33,55,32,33}};
-        crm.m_time=QDateTime::currentDateTime();
-        auto cr_ptr=crm.ModelToDB(pp_ptr,pm_ptr);
+//        CheckResultModel<Type::ThreshHold> crm;
+//        crm.m_type=Type::ThreshHold;
+//        crm.m_params={{{3,2},0,60,strategy::fullThreshold,false,StaticParams::CommonParams::StrategyMode::ageRelated,false,CursorColor::red},{300,30,100,20,20,10,30,10}};
+//        crm.m_data={1,2,3,4,10,5,3,2,3,1,3,{3,2,3,2},{11,223,11,22,33,22},{2,4,2,3,5,2,33,55,32,33}};
+//        crm.m_time=QDateTime::currentDateTime();
+//        auto cr_ptr=crm.ModelToDB(pp_ptr,pm_ptr);
 
-        QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
-        bool bCommit = db.transaction();
+//        QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
+//        bool bCommit = db.transaction();
 
-        QSqlError daoError;
-        daoError = qx::dao::insert(pp_ptr, &db);
-        daoError = qx::dao::insert(pm_ptr, &db);
-        daoError = qx::dao::insert(cr_ptr, &db);
-        bCommit = (bCommit && ! daoError.isValid());
-        qAssert(bCommit);
-        db.commit();
+//        QSqlError daoError;
+//        daoError = qx::dao::insert(pp_ptr, &db);
+//        daoError = qx::dao::insert(pm_ptr, &db);
+//        daoError = qx::dao::insert(cr_ptr, &db);
+//        bCommit = (bCommit && ! daoError.isValid());
+//        qAssert(bCommit);
+//        db.commit();
     }
 
     void static GetEntityData()

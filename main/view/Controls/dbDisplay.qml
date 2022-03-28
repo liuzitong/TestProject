@@ -61,6 +61,23 @@ Item{
             drawText(db,x_coord,y_coord,size);
         }
 
+        //        function drawDot(dot)
+        //        {
+        //            var x_coord=(dot.x_Deg/90)*(diameter*0.5)+width/2;
+        //            var y_coord=(-dot.y_Deg/90)*(diameter*0.5)+height/2;
+        //            var radius=diameter/180;
+        //            var ctx = getContext("2d");
+        //            ctx.lineWidth = 0;
+        //            ctx.strokeStyle = "red";
+        //            ctx.beginPath();
+        //            ctx.arc(x_coord, x_coord, radius, 0, Math.PI*2);
+        //            ctx.stroke();
+        //            ctx.closePath();
+        //            context.fillStyle = "green";
+        //            context.fill();
+        //        }
+
+
         function drawAxisEndText(string,x_coord,y_coord,size)
         {
             var ctx = getContext("2d")
