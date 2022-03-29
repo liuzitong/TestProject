@@ -8,6 +8,9 @@
         <file>Content.qml</file>
         <file>qmldir</file>
         <file>ReportAndAnalysis.qml</file>
+        <file>NewProgram.qml</file>
+        <file>About.qml</file>
+        <file>Settings.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

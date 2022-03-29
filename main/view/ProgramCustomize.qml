@@ -89,9 +89,12 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                                         else{currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false,[model.program_id]);}
                                                         console.log(currentProgram.name);
                                                         var params=currentProgram.params;
-//                                                        var dots=currentProgram.dots;
                                                         console.log(currentProgram.dots.length);
                                                         strategyStack.changeProgram();
+                                                        dbDisplay.dotList=currentProgram.dots;
+                                                        if(type!=2){dbDisplay.range=params.commonParams.Range[1];}
+                                                        else{dbDisplay.range=params.Range[1]}
+                                                        dbDisplay.displayCanvas.requestPaint();
 
                                                     }
                                                     Component.onDestruction: {
@@ -131,14 +134,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         case 1:strategyNames=[{name:qsTr("one stage"),strategy:3},{name:qsTr("two stages"),strategy:4},{name:qsTr("quantify defects"),strategy:5},{name:qsTr("single stimulation"),strategy:6}];break;
                                         case 2:strategyNames=[];break;
                                     }
-                                    var dots=currentProgram.dots;
-                                    for(var i=0;i<dots.length;i++)
-                                    {
-                                        console.log("x:"+dots[i].x+"  "+"y:"+dots[i].y);
-//                                        dbDisplay.drawDot(dot[i]);
 
-                                    }
-//                                    dbDisplay.dotList=dots;
                                 }
 
                                 Item{anchors.fill: parent;anchors.margins: 0.1*height;
@@ -178,7 +174,9 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                     Rectangle{anchors.fill: parent;color: "#DCDEE0";
                         Item{ anchors.fill: parent;anchors.margins: 0.15*width;
                             Column{anchors.fill: parent;spacing: width*0.25;
-                                CusButton{text:"新建";height: parent.width*0.3;width: parent.width;}
+                                CusButton{text:"新建";height: parent.width*0.3;width: parent.width;
+                                    onClicked: {}
+                                }
                                 CusButton{text:"取消";height: parent.width*0.3;width: parent.width;}
                                 CusButton{text:"保存";height: parent.width*0.3;width: parent.width;}
                                 CusButton{text:"删除";height: parent.width*0.3;width: parent.width;}

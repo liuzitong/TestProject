@@ -193,53 +193,13 @@ Rectangle {
                         checkContentButton.image.source=checkContentButton.imageSrc;
                         patientInfo.visible=false;
                         break;
-
                 }
             }
         }
-
     }
-
-
-
-//        Loader {
-//            id: pageLoader
-//            width:parent.width;height: parent.height*0.90;
-//            source: "qrc:/perimeter/main/view/patientManagement.qml";
-//            function changePage(pageName)
-//            {
-//                switch(pageName)
-//                {
-//                    case "patientManagement":
-//                        source="qrc:/perimeter/main/view/patientManagement.qml";
-//                        checkContentButton.image.source=checkContentButton.imageSrc;
-//                        patientContentButton.image.source=patientContentButton.pressImageSrc;
-//                        seperator1.opacity=1;
-//                        seperator2.opacity=1;
-//                        seperator3.opacity=0;
-//                        break;
-//                    case "check": source="qrc:/perimeter/main/view/check.qml";
-//                        patientContentButton.image.source=patientContentButton.imageSrc;
-//                        checkContentButton.image.source=checkContentButton.pressImageSrc;
-//                        seperator1.opacity=0;
-//                        seperator2.opacity=1;
-//                        seperator3.opacity=1;
-//                        break;
-//                    case "programCustomize":
-//                        source="qrc:/perimeter/main/view/programCustomize.qml";
-//                        seperator1.opacity=0;
-//                        seperator2.opacity=0;
-//                        seperator3.opacity=0;
-//                        patientContentButton.image.source=patientContentButton.imageSrc;
-//                        checkContentButton.image.source=checkContentButton.imageSrc;
-//                        break;
-//                }
-//            }
-//        }
-//     }
-//    Component.onCompleted: {IcUiQmlApi.appCtrl.changePage.connect(pageLoader.changePage)}
-
-
-
 }
+
+
+
+
 

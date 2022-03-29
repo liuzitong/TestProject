@@ -1,7 +1,7 @@
 ﻿import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-
+import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0     // [HINT] this is the pre-registered module name.
 import qxpack.indcom.ui_qml_control 1.0  // [HINT] ModalPopupDialog is in it
 

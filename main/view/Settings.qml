@@ -4,13 +4,14 @@ import QtQuick.Layouts 1.3
 
 import qxpack.indcom.ui_qml_base 1.0     // [HINT] this is the pre-registered module name.
 import qxpack.indcom.ui_qml_control 1.0  // [HINT] ModalPopupDialog is in it
+import perimeter.main.view.Controls 1.0
 
 ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_contro
     id:idPopup
     property alias color: idContent.color;
     reqEnterEventLoop:false;
-
-
+//    anchors.fill: parent;
+    width: 1200;height:640;
    contentItem:
    Rectangle{
         id: idContent; color: "#60606060";implicitWidth: idPopup.width; implicitHeight: idPopup.height;

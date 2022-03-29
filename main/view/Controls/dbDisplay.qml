@@ -3,25 +3,38 @@
 Item{
     id:root;
     anchors.fill: parent;anchors.margins: parent.height*0.03;
+    property alias range: displayCanvas.degreeRange;
     property alias displayCanvas: displayCanvas;
+    property var dBList:[];
     property var dotList:[];
-    function addDot(db,x,y,size)
-    {
-        dotList.push({db:db,x_Deg:x,y_Deg:y,size:size});
-    }
+
+//    function hello(){
+//        console.log("hello.");
+//        dotList.forEach(function(item){console.log(item.x+" "+item.y);})
+//        displayCanvas.requestPaint();
+//    }
+
+//    function addDB(db,x,y)
+//    {
+//        dBList.push({db:db,x:x,y:y});
+//    }
 
     signal painted();
 
-    Component.onCompleted: {addDot(39,33,33,14);addDot(55,-44,-44,14)}
+    Component.onCompleted:
+    {
+//        addDB(11,22,33);
+//        addDB(15,-20,-44);
+    }
 
     Canvas{
         id:displayCanvas;
-        property int degreeRange: 30;
+        property int degreeRange: 0;
         anchors.fill: parent;
         property double diameter: 0.97*height;
         property double widthMargin: (width-height)/2+heightMargin;
         property double heightMargin:height*0.015;
-        property double fontSize: diameter*0.020;
+        property int fontSize: diameter*0.022;
         property int pi: 0;
 
         function drawDashRound(x, y, radius, length)
@@ -41,41 +54,41 @@ Item{
             }
         }
 
-        function drawText(content,x_coord,y_coord,size)
+        function drawText(content,x_coord,y_coord)
         {
             var ctx = getContext("2d");
             ctx.textAlign = "center";
-            ctx.font = size.toString()+"px sans-serif";
+            ctx.font = fontSize.toString()+"px sans-serif";
             ctx.fillStyle="white";
-            ctx.fillRect(x_coord-size*0.7,y_coord-size*0.6,size*1.4,size*1.2)
+            ctx.fillRect(x_coord-fontSize*0.7,y_coord-fontSize*0.6,fontSize*1.4,fontSize*1.2)
             ctx.fillStyle="black";
-            ctx.fillText(content, x_coord, y_coord+size*1/3);
+            ctx.fillText(content, x_coord, y_coord+fontSize*1/3);
         }
 
         function drawDB(dot)
         {
-            var x_coord=(dot.x_Deg/90)*(diameter*0.5)+width/2;
-            var y_coord=(-dot.y_Deg/90)*(diameter*0.5)+height/2;
+            var x_coord=(dot.x/degreeRange)*(diameter*0.5)+width/2;
+            var y_coord=(-dot.y/degreeRange)*(diameter*0.5)+height/2;
             var db=dot.db;
             var size=dot.size;
             drawText(db,x_coord,y_coord,size);
         }
 
-        //        function drawDot(dot)
-        //        {
-        //            var x_coord=(dot.x_Deg/90)*(diameter*0.5)+width/2;
-        //            var y_coord=(-dot.y_Deg/90)*(diameter*0.5)+height/2;
-        //            var radius=diameter/180;
-        //            var ctx = getContext("2d");
-        //            ctx.lineWidth = 0;
-        //            ctx.strokeStyle = "red";
-        //            ctx.beginPath();
-        //            ctx.arc(x_coord, x_coord, radius, 0, Math.PI*2);
-        //            ctx.stroke();
-        //            ctx.closePath();
-        //            context.fillStyle = "green";
-        //            context.fill();
-        //        }
+        function drawDot(dot)
+        {
+            var x_coord=(dot.x/degreeRange)*(diameter*0.5)+width/2;
+            var y_coord=(-dot.y/degreeRange)*(diameter*0.5)+height/2;
+            var radius=diameter/180*1.5;
+            var ctx = getContext("2d");
+            ctx.lineWidth = 0;
+            ctx.strokeStyle = "red";
+            ctx.beginPath();
+            ctx.arc(x_coord, y_coord, radius, 0, Math.PI*2);
+            ctx.stroke();
+            ctx.closePath();
+            context.fillStyle = "green";
+            context.fill();
+        }
 
 
         function drawAxisEndText(string,x_coord,y_coord,size)
@@ -96,14 +109,24 @@ Item{
         }
 
 
-        onPaint: {
+        onPaint:
+        {
+            if(degreeRange==0) return;
+            var ctx = getContext("2d")
+            ctx.fillStyle = "#cbced0";
+            ctx.fillRect(0, 0, width, height);
+            var degreeStart=degreeRange%Math.ceil(degreeRange/3);
+            var degreeStep;
+            if(degreeStart==0){degreeStart=degreeStep=degreeRange/3;}
+            else{degreeStep=(degreeRange-degreeStart)/2;}
+
+            console.log("start:"+degreeStart+"  step:"+degreeStep);
             var i;
             for(i=3;i>=1;i--)
             {
                 if(i!==3)
-                     drawDashRound(width/2,height/2, diameter/6*i, 3)
+                     drawDashRound(width/2,height/2,(degreeStart+degreeStep*(i-1))/degreeRange*diameter/2, 3)
                 else{
-                    var ctx = getContext("2d")
                     ctx.lineWidth = 0;
                     ctx.strokeStyle = "black";
                     ctx.fillStyle="white";
@@ -137,16 +160,18 @@ Item{
                     }
                     else
                     {
-                        drawText(degreeRange/3*Math.abs(i),widthMargin+(i+3)*diameter/6,height/2,fontSize);
-                        drawText(degreeRange/3*Math.abs(i),width/2,heightMargin+(i+3)*diameter/6,fontSize);
+//                        drawText(degreeRange/3*Math.abs(i),widthMargin+(i+3)*diameter/6,height/2,fontSize);
+//                        drawText(degreeRange/3*Math.abs(i),width/2,heightMargin+(i+3)*diameter/6,fontSize);
+                        var degree=degreeStart+degreeStep*(Math.abs(i)-1);
+                        var coord=degree/degreeRange*diameter/2;
+                        if(i<-0) coord=-coord;
+                        drawText(degree,width/2+coord,height/2,fontSize);
+                        drawText(degree,width/2,height/2+coord,fontSize);
                     }
                 }
             }
-            dotList.forEach(function(item)
-            {
-//                console.log(item.x_Coord);
-                drawDB(item);
-            })
+            dBList.forEach(function(item){drawDB(item);})
+            dotList.forEach(function(item){drawDot(item);})
             root.painted();
         }
     }
