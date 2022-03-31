@@ -11,10 +11,36 @@ import perimeter.main.view.Utils 1.0
 
 Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
     property var currentProgram: null;
-    property int type;
+    property var content;
+
+
+    Component.onDestruction: {
+        if (currentProgram!=null)
+        {
+            if(type!=2)
+            {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
+            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::MoveProgramVM", currentProgram);}
+        }
+        if (currentProgram!=null)
+        {
+            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);
+        }
+    }
+//    property int type;
+//    property var newProgram;
     signal changePage(var pageName);
     function rePaintCanvas(){dbDisplay.displayCanvas.requestPaint();}
     Rectangle{id:content;width: parent.width;height: parent.height*14/15
+        NewProgram{
+            id:newProgram;
+            anchors.fill: parent;
+        }
+
+        MoveParamsSetting
+        {
+            id:moveParamsSetting;
+            anchors.fill: parent;
+        }
         anchors.top: parent.top
         Item{anchors.fill: parent;anchors.margins: 2;
             Row{anchors.fill: parent;spacing: 2;
@@ -78,39 +104,21 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 //                                                        currentProgram.hello();
                                                         if (currentProgram!=null)
                                                         {
-                                                            if(type!=2)
+                                                            if(currentProgram.type!==2)
                                                             {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
                                                             else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::MoveProgramVM", currentProgram);}
                                                         }
 
-                                                        type=model.type;
-                                                        if(type!=2)
+                                                        var type=model.type;
+                                                        if(type!==2)
                                                         {currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[model.program_id]);}
                                                         else{currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false,[model.program_id]);}
-                                                        console.log(currentProgram.name);
                                                         var params=currentProgram.params;
-                                                        console.log(currentProgram.dots.length);
-                                                        strategyStack.changeProgram();
-                                                        dbDisplay.dotList=currentProgram.dots;
-                                                        if(type!=2){dbDisplay.range=params.commonParams.Range[1];}
-                                                        else{dbDisplay.range=params.Range[1]}
-                                                        dbDisplay.displayCanvas.requestPaint();
+                                                        strategyStack.currentProgramChanged();
+                                                        dbDisplay.currentProgramChanged();
 
-                                                    }
-                                                    Component.onDestruction: {
-                                                        if (currentProgram!=null)
-                                                        {
-                                                            if(type!=2)
-                                                            {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
-                                                            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::MoveProgramVM", currentProgram);}
-                                                        }
-                                                        if (currentProgram!=null)
-                                                        {
-                                                            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);
-                                                        }
                                                     }
                                                 }
-
                                             }
                                         }
                                     }
@@ -126,26 +134,30 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                             StackLayout {
                                 id:strategyStack;anchors.fill: parent;
                                 property var strategyNames;
-                                function  changeProgram()
+                                function currentProgramChanged()
                                 {
+                                    strategyNames=[];
+                                    console.log("currentProgram.type"+currentProgram.type);
                                     switch(currentProgram.type)
                                     {
                                         case 0:strategyNames=[{name:qsTr("fullThreshold"),strategy:0},{name:qsTr("smart interactive"),strategy:1},{name:qsTr("fast interactive"),strategy:2}];break;
                                         case 1:strategyNames=[{name:qsTr("one stage"),strategy:3},{name:qsTr("two stages"),strategy:4},{name:qsTr("quantify defects"),strategy:5},{name:qsTr("single stimulation"),strategy:6}];break;
-                                        case 2:strategyNames=[];break;
+//                                        case 2:strategyNames=[];break;
+                                        default:break;
                                     }
-
                                 }
 
                                 Item{anchors.fill: parent;anchors.margins: 0.1*height;
                                     Column{anchors.fill: parent;spacing: height*0.10;
                                         Repeater {
+                                            id:rp;
                                             model:strategyStack.strategyNames;
                                             Row{
                                                 width: parent.width;height: parent.height/7;spacing: 0.5*height;
                                                 CusCheckBox{
                                                     property int strategy:modelData.strategy;
-                                                    height: parent.height;checked:currentProgram.strategies.indexOf(strategy)>-1;width: parent.height;
+                                                    height: parent.height;checked:{if(currentProgram.type!==2){return currentProgram.strategies.indexOf(strategy)>-1;}else return false ;} width: parent.height;
+                                                    enabled: !(currentProgram.params.commonParams.strategy===strategy);
                                                     onClicked:
                                                     {
                                                         var list = currentProgram.strategies;
@@ -167,7 +179,19 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                     Rectangle{anchors.fill: parent;color:"#cbced0";
                         CusText{text:qsTr("点坐标"); anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
                         CusText{text:"(-90,71)"; anchors.top: parent.top; anchors.topMargin: 0.08*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
-                        DbDisplay{id:dbDisplay;}
+                        DbDisplay{
+                            id:dbDisplay;
+                            function currentProgramChanged()
+                            {
+
+                                if(currentProgram.type!==2){dbDisplay.range=currentProgram.params.commonParams.Range[1];}
+                                else{dbDisplay.range=currentProgram.params.Range[1]}
+                                dbDisplay.type=currentProgram.type;
+                                console.log("haha");
+                                dotList=currentProgram.dots;
+                                displayCanvas.requestPaint();
+                            }
+                        }
                     }
                 }
                 Item{ width:parent.width*0.115-2;height: parent.height;
@@ -175,7 +199,39 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                         Item{ anchors.fill: parent;anchors.margins: 0.15*width;
                             Column{anchors.fill: parent;spacing: width*0.25;
                                 CusButton{text:"新建";height: parent.width*0.3;width: parent.width;
-                                    onClicked: {}
+                                    function createProgram(){
+                                        if (currentProgram!=null)
+                                        {
+                                            if(currentProgram.type!==2)
+                                            {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
+                                            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::MoveProgramVM", currentProgram);}
+                                        }
+
+                                        var type=newProgram.type;
+                                        console.log("type:"+type,"strat:"+newProgram.strategy);
+                                        if(type!==2)
+                                        {currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[]);}
+                                        else{currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false,[]);}
+
+                                        currentProgram.type=type;
+                                        if(currentProgram.type!==2)
+                                        {
+                                            currentProgram.params.commonParams.Range[1]=30;
+                                            currentProgram.params.commonParams.strategy=newProgram.strategy;
+                                            if(currentProgram.type===0) currentProgram.strategies=[0,1,2]; else currentProgram.strategies=[3,4,5,6];
+
+                                        }
+                                        else{
+                                            currentProgram.params.Range[1]=30;
+                                            currentProgram.params.strategy=newProgram.strategy;
+                                        }
+                                        strategyStack.currentProgramChanged();
+                                        dbDisplay.currentProgramChanged();
+                                    }
+                                    onClicked: {newProgram.open();}
+                                    Component.onCompleted: {
+                                        newProgram.ok.connect(createProgram);
+                                    }
                                 }
                                 CusButton{text:"取消";height: parent.width*0.3;width: parent.width;}
                                 CusButton{text:"保存";height: parent.width*0.3;width: parent.width;}
@@ -201,7 +257,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
             Item{height: parent.height;width:parent.width*0.648;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter
-                        CusButton{text:"参数设置";}
+                        CusButton{text:"参数设置";onClicked:moveParamsSetting.open();}
                         CusButton{text:"圆形选点";}
                         CusButton{text:"矩形选点";}
                         }

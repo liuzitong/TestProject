@@ -7,6 +7,7 @@ Item{
     property alias displayCanvas: displayCanvas;
     property var dBList:[];
     property var dotList:[];
+    property int type;
 
 //    function hello(){
 //        console.log("hello.");
@@ -76,14 +77,29 @@ Item{
 
         function drawDot(dot)
         {
-            var x_coord=(dot.x/degreeRange)*(diameter*0.5)+width/2;
-            var y_coord=(-dot.y/degreeRange)*(diameter*0.5)+height/2;
-            var radius=diameter/180*1.5;
+            var x;
+            var y;
+            if(type==2)
+            {
+                var radius=dot.x;
+                var angle=dot.y;
+                x=radius*Math.cos(angle/180*Math.PI);
+                y=radius*Math.sin(angle/180*Math.PI);
+            }
+            else{
+                x=dot.x;
+                y=dot.y;
+            }
+
+            var x_coord=(x/degreeRange)*(diameter*0.5)+width/2;
+            var y_coord=(-y/degreeRange)*(diameter*0.5)+height/2;
+
+            var dotRadius=diameter/180*1.5;
             var ctx = getContext("2d");
             ctx.lineWidth = 0;
             ctx.strokeStyle = "red";
             ctx.beginPath();
-            ctx.arc(x_coord, y_coord, radius, 0, Math.PI*2);
+            ctx.arc(x_coord, y_coord, dotRadius, 0, Math.PI*2);
             ctx.stroke();
             ctx.closePath();
             context.fillStyle = "green";

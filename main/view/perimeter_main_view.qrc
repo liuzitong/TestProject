@@ -11,6 +11,8 @@
         <file>NewProgram.qml</file>
         <file>About.qml</file>
         <file>Settings.qml</file>
+        <file>MoveParamsSetting.qml</file>
+        <file>StaticParamsSetting.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

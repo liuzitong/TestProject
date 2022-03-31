@@ -1,15 +1,17 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.2
 
 ComboBox {
     id: control
     model: ["First", "Second", "Third"]
-    property string borderColor:"black"
+    property string borderColor:"#bdc0c6"
     property string borderColorPressed:"Brown"
-    property string imageSrc
+    property string imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
     property string backgroundColor:"#dcdee0"
     font.family:"Microsoft YaHei"
-    font.pointSize:height/3;
+    font.pointSize:height*0.28;
+    height: parent.height;
+
 
     delegate: ItemDelegate {
         width: control.width
@@ -26,8 +28,8 @@ ComboBox {
     indicator:
         Image {
             id: indicatorImage
-            width: control.height*0.6
-            height: control.height/3
+            width: control.height*0.56
+            height: control.height*0.28
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             source: imageSrc
@@ -48,7 +50,7 @@ ComboBox {
     background: Rectangle {
         implicitWidth: control.width
         implicitHeight: control.height
-        border.color:/* control.pressed ? "grey" :*/ control.borderColor
+        border.color: control.pressed ? "blue" : control.borderColor
         border.width: control.visualFocus ? 2 : 1
         radius: height/6
         color:control.backgroundColor;
@@ -57,8 +59,8 @@ ComboBox {
     popup: Popup {
         y: control.height - 1
         width: control.width
-        implicitHeight: listview.contentHeight+(listview.count-1)*1
-        padding: 1
+        implicitHeight: listview.contentHeight+(listview.count-1)*1;
+        padding: 2;
 
         contentItem: ListView {
             id: listview

@@ -8,7 +8,7 @@ Item{
     property string imageSrc:"qrc:/Pics/base-svg/btn_checkbox_1normal.svg";
     property string hoverImageSrc: "qrc:/Pics/base-svg/btn_checkbox_2hover.svg";
     property string pressImageSrc: "qrc:/Pics/base-svg/btn_checkbox_3press.svg";
-    property string backGroundColor: "#f0f2f3"
+    property string backGroundColor:enabled? "#f0f2f3":"Gray";
     signal clicked;
 
     Image {

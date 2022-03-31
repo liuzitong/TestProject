@@ -23,6 +23,8 @@ Window {
         anchors.fill: parent;
     }
 
+
+
     Component.onCompleted: {
         idPriv.init();
         content.changePage.connect(changePage);

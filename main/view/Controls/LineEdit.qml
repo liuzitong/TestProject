@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtQuick.Controls 2.0
 
 Item{
@@ -21,7 +21,7 @@ Item{
         horizontalAlignment: Text.AlignLeft
         renderType: Text.NativeRendering
         verticalAlignment: Text.AlignVCenter
-        font.pointSize: parent.height/3
+        font.pointSize: parent.height*0.28
         font.family:"Microsoft YaHei"
         selectByMouse: true
         selectionColor: "yellow"

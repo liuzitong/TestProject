@@ -4,6 +4,11 @@ namespace Perimeter {
 
 StaticProgramVM::StaticProgramVM(const QVariantList & args)
 {
+    if(args.count()==0)
+    {
+        m_staticParamsVm=new StaticParamsVM();
+        return;
+    }
 //    qDebug()<<"static programvm cons";
     int program_id=args[0].toInt();
 //    qDebug()<<program_id;
@@ -44,6 +49,11 @@ void StaticProgramVM::hello()
 
 MoveProgramVM::MoveProgramVM(const QVariantList & args)
 {
+    if(args.count()==0)
+    {
+        m_moveParamsVm=new MoveParamVM();
+        return;
+    }
 //    qDebug()<<"move programvm cons";
     int program_id=args[0].toInt();
 //    qDebug()<<program_id;
@@ -62,6 +72,7 @@ MoveProgramVM::MoveProgramVM(const QVariantList & args)
     {
         m_dots.append(QPoint(v.x,v.y));
     }
+
 }
 
 MoveProgramVM::~MoveProgramVM()

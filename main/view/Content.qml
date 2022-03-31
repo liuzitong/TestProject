@@ -34,6 +34,13 @@ Rectangle {
 //            pageLoader.changePage("check")
 //        }
 //    }
+
+//    MoveParamsSetting
+//    {
+//        anchors.fill: parent;
+//        z:2;
+//    }
+
     Settings{
         id:settings;
         anchors.fill: parent;
@@ -43,6 +50,12 @@ Rectangle {
         id:about;
         anchors.fill: parent;
     }
+
+//    NewProgram{
+//        id:newProgram;
+//        anchors.fill: parent;
+//    }
+
 
 
     Column {
@@ -81,7 +94,7 @@ Rectangle {
                                     CusText{id:age;text:"40"; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1;}
                                 }
 
-                                
+
                                 Flow{
                                     height: parent.height;
                                     CusText{text:"ID:  "; horizontalAlignment: Text.AlignRight;color:"white";width: height;font.pointSize: height*0.4;}
@@ -138,7 +151,7 @@ Rectangle {
             id:contentPage;width:parent.width;height: parent.height*0.90;
             PatientManagement{id:patientPage;anchors.fill:parent; }
             Check{id:checkPage;anchors.fill: parent;visible: false;}
-            ProgramCustomize{id:programPage;anchors.fill: parent;visible: false;}
+            ProgramCustomize{id:programPage;anchors.fill: parent;visible: false;/*newProgram:newProgram;*/}
             ReportAndAnalysis{id:reportPage;anchors.fill: parent;visible: false;}
 
             Component.onCompleted: {

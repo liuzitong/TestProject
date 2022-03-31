@@ -23,7 +23,7 @@ class CommonParamsVM:public QObject
     Q_PROPERTY(int eyeMoveAlarmMode READ getEyeMoveAlarmMode WRITE setEyeMoveAlarmMode)
     Q_PROPERTY(bool blindDotTest READ getBlindDotTest WRITE setBlindDotTest)
 public:
-    CommonParamsVM();
+    CommonParamsVM()=default;
     CommonParamsVM(StaticParams::CommonParams& commonParams){m_commomParams=commonParams;}
     QList<int> getRange(){return QList<int>{m_commomParams.Range[0],m_commomParams.Range[1]};} void setRange(QList<int> value){m_commomParams.Range[0]=value[0],m_commomParams.Range[1]=value[1];}
     int getStrategy(){return int(m_commomParams.strategy);}void setStrategy(int value){m_commomParams.strategy=StaticParams::CommonParams::Strategy(value);};
@@ -56,7 +56,7 @@ class FixedParamsVM:public QObject
     Q_PROPERTY(int blindDotStimulationDB READ getBlindDotStimulationDB WRITE setBlindDotStimulationDB)
     Q_PROPERTY(int shortTermFluctuationCount READ getShortTermFluctuationCount WRITE setShortTermFluctuationCount)
 public:
-    FixedParamsVM();
+    FixedParamsVM()=default;
     FixedParamsVM(StaticParams::FixedParams& fixedParams){m_fixedParams=fixedParams;}
     int getStimulationTime(){return m_fixedParams.stimulationTime;}void setStimulationTime(int value){m_fixedParams.stimulationTime=value;}
     int getIntervalTime(){return m_fixedParams.intervalTime;}void setIntervalTime(int value){m_fixedParams.intervalTime=value;}
@@ -113,7 +113,7 @@ class MoveParamVM:public QObject
     Q_PROPERTY(int eyeMoveAlarmMode READ getEyeMoveAlarmMode WRITE setEyeMoveAlarmMode)
 
 public:
-    MoveParamVM();
+    MoveParamVM()=default;
     MoveParamVM(MoveParams& moveParams){m_moveParams=moveParams;}
     QList<int> getRange(){return QList<int>{m_moveParams.Range[0],m_moveParams.Range[1]};}void setRange(QList<int> value){m_moveParams.Range[0]=value[0];m_moveParams.Range[1]=value[1];}
     int getStrategy(){return int(m_moveParams.strategy);}void setStrategy(int value){m_moveParams.strategy=MoveParams::Strategy(value);}
