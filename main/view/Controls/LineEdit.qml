@@ -21,7 +21,7 @@ Item{
         horizontalAlignment: Text.AlignLeft
         renderType: Text.NativeRendering
         verticalAlignment: Text.AlignVCenter
-        font.pointSize: parent.height*0.28
+        font.pointSize: parent.height*0.30
         font.family:"Microsoft YaHei"
         selectByMouse: true
         selectionColor: "yellow"

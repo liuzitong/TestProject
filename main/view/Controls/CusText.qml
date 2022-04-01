@@ -5,11 +5,12 @@ Text {
     height: parent.height
     text: qsTr("中文")
     width: /*IcUiQmlApi.appCtrl.language==="Chinese"?*/(text.length*0.4+0.4)*height/*:(text.length*0.2+0.4)*height*/;
-    font.pointSize: height*0.28
+    font.pointSize: height*0.30
     fontSizeMode: Text.Fit
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignHCenter
     font.family:"Microsoft YaHei"
+    renderType: Text.NativeRendering
 }
 
 

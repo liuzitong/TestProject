@@ -9,7 +9,7 @@ ComboBox {
     property string imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
     property string backgroundColor:"#dcdee0"
     font.family:"Microsoft YaHei"
-    font.pointSize:height*0.28;
+    font.pointSize:height*0.30;
     height: parent.height;
 
 
@@ -21,6 +21,7 @@ ComboBox {
             font: control.font
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
         }
         highlighted: control.highlightedIndex == index
     }
@@ -45,6 +46,7 @@ ComboBox {
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
+        renderType: Text.NativeRendering
     }
 
     background: Rectangle {
@@ -59,7 +61,7 @@ ComboBox {
     popup: Popup {
         y: control.height - 1
         width: control.width
-        implicitHeight: listview.contentHeight+(listview.count-1)*1;
+        implicitHeight: listview.contentHeight+(listview.count-1)*padding;
         padding: 2;
 
         contentItem: ListView {

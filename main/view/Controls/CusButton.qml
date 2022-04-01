@@ -70,6 +70,7 @@ Item{
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 font.family: "Microsoft YaHei"
+                renderType: Text.NativeRendering
             }
             Component.onCompleted: {if(imageText.text=="") imageText.height=0;}
         }
@@ -89,6 +90,7 @@ Item{
             horizontalAlignment: Text.AlignHCenter
             anchors.fill: parent
             font.family: "Microsoft YaHei"
+            renderType: Text.NativeRendering
         }
     }
 

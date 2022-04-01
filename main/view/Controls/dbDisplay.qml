@@ -102,8 +102,8 @@ Item{
             ctx.arc(x_coord, y_coord, dotRadius, 0, Math.PI*2);
             ctx.stroke();
             ctx.closePath();
-            context.fillStyle = "green";
-            context.fill();
+            ctx.fillStyle = "green";
+            ctx.fill();
         }
 
 

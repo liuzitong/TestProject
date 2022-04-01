@@ -5,11 +5,11 @@ import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0     // [HINT] this is the pre-registered module name.
 import qxpack.indcom.ui_qml_control 1.0  // [HINT] ModalPopupDialog is in it
 
-ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml_contro
+ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml_contro
     id:idPopup
     property alias color: idContent.color;
     reqEnterEventLoop:false;
-    width:1366; height: 640;
+//    width:1366; height: 640;
 //    property alias contentWidth : idContent.implicitWidth;
 //    property alias contentHeight: idContent.implicitHeight;
     property string backGroundColor:"#dcdee0"
@@ -27,7 +27,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
     property int fixationViewSelection;
     property int moveSpeed;
-    property int moveLight;
+    property int moveLight:0;
     property int moveMethod;
     property int moveDistance;
     property int alarmMode;
@@ -65,8 +65,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                     width: parent.width;height: parent.height-header.height;
                     Rectangle{
                         id: rectangle
-                        height: parent.height*0.065;width:parent.width-2;color: "#D2D2D3";anchors.horizontalCenter: parent.horizontalCenter;
-                        TabBar {id: bar;height: parent.height*0.8; anchors.bottom: parent.bottom; anchors.bottomMargin: 0;anchors.left: parent.left; anchors.leftMargin: 0.01*parent.width;spacing: 0;currentIndex: 0;width:parent.width*0.15;
+                        height: parent.height*0.07;width:parent.width-2;color: "#D2D2D3";anchors.horizontalCenter: parent.horizontalCenter;
+                        TabBar {id: bar;height: parent.height*0.8;width:parent.width*0.10; anchors.bottom: parent.bottom; anchors.bottomMargin: 0;anchors.left: parent.left; anchors.leftMargin: 0.01*parent.width;spacing: 0;currentIndex: 0;
                             Repeater { model:["常用参数"]
                                 TabButton {width: bar.width;height: parent.height;
                                     Rectangle{anchors.fill: parent;color:parent.checked? "#E3E5E8":"#D2D2D3";
@@ -79,7 +79,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                     }
 
                     StackLayout {
-                        width: parent.width;height: parent.height*0.755;currentIndex: bar.currentIndex;
+                        width: parent.width;height: parent.height*0.78;currentIndex: bar.currentIndex;
                         Rectangle{
                             anchors.fill: parent;
                             anchors.margins: parent.width*0.05;
@@ -94,7 +94,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                 anchors.fill: parent;
                                 anchors.margins: parent.width*0.04;
                                 spacing:width*0.1;
-                                property int rowHeight:height*0.08
+                                property int rowHeight:height*0.09
                                 Column{
                                     height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.8;
                                     Item{
@@ -132,7 +132,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.8;
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"策略"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"固视选择"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
                                        LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:"中心点"}
                                    }
                                    Item{
@@ -143,7 +143,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"移动亮度"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                       SpinBox{height:parent.height; wheelEnabled: true;width: parent.width*0.6; editable: true; value: 30; to: 51;  anchors.right: parent.right;font.family: "Microsoft YaHei";font.pointSize: height*0.3}
+                                       NumberLineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:moveLight;step:1;max:51;min:0;}
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
@@ -178,15 +178,19 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                     }
 
                     Item {
+                        id: item1
                         width: parent.width;
-                        height: parent.height*0.18
-//                        anchors.margins: height*0.3;
+                        height: parent.height*0.15
+                        //                        anchors.margins: height*0.3;
                         Flow{
-                            anchors.fill: parent;
-                            anchors.margins: parent.height*0.33;
+                            anchors.top: parent.top
+                            anchors.topMargin: parent.height*0.34;
+                            anchors.right: parent.right
+                            anchors.margins: parent.height*0.40;
                             spacing: height;
                             layoutDirection: Qt.RightToLeft
                             anchors.verticalCenter: parent.verticalCenter
+//
                             CusButton{text:"取消";onClicked: idPopup.close();}
                             CusButton{text:"确定";onClicked: idPopup.close();}
                         }
@@ -197,3 +201,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
         }
     }
 }
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/
