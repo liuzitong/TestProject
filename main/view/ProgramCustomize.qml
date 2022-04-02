@@ -34,6 +34,11 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
         NewProgram{
             id:newProgram;
             anchors.fill: parent;
+//            onOk: {
+//                currentProgram.type=type;currentProgram.strategy=strategy;
+//                if(currentProgram.type!==2){currentProgram.params.commonParams.Range[1]=range;}
+//                else{currentProgram.params.Range[1]=range;}
+//            }
         }
 
         MoveParamsSetting
@@ -41,6 +46,14 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
             id:moveParamsSetting;
             anchors.fill: parent;
         }
+
+        StaticParamsSetting
+        {
+            id:staticParamsSetting;
+            anchors.fill: parent;
+            currentProgram:root.currentProgram;
+        }
+
         anchors.top: parent.top
         Item{anchors.fill: parent;anchors.margins: 2;
             Row{anchors.fill: parent;spacing: 2;
@@ -116,7 +129,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                                         var params=currentProgram.params;
                                                         strategyStack.currentProgramChanged();
                                                         dbDisplay.currentProgramChanged();
-
+                                                        paramsSetting.enabled=true;
                                                     }
                                                 }
                                             }
@@ -186,6 +199,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 
                                 if(currentProgram.type!==2){dbDisplay.range=currentProgram.params.commonParams.Range[1];}
                                 else{dbDisplay.range=currentProgram.params.Range[1]}
+                                console.log(dbDisplay.range);
                                 dbDisplay.type=currentProgram.type;
                                 console.log("haha");
                                 dotList=currentProgram.dots;
@@ -216,17 +230,18 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         currentProgram.type=type;
                                         if(currentProgram.type!==2)
                                         {
-                                            currentProgram.params.commonParams.Range[1]=30;
                                             currentProgram.params.commonParams.strategy=newProgram.strategy;
+                                            currentProgram.params.commonParams.Range[1]=newProgram.range;
                                             if(currentProgram.type===0) currentProgram.strategies=[0,1,2]; else currentProgram.strategies=[3,4,5,6];
 
                                         }
                                         else{
-                                            currentProgram.params.Range[1]=30;
                                             currentProgram.params.strategy=newProgram.strategy;
+                                            currentProgram.params.Range[1]=newProgram.range;
                                         }
                                         strategyStack.currentProgramChanged();
                                         dbDisplay.currentProgramChanged();
+                                        paramsSetting.enabled=true;
                                     }
                                     onClicked: {newProgram.open();}
                                     Component.onCompleted: {
@@ -257,7 +272,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
             Item{height: parent.height;width:parent.width*0.648;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter
-                        CusButton{text:"参数设置";onClicked:moveParamsSetting.open();}
+                        CusButton{id:paramsSetting;text:"参数设置";enabled:false; onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { moveParamsSetting.open();}}
                         CusButton{text:"圆形选点";}
                         CusButton{text:"矩形选点";}
                         }

@@ -30,11 +30,14 @@ Item{
         verticalAlignment: Text.AlignVCenter
         font.pointSize: parent.height*0.30
         font.family:"Microsoft YaHei"
-        selectByMouse: false;
+        selectByMouse: true;
         selectionColor: "yellow"
         background: Rectangle {id:recbackground;border.width: 1;radius: root.radius;color:readOnly? "#e4e6e8":"white" ;border.color: "#bdc0c6"}
-        Keys.onPressed: { switch (event.key){/*EnterKey*/ case 16777220:root.enterPressed();break;};
-        }
+        Keys.onPressed: { switch (event.key){/*EnterKey*/ case 16777220:console.log("qqq");root.enterPressed();inputFinished();break;}}
+        validator: RegExpValidator { regExp: /[0-9]+/ }
+//        onTextChanged: {}
+        onFocusChanged: if(!focus) inputFinished();
+        function inputFinished(){console.log(value);console.log(text);if(text==""){text=0;} value=text;if (value>max){value=max;}else if(value<min){value=min;} text=value;}
         Canvas{
             height: parent.height
             anchors.right: parent.right
@@ -69,7 +72,7 @@ Item{
                 repeat: true
                 interval: 30;
                 running:false;
-                onTriggered: {value++;if(value>max) value=max; textfeild.text=value;}
+                onTriggered: {value+=step;if(value>max) value=max; textfeild.text=value;}
             }
 
             Timer{
@@ -78,7 +81,7 @@ Item{
                 repeat: true
                 interval: 30;
                 running:false;
-                onTriggered: {value--;if(value<min) value=min;textfeild.text=value;}
+                onTriggered: {value-=step;if(value<min) value=min;textfeild.text=value;}
             }
 
 
@@ -87,7 +90,7 @@ Item{
                 width: parent.width;
                 anchors.top:parent.top;
                 anchors.right: parent.right;
-                onClicked:{value++;if(value>max) value=max;textfeild.text=value;}
+                onClicked:{value+=step;if(value>max) value=max;textfeild.text=value;}
                 onPressAndHold: timerUp.start();
                 onReleased: timerUp.stop();
 
@@ -97,7 +100,7 @@ Item{
                 width: parent.width;
                 anchors.bottom: parent.bottom;
                 anchors.right: parent.right;
-                onClicked:{value--;if(value<min) value=min;textfeild.text=value;}
+                onClicked:{value-=step;if(value<min) value=min;textfeild.text=value;}
                 onPressAndHold: timerDown.start();
                 onReleased: timerDown.stop();
             }

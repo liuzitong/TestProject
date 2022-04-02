@@ -14,6 +14,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 //    property alias contentHeight: idContent.implicitHeight;
     property int type;
     property int strategy;
+    property int range;
     signal ok();
     signal cancel();
 
@@ -50,10 +51,15 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         Column{anchors.fill: parent;spacing:parent.height*(1-0.16*4)/3;
                             Row{width:parent.width;height: parent.height*0.16;spacing: width*0.05;
                                 CusText{text:"范围:"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
-                                LineEdit{
-                                    id:range;
+                                NumberLineEdit{
+                                    id:rangeEdit;
                                     width: parent.width*0.7;
                                     height:parent.height;
+                                    step:1;
+                                    min:5;
+                                    max:90;
+//                                    readOnly: true;
+                                    onValueChanged: {range=value;}
                                 }
                             }
                             Row{width:parent.width;height: parent.height*0.16;spacing: width*0.05;
@@ -83,7 +89,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                 id:okCancel
                                 width:parent.width;height: parent.height*0.16 ;
                                 CusButton{ text:"确定"; anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;onClicked: {idPopup.close();ok()}}
-                                CusButton{ text:"取消"; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter;onClicked: {idPopup.close();cancel()}}
+                                CusButton{ text:"取消"; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter;onClicked: {idPopup.close();}}
                             }
                         }
                     }

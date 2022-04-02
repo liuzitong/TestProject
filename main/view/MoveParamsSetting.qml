@@ -71,7 +71,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                 TabButton {width: bar.width;height: parent.height;
                                     Rectangle{anchors.fill: parent;color:parent.checked? "#E3E5E8":"#D2D2D3";
                                         Rectangle{width: parent.width;height: 3;color: "#0064B6";visible: parent.parent.checked? true:false; }
-                                        CusText{text:modelData; anchors.fill: parent;color:parent.parent.checked?"#0064B6":"black";font.pointSize: height*0.25}
+                                        CusText{text:modelData; anchors.fill: parent;color:parent.parent.checked?"#0064B6":"black";font.pointSize: height*0.3}
                                     }
                                 }
                             }
