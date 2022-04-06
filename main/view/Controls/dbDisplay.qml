@@ -136,7 +136,7 @@ Item{
             if(degreeStart==0){degreeStart=degreeStep=degreeRange/3;}
             else{degreeStep=(degreeRange-degreeStart)/2;}
 
-            console.log("start:"+degreeStart+"  step:"+degreeStep);
+//            console.log("start:"+degreeStart+"  step:"+degreeStep);
             var i;
             for(i=3;i>=1;i--)
             {

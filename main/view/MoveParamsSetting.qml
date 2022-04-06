@@ -18,20 +18,21 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
     signal ok();
     signal cancel();
 
-    property int range;
-    property int dotCount;
-    property int strategy;
-    property int cursorColor;
-    property int cursorSize;
-    property int backgroundLightColor;
+//    property int range;
+//    property int dotCount;
+//    property int strategy;
+//    property int cursorColor;
+//    property int cursorSize;
+//    property int backgroundLightColor;
 
-    property int fixationViewSelection;
-    property int moveSpeed;
-    property int moveLight:0;
-    property int moveMethod;
-    property int moveDistance;
-    property int alarmMode;
+//    property int fixationViewSelection;
+//    property int moveSpeed;
+//    property int moveLight:0;
+//    property int moveMethod;
+//    property int moveDistance;
+//    property int alarmMode;
 
+    property var currentProgram;
 
    contentItem:
    Rectangle{

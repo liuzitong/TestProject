@@ -17,6 +17,8 @@ Item{
     property int max;
     property int min;
 
+//    onValueChanged:text=value;
+
     width: parent.width;
     height:parent.height;
     clip: true
@@ -37,7 +39,7 @@ Item{
         validator: RegExpValidator { regExp: /[0-9]+/ }
 //        onTextChanged: {}
         onFocusChanged: if(!focus) inputFinished();
-        function inputFinished(){console.log(value);console.log(text);if(text==""){text=0;} value=text;if (value>max){value=max;}else if(value<min){value=min;} text=value;}
+        function inputFinished(){console.log(value);console.log(text);if(text==""){text=0;} value=text;if (value>max){value=max;}else if(value<min){value=min;} /*text=value;*/}
         Canvas{
             height: parent.height
             anchors.right: parent.right
@@ -72,7 +74,7 @@ Item{
                 repeat: true
                 interval: 30;
                 running:false;
-                onTriggered: {value+=step;if(value>max) value=max; textfeild.text=value;}
+                onTriggered: {value+=step;if(value>max) value=max; /*textfeild.text=value;*/}
             }
 
             Timer{
@@ -81,7 +83,7 @@ Item{
                 repeat: true
                 interval: 30;
                 running:false;
-                onTriggered: {value-=step;if(value<min) value=min;textfeild.text=value;}
+                onTriggered: {value-=step;if(value<min) value=min;/*textfeild.text=value;*/}
             }
 
 
@@ -90,7 +92,7 @@ Item{
                 width: parent.width;
                 anchors.top:parent.top;
                 anchors.right: parent.right;
-                onClicked:{value+=step;if(value>max) value=max;textfeild.text=value;}
+                onClicked:{value+=step;if(value>max) value=max;/*textfeild.text=value;*/}
                 onPressAndHold: timerUp.start();
                 onReleased: timerUp.stop();
 
@@ -100,7 +102,7 @@ Item{
                 width: parent.width;
                 anchors.bottom: parent.bottom;
                 anchors.right: parent.right;
-                onClicked:{value-=step;if(value<min) value=min;textfeild.text=value;}
+                onClicked:{value-=step;if(value<min) value=min;/*textfeild.text=value;*/}
                 onPressAndHold: timerDown.start();
                 onReleased: timerDown.stop();
             }

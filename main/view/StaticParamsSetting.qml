@@ -17,30 +17,30 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
     property int type;
     signal ok();
     signal cancel();
+//    signal currentProgramChanged();
 
-    property int range;
-    property int dotCount;
-    property int strategy
-    property int strategyMode;
-    property int cursorColor;
-    property int cursorSize;
-    property int backgroundLightColor;
-    property bool cyanyellowTest;
+//    property int range;
+//    property int dotCount;
+//    property int strategy
+//    property int strategyMode;
+//    property int cursorColor;
+//    property int cursorSize;
+//    property int backgroundLightColor;
+//    property bool cyanyellowTest;
 
-    property bool responceAutoAdapt;
-    property int adaptiveIntevalTime;
-    property bool centerDotCheck;
-    property bool shortTermFluctuation;
-    property int fixationViewSelection
-    property int alarmMode;
-    property bool blindDotTest;
+//    property bool responceAutoAdapt;
+//    property int adaptiveIntevalTime;
+//    property bool centerDotCheck;
+//    property bool shortTermFluctuation;
+//    property int fixationViewSelection
+//    property int alarmMode;
+//    property bool blindDotTest;
 
 
-    property int stimuationTime;
-    property int intevalTime;
+//    property int stimuationTime;
+//    property int intevalTime;
 
     property var currentProgram;
-
 
 
 
@@ -106,48 +106,72 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                 anchors.fill: parent;
                                 anchors.margins: parent.width*0.04;
                                 spacing:width*0.1;
-                                property int rowHeight:height*0.09
+                                property int rowHeight:height*0.09;
                                 Column{
                                     height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.45;
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"测试范围"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram.params.commonParams.Range[1];}
+                                        LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.params.commonParams.Range[1];}
+
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"测试点数"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram.dots.length;}
+                                        LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.dots.length;}
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"策略"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        CusComboBox{width: parent.width*0.6; anchors.right: parent.right;model:["全阈值","智能交互式","快速智能交互式"];currentIndex: currentProgram.strategy;}
+                                        CusComboBox{
+                                            property var threshold:["全阈值","智能交互式","快速智能交互式"];
+                                            property var screening: ["二区法","三区法","量化缺损","单刺激"];
+                                            width: parent.width*0.6; anchors.right: parent.right;model:currentProgram===null?null:currentProgram.type===0?threshold:screening;
+                                            currentIndex: currentProgram===null?0:(currentProgram.type===0?currentProgram.params.commonParams.strategy:currentProgram.params.commonParams.strategy-3);
+                                            Component.onCompleted: idPopup.ok.connect(function(){if(currentProgram.type===0) {currentProgram.params.commonParams.strategy=currentIndex;}else {currentProgram.params.commonParams.strategy=(currentIndex+3);}});
+                                        }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"策略模式"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        CusComboBox{width: parent.width*0.6; anchors.right: parent.right;model:["年龄相关","阈值相关","单刺激"];}
+                                        CusComboBox{
+                                            width: parent.width*0.6; anchors.right: parent.right;model:["年龄相关","阈值相关","单刺激"];
+                                            currentIndex: currentProgram===null?0:currentProgram.params.commonParams.strategyMode;
+                                            Component.onCompleted: idPopup.ok.connect(function(){currentProgram.params.commonParams.strategyMode=currentIndex;});
+                                        }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"光标大小"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        CusComboBox{width: parent.width*0.6; anchors.right: parent.right;model:["I","II","III","IV","V"];}
+                                        CusComboBox{
+                                            width: parent.width*0.6; anchors.right: parent.right;model:["I","II","III","IV","V"];
+                                            currentIndex: currentProgram===null?0:currentProgram.params.commonParams.cursorSize;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.cursorSize=currentIndex;})}
+                                        }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"光标颜色"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        CusComboBox{width: parent.width*0.6; anchors.right: parent.right;model:["白色","红色","蓝色"];}
+                                        CusComboBox{
+                                            width: parent.width*0.6; anchors.right: parent.right;model:["白色","红色","蓝色"];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.cursorColor;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.cursorColor=currentIndex;})}
+                                        }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"背景光颜色"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        CusComboBox{width: parent.width*0.6; anchors.right: parent.right;model:["白色","黄色"];}
+                                        CusComboBox{
+                                            width: parent.width*0.6; anchors.right: parent.right;model:["白色","黄色"];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.backGroundColor;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.backGroundColor=currentIndex;})}
+                                        }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"兰·黄测试"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        CusComboBox{width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];}
+                                        CusComboBox{
+                                            width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.cyanYellowTest;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.cyanYellowTest=currentIndex;})}
+                                        }
                                     }
                                 }
                                 Column{
@@ -155,37 +179,63 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"响应自适应"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                       CusComboBox{width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"]}
+                                       CusComboBox{
+                                           width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.responseAutoAdapt;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.responseAutoAdapt=currentIndex;})}
+                                       }
+
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"自适应时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                       NumberLineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:moveLight;step:50;max:5000;min:0;}
+                                       NumberLineEdit{
+                                           width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;
+                                           Component.onCompleted: {
+                                               idPopup.ok.connect(function(){currentProgram.params.commonParams.intervalTime=value;})
+                                               idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.commonParams.intervalTime;});
+                                           }
+                                       }
+
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"中心点监测"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                       CusComboBox{width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];}
+                                       CusComboBox{
+                                            width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.centerDotCheck;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.centerDotCheck=currentIndex;})}
+                                       }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"短期波动"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                       CusComboBox{width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];}
+                                       CusComboBox{
+                                            width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.shortTermFluctuation;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.shortTermFluctuation=currentIndex;})}
+                                       }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"固视选择"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                       CusComboBox{width: parent.width*0.6; anchors.right: parent.right;model:["中心点","小菱形","大菱形","底点"];}
+                                       CusComboBox{
+                                            width: parent.width*0.6; anchors.right: parent.right;model:["中心点","小菱形","大菱形","底点"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.fixationViewSelection;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.fixationViewSelection=currentIndex;})}
+                                       }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"眼动模式报警"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                       CusComboBox{width: parent.width*0.6; anchors.right: parent.right;model:["不报警","只报警","报警并暂停"];}
+                                       CusComboBox{
+                                           width: parent.width*0.6; anchors.right: parent.right;model:["不报警","只报警","报警并暂停"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.eyeMoveAlarmMode;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.eyeMoveAlarmMode=currentIndex;})}
+                                       }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"盲点测试"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                       CusComboBox{width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];}
+                                       CusComboBox{
+                                           width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.blindDotTest;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.blindDotTest=currentIndex;})}
+                                       }
                                    }
                                 }
 
@@ -211,27 +261,42 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"刺激时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        NumberLineEdit{width: parent.width*0.6; anchors.right: parent.right;step:10;max:500;min:0;}
+                                        NumberLineEdit{
+                                            width: parent.width*0.6; anchors.right: parent.right;step:10;max:500;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.stimulationTime;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.stimulationTime=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.stimulationTime;});}) }
+                                        }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"间隔时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        NumberLineEdit{width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;}
+                                        NumberLineEdit{
+                                            width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.intervalTime;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.intervalTime=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.intervalTime;});}) }
+                                        }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"假阳性周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        NumberLineEdit{width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;}
+                                        NumberLineEdit{
+                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.falsePositiveCycle;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.falsePositiveCycle=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.falsePositiveCycle;});}) }
+                                        }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"假阴性周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        NumberLineEdit{width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;}
+                                        NumberLineEdit{
+                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.falseNegativeCycle;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.falseNegativeCycle=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.falseNegativeCycle;});}) }
+                                        }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"固视丢失率周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                        NumberLineEdit{width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;}
+                                        NumberLineEdit{
+                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.fixationViewLossCycle;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.fixationViewLossCycle=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.fixationViewLossCycle;});}) }
+                                        }
                                     }
 
                                 }
@@ -240,17 +305,26 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"单刺激分贝"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                       NumberLineEdit{width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;}
+                                       NumberLineEdit{
+                                           width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.singleStimulationDB;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.singleStimulationDB=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.singleStimulationDB;});}) }
+                                       }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"盲点刺激分贝"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                       NumberLineEdit{width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;}
+                                       NumberLineEdit{
+                                           width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.blindDotStimulationDB;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.blindDotStimulationDB=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.blindDotStimulationDB;});}) }
+                                       }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"短期波动次数"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
-                                       NumberLineEdit{width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:1;}
+                                       NumberLineEdit{
+                                           width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:1;value:currentProgram===null?0:currentProgram.params.fixedParams.shortTermFluctuationCount;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.shortTermFluctuationCount=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.shortTermFluctuationCount;});}) }
+                                       }
                                    }
                                 }
                             }
@@ -272,11 +346,25 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             anchors.verticalCenter: parent.verticalCenter
 //
                             CusButton{text:"取消";onClicked: idPopup.close();}
-                            CusButton{text:"确定";onClicked: idPopup.close();}
+                            CusButton{text:"确定";onClicked:
+                                {
+                                    ok();
+                                    idPopup.close();
+
+                                }
+                            }
+                             CusButton{text:"aa";onClicked:{
+                                     console.log(currentProgram.params.commonParams.cursorSize) ;
+                                     console.log(currentProgram.params.commonParams.intervalTime) ;
+//                                     console.log(intevalTimeididid.value);
+
+//                                     intevalTimeididid.value+=currentProgram.params.commonParams.intervalTime;
+//                                     intevalTimeididid.value=currentProgram.params.commonParams.intervalTime;
+
+                                 }}
                         }
                     }
                 }
-
             }
         }
     }

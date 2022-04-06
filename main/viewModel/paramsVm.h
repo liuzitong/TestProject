@@ -25,6 +25,7 @@ class CommonParamsVM:public QObject
 public:
     CommonParamsVM()=default;
     CommonParamsVM(StaticParams::CommonParams& commonParams){m_commomParams=commonParams;}
+    StaticParams::CommonParams getData(){return m_commomParams;}
     QList<int> getRange(){return QList<int>{m_commomParams.Range[0],m_commomParams.Range[1]};} void setRange(QList<int> value){m_commomParams.Range[0]=value[0],m_commomParams.Range[1]=value[1];}
     int getStrategy(){return int(m_commomParams.strategy);}void setStrategy(int value){m_commomParams.strategy=StaticParams::CommonParams::Strategy(value);};
     int getStrategyMode(){return int(m_commomParams.strategyMode);}void setStrategyMode(int value){m_commomParams.strategyMode=StaticParams::CommonParams::StrategyMode(value);}
@@ -39,7 +40,6 @@ public:
     int getFixationViewSelection(){return int(m_commomParams.fixationViewSelection);}void setFixationViewSelection(int value){m_commomParams.fixationViewSelection=FixationViewSelection(value);}
     int getEyeMoveAlarmMode(){return int(m_commomParams.eyeMoveAlarmMode);}void setEyeMoveAlarmMode(bool value){m_commomParams.eyeMoveAlarmMode=EyeMoveAlarmMode(value);}
     bool getBlindDotTest(){return m_commomParams.blindDotTest;}void setBlindDotTest(bool value){m_commomParams.blindDotTest=value;}
-
 private:
     StaticParams::CommonParams m_commomParams;
 };
@@ -58,6 +58,7 @@ class FixedParamsVM:public QObject
 public:
     FixedParamsVM()=default;
     FixedParamsVM(StaticParams::FixedParams& fixedParams){m_fixedParams=fixedParams;}
+    StaticParams::FixedParams getData(){return m_fixedParams;}
     int getStimulationTime(){return m_fixedParams.stimulationTime;}void setStimulationTime(int value){m_fixedParams.stimulationTime=value;}
     int getIntervalTime(){return m_fixedParams.intervalTime;}void setIntervalTime(int value){m_fixedParams.intervalTime=value;}
     int getFalsePositiveCycle(){return m_fixedParams.falsePositiveCycle;}void setFalsePositiveCycle(int value){m_fixedParams.falsePositiveCycle=value;}
@@ -73,8 +74,8 @@ private:
 class StaticParamsVM:public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* commonParams READ getCommonParams WRITE setCommonParams)
-    Q_PROPERTY(QObject* fixedParams READ getFixedParams WRITE setFixedParams)
+    Q_PROPERTY(QObject* commonParams READ getCommonParams )
+    Q_PROPERTY(QObject* fixedParams READ getFixedParams )
 public:
     StaticParamsVM()
     {
@@ -88,13 +89,13 @@ public:
         m_commonParams=new CommonParamsVM(staticParams.commonParams);
         m_fixedParams=new FixedParamsVM(staticParams.fixedParams);
     }
-    QObject* getCommonParams(){return m_commonParams;}void setCommonParams(QObject* value){m_commonParams=value;}
-    QObject* getFixedParams(){return m_fixedParams;};void setFixedParams(QObject* value){m_fixedParams=value;};
+    CommonParamsVM* getCommonParams(){return m_commonParams;}/*void setCommonParams(QObject* value){m_commonParams=value;}*/
+    FixedParamsVM* getFixedParams(){return m_fixedParams;};/*void setFixedParams(QObject* value){m_fixedParams=value;};*/
     ~StaticParamsVM(){delete m_commonParams;delete m_fixedParams;/*delete m_staticParams;*/}
 private:
 //    StaticParams* m_staticParams;
-    QObject* m_commonParams;
-    QObject* m_fixedParams;
+    CommonParamsVM* m_commonParams;
+    FixedParamsVM* m_fixedParams;
 };
 
 class MoveParamVM:public QObject
@@ -115,6 +116,7 @@ class MoveParamVM:public QObject
 public:
     MoveParamVM()=default;
     MoveParamVM(MoveParams& moveParams){m_moveParams=moveParams;}
+    MoveParams getData(){return m_moveParams;}
     QList<int> getRange(){return QList<int>{m_moveParams.Range[0],m_moveParams.Range[1]};}void setRange(QList<int> value){m_moveParams.Range[0]=value[0];m_moveParams.Range[1]=value[1];}
     int getStrategy(){return int(m_moveParams.strategy);}void setStrategy(int value){m_moveParams.strategy=MoveParams::Strategy(value);}
     int getCursorColor(){return int(m_moveParams.cursorColor);}void setCursorColor(int value){m_moveParams.cursorColor=CursorColor(value);}

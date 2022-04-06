@@ -45,13 +45,15 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
         {
             id:moveParamsSetting;
             anchors.fill: parent;
+
         }
 
         StaticParamsSetting
         {
             id:staticParamsSetting;
             anchors.fill: parent;
-            currentProgram:root.currentProgram;
+//            currentProgram:root.currentProgram;
+//            onCurrentProgramChanged: {console.log("hello world");}
         }
 
         anchors.top: parent.top
@@ -124,12 +126,19 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 
                                                         var type=model.type;
                                                         if(type!==2)
-                                                        {currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[model.program_id]);}
-                                                        else{currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false,[model.program_id]);}
+                                                        {
+                                                            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[model.program_id]);
+                                                            staticParamsSetting.currentProgram=currentProgram;
+                                                        }
+                                                        else{
+                                                            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false,[model.program_id]);
+                                                            moveParamsSetting.currentProgram=currentProgram;
+                                                        }
                                                         var params=currentProgram.params;
                                                         strategyStack.currentProgramChanged();
                                                         dbDisplay.currentProgramChanged();
                                                         paramsSetting.enabled=true;
+//                                                        staticParamsSetting.currentProgramChanged();
                                                     }
                                                 }
                                             }
@@ -170,7 +179,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                                 CusCheckBox{
                                                     property int strategy:modelData.strategy;
                                                     height: parent.height;checked:{if(currentProgram.type!==2){return currentProgram.strategies.indexOf(strategy)>-1;}else return false ;} width: parent.height;
-                                                    enabled: !(currentProgram.params.commonParams.strategy===strategy);
+                                                    enabled: if(currentProgram.type!==2){return !(currentProgram.params.commonParams.strategy===strategy);} else return false;
                                                     onClicked:
                                                     {
                                                         var list = currentProgram.strategies;
@@ -199,9 +208,9 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 
                                 if(currentProgram.type!==2){dbDisplay.range=currentProgram.params.commonParams.Range[1];}
                                 else{dbDisplay.range=currentProgram.params.Range[1]}
-                                console.log(dbDisplay.range);
+//                                console.log(dbDisplay.range);
                                 dbDisplay.type=currentProgram.type;
-                                console.log("haha");
+//                                console.log("haha");
                                 dotList=currentProgram.dots;
                                 displayCanvas.requestPaint();
                             }
@@ -213,6 +222,10 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                         Item{ anchors.fill: parent;anchors.margins: 0.15*width;
                             Column{anchors.fill: parent;spacing: width*0.25;
                                 CusButton{text:"新建";height: parent.width*0.3;width: parent.width;
+                                    onClicked: {newProgram.open();}
+                                    Component.onCompleted: {
+                                        newProgram.ok.connect(createProgram);
+                                    }
                                     function createProgram(){
                                         if (currentProgram!=null)
                                         {
@@ -224,8 +237,14 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         var type=newProgram.type;
                                         console.log("type:"+type,"strat:"+newProgram.strategy);
                                         if(type!==2)
-                                        {currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[]);}
-                                        else{currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false,[]);}
+                                        {
+                                            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[model.program_id]);
+                                            staticParamsSetting.currentProgram=currentProgram;
+                                        }
+                                        else{
+                                            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false,[model.program_id]);
+                                            moveParamsSetting.currentProgram=currentProgram;
+                                        }
 
                                         currentProgram.type=type;
                                         if(currentProgram.type!==2)
@@ -242,16 +261,16 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         strategyStack.currentProgramChanged();
                                         dbDisplay.currentProgramChanged();
                                         paramsSetting.enabled=true;
-                                    }
-                                    onClicked: {newProgram.open();}
-                                    Component.onCompleted: {
-                                        newProgram.ok.connect(createProgram);
+
                                     }
                                 }
                                 CusButton{text:"取消";height: parent.width*0.3;width: parent.width;}
-                                CusButton{text:"保存";height: parent.width*0.3;width: parent.width;}
+                                CusButton{
+                                    text:"保存";height: parent.width*0.3;width: parent.width;enabled: currentProgram.category===4;
+                                    onClicked: currentProgram.saveProgram();
+                                }
+                                CusButton{text:"另存为";height: parent.width*0.3;width: parent.width;}
                                 CusButton{text:"删除";height: parent.width*0.3;width: parent.width;}
-//                                CusButton{text:"清除";height: parent.width*0.3;width: parent.width;}
                                 CusButton{text:"复制";height: parent.width*0.3;width: parent.width;}
                             }
                         }
