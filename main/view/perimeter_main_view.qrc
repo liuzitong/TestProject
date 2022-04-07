@@ -13,6 +13,7 @@
         <file>Settings.qml</file>
         <file>MoveParamsSetting.qml</file>
         <file>StaticParamsSetting.qml</file>
+        <file>SaveToAnotherProgram.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

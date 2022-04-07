@@ -128,7 +128,7 @@ struct MoveParams
     BackGroundColor             backGroundColor;
 
 //    FixationViewSelection       fixationViewSelection;
-    float                       speed;
+    int                         speed;
     int                         brightness;
     MoveMethod                  moveMethod;
     MoveDistance                moveDistance;

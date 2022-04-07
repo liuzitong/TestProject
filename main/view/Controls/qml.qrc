@@ -9,6 +9,7 @@
         <file>CusCheckBox.qml</file>
         <file>DbDisplay.qml</file>
         <file>NumberLineEdit.qml</file>
+        <file>ProgramCustomizeDisplay.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

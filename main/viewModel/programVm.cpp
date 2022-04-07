@@ -1,4 +1,6 @@
 ﻿#include "programVm.h"
+#include <qDebug>
+#include <math.h>
 namespace Perimeter {
 
 
@@ -42,9 +44,29 @@ StaticProgramVM::~StaticProgramVM()
     delete m_staticParamsVm;
 }
 
-void StaticProgramVM::saveProgram()
+void StaticProgramVM::updateProgram()
 {
-    qDebug()<<"save data";
+    Program_ptr pp=getProgramData();
+    QSqlError error=qx::dao::update(pp);
+}
+
+void StaticProgramVM::insertProgram()
+{
+
+    Program_ptr pp=getProgramData();
+    QSqlError error=qx::dao::insert(pp);
+}
+
+void StaticProgramVM::deleteProgram()
+{
+    qDebug()<<"delete Program";
+    Program_ptr pp=getProgramData();
+    qDebug()<<pp->m_id;
+    QSqlError error=qx::dao::delete_by_id(pp);
+}
+
+Program_ptr StaticProgramVM::getProgramData()
+{
     QSharedPointer<ProgramModel<Type::ThreshHold>> programModel=QSharedPointer<ProgramModel<Type::ThreshHold>>(new ProgramModel<Type::ThreshHold>());
     programModel->m_id=m_id;
     programModel->m_name=m_name;
@@ -58,16 +80,29 @@ void StaticProgramVM::saveProgram()
         programModel->m_data.strategies.push_back(StaticParams::CommonParams::Strategy(v.toInt()));
     }
 
+    qDebug()<<"***********************************";
+    qDebug()<<"***********************************";
+    qDebug()<<"***********************************";
     for(auto& v:m_dots)
     {
-        programModel->m_data.dots.push_back({float(v.toPointF().x()),float(v.toPointF().y())});
+        if(fabs(v.toPointF().x())<0.05&&fabs(v.toPointF().y())<0.05)
+        {
+            float x=v.toMap()["x"].toFloat();
+            float y=v.toMap()["y"].toFloat();
+            qDebug()<<x;
+            programModel->m_data.dots.push_back({x,y});
+//            programModel->m_data.dots.push_back({x,y});
+        }
+        else{
+            programModel->m_data.dots.push_back({float(v.toPointF().x()),float(v.toPointF().y())});
+        }
     }
-    auto programData=programModel->ModelToDB();
-    qDebug()<<programModel->m_params.commonParams.intervalTime;
-    qDebug()<<int(programModel->m_params.commonParams.strategy);
-    QSqlError error=qx::dao::update(programData);
-    qDebug()<<error.text();
+    return programModel->ModelToDB();
+
 }
+
+
+
 
 
 MoveProgramVM::MoveProgramVM(const QVariantList & args)
@@ -88,6 +123,7 @@ MoveProgramVM::MoveProgramVM(const QVariantList & args)
 //    qDebug()<<program_ptr->m_params;
     auto programModel=QSharedPointer<ProgramModel<Type::Move>>(new ProgramModel<Type::Move>(program_ptr));
     m_id=programModel->m_id;
+    m_name=programModel->m_name;
     m_type=int(programModel->m_type);
     m_moveParamsVm=new MoveParamVM(programModel->m_params);
     m_category=int(programModel->m_category);
@@ -104,23 +140,53 @@ MoveProgramVM::~MoveProgramVM()
     delete m_moveParamsVm;
 }
 
-void MoveProgramVM::saveProgram()
+void MoveProgramVM::updateProgram()
+{
+    Program_ptr pp=getProgramData();
+    QSqlError error=qx::dao::update(pp);
+}
+
+void MoveProgramVM::insertProgram()
+{
+    Program_ptr pp=getProgramData();
+    QSqlError error=qx::dao::insert(pp);
+}
+
+void MoveProgramVM::deleteProgram()
+{
+    Program_ptr pp=getProgramData();
+    QSqlError error=qx::dao::delete_by_id(pp);
+}
+
+
+Program_ptr MoveProgramVM::getProgramData()
 {
     QSharedPointer<ProgramModel<Type::Move>> programModel=QSharedPointer<ProgramModel<Type::Move>>(new ProgramModel<Type::Move>());
     programModel->m_id=m_id;
-    programModel->m_name=m_name;
     programModel->m_type=Type(m_type);
+    programModel->m_name=m_name;
+//    qDebug()<<m_name;
     programModel->m_params=m_moveParamsVm->getData();
     programModel->m_category= Category(m_category);
 
+
     for(auto& v:m_dots)
     {
-        programModel->m_data.dots.push_back({float(v.toPointF().x()),float(v.toPointF().y())});
+        if(v.toPointF().x()<0.05)
+        {
+            float x=v.toMap()["x"].toFloat();
+            float y=v.toMap()["y"].toFloat();
+            qDebug()<<x;
+//            programModel->m_data.dots.push_back({x,y});
+        }
+        else{
+            programModel->m_data.dots.push_back({float(v.toPointF().x()),float(v.toPointF().y())});
+        }
     }
 
-    auto programData=programModel->ModelToDB();
-    QSqlError error=qx::dao::update(programData);
-    qDebug()<<error.text();
+    return programModel->ModelToDB();
 }
+
+
 
 }

@@ -23,7 +23,9 @@ class StaticProgramVM:public QObject
 public:
     Q_INVOKABLE explicit StaticProgramVM(const QVariantList &);
     Q_INVOKABLE virtual ~StaticProgramVM();
-    Q_INVOKABLE void saveProgram();
+    Q_INVOKABLE void updateProgram();
+    Q_INVOKABLE void insertProgram();
+    Q_INVOKABLE void deleteProgram();
 
     long getID(){return m_id;}void setID(int value){m_id=value;}
     long getType(){return m_type;}void setType(int value){m_type=value;}
@@ -42,6 +44,8 @@ private:
     QVariantList m_dots;
     int m_category;
 
+    Program_ptr getProgramData();
+
 //    QSharedPointer<ProgramModel<Type::ThreshHold>> programModel;
     Q_DISABLE_COPY(StaticProgramVM);
 };
@@ -52,7 +56,10 @@ class MoveProgramVM:public QObject
 public:
     Q_INVOKABLE explicit MoveProgramVM(const QVariantList &);
     Q_INVOKABLE virtual ~MoveProgramVM();
-    Q_INVOKABLE void saveProgram();
+    Q_INVOKABLE void updateProgram();
+    Q_INVOKABLE void insertProgram();
+    Q_INVOKABLE void deleteProgram();
+
     Q_PROPERTY(long id READ getID WRITE setID);
     Q_PROPERTY(int type READ getType WRITE setType);
     Q_PROPERTY(QString name READ getName WRITE setName);
@@ -73,6 +80,8 @@ private:
     MoveParamVM* m_moveParamsVm;
     QVariantList m_dots;
     int m_category;
+
+    Program_ptr getProgramData();
 //    QSharedPointer<ProgramModel<Type::Move>> programModel;
     Q_DISABLE_COPY(MoveProgramVM);
 };

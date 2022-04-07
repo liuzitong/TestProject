@@ -107,7 +107,7 @@ class MoveParamVM:public QObject
     Q_PROPERTY(int cursorSize READ getCursorSize WRITE setCursorSize)
     Q_PROPERTY(int backGroundColor READ getBackGroundColor WRITE setBackGroundColor)
 //    Q_PROPERTY(int fixationViewSelection READ getFixationViewSelection WRITE setFixationViewSelection)
-    Q_PROPERTY(float spead READ getSpeed WRITE setSpeed)
+    Q_PROPERTY(int speed READ getSpeed WRITE setSpeed)
     Q_PROPERTY(int brightness READ getBrightness WRITE setBrightness)
     Q_PROPERTY(int moveMethod READ getMoveMethod WRITE setMoveMethod)
     Q_PROPERTY(int moveDistance READ getMoveDistance WRITE setMoveDistance)
@@ -123,7 +123,7 @@ public:
     int getCursorSize(){return int(m_moveParams.cursorSize);}void setCursorSize(int value){m_moveParams.cursorSize=CursorSize(value);}
     int getBackGroundColor(){return int(m_moveParams.backGroundColor);}void setBackGroundColor(int value){m_moveParams.backGroundColor=BackGroundColor(value);}
 //    int getFixationViewSelection(){return int(m_moveParams->fixationViewSelection);}void setFixationViewSelection(int value){m_moveParams->fixationViewSelection=FixationViewSelection(value);}
-    float getSpeed(){return m_moveParams.speed;}void setSpeed(float value){m_moveParams.speed=value;}
+    int getSpeed(){return m_moveParams.speed;}void setSpeed(float value){m_moveParams.speed=value;}
     int getBrightness(){return m_moveParams.brightness;}void setBrightness(int value){m_moveParams.brightness=value;}
     int getMoveMethod(){return int(m_moveParams.moveMethod);}void setMoveMethod(int value){m_moveParams.moveMethod=MoveParams::MoveMethod(value);}
     int getMoveDistance(){return int(m_moveParams.moveDistance);}void setMoveDistance(int value){m_moveParams.moveDistance=MoveParams::MoveDistance(value);}

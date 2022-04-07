@@ -7,3 +7,4 @@ CusCalendar 1.0     CusCalendar.qml
 CusCheckBox 1.0     CusCheckBox.qml
 DbDisplay 1.0       DbDisplay.qml
 NumberLineEdit 1.0  NumberLineEdit.qml
+ProgramCustomizeDisplay 1.0       ProgramCustomizeDisplay.qml

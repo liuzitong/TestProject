@@ -175,7 +175,7 @@ int  main1 ( int argc, char *argv[] )
 //     0,1,500,0,0,FixationViewSelection::centerPoint,EyeMoveAlarmMode::dontAlarm,1},
 //     {180,1000,20,20,10,10,10,10}};
     pm.m_params={{0,30},MoveStrategy::straightLine,CursorColor::white,CursorSize::I,BackGroundColor::white,
-                1.0,0,MoveParams::MoveMethod::_4Lines,MoveParams::MoveDistance::_5,EyeMoveAlarmMode::dontAlarm};
+                1,0,MoveParams::MoveMethod::_4Lines,MoveParams::MoveDistance::_5,EyeMoveAlarmMode::dontAlarm};
 
 //    pm.m_data.strategies={StaticStrategy::oneStage,StaticStrategy::twoStages,StaticStrategy::quantifyDefects,StaticStrategy::singleStimulation};
     pm.m_data.dots={

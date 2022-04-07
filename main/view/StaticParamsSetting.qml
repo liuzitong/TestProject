@@ -192,7 +192,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                            width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;
                                            Component.onCompleted: {
                                                idPopup.ok.connect(function(){currentProgram.params.commonParams.intervalTime=value;})
-                                               idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.commonParams.intervalTime;});
+                                               idPopup.currentProgramChanged.connect(function(){if(currentProgram!==null){value=currentProgram.params.commonParams.intervalTime;}});
                                            }
                                        }
 
@@ -332,10 +332,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                     }
 
                     Item {
-                        id: item1
                         width: parent.width;
                         height: parent.height*0.15
-                        //                        anchors.margins: height*0.3;
                         Flow{
                             anchors.top: parent.top
                             anchors.topMargin: parent.height*0.34;
@@ -346,22 +344,16 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             anchors.verticalCenter: parent.verticalCenter
 //
                             CusButton{text:"取消";onClicked: idPopup.close();}
-                            CusButton{text:"确定";onClicked:
-                                {
-                                    ok();
-                                    idPopup.close();
+                            CusButton{text:"确定";onClicked:{ok();idPopup.close();}}
+//                             CusButton{text:"aa";onClicked:{
+//                                     console.log(currentProgram.params.commonParams.cursorSize) ;
+//                                     console.log(currentProgram.params.commonParams.intervalTime) ;
+////                                     console.log(intevalTimeididid.value);
 
-                                }
-                            }
-                             CusButton{text:"aa";onClicked:{
-                                     console.log(currentProgram.params.commonParams.cursorSize) ;
-                                     console.log(currentProgram.params.commonParams.intervalTime) ;
-//                                     console.log(intevalTimeididid.value);
+////                                     intevalTimeididid.value+=currentProgram.params.commonParams.intervalTime;
+////                                     intevalTimeididid.value=currentProgram.params.commonParams.intervalTime;
 
-//                                     intevalTimeididid.value+=currentProgram.params.commonParams.intervalTime;
-//                                     intevalTimeididid.value=currentProgram.params.commonParams.intervalTime;
-
-                                 }}
+//                                 }}
                         }
                     }
                 }

@@ -11,12 +11,14 @@ class ProgramListModelVm:public QAbstractListModel
 public:
     Q_INVOKABLE explicit ProgramListModelVm(const QVariantList &);
     Q_INVOKABLE virtual ~ProgramListModelVm() Q_DECL_OVERRIDE=default;
+    Q_INVOKABLE void refreshData();
 //    Q_INVOKABLE void hello();
 //    Q_INVOKABLE void getProgramListByCategory(int category);
 //    Q_INVOKABLE QObject* getProgramByProgramId();
 //    Q_INVOKABLE void addProgram();
 private:
     Program_List m_list;
+    int m_category;
 //    QString m_str;
     Q_DISABLE_COPY(ProgramListModelVm);
 public:

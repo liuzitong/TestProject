@@ -12,24 +12,23 @@ import perimeter.main.view.Utils 1.0
 Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
     property var currentProgram: null;
     property var content;
+//    onCurrentProgramChanged: {
+//        if(currentProgram.type!==2){staticParamsSetting.currentProgram=currentProgram;}else{moveParamsSetting.currentProgram=currentProgram;}}
 
 
     Component.onDestruction: {
         if (currentProgram!=null)
         {
-            if(type!=2)
+            if(currentProgram.type!==2)
             {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
             else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::MoveProgramVM", currentProgram);}
         }
-        if (currentProgram!=null)
-        {
-            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);
-        }
+
     }
 //    property int type;
 //    property var newProgram;
     signal changePage(var pageName);
-    function rePaintCanvas(){dbDisplay.displayCanvas.requestPaint();}
+    function rePaintCanvas(){display.displayCanvas.requestPaint();}
     Rectangle{id:content;width: parent.width;height: parent.height*14/15
         NewProgram{
             id:newProgram;
@@ -39,6 +38,12 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 //                if(currentProgram.type!==2){currentProgram.params.commonParams.Range[1]=range;}
 //                else{currentProgram.params.Range[1]=range;}
 //            }
+        }
+
+        SaveToAnotherProgram{
+            id:saveToAnotherProgram;
+            anchors.fill: parent;
+
         }
 
         MoveParamsSetting
@@ -79,6 +84,16 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                             StackLayout {
                                 anchors.fill: parent;currentIndex: bar.currentIndex;
                                 Repeater {
+                                    id:programLists;
+                                    function refreshData()
+                                    {
+                                        programListModelVmThreshold.refreshData();
+                                        programListModelVmScreening.refreshData();
+                                        programListModelVmSpecial.refreshData();
+                                        programListModelVmMove.refreshData();
+                                        programListModelVmCustom.refreshData();
+                                    }
+
                                     property var programListModelVmThreshold: null;
                                     property var programListModelVmScreening: null;
                                     property var programListModelVmSpecial: null;
@@ -97,7 +112,6 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmSpecial);
                                         IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmMove);
                                         IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmCustom);
-
                                     }
                                     model:[programListModelVmThreshold,programListModelVmScreening,programListModelVmSpecial,programListModelVmMove,programListModelVmCustom]
                                     Item {id: homeTab;anchors.fill: parent;anchors.margins: height*0.03;
@@ -125,6 +139,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                                         }
 
                                                         var type=model.type;
+                                                        console.log(type);
                                                         if(type!==2)
                                                         {
                                                             currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[model.program_id]);
@@ -136,7 +151,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                                         }
                                                         var params=currentProgram.params;
                                                         strategyStack.currentProgramChanged();
-                                                        dbDisplay.currentProgramChanged();
+                                                        display.currentProgramChanged();
                                                         paramsSetting.enabled=true;
 //                                                        staticParamsSetting.currentProgramChanged();
                                                     }
@@ -159,7 +174,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                 function currentProgramChanged()
                                 {
                                     strategyNames=[];
-                                    console.log("currentProgram.type"+currentProgram.type);
+//                                    console.log("currentProgram.type"+currentProgram.type);
                                     switch(currentProgram.type)
                                     {
                                         case 0:strategyNames=[{name:qsTr("fullThreshold"),strategy:0},{name:qsTr("smart interactive"),strategy:1},{name:qsTr("fast interactive"),strategy:2}];break;
@@ -172,7 +187,6 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                 Item{anchors.fill: parent;anchors.margins: 0.1*height;
                                     Column{anchors.fill: parent;spacing: height*0.10;
                                         Repeater {
-                                            id:rp;
                                             model:strategyStack.strategyNames;
                                             Row{
                                                 width: parent.width;height: parent.height/7;spacing: 0.5*height;
@@ -199,21 +213,21 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                 }
                 Item{width:parent.width*0.650-2;height: parent.height;
                     Rectangle{anchors.fill: parent;color:"#cbced0";
-                        CusText{text:qsTr("点坐标"); anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
-                        CusText{text:"(-90,71)"; anchors.top: parent.top; anchors.topMargin: 0.08*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
-                        DbDisplay{
-                            id:dbDisplay;
+                        ProgramCustomizeDisplay{
+                            id:display;
                             function currentProgramChanged()
                             {
 
-                                if(currentProgram.type!==2){dbDisplay.range=currentProgram.params.commonParams.Range[1];}
-                                else{dbDisplay.range=currentProgram.params.Range[1]}
-//                                console.log(dbDisplay.range);
-                                dbDisplay.type=currentProgram.type;
+                                if(currentProgram.type!==2){display.range=currentProgram.params.commonParams.Range[1];}
+                                else{display.range=currentProgram.params.Range[1]}
+//                                console.log(display.range);
+                                display.type=currentProgram.type;
 //                                console.log("haha");
                                 dotList=currentProgram.dots;
                                 displayCanvas.requestPaint();
+
                             }
+                            onDotListChanged:{console.log("changed");currentProgram.dots=dotList;currentProgram.type===2?moveParamsSetting.currentProgramChanged():staticParamsSetting.currentProgramChanged();}
                         }
                     }
                 }
@@ -238,11 +252,11 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         console.log("type:"+type,"strat:"+newProgram.strategy);
                                         if(type!==2)
                                         {
-                                            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[model.program_id]);
+                                            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false);
                                             staticParamsSetting.currentProgram=currentProgram;
                                         }
                                         else{
-                                            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false,[model.program_id]);
+                                            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false);
                                             moveParamsSetting.currentProgram=currentProgram;
                                         }
 
@@ -259,19 +273,40 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                             currentProgram.params.Range[1]=newProgram.range;
                                         }
                                         strategyStack.currentProgramChanged();
-                                        dbDisplay.currentProgramChanged();
+                                        display.currentProgramChanged();
+                                        console.log(newProgram.programName);
+                                        currentProgram.name=newProgram.programName;
+                                        currentProgram.category=4;
+                                        currentProgram.insertProgram();
+                                        programLists.refreshData();
                                         paramsSetting.enabled=true;
+                                        bar.currentIndex=4;
 
                                     }
                                 }
                                 CusButton{text:"取消";height: parent.width*0.3;width: parent.width;}
                                 CusButton{
                                     text:"保存";height: parent.width*0.3;width: parent.width;enabled: currentProgram.category===4;
-                                    onClicked: currentProgram.saveProgram();
+                                    onClicked: {currentProgram.dots.forEach(function(item){console.log("x:"+item.x+" y:"+item.y);});currentProgram.updateProgram();}
                                 }
-                                CusButton{text:"另存为";height: parent.width*0.3;width: parent.width;}
-                                CusButton{text:"删除";height: parent.width*0.3;width: parent.width;}
-                                CusButton{text:"复制";height: parent.width*0.3;width: parent.width;}
+
+                                CusButton{text:"删除";height: parent.width*0.3;width: parent.width;enabled:currentProgram.category===4; onClicked:{ currentProgram.deleteProgram();paramsSetting.enabled=false;programLists.refreshData();}}
+                                CusButton{
+                                    text:"复制";height: parent.width*0.3;width: parent.width;
+                                    onClicked: saveToAnotherProgram.open();
+                                    Component.onCompleted: {
+                                        saveToAnotherProgram.ok.connect(saveToAnother);
+                                    }
+                                    function saveToAnother()
+                                    {
+                                        currentProgram.category=4;
+                                        currentProgram.name=saveToAnotherProgram.name;
+                                        console.log(currentProgram.name);
+                                        currentProgram.insertProgram();
+                                        programLists.refreshData();
+                                        bar.currentIndex=4;
+                                    }
+                                }
                             }
                         }
                     }
