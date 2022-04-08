@@ -46,7 +46,10 @@ Item{
 //                console.log(displayCanvas.mouseCoord.x);
 //                console.log(displayCanvas.mouseCoord.y);
 //                var dot = displayCanvas.pixCoordToDot(mouseX,mouseY)
+
                 var dot = displayCanvas.pixCoordToDot(mouseX,mouseY)
+                console.log(dot.x+" "+dot.y);
+                if(type==2){dot=displayCanvas.orthToPolar(dot)}
                 console.log(dot.x+" "+dot.y);
                 dotList.push(dot);
                 root.dotListChanged();
@@ -102,17 +105,39 @@ Item{
             return {x:dot_x,y:dot_y};
         }
 
-        function orthToPolar(dot)
+        function polarToOrth(dot)
         {
             var radius=dot.x;
             var angle=dot.y;
             return {x:radius*Math.cos(angle/180*Math.PI),y:radius*Math.sin(angle/180*Math.PI)}
         }
 
+        function orthToPolar(dot)
+        {
+            console.log(dot.x+"  "+dot.y);
+            var radius=Math.sqrt(Math.pow(dot.x,2)+Math.pow(dot.y,2));
+            console.log(radius);
+            var rad=Math.asin(dot.y/radius);
+            console.log(rad);
+            var angle=rad*(180/Math.PI);
+            console.log(angle);
+            if(dot.x<0)
+            {
+                if(dot.y>0){angle=90+(90-angle)}
+                if(dot.y<0){angle=-90-(90+angle)}
+            }
+
+            console.log(angle);
+//            if(dot.x>0&&dot.y<0) angle=angle+90;
+//            if(dot.x<0&&dot.y<0
+            if(angle<0) angle+=360;
+            return {x:radius,y:angle}
+        }
+
         function drawDot(dot)
         {
             var orthCoord;
-            if(type==2) {orthCoord=orthToPolar(dot)}else{orthCoord=dot}
+            if(type==2) {orthCoord=polarToOrth(dot)}else{orthCoord=dot}
 
             var x_pix=(orthCoord.x/degreeRange)*(diameter*0.5)+width/2;
             var y_pix=(-orthCoord.y/degreeRange)*(diameter*0.5)+height/2;

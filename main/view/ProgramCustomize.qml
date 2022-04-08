@@ -220,6 +220,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 
                                 if(currentProgram.type!==2){display.range=currentProgram.params.commonParams.Range[1];}
                                 else{display.range=currentProgram.params.Range[1]}
+                                console.log(display.range);
 //                                console.log(display.range);
                                 display.type=currentProgram.type;
 //                                console.log("haha");
@@ -326,7 +327,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
             Item{height: parent.height;width:parent.width*0.648;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter
-                        CusButton{id:paramsSetting;text:"参数设置";enabled:false; onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { moveParamsSetting.open();}}
+                        CusButton{id:paramsSetting;text:"参数设置";enabled:false;onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { moveParamsSetting.open();}}
                         CusButton{text:"圆形选点";}
                         CusButton{text:"矩形选点";}
                         }
