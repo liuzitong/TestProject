@@ -172,11 +172,12 @@ Program_ptr MoveProgramVM::getProgramData()
 
     for(auto& v:m_dots)
     {
-        if(v.toPointF().x()<0.05)
+        if(fabs(v.toPointF().x())<0.05&&fabs(v.toPointF().y())<0.05)
         {
             float x=v.toMap()["x"].toFloat();
             float y=v.toMap()["y"].toFloat();
             qDebug()<<x;
+            programModel->m_data.dots.push_back({x,y});
 //            programModel->m_data.dots.push_back({x,y});
         }
         else{
