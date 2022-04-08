@@ -30,32 +30,43 @@ Item{
         property double widthMargin: /*(width-height)/2+heightMargin;*/(width-diameter)/2;
         property double heightMargin:height*0.015;
         property int fontSize: diameter*0.022;
-        property int pi: 0;
+//        property int pi: 0;
 //        property point mouseCoord;
 
         MouseArea{
             anchors.fill: parent;
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            property var newDotList:[];
             onClicked:
             {
-//                console.log(mouseX);
-//                console.log(mouseY);
-//                console.log("aa");
-//                displayCanvas.drawText("QQ",mouseX,mouseY);
-//                displayCanvas.mouseCoord.x=mouseX;
-//                displayCanvas.mouseCoord.y=mouseY;
-//                console.log(displayCanvas.mouseCoord.x);
-//                console.log(displayCanvas.mouseCoord.y);
-//                var dot = displayCanvas.pixCoordToDot(mouseX,mouseY)
-
+                newDotList=[];
                 var dot = displayCanvas.pixCoordToDot(mouseX,mouseY)
-                console.log(dot.x+" "+dot.y);
-                if(type==2){dot=displayCanvas.orthToPolar(dot)}
-                console.log(dot.x+" "+dot.y);
-                dotList.push(dot);
-                root.dotListChanged();
-                displayCanvas.requestPaint();
+                if (mouse.button === Qt.RightButton)
+                {
+                    console.log("right clicked aa");
+                    var distance=1000*1000;
+                    var nearestDot;
+                    dotList.forEach(function(item){
+                        var tempDot;
+                        if(type==2){tempDot =displayCanvas.polarToOrth(item);}else{tempDot=item;}
+                        console.log("tempDot:"+tempDot.x+"  "+tempDot.y);
+                        var newDist=Math.pow(tempDot.x-dot.x,2)+Math.pow(tempDot.y-dot.y,2);
+                        console.log("newDist:"+newDist);
+                        if (newDist<distance) {nearestDot=item;distance=newDist;}
+                    })
+                    console.log("nearestDot:"+nearestDot.x+"  "+nearestDot.y)
+                    dotList.forEach(function(item){if(!(item.x===nearestDot.x&&item.y===nearestDot.y)) newDotList.push(item)});
+                    dotList=newDotList;
+                    root.dotListChanged();
+                    displayCanvas.requestPaint();
+                }
+                else{
+                    if(type==2){dot=displayCanvas.orthToPolar(dot)}
+                    dotList.push(dot);
+                    root.dotListChanged();
+                    displayCanvas.requestPaint();
+                }
             }
-
         }
 
         function drawDashRound(x, y, radius, length)
@@ -114,22 +125,14 @@ Item{
 
         function orthToPolar(dot)
         {
-            console.log(dot.x+"  "+dot.y);
             var radius=Math.sqrt(Math.pow(dot.x,2)+Math.pow(dot.y,2));
-            console.log(radius);
             var rad=Math.asin(dot.y/radius);
-            console.log(rad);
             var angle=rad*(180/Math.PI);
-            console.log(angle);
             if(dot.x<0)
             {
                 if(dot.y>0){angle=90+(90-angle)}
                 if(dot.y<0){angle=-90-(90+angle)}
             }
-
-            console.log(angle);
-//            if(dot.x>0&&dot.y<0) angle=angle+90;
-//            if(dot.x<0&&dot.y<0
             if(angle<0) angle+=360;
             return {x:radius,y:angle}
         }

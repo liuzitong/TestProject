@@ -502,6 +502,7 @@ Item{
                     onClicked: {
                         patientReviseButton.enabled=false;patientReviseButton.buttonColor="#787878"
                         patientSaveButton.enabled=true; patientSaveButton.buttonColor = "#dcdee0"
+
                         newId.text="";
                         newChineseName.text="";
                         newEnglishFirstName.text="";
