@@ -5,6 +5,7 @@ import QtQml 2.2
 import QtQuick.Controls.Styles 1.4
 import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0
+import perimeter.main.view.Utils 1.0
 
 Item{
     id:root;
@@ -12,9 +13,10 @@ Item{
     property bool doubleName:IcUiQmlApi.appCtrl.doubleName
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
-    property int pageSize: 15;
+    property var currentPatient:null;
+    property int pageSize: 15
     signal queryStarted;
-    signal changePage(var pageName);
+    signal changePage(var pageName,var currentPatient);
     width: 1440
     height: 700
     anchors.fill:parent;
@@ -115,7 +117,7 @@ Item{
                                 case 3:patientInfoListView.patientListModelVm.getPatientListBySex(sex.currentIndex,dateFrom.text,dateTo.text);break;
                                 case 4:patientInfoListView.patientListModelVm.getPatientListByBirthDate(birthDate.text);
                                 }
-//                                queryStarted();
+                                queryStarted();
                             }
                         }
                         Item{
@@ -187,20 +189,14 @@ Item{
                                                     width: parent.width*1/10;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"
                                                     onClicked:
                                                     {
-                                                        var name=model.name;var firstName ="";var lastName="";
-                                                        if(model.name.indexOf(" ")>-1){ firstName =model.name.split(" ")[0]; lastName=model.name.split(" ")[1];};
-                                                        newId.text=model.patientId;newChineseName.text=model.name;genderSelect.selectGender(model.sex);newDateBirth.text=model.birthDate;newEnglishFirstName.text=firstName;newEnglishLastName.text=lastName;
-                                                        IcUiQmlApi.appCtrl.currentPatient.id=model.Id;
-                                                        IcUiQmlApi.appCtrl.currentPatient.patientId=model.patientId;
-                                                        IcUiQmlApi.appCtrl.currentPatient.name=model.name;
-                                                        IcUiQmlApi.appCtrl.currentPatient.sex=model.sex;
-                                                        IcUiQmlApi.appCtrl.currentPatient.birthDate=model.birthDate;
-                                                        IcUiQmlApi.appCtrl.currentPatient.lastUpdate=model.lastUpdate;
-                                                        console.log("current patient info:"+IcUiQmlApi.appCtrl.currentPatient.id+" "+IcUiQmlApi.appCtrl.currentPatient.patientId+" "+IcUiQmlApi.appCtrl.currentPatient.name+" "+IcUiQmlApi.appCtrl.currentPatient.sex+" "+IcUiQmlApi.appCtrl.currentPatient.birthDate+" "+IcUiQmlApi.appCtrl.currentPatient.lastUpdate)
+                                                        var firstName ="";var lastName="";
+                                                        if(currentPatient!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientVm", currentPatient);
+                                                        currentPatient=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::PatientVm", false,[model.Id]);
+                                                        console.log(currentPatient.name);
+                                                        if(currentPatient.name.indexOf(" ")>-1){ firstName =currentPatient.name.split(" ")[0]; lastName=currentPatient.name.split(" ")[1];};
+                                                        newPatientId.text=currentPatient.patientId;newChineseName.text=currentPatient.name;genderSelect.selectGender(currentPatient.sex);newBirthDate.text=currentPatient.birthDate;newEnglishFirstName.text=firstName;newEnglishLastName.text=lastName
                                                         patientSaveButton.enabled=false;patientSaveButton.buttonColor = "#787878"
                                                         patientReviseButton.enabled=true;patientReviseButton.buttonColor="#dcdee0"
-                                                       /* patient.id=model.Id;*//*patient.patientId=model.patientId;patient.sex=model.sex;patient.birthDate=model.birtDate;*/
-
                                                     }
                                                 }
                                             }
@@ -302,7 +298,7 @@ Item{
                             Row{
                                 width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
                                 CusText{text:"*患者ID "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
-                                LineEdit{id:newId;width: parent.width*0.6}
+                                LineEdit{id:newPatientId;width: parent.width*0.6;}
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
                             Row{
@@ -363,25 +359,10 @@ Item{
                                 CusText{text:"*出生日期 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
                                 Row{
                                     height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
-                                    Item{
-                                        height: parent.height;width: 2*height;
-                                        LineEdit
-                                        {
-                                            id:newDateBirth;width: height*3.1;onTextChanged:
-                                            {
-                                                var birthDate=new Date(Date.parse(newDateBirth.text));
-                                                var now=new Date(Date.now());
-                                                var age=now.getFullYear()-birthDate.getFullYear();
-                                                if(now.getMonth()<birthDate.getMonth()) age-=1;
-                                                if((now.getMonth()==birthDate.getMonth())&&(now.getDay()<birthDate.getDay())) age-=1;
-                                                newPatientage.text=age;
-                                            }
-                                        }
-                                    }
-                                    CusButton{text:"选择";width:height*2;onClicked:{calendar.inputObj=newDateBirth;calendar.open();}}
+                                    Item{height: parent.height;width: 2*height;LineEdit{id:newBirthDate;width: height*3.1;onTextChanged:{newPatientage.text=CusUtils.getAge(newBirthDate.text);}}}
+                                    CusButton{text:"选择";width:height*2;onClicked:{calendar.inputObj=newBirthDate;calendar.open();}}
                                     LineEdit{id:newPatientage;width: height*2;text:"1";radius: height*0.2;horizontalAlignment: Text.AlignHCenter;readOnly: true;backgroundColor:backGroundColor;}
                                 }
-
                             }
                         }
                     }
@@ -463,7 +444,13 @@ Item{
                         {
                             var Name;
                             if(!doubleName) Name=newChineseName.text;else {Name=newEnglishFirstName.text+" "+newEnglishLastName.text;}
-                            IcUiQmlApi.appCtrl.databaseSvc.updatePatient(IcUiQmlApi.appCtrl.currentPatient.id,newId.text,Name,genderSelect.gender,newDateBirth.text);
+//                            IcUiQmlApi.appCtrl.databaseSvc.updatePatient(IcUiQmlApi.appCtrl.currentPatient.id,newPatientId.text,Name,genderSelect.gender,newBirthDate.text);
+                            currentPatient.patientId=newPatientId.text;
+                            currentPatient.name=Name;
+                            currentPatient.sex=genderSelect.gender;
+                            console.log(newBirthDate.text);
+                            currentPatient.birthDate=newBirthDate.text;
+                            currentPatient.update();
                             query.startQuery();
                         }
                     }
@@ -474,18 +461,18 @@ Item{
                             var pl=patientInfoListView.seletedPatient;
                             for(var i=0;i<pl.length;i++){
                                 console.log(pl[i])
-                                 IcUiQmlApi.appCtrl.databaseSvc.deletePatient(pl[i]);
+                                patientInfoListView.patientListModelVm.deletePatient(pl[i]);
                             }
                             query.startQuery();
                         }
 
                     }
-                    CusButton{text:"分析";onClicked: {root.changePage("reportAndAnalysis");}}
+                    CusButton{text:"分析";onClicked: {root.changePage("reportAndAnalysis",null);}}
                 }
             }
             Flow{
                 height:parent.height; layoutDirection: Qt.RightToLeft;width:parent.width*0.4;spacing: height*0.8;
-                CusButton{text:"进入检测";onClicked: {root.changePage("check");}}
+                CusButton{text:"进入检测";enabled:!(currentPatient===null);onClicked: {root.changePage("check",currentPatient);}}
                 CusButton{
                     id:patientSaveButton;text:"保存";
                     enabled: false;
@@ -493,22 +480,32 @@ Item{
                         var Name="";
                         if(!doubleName){ Name=newChineseName.text; }
                         else {Name = newEnglishFirstName.text+" "+newEnglishLastName.text;}
-                        IcUiQmlApi.appCtrl.databaseSvc.addPatient(newId.text,Name,genderSelect.gender,newDateBirth.text);
+                        if(currentPatient!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientVm", currentPatient);
+                        currentPatient=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::PatientVm", false);
+                        currentPatient.patientId=newPatientId.text;
+                        currentPatient.name=newChineseName.text;
+                        currentPatient.sex=genderSelect.gender;
+                        currentPatient.birthDate=newBirthDate.text;
+                        currentPatient.insert();
+                        root.currentPatientChanged();
                         query.startQuery();
                     }
                 }
                 CusButton{
                     text:"新建";
                     onClicked: {
+                        if(currentPatient!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientVm", currentPatient);
                         patientReviseButton.enabled=false;patientReviseButton.buttonColor="#787878"
                         patientSaveButton.enabled=true; patientSaveButton.buttonColor = "#dcdee0"
-
-                        newId.text="";
+                        newPatientId.text="";
                         newChineseName.text="";
                         newEnglishFirstName.text="";
                         newEnglishLastName.text="";
                         genderSelect.selectGender(0);
-                        newDateBirth.text="";
+                        newBirthDate.text="";
+
+
+
                     }
                 }
             }

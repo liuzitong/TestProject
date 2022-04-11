@@ -321,7 +321,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
         Row{anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.235;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:"返回";onClicked:root.changePage("patientManagement");}
+                    CusButton{text:"返回";onClicked:root.changePage("patientManagement",null);}
                     }
                 }
             Item{height: parent.height;width:parent.width*0.648;

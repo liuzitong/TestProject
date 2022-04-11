@@ -22,7 +22,7 @@ public:
     Q_INVOKABLE void getPatientListByName(QString name,QDate from,QDate to);
     Q_INVOKABLE void getPatientListBySex(int sex,QDate from,QDate to);
     Q_INVOKABLE void getPatientListByBirthDate(QDate date);
-    Q_INVOKABLE void updatePatient(long id,QString patientId, QString name, int sex, QDate date);
+//    Q_INVOKABLE void updatePatient(long id,QString patientId, QString name, int sex, QDate date);
     Q_INVOKABLE void deletePatient(long id);
     Q_INVOKABLE void addPatient(QString patientId,QString name,int sex,QDate date,QDateTime updateTime=QDateTime::currentDateTime());
     Q_INVOKABLE void hello();

@@ -19,7 +19,6 @@ public:
 private:
     Program_List m_list;
     int m_category;
-//    QString m_str;
     Q_DISABLE_COPY(ProgramListModelVm);
 public:
     virtual int rowCount(const QModelIndex &parent) const override;

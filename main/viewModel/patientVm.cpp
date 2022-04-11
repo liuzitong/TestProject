@@ -12,16 +12,45 @@ void PatientVm::hello()
     qDebug()<<"patient says hello.";
 }
 
-//PatientVm::PatientVm()
-//{
-//    m_patient=perimeter_new(Patient);
-//}
 
-PatientVm::PatientVm(const QVariantList &)
+
+PatientVm::PatientVm(const QVariantList & args)
 {
-     m_patient=perimeter_new(Patient);
-//    qDebug()<<"gogogogogo";
+    qDebug()<<"constructor";
+    if(args.count()==0)
+    {
+        m_patient=std::shared_ptr<Patient>(new Patient());
+    }
+    else
+    {
+        Patient_List Patient_List;
+        int id=args[0].toInt();
+        qx_query query("select * from patient where id=:id");
+        query.bind(":id",id);
+        QSqlError daoError = qx::dao::execute_query(query, Patient_List);
+        if(Patient_List.count()==0)
+            m_patient=std::shared_ptr<Patient>(new Patient());
+        else
+        {
+            m_patient=Patient_List.first();
+        }
+    }
 }
+
+void PatientVm::update()
+{
+    m_patient->m_lastUpdate=QDateTime::currentDateTime();
+    qx::dao::update(m_patient);
+}
+
+void PatientVm::insert()
+{
+    m_patient->m_lastUpdate=QDateTime::currentDateTime();
+    qx::dao::insert(m_patient);
+}
+
+
+
 
 PatientVm &PatientVm::operator=(const PatientVm &other)
 {
@@ -40,74 +69,77 @@ PatientVm &PatientVm::operator=(const PatientVm &other)
 //    this->m_patient=other.m_patient;
 //}
 
-PatientVm::~PatientVm()
-{
-//    m_patient=0;
-//    qDebug()<<"patient  destructed";
+//PatientVm::~PatientVm()
+//{
 //    if(m_patient!=nullptr)
-//        delete (Patient*)m_patient;
-    if(m_patient!=nullptr)
-        perimeter_delete(m_patient,Patient);
-}
+//        perimeter_delete(m_patient,Patient);
+//}
 
 long PatientVm::getID()
 {
-    return T_PrivPtr( m_patient )->m_id;
+    return  m_patient ->m_id;
 }
 
 void PatientVm::setID(long value)
 {
-    T_PrivPtr( m_patient )->m_id=value;
+    m_patient->m_id=value;
 }
 
 QString PatientVm::getPatientID()
 {
-   return T_PrivPtr( m_patient )->m_patientId;
+   return  m_patient->m_patientId;
 }
 
 void PatientVm::setPatientID(QString value)
 {
-    T_PrivPtr( m_patient )->m_patientId=value;
+    m_patient ->m_patientId=value;
 }
 
 QString PatientVm::getName()
 {
-    return T_PrivPtr( m_patient )->m_name;
+    return  m_patient ->m_name;
 }
 
 void PatientVm::setName(QString value)
 {
-    T_PrivPtr( m_patient )->m_name=value;
+   m_patient->m_name=value;
 }
 
 int PatientVm::getSex()
 {
-    return static_cast<int>(T_PrivPtr( m_patient )->m_sex);
+    return static_cast<int>( m_patient ->m_sex);
 }
 
 void PatientVm::setSex(int value)
 {
-    T_PrivPtr( m_patient )->m_sex=Patient::sex(value);
+    m_patient ->m_sex=Patient::sex(value);
 }
 
-QDate PatientVm::getBirthDate()
+QString PatientVm::getBirthDate()
 {
-    return T_PrivPtr( m_patient )->m_birthDate;
+    return  m_patient->m_birthDate.toString("yyyy-MM-dd");
 }
 
-void PatientVm::setBirthDate(QDate value)
+void PatientVm::setBirthDate(QString date)
 {
-    T_PrivPtr( m_patient )->m_birthDate=value;
+    QList<QString> list=date.split("-");
+    int year=list[0].toInt();
+    int month=list[1].toInt();
+    int day=list[2].toInt();
+    m_patient->m_birthDate.setDate(year,month,day);
+    qDebug()<<year;
+    qDebug()<<month;
+    qDebug()<<day;
 }
 
 QDateTime PatientVm::getLastUpdate()
 {
-    return T_PrivPtr( m_patient )->m_lastUpdate;
+    return m_patient->m_lastUpdate;
 }
 
 void Perimeter::PatientVm::setLastUpdate(QDateTime value)
 {
-    T_PrivPtr(m_patient)->m_lastUpdate=value;
+    m_patient->m_lastUpdate=value;
 }
 
 }

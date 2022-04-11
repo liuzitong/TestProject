@@ -5,7 +5,7 @@ import QtQml 2.2
 import QtQuick.Controls.Styles 1.4
 import qxpack.indcom.ui_qml_base 1.0
 import perimeter.main.view.Controls 1.0
-
+import perimeter.main.view.Utils 1.0
 
 Rectangle {
     id: root;visible: true;width: 1366;height: 768;color: backGroundColor;
@@ -13,6 +13,7 @@ Rectangle {
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
     property string language:IcUiQmlApi.appCtrl.language
+    property var currentPatient: patientPage.currentPatient;
     signal changePage(string page);
 
 //    function switchContent(contentType)
@@ -81,24 +82,25 @@ Rectangle {
                                 Flow{
                                     height: parent.height;
                                     CusText{text:"姓名:  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
-                                    CusText{id:name;text:"张先生"; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: if(IcUiQmlApi.appCtrl.language!=="Chinese")  return text.length*4.7;}
+                                    CusText{id:name;text:currentPatient.name; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: if(IcUiQmlApi.appCtrl.language!=="Chinese")  return text.length*4.7;}
                                 }
                                 Flow{
                                     height: parent.height;
                                     CusText{text:"性别:  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
-                                    CusText{id:sex;text:"男"; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1;}
+                                    CusText{id:sex;text:{switch (currentPatient.sex){ case 0:return "男";case 1:return "女";case 2:return "其它";};}
+                                            horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1;}
                                 }
                                 Flow{
                                     height: parent.height;
                                     CusText{text:"年龄:  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
-                                    CusText{id:age;text:"40"; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1;}
+                                    CusText{id:age;text:CusUtils.getAge(currentPatient.birthDate); horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1;}
                                 }
 
 
                                 Flow{
                                     height: parent.height;
                                     CusText{text:"ID:  "; horizontalAlignment: Text.AlignRight;color:"white";width: height;font.pointSize: height*0.4;}
-                                    CusText{id:id;text:"202107055362"; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1.5;}
+                                    CusText{id:id;text:currentPatient.patientId; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1.5;}
                                 }
                             }
                         }
@@ -107,7 +109,7 @@ Rectangle {
                         width: parent.width;height: parent.height*0.60;
                         CusButton{
                             type:"click";isAnime: false;underImageText.text: "登录";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_login.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_login_select.svg";
-                            onClicked: {changePage("login");}
+                            onClicked: {changePage("login",null);}
                         }
                         Flow{
                             id:contentSwitcher
@@ -138,7 +140,7 @@ Rectangle {
                             }
                             CusButton{
                                 type:"click";isAnime: false;underImageText.text: "自定义";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_customize.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_customize_select.svg";
-                                onClicked: contentPage.changePage("programCustomize");
+                                onClicked: contentPage.changePage("programCustomize",null);
                             }
                             CusButton{type:"click";isAnime: false;underImageText.text: "关于";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_about.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_about_select.svg";onClicked: {about.open();}}
                         }
@@ -162,7 +164,7 @@ Rectangle {
                 reportPage.changePage.connect(changePage);
             }
 
-            function changePage(pageName)
+            function changePage(pageName,param)
             {
                 console.log(pageName);
                 patientPage.visible=false;checkPage.visible=false;programPage.visible=false;reportPage.visible=false;
@@ -187,6 +189,8 @@ Rectangle {
                         patientInfo.visible=true;
                         break;
                     case "check":
+                        console.log(param.name);
+                        checkPage.currentPatient=param;
                         checkPage.visible=true;
                         checkPage.rePaintCanvas();
                         patientContentButton.image.source=patientContentButton.imageSrc;

@@ -14,6 +14,7 @@ Column {id:root; width: 1366;height: 691
     property string backGroundColor:"#dcdee0"
     property string backGroundColorCheckPanel:"#cbced0"
     property string backGroundBorderColor:"#bdc0c6"
+    property var currentPatient: null;
     Rectangle{width: parent.width; height: parent.height*14/15; id:content;
         Item{anchors.fill: parent;anchors.margins: 2;
             Row{anchors.fill: parent;spacing: 2;
@@ -127,7 +128,7 @@ Column {id:root; width: 1366;height: 691
         Row{anchors.fill: parent;
             Item{ height: parent.height;width:parent.width*0.25;
                 Item{anchors.fill: parent; anchors.margins:parent.height*0.15;
-                    CusButton{text:"返回";onClicked:root.changePage("patientManagement");}
+                    CusButton{text:"返回";onClicked:root.changePage("patientManagement",null);}
                 }
             }
             Item{height: parent.height;width:parent.width*0.25;

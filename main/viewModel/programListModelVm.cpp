@@ -13,10 +13,6 @@ enum ProgramRoles
 
 ProgramListModelVm::ProgramListModelVm(const QVariantList & list)
 {
-//    qDebug()<<"construcated";
-//    qDebug()<<list.size();
-//     qDebug()<<list[0].toInt();
-//    int category=list[0].toInt();
     m_category=list[0].toInt();
     qx_query query("select program_id,type,name,category,data from program where category=:category");
     query.bind(":category",m_category);
@@ -25,9 +21,6 @@ ProgramListModelVm::ProgramListModelVm(const QVariantList & list)
     beginResetModel();
     m_list=program_List;
     endResetModel();
-//    if(m_list.count()>0)
-//        qDebug()<<m_list[0]->m_name;
-    //    m_str=list[1].toString();
 }
 
 void ProgramListModelVm::refreshData()

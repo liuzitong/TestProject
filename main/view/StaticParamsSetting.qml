@@ -17,28 +17,6 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
     property int type;
     signal ok();
     signal cancel();
-//    signal currentProgramChanged();
-
-//    property int range;
-//    property int dotCount;
-//    property int strategy
-//    property int strategyMode;
-//    property int cursorColor;
-//    property int cursorSize;
-//    property int backgroundLightColor;
-//    property bool cyanyellowTest;
-
-//    property bool responceAutoAdapt;
-//    property int adaptiveIntevalTime;
-//    property bool centerDotCheck;
-//    property bool shortTermFluctuation;
-//    property int fixationViewSelection
-//    property int alarmMode;
-//    property bool blindDotTest;
-
-
-//    property int stimuationTime;
-//    property int intevalTime;
 
     property var currentProgram;
 

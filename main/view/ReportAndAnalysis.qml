@@ -28,7 +28,7 @@ Column {
                 Item{
                     anchors.fill: parent
                     anchors.margins:parent.height*0.15;
-                    CusButton{text:"返回";onClicked:root.changePage("patientManagement");}
+                    CusButton{text:"返回";onClicked:root.changePage("patientManagement",null);}
                     }
                 }
 

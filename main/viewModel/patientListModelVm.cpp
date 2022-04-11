@@ -199,17 +199,17 @@ void PatientListModelVm::getPatientListByBirthDate(QDate date)
 }
 
 
-void PatientListModelVm::updatePatient(long id,QString patientId, QString name, int sex, QDate date)
-{
-    Patient_List Patient_List;
-    qx_query query("select * from patient where id=:id");
-    query.bind(":id",QString::number(id));
-    QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
-    Patient_ptr pp = Patient_List.front();
-    pp->m_patientId=patientId;pp->m_name=name;pp->m_sex=Patient::sex(sex);pp->m_birthDate=date;pp->m_lastUpdate=QDateTime::currentDateTime();
-    daoError = qx::dao::update(pp);
-    emit patientListChanged();
-}
+//void PatientListModelVm::updatePatient(long id,QString patientId, QString name, int sex, QDate date)
+//{
+//    Patient_List Patient_List;
+//    qx_query query("select * from patient where id=:id");
+//    query.bind(":id",QString::number(id));
+//    QSqlError daoError = qx::dao::execute_query(query, Patient_List);;
+//    Patient_ptr pp = Patient_List.front();
+//    pp->m_patientId=patientId;pp->m_name=name;pp->m_sex=Patient::sex(sex);pp->m_birthDate=date;pp->m_lastUpdate=QDateTime::currentDateTime();
+//    daoError = qx::dao::update(pp);
+//    emit patientListChanged();
+//}
 
 
 //bool PatientListModel::setData(const QModelIndex &, const QVariant &, int)

@@ -1,6 +1,7 @@
 ﻿#ifndef PATIENTVM_H
 #define PATIENTVM_H
 #include "perimeter/base/common/perimeter_def.h"
+#include "perimeter/main/database/patient.h"
 //#include "qxpack/indcom/afw/qxpack_ic_viewmodelbase.hxx"
 #include <memory>
 #include <QDate>
@@ -15,25 +16,29 @@ class PERIMETER_API PatientVm: public QObject
     Q_PROPERTY(QString patientId READ getPatientID WRITE setPatientID)
     Q_PROPERTY(QString name READ getName WRITE setName)
     Q_PROPERTY(int sex READ getSex WRITE setSex)
-    Q_PROPERTY(QDate date READ getBirthDate WRITE setBirthDate)
+    Q_PROPERTY(QString birthDate READ getBirthDate WRITE setBirthDate)
     Q_PROPERTY(QDateTime lastUpdate READ getLastUpdate WRITE setLastUpdate)
 
 public:
 //    Q_INVOKABLE PatientVm();
     Q_INVOKABLE explicit PatientVm(const QVariantList &);
-    Q_INVOKABLE virtual ~PatientVm() Q_DECL_OVERRIDE;
-
+//    Q_INVOKABLE void deletePatient();
+    Q_INVOKABLE virtual ~PatientVm() Q_DECL_OVERRIDE=default;
+    Q_INVOKABLE void update();
+    Q_INVOKABLE void insert();
     Q_INVOKABLE void hello();
+//    Q_INVOKABLE int age();
     PatientVm& operator=(const PatientVm& other);
     long getID();void setID(long value);
     QString getPatientID();void setPatientID(QString value);
     QString getName();void setName(QString value);
     int getSex();void setSex(int value);
-    QDate getBirthDate();void setBirthDate(QDate value);
+    QString getBirthDate();void setBirthDate(QString value);
     QDateTime getLastUpdate();void setLastUpdate(QDateTime lastUpdate);
 
+
 private:
-    void* m_patient;
+    Patient_ptr m_patient;
 };
 }
 #endif // PATIENTVM_H

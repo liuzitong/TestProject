@@ -178,7 +178,6 @@ Program_ptr MoveProgramVM::getProgramData()
             float y=v.toMap()["y"].toFloat();
             qDebug()<<x;
             programModel->m_data.dots.push_back({x,y});
-//            programModel->m_data.dots.push_back({x,y});
         }
         else{
             programModel->m_data.dots.push_back({float(v.toPointF().x()),float(v.toPointF().y())});
@@ -187,7 +186,6 @@ Program_ptr MoveProgramVM::getProgramData()
 
     return programModel->ModelToDB();
 }
-
 
 
 }
