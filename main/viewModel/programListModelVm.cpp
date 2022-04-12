@@ -14,7 +14,7 @@ enum ProgramRoles
 ProgramListModelVm::ProgramListModelVm(const QVariantList & list)
 {
     m_category=list[0].toInt();
-    qx_query query("select program_id,type,name,category,data from program where category=:category");
+    qx_query query("select program_id,type,name,category from program where category=:category");
     query.bind(":category",m_category);
     Program_List program_List;
     QSqlError daoError = qx::dao::execute_query(query, program_List);

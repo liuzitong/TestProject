@@ -126,8 +126,8 @@ Rectangle {
                             height: parent.height;anchors.right: parent.right;spacing: height*1
 
                             CusButton{
-                                width: parent.height*2;text: "生成数据";
-                                onClicked: {IcUiQmlApi.appCtrl.databaseSvc.createData();}
+                                width: parent.height*2;text: "DoStuff";
+                                onClicked: {IcUiQmlApi.appCtrl.databaseSvc.doStuff();}
                             }
                             CusButton{
                                 type:"click";isAnime: false;underImageText.text: "设置";underImageText.color: "white"; fontSize: height/4;rec.visible: false;

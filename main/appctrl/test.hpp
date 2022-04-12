@@ -14,6 +14,7 @@
 #include <perimeter/main/model/utility.h>
 #include <perimeter/main/model/programModel.h>
 #include <perimeter/main/model/checkResultModel.h>
+#include "qxpack/indcom/common/qxpack_ic_global.hxx"
 
 class Test{
 public:
@@ -216,39 +217,37 @@ public:
     }
 
 
-    void static createEntityData()
+    static void  createEntityData()
     {
-//        ProgramModel<Type::ThreshHold> pm;
-//        pm.m_type=Type::ThreshHold;pm.m_params={{{3,2},0},{}};
-//        pm.m_name="30-2";
-//        using strategy=StaticParams::CommonParams::Strategy;
-//        pm.m_data.strategies={strategy::fullThreshold,strategy::fastInterative};
-//        pm.m_data.dots={{2,3},{55,2}};
-//        pm.m_category=Category::Custom;
-//        auto pm_ptr=pm.ModelToDB();
+        ProgramModel<Type::ThreshHold> pm;
+        pm.m_name="30-2";
+        using strategy=StaticParams::CommonParams::Strategy;
+        pm.m_data.strategies={strategy::fullThreshold,strategy::fastInterative};
+        pm.m_data.dots={{2,3},{55,2}};
+        pm.m_category=Category::Custom;
+        auto pm_ptr=pm.ModelToDB();
 
-//        Patient_ptr pp_ptr(new Patient("50022","lzt",Patient::sex::male,QDate::currentDate()));
+        Patient_ptr pp_ptr(new Patient("50022","lzt",Patient::sex::male,QDate::currentDate()));
 
-//        CheckResultModel<Type::ThreshHold> crm;
-//        crm.m_type=Type::ThreshHold;
-//        crm.m_params={{{3,2},0,60,strategy::fullThreshold,false,StaticParams::CommonParams::StrategyMode::ageRelated,false,CursorColor::red},{300,30,100,20,20,10,30,10}};
-//        crm.m_data={1,2,3,4,10,5,3,2,3,1,3,{3,2,3,2},{11,223,11,22,33,22},{2,4,2,3,5,2,33,55,32,33}};
-//        crm.m_time=QDateTime::currentDateTime();
-//        auto cr_ptr=crm.ModelToDB(pp_ptr,pm_ptr);
+        CheckResultModel<Type::ThreshHold> crm;
+        crm.m_type=Type::ThreshHold;
+        crm.m_data={1,2,3,4,10,5,3,2,3,1,3,{3,2,3,2},{11,223,11,22,33,22},{2,4,2,3,5,2,33,55,32,33}};
+        crm.m_time=QDateTime::currentDateTime();
+        auto cr_ptr=crm.ModelToDB();
 
-//        QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
-//        bool bCommit = db.transaction();
+        QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
+        bool bCommit = db.transaction();
 
-//        QSqlError daoError;
-//        daoError = qx::dao::insert(pp_ptr, &db);
-//        daoError = qx::dao::insert(pm_ptr, &db);
-//        daoError = qx::dao::insert(cr_ptr, &db);
-//        bCommit = (bCommit && ! daoError.isValid());
-//        qAssert(bCommit);
-//        db.commit();
+        QSqlError daoError;
+        daoError = qx::dao::insert(pp_ptr, &db);
+        daoError = qx::dao::insert(pm_ptr, &db);
+        daoError = qx::dao::insert(cr_ptr, &db);
+        bCommit = (bCommit && ! daoError.isValid());
+        qAssert(bCommit);
+        db.commit();
     }
 
-    void static GetEntityData()
+    static void  GetEntityData()
     {
         CheckResult_List CheckResult_List;
 
@@ -277,7 +276,83 @@ public:
 
         std::cout<<checkResult_ptr->m_patient->m_name.toStdString()<<std::endl;
 
-        CheckResultModel<Type::ThreshHold> CheckResult(checkResult_ptr);
-        std::cout<<CheckResult.m_programModel.m_params.commonParams.Range[0]<<std::endl;
+
     }
+
+    static void createPatientsData()
+    {
+        QxPack::IcLCG  lcg;
+        Patient_ptr patient_ptr,patient_1,patient_2;
+        CheckResult_ptr checkResult_1,checkResult_2,checkResult_3,checkResult_4;
+        Program_ptr program_1,program_2;
+        program_1.reset(new Program);
+        program_2.reset(new Program(2,2,"30-2","program2 params","program2 data"));
+
+        program_1->m_id=1;
+        program_1->m_data="program1data";
+        program_1->m_name="24-2";
+        program_1->m_type=3;
+        program_1->m_params="ttt";
+        program_1->m_data="bbbb";
+        patient_1.reset(new Patient("5001","lzt",Patient::sex::male,QDate::fromString("1988-05-11","yyyy-MM-dd")));
+        patient_2.reset(new Patient("5003","yangzhiqun",Patient::sex::female,QDate::fromString("1988-05-11","yyyy-MM-dd")));
+
+        checkResult_1.reset(new CheckResult(1,"params1","data1",QDateTime::currentDateTime(),patient_1,program_1));
+        checkResult_2.reset(new CheckResult(2,"params2","data2",QDateTime::currentDateTime(),patient_2,program_1));
+        checkResult_3.reset(new CheckResult(3,"params3","data3",QDateTime::currentDateTime(),patient_1,program_2));
+        checkResult_4.reset(new CheckResult(4,"params4","data4",QDateTime::currentDateTime(),patient_2,program_2));
+
+        QSqlDatabase db = qx::QxSqlDatabase::getDatabase();
+        bool bCommit = db.transaction();
+
+        QSqlError daoError;
+        daoError = qx::dao::insert(program_1, &db);
+        daoError = qx::dao::insert(program_2, &db);
+
+        bCommit = (bCommit && ! daoError.isValid());
+        qAssert(bCommit);
+        db.commit();
+
+        bCommit = db.transaction();
+    //    daoError = qx::dao::insert(patient_1, &db);
+    //    daoError = qx::dao::insert(patient_2, &db);
+        for(int i=0;i<100;i++)
+        {
+            QDate date = QDate::currentDate();
+            date=date.addYears(-(lcg.value()%80)-1).addMonths(-(lcg.value()%12)).addDays(-(lcg.value()%31));
+            qDebug()<<QString("year:%1,month:%2,day:%3").arg(date.year()).arg(date.month()).arg(date.day());
+            QDateTime time = QDateTime::currentDateTime();
+            int year,month,day;
+            year=-lcg.value()%(time.date().year()-date.year());
+            month=-lcg.value()%12;
+            day=-lcg.value()%31;
+            time = time.addYears(year).addMonths(month).addDays(day);
+            qDebug()<<QString("year:%1,month:%2,day:%3").arg(time.date().year()).arg(time.date().month()).arg(time.date().day());
+
+            QString nm = QString("%1%2%3").arg( QChar( ( lcg.value() % 26 ) + 'A' ))
+                             .arg( QChar( ( lcg.value() % 26 ) + 'a' ))
+                             .arg( QChar( ( lcg.value() % 26 ) + 'a' ));
+            QString id = QString("PID_%1").arg( lcg.value() % 10000 );
+            patient_ptr.reset(new Patient(id ,nm,Patient::sex(lcg.value()%3),date,time));
+            daoError = qx::dao::insert(patient_ptr, &db);
+        }
+        bCommit = (bCommit && ! daoError.isValid());
+        qAssert(bCommit);
+        db.commit();
+
+        bCommit = db.transaction();
+        daoError = qx::dao::insert(checkResult_1, &db);
+        daoError = qx::dao::insert(checkResult_2, &db);
+        daoError = qx::dao::insert(checkResult_3, &db);
+        daoError = qx::dao::insert(checkResult_4, &db);
+        bCommit = (bCommit && ! daoError.isValid());
+        qAssert(bCommit);
+        db.commit();
+    }
+
+    void static doStuff()
+    {
+        qDebug()<<"hehe";
+    }
+
 };

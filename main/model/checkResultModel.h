@@ -41,7 +41,7 @@ struct ResultData
     int T_Light_pv;
     std::vector<int> shortTermFluctuation;
     std::vector<int> eyeMoveCurve;
-    typename CheckDataTraits<T>::checkData m_data;
+    typename CheckDataTraits<T>::checkData checkdata;
 
     template<class Archive>
     void serialize(Archive& archive, const unsigned int version)
@@ -59,6 +59,8 @@ struct ResultData
         archive & BOOST_SERIALIZATION_NVP(T_Light_pv);
         archive & BOOST_SERIALIZATION_NVP(shortTermFluctuation);
         archive & BOOST_SERIALIZATION_NVP(eyeMoveCurve);
+        archive & BOOST_SERIALIZATION_NVP(checkdata);
+
     }
 };
 
@@ -72,8 +74,8 @@ struct CheckResultModel
     typename ParamTraits<type>::params m_params;
     ResultData<type> m_data;
     QDateTime m_time;
-    Patient m_patient;
-    ProgramModel<type> m_programModel;
+    int m_patient_id;
+    int m_program_id;
 
 
     CheckResultModel()=default;
@@ -85,11 +87,11 @@ struct CheckResultModel
         m_params=Utility::QStringToEntity<ParamTraits<type>::params>(checkResult_ptr->m_params);
         m_data=Utility::QStringToEntity<ResultData<type>>(checkResult_ptr->m_data);
         m_time=checkResult_ptr->m_time;
-        m_patient=*(checkResult_ptr->m_patient);
-        m_programModel=ProgramModel<type>(checkResult_ptr->m_program);
+        m_patient_id=checkResult_ptr->m_patient->m_id;
+        m_program_id=checkResult_ptr->m_program->m_id;
     }
 
-    CheckResult_ptr ModelToDB(Patient_ptr patient_ptr,Program_ptr program_ptr)
+    CheckResult_ptr ModelToDB()
     {
         auto checkResult_ptr=CheckResult_ptr(new CheckResult());
         checkResult_ptr->m_id=m_id;
@@ -97,8 +99,8 @@ struct CheckResultModel
         checkResult_ptr->m_params=Utility::entityToQString(m_params);
         checkResult_ptr->m_data=Utility::entityToQString(m_data);
         checkResult_ptr->m_time=m_time;
-        checkResult_ptr->m_patient=patient_ptr;
-        checkResult_ptr->m_program=program_ptr;
+        checkResult_ptr->m_patient->m_id=m_patient_id;
+        checkResult_ptr->m_program->m_id=m_program_id;
         return checkResult_ptr;
     }
 
