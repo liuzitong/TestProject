@@ -57,8 +57,6 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
         {
             id:staticParamsSetting;
             anchors.fill: parent;
-//            currentProgram:root.currentProgram;
-//            onCurrentProgramChanged: {console.log("hello world");}
         }
 
         anchors.top: parent.top
@@ -120,7 +118,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                             model: modelData;delegate: delegateProg;clip:true;snapMode: ListView.SnapPosition;
                                         }
                                         Component{id:delegateProg;
-                                            Rectangle{height: (homeTab.height-1)*1/10+1;width: listView.width;color:"white";border.color: "black";
+                                            Rectangle{height: (homeTab.height-1)*1/10+1;width: listView.width;color:"white";border.color: backGroundBorderColor;
                                                 CusText{width: parent.width;text:model.name}
                                                 MouseArea{ anchors.fill: parent;
                                                     onClicked:

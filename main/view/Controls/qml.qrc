@@ -7,9 +7,9 @@
         <file>LineEdit.qml</file>
         <file>qmldir</file>
         <file>CusCheckBox.qml</file>
-        <file>DbDisplay.qml</file>
         <file>NumberLineEdit.qml</file>
         <file>ProgramCustomizeDisplay.qml</file>
+        <file>CheckDisplay.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>
