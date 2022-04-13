@@ -14,12 +14,24 @@ Item{
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
     property var currentPatient:null;
-    property int pageSize: 15
+    property int pageSize: 10
     signal queryStarted;
-    signal changePage(var pageName,var currentPatient);
+    signal changePage(var pageName,var params);
     width: 1440
     height: 700
     anchors.fill:parent;
+
+    function createNewPatient(){
+        if(currentPatient!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientVm", currentPatient);
+        patientReviseButton.enabled=false;patientReviseButton.buttonColor="#787878"
+        patientSaveButton.enabled=true; patientSaveButton.buttonColor = "#dcdee0"
+        newPatientId.text="";
+        newChineseName.text="";
+        newEnglishFirstName.text="";
+        newEnglishLastName.text="";
+        genderSelect.selectGender(0);
+        newBirthDate.text="";
+    }
 
     Item{
         width: parent.width;
@@ -210,10 +222,10 @@ Item{
                             Flow{
                                 id:pageIndex;
                                 property int currentPage: 1;property int totalPage:1;property int totalRecordCount: 0;anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;height:parent.height;
-                                CusText{id:currentPageNumberText;text:"第 "+pageIndex.currentPage+"/"+pageIndex.totalPage+" 页,共计 "+pageIndex.totalRecordCount+" 条纪录";width: height*6}
+                                CusText{id:currentPageNumberText;text:"第 "+pageIndex.currentPage+"/"+pageIndex.totalPage+" 页,共计 "+pageIndex.totalRecordCount+" 条纪录";width: height*6;height: parent.height*0.8}
                             }
                             Flow{
-                                anchors.right: parent.right;height:parent.height*1.3;anchors.verticalCenter: parent.verticalCenter;spacing:0.4*height;
+                                anchors.right: parent.right;height:parent.height*1.0;anchors.verticalCenter: parent.verticalCenter;spacing:0.5*height;
                                 CusButton{
                                     id:startPage;
                                     imageHightScale: 1;width: height; borderWidth: 0;imageSrc: "qrc:/Pics/base-svg/page_1head_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/page_1head_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/page_1head_3press.svg";
@@ -467,7 +479,7 @@ Item{
                         }
 
                     }
-                    CusButton{text:"分析";onClicked: {root.changePage("reportAndAnalysis",null);}}
+                    CusButton{text:"查看报告";enabled:currentPatient!==null;onClicked: {root.changePage("analysisLobby",null);}}
                 }
             }
             Flow{
@@ -492,20 +504,10 @@ Item{
                     }
                 }
                 CusButton{
+                    id:newPatientButton;
                     text:"新建";
                     onClicked: {
-                        if(currentPatient!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientVm", currentPatient);
-                        patientReviseButton.enabled=false;patientReviseButton.buttonColor="#787878"
-                        patientSaveButton.enabled=true; patientSaveButton.buttonColor = "#dcdee0"
-                        newPatientId.text="";
-                        newChineseName.text="";
-                        newEnglishFirstName.text="";
-                        newEnglishLastName.text="";
-                        genderSelect.selectGender(0);
-                        newBirthDate.text="";
-
-
-
+                        root.createNewPatient()
                     }
                 }
             }

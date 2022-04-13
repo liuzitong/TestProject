@@ -13,8 +13,9 @@ Rectangle {
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
     property string language:IcUiQmlApi.appCtrl.language
-    property var currentPatient: patientPage.currentPatient;
-    signal changePage(string page);
+    property alias currentPatient: patientPage.currentPatient;
+
+//    onCurrentPatientChanged: { checkPage.currentPatient=currentPatient;}
 
 //    function switchContent(contentType)
 //    {
@@ -76,9 +77,7 @@ Rectangle {
                             CusText{text:"电脑自动视野仪系统"; horizontalAlignment: Text.AlignLeft;color: "white";font.pointSize: height*0.5;width:height*10;}
 
                             Flow{
-                                id:patientInfo;visible: false;
-                                height: parent.height;
-                                spacing: height*0.5;
+                                id:patientInfo;visible: true;height: parent.height;spacing: height*0.5;
                                 Flow{
                                     height: parent.height;
                                     CusText{text:"姓名:  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
@@ -151,26 +150,34 @@ Rectangle {
 
         Item{
             id:contentPage;width:parent.width;height: parent.height*0.90;
-            PatientManagement{id:patientPage;anchors.fill:parent; }
-            Check{id:checkPage;anchors.fill: parent;visible: false;}
-            ProgramCustomize{id:programPage;anchors.fill: parent;visible: false;/*newProgram:newProgram;*/}
-            ReportAndAnalysis{id:reportPage;anchors.fill: parent;visible: false;}
+            PatientManagement{id:patientPage;anchors.fill:parent; onChangePage: contentPage.changePage(pageName,params);}
+            Check{id:checkPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
+            ProgramCustomize{id:programPage;anchors.fill: parent;visible: false;onChangePage: contentPage.changePage(pageName,params);}
+            AnalysisLobby{id:analysisLobbypage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
+            SingleAnalysis{id:singleAnalysisPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
 
-            Component.onCompleted: {
+//            Component.onCompleted: {
 //                IcUiQmlApi.appCtrl.changePage.connect(changePage);
-                patientPage.changePage.connect(changePage);
-                checkPage.changePage.connect(changePage);
-                programPage.changePage.connect(changePage);
-                reportPage.changePage.connect(changePage);
-            }
+//                patientPage.changePage.connect(contentPage.changePage);
+//                checkPage.changePage.connect(contentPage.changePage);
+//                programPage.changePage.connect(contentPage.changePage);
+//                analysisLobbypage.changePage.connect(contentPage.changePage);
+//                singleAnalysisPage.changePage.conect(contentPage.changePage);
+//            }
 
-            function changePage(pageName,param)
+            function changePage(pageName,params)
             {
                 console.log(pageName);
-                patientPage.visible=false;checkPage.visible=false;programPage.visible=false;reportPage.visible=false;
+                patientPage.visible=false;checkPage.visible=false;programPage.visible=false;analysisLobbypage.visible=false;singleAnalysisPage.visible=false;
                 switch(pageName)
                 {
                     case "patientManagement":
+                        console.log(params);
+                        if(params==="createNewPatient")
+                        {
+                            console.log("lollicon");
+                            patientPage.createNewPatient();
+                        }
                         patientPage.visible=true;
                         checkContentButton.image.source=checkContentButton.imageSrc;
                         patientContentButton.image.source=patientContentButton.pressImageSrc;
@@ -179,8 +186,8 @@ Rectangle {
                         seperator3.opacity=0;
                         patientInfo.visible=false;
                         break;
-                    case "reportAndAnalysis":
-                        reportPage.visible=true;
+                    case "analysisLobby":
+                        analysisLobbypage.visible=true;
                         checkContentButton.image.source=checkContentButton.imageSrc;
                         patientContentButton.image.source=patientContentButton.pressImageSrc;
                         seperator1.opacity=1;
@@ -189,8 +196,6 @@ Rectangle {
                         patientInfo.visible=true;
                         break;
                     case "check":
-                        console.log(param.name);
-                        checkPage.currentPatient=param;
                         checkPage.visible=true;
                         checkPage.rePaintCanvas();
                         patientContentButton.image.source=patientContentButton.imageSrc;
@@ -208,7 +213,13 @@ Rectangle {
                         seperator3.opacity=0;
                         patientContentButton.image.source=patientContentButton.imageSrc;
                         checkContentButton.image.source=checkContentButton.imageSrc;
-                        patientInfo.visible=false;
+//                        patientInfo.visible=false;
+                        break;
+                    case "singleAnalysis":
+                        console.log(params.pageFrom);
+                        singleAnalysisPage.visible=true;
+                        singleAnalysisPage.lastPage=params.pageFrom;
+                        console.log(params.pageFrom);
                         break;
                 }
             }

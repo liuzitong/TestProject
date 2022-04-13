@@ -9,18 +9,19 @@ import QtMultimedia 5.8
 import perimeter.main.view.Utils 1.0
 
 Item {id:root; width: 1366;height: 691
-    signal changePage(var pageName);
+    signal changePage(var pageName,var params);
     function rePaintCanvas(){checkDisplay.displayCanvas.requestPaint();}
     property string backGroundColor:"#dcdee0"
     property string backGroundColorCheckPanel:"#cbced0"
     property string backGroundBorderColor:"#bdc0c6"
     property var currentProgram: null;
     property var currentPatient: null;
+    property var currentCheckResult: null;
     Column{anchors.fill: parent;
         Rectangle{width: parent.width; height: parent.height*14/15; id:content;
             ChooseProgram{id:chooseProgram;anchors.fill: parent;onOk:{root.currentProgram=currentProgram;currentProgram.type!==2?staticParamsSetting.currentProgram=currentProgram:moveParamsSetting.currentProgram=currentProgram;}}
-            MoveParamsSetting{id:moveParamsSetting;anchors.fill: parent;}
-            StaticParamsSetting{id:staticParamsSetting;anchors.fill: parent;onDataRefreshed:console.log(currentProgram.params.commonParams.intervalTime);}
+            MoveParamsSetting{id:moveParamsSetting;anchors.fill: parent;onDataRefreshed:root.currentProgramChanged();}
+            StaticParamsSetting{id:staticParamsSetting;anchors.fill: parent;onDataRefreshed:{root.currentProgramChanged();}}
             Item{anchors.fill: parent;anchors.margins: 2;
                 Row{anchors.fill: parent;spacing: 2;
                     Rectangle{ width: parent.width*0.25-2;height: parent.height;color: backGroundColor;
@@ -33,14 +34,14 @@ Item {id:root; width: 1366;height: 691
                                                 CusText{text:"程序名"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 LineEdit {
                                                     text:""; width: parent.width*0.70;textfeild.readOnly: true; textfeild.font.pointSize:if(IcUiQmlApi.appCtrl.language!=="Chinese") return programDisplay.height*0.29; else return parent.height/3;
-                                                    Component.onCompleted: {chooseProgram.ok.connect(function(){text=currentProgram.name});}
+                                                    Component.onCompleted: {currentProgramChanged.connect(function(){text=currentProgram.name});}
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
                                                 CusText{text:"光标"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 LineEdit{
                                                     text:"";width: parent.width*0.70;textfeild.readOnly: true;
-                                                    Component.onCompleted: {chooseProgram.ok.connect(function(){
+                                                    Component.onCompleted: {currentProgramChanged.connect(function(){
                                                         text="";
                                                         var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
                                                         switch (params.cursorSize){ case 0:text+="I";break;case 1:text+="II";break;case 2:text+="III";break;case 3: text+="IV";break;case 4:text+="V";break;}
@@ -53,7 +54,7 @@ Item {id:root; width: 1366;height: 691
                                                 CusText{text:"策略"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 LineEdit{
                                                     text:"";width: parent.width*0.7;textfeild.readOnly: true;
-                                                    Component.onCompleted: {chooseProgram.ok.connect(function(){
+                                                    Component.onCompleted: {currentProgramChanged.connect(function(){
                                                         text="";
                                                         var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
                                                         if(currentProgram.type!==2)
@@ -173,8 +174,14 @@ Item {id:root; width: 1366;height: 691
                             CusButton{text:"开始测试";onClicked:{console.log("hllo.");dbDisplay.putText();}}
                             CusButton{text:"停止测试";}
                             CusButton{text:"切换眼别";}
+                            CusComboBox{
+                                id:queryStrategy;height: parent.height;width: parent.height*3.5;
+                                borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
+                                imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
+                                model: ListModel {ListElement { text: "常规分析" } ListElement { text: "三合一图" } ListElement { text: "总览图" }}
+                            }
                         }
-                        CusButton{text:"打印"; anchors.right: parent.right; }
+                        CusButton{text:"分析"; anchors.right: parent.right;onClicked: {changePage("singleAnalysis",{pageFrom:"check"})} }
                     }
                 }
             }

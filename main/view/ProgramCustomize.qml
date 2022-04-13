@@ -27,7 +27,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
     }
 //    property int type;
 //    property var newProgram;
-    signal changePage(var pageName);
+    signal changePage(var pageName,var params);
     function rePaintCanvas(){display.displayCanvas.requestPaint();}
     Rectangle{id:content;width: parent.width;height: parent.height*14/15
         NewProgram{

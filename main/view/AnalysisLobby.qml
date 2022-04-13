@@ -10,7 +10,8 @@ import qxpack.indcom.ui_qml_base 1.0
 Column {
     id:root
     anchors.fill:parent;
-    signal changePage(var pageName);
+    property var currentPatient: null;
+    signal changePage(var pageName,var params);
     Item
     {
         width: parent.width;
@@ -41,7 +42,7 @@ Column {
                         height: parent.height;spacing: height*0.8
                         anchors.horizontalCenter: parent.horizontalCenter
                         CusComboBox{
-                            id:queryStrategy;height: parent.height;width: parent.height*4;
+                            id:queryStrategy;height: parent.height;width: parent.height*3.5;
                             borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                             imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
                             model: ListModel {ListElement { text: "常规分析" } ListElement { text: "三合一图" } ListElement { text: "总览图" }}
@@ -58,7 +59,7 @@ Column {
                     id: item2
                     anchors.fill: parent
                     anchors.margins:parent.height*0.15;
-                    CusButton{text:"删除"; anchors.horizontalCenter: parent.horizontalCenter;}
+                    CusButton{text:"删除"; anchors.horizontalCenter: parent.horizontalCenter;onClicked: console.log(currentPatient.name);}
                 }
                 }
 
@@ -69,7 +70,7 @@ Column {
                     id: item1
                     anchors.fill: parent
                     anchors.margins:parent.height*0.15;
-                    CusButton{text:"打印预览"; anchors.right: parent.right;}
+                    CusButton{text:"分析"; anchors.right: parent.right;onClicked: {changePage("singleAnalysis",{pageFrom:"analysisLobby"})}}
                 }
             }
         }

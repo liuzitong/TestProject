@@ -16,6 +16,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
     property string backGroundBorderColor:"#bdc0c6"
     property int type;
     signal ok();
+    signal dataRefreshed();
     signal cancel();
 
     property var currentProgram;
@@ -213,7 +214,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             layoutDirection: Qt.RightToLeft
                             anchors.verticalCenter: parent.verticalCenter
                             CusButton{text:"取消";onClicked: idPopup.close();}
-                            CusButton{text:"确定";onClicked:{ok();idPopup.close();}}
+                            CusButton{text:"确定";onClicked:{ok();idPopup.close();dataRefreshed();}}
                             CusButton{text:"aa";onClicked: console.log(currentProgram.params.brightness);}
                         }
                     }

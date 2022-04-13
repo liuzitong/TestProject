@@ -7,7 +7,7 @@
         <file>ProgramCustomize.qml</file>
         <file>Content.qml</file>
         <file>qmldir</file>
-        <file>ReportAndAnalysis.qml</file>
+        <file>AnalysisLobby.qml</file>
         <file>NewProgram.qml</file>
         <file>About.qml</file>
         <file>Settings.qml</file>
@@ -15,6 +15,7 @@
         <file>StaticParamsSetting.qml</file>
         <file>SaveToAnotherProgram.qml</file>
         <file>ChooseProgram.qml</file>
+        <file>SingleAnalysis.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>
