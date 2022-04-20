@@ -484,7 +484,7 @@ Item{
             }
             Flow{
                 height:parent.height; layoutDirection: Qt.RightToLeft;width:parent.width*0.4;spacing: height*0.8;
-                CusButton{text:"进入检测";enabled:!(currentPatient===null);onClicked: {root.changePage("check",currentPatient);}}
+                CusButton{text:"进入检测";/*enabled:!(currentPatient===null);*/onClicked: {root.changePage("check",currentPatient);}}
                 CusButton{
                     id:patientSaveButton;text:"保存";
                     enabled: false;

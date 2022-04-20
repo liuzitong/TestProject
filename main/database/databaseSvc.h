@@ -19,7 +19,6 @@ public:
     ~databaseSvc();
     Q_INVOKABLE void initDataBase();
     Q_INVOKABLE void createTable();
-    Q_INVOKABLE void doStuff();
 };
 
 

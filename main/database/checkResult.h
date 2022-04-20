@@ -19,14 +19,15 @@ public:
     int m_type;
     QString m_params;
     QString m_data;
+    QByteArray m_pic;
     QDateTime m_time;
     Patient_ptr m_patient;
     Program_ptr m_program;
     CheckResult() = default;
-    CheckResult(QString params,QString data,QDateTime time,Patient_ptr patient,Program_ptr program):
-    m_params(params),m_data(data),m_time(time),m_patient(patient),m_program(program){}
-    CheckResult(long id,QString params,QString data,QDateTime time,Patient_ptr patient,Program_ptr program):
-    m_id(id),m_params(params),m_data(data),m_time(time),m_patient(patient),m_program(program){}
+    CheckResult(QString params,QString data,QByteArray pic,QDateTime time,Patient_ptr patient,Program_ptr program):
+    m_params(params),m_data(data),m_pic(pic),m_time(time),m_patient(patient),m_program(program){}
+    CheckResult(long id,QString params,QString data,QByteArray pic,QDateTime time,Patient_ptr patient,Program_ptr program):
+    m_id(id),m_params(params),m_data(data),m_pic(pic),m_time(time),m_patient(patient),m_program(program){}
     virtual ~CheckResult(){}
 };
 

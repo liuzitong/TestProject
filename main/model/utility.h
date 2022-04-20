@@ -20,7 +20,7 @@ public:
     template<typename T>
     QString static entityToQString(T t)
     {
-        std::stringstream ss;
+        std::stringstream ss;                              //必须括号主动调用析构函数,不然写入不全
         {
             boost::archive::xml_oarchive oa(ss);
             oa<< BOOST_SERIALIZATION_NVP(t);

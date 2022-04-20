@@ -72,5 +72,40 @@
         <file>Pics/base-svg/menu_login_select.svg</file>
         <file>Pics/base-svg/menu_patient_select.svg</file>
         <file>Pics/base-svg/menu_set_select.svg</file>
+        <file>grays/2_Gray0.bmp</file>
+        <file>grays/2_Gray1.bmp</file>
+        <file>grays/2_Gray2.bmp</file>
+        <file>grays/2_Gray3.bmp</file>
+        <file>grays/2_Gray4.bmp</file>
+        <file>grays/2_Gray5.bmp</file>
+        <file>grays/2_Gray6.bmp</file>
+        <file>grays/2_Gray7.bmp</file>
+        <file>grays/DE0.bmp</file>
+        <file>grays/GPAPE0.bmp</file>
+        <file>grays/GPAPE1.bmp</file>
+        <file>grays/GPAPE2.bmp</file>
+        <file>grays/GPAPE3.bmp</file>
+        <file>grays/GPAPE4.bmp</file>
+        <file>grays/Gray0.bmp</file>
+        <file>grays/Gray1.bmp</file>
+        <file>grays/Gray2.bmp</file>
+        <file>grays/Gray2_8.bmp</file>
+        <file>grays/Gray2_9.bmp</file>
+        <file>grays/Gray3.bmp</file>
+        <file>grays/Gray4.bmp</file>
+        <file>grays/Gray5.bmp</file>
+        <file>grays/Gray6.bmp</file>
+        <file>grays/Gray7.bmp</file>
+        <file>grays/Gray8.bmp</file>
+        <file>grays/Gray9.bmp</file>
+        <file>grays/PE0.bmp</file>
+        <file>grays/PE1.bmp</file>
+        <file>grays/PE2.bmp</file>
+        <file>grays/PE3.bmp</file>
+        <file>grays/PE4.bmp</file>
+        <file>grays/SE0.bmp</file>
+        <file>grays/SE1.bmp</file>
+        <file>grays/SE2.bmp</file>
+        <file>grays/SE3.bmp</file>
     </qresource>
 </RCC>

@@ -21,8 +21,8 @@ class PERIMETER_API  AppCtrl : public QxPack::IcAppCtrlBase {
     Q_PROPERTY( QObject*  databaseSvc READ  databaseSvcObj CONSTANT )
     Q_PROPERTY( QString   language READ  getLanguage WRITE setLanguage NOTIFY languageChanged)
     Q_PROPERTY( bool      doubleName READ  getDoubleName WRITE setDoubleName NOTIFY doubleNameChanged)
-    Q_PROPERTY( QObject*  currentPatient READ  getCurrentPatient WRITE setCurrentPatient NOTIFY currentPatientChanged)
-
+//    Q_PROPERTY( QObject*  currentPatient READ  getCurrentPatient WRITE setCurrentPatient NOTIFY currentPatientChanged)
+    Q_PROPERTY( QObject*  testClass READ  getTestClass CONSTANT )
 
 public:
     //! ctor
@@ -40,10 +40,11 @@ public:
 
     //Custom Code
     QObject*    databaseSvcObj() const;
+    QObject*    getTestClass() const;
     QString     getLanguage();          void setLanguage(QString value);            Q_SIGNAL void  languageChanged(QString value);
     bool        getDoubleName();        void setDoubleName(bool value);             Q_SIGNAL void  doubleNameChanged(bool value);
-    QObject*    getCurrentPatient();    void setCurrentPatient(QObject* value);     Q_SIGNAL void  currentPatientChanged(QObject* value);
-    Q_SIGNAL void  changePage(QString value);
+//    QObject*    getCurrentPatient();    void setCurrentPatient(QObject* value);     Q_SIGNAL void  currentPatientChanged(QObject* value);
+//    Q_SIGNAL void  changePage(QString value);
 protected:
     // override the name
     virtual QString   instanceName() const Q_DECL_OVERRIDE;

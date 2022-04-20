@@ -105,7 +105,7 @@ Item {id:root; width: 1366;height: 691
                     }
                     Rectangle{ width: parent.width*0.25-2;height:parent.height;color: backGroundColor;
                         Item{anchors.fill: parent;anchors.margins: parent.height*0.02
-                            Column{id: column;anchors.fill: parent;spacing:(height-videoArea.height-controlPanel.height-eyeOptionsGroup.height)/2;
+                            Column{id: column;anchors.fill: parent;spacing:/*(height-videoArea.height-controlPanel.height-eyeOptionsGroup.height)/2*/height*0.043;
                                 Item{id:videoArea; width: parent.width*0.83;height: width*3/4;anchors.horizontalCenter: parent.horizontalCenter;
                                     Rectangle{anchors.fill: parent;color:"black";}
                                     MediaPlayer{
@@ -119,28 +119,30 @@ Item {id:root; width: 1366;height: 691
                                     Image { id: leftButton; anchors.right: autoButton.left; anchors.verticalCenter: parent.verticalCenter; height: sourceSize.height*root.height/691; anchors.rightMargin:(controlPanel.height-autoButton.height-upButton.height*2)/2;width: sourceSize.width*root.width/1366;source: "qrc:/Pics/capture-svg/arrow_3left.svg";}
                                     Image {id: rightButton;anchors.left: autoButton.right;anchors.verticalCenter: parent.verticalCenter;height: sourceSize.height*root.height/691; anchors.leftMargin:(controlPanel.height-autoButton.height-upButton.height*2)/2;width: sourceSize.width*root.width/1366; source: "qrc:/Pics/capture-svg/arrow_4right.svg";}
                                 }
-                                Rectangle{id:eyeOptionsGroup; width: parent.width*0.83;height: parent.height*0.35;anchors.horizontalCenter: parent.horizontalCenter; border.color: backGroundBorderColor;color: backGroundColor; radius: width*0.03;
+                                Rectangle{id:eyeOptionsGroup; width: parent.width*0.83;height: parent.height*0.25;anchors.horizontalCenter: parent.horizontalCenter; border.color: backGroundBorderColor;color: backGroundColor; radius: width*0.03;
                                     Item{ anchors.fill: parent;anchors.margins: parent.height*0.1;
-                                        Column{anchors.fill: parent;spacing: 0.10*height;
-                                            Row{width:parent.width;height: parent.height*0.7/4;spacing: width*0.05;
+                                        Column{anchors.fill: parent;spacing: 0.15*height;
+                                            Row{width:parent.width;height: parent.height*0.7/3;spacing: width*0.05;
                                                 CusCheckBox{}
                                                 CusText{text:"瞳孔尺寸"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 LineEdit{text:"0.0";width: parent.width*0.5;textfeild.readOnly: true;}
                                             }
-                                            Row{id: row;width:parent.width;height: parent.height*0.7/4;spacing: width*0.05;
+                                            Row{id: row;width:parent.width;height: parent.height*0.7/3;spacing: width*0.05;
                                                 CusCheckBox{}
                                                 CusText{text:"眼动警报"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 Image {source: "qrc:/Pics/capture-svg/btn_alarm.svg";height:parent.height*0.6; anchors.verticalCenter: parent.verticalCenter;width: height; }
                                             }
-                                            Row{width:parent.width;height: parent.height*0.7/4;spacing: width*0.05;
+                                            Row{width:parent.width;height: parent.height*0.7/3;spacing: width*0.05;
                                                 CusCheckBox{}
                                                 CusText{text:"固视偏移"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                             }
-                                            Row{
-                                                width:parent.width;height: parent.height*0.7/4;spacing: width*0.05;
-                                            }
                                         }
                                     }
+                                }
+                                Item{
+                                    id: item2
+                                    width: parent.width*0.83;height: parent.height*0.07;anchors.horizontalCenter: parent.horizontalCenter;
+                                    EyeDeviationCurve{ anchors.horizontalCenter: parent.horizontalCenter}
                                 }
                             }
                         }

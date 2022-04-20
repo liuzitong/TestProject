@@ -28,7 +28,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 //    property int type;
 //    property var newProgram;
     signal changePage(var pageName,var params);
-    function rePaintCanvas(){display.displayCanvas.requestPaint();}
+    function rePaintCanvas(){display.requestPaint();}
     Rectangle{id:content;width: parent.width;height: parent.height*14/15
         NewProgram{
             id:newProgram;
@@ -221,6 +221,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                 console.log(display.range);
 //                                console.log(display.range);
                                 display.type=currentProgram.type;
+                                display.category=currentProgram.category;
 //                                console.log("haha");
                                 dotList=currentProgram.dots;
                                 displayCanvas.requestPaint();

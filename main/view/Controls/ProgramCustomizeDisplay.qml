@@ -7,6 +7,7 @@ Item{
     property alias displayCanvas: displayCanvas;
     property var dotList:[];
     property int type;
+    property int category;
 
 
     signal painted();
@@ -39,6 +40,8 @@ Item{
             property var newDotList:[];
             onClicked:
             {
+                if(category!==4)
+                    return;
                 newDotList=[];
                 var dot = displayCanvas.pixCoordToDot(mouseX,mouseY)
                 if (mouse.button === Qt.RightButton)

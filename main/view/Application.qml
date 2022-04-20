@@ -9,34 +9,15 @@ import perimeter.main.view.Controls 1.0
 
 Window {
     id: window;visible: true;width: 1366;height: 768;title: qsTr("Hello World");
-    minimumWidth: 960;minimumHeight: 640;property string currentpage: "Login";
+    minimumWidth: 1366;minimumHeight: 768;property string currentpage: "Login";
     property string language: IcUiQmlApi.appCtrl.language
+    Content{id:content;anchors.fill: parent;}
+    Login{id:login;visible: false;anchors.fill: parent;}
 
-    Content{
-        id:content
-        anchors.fill: parent;
-    }
-
-    Login{
-        id:login
-        visible: false;
-        anchors.fill: parent;
-    }
-
-
-
-    Component.onCompleted: {
-        idPriv.init();
-        content.changePage.connect(changePage);
-        login.changePage.connect(changePage);
-//        var param=IcUiQmlApi.appCtrl.databaseSvc.getParams();
-//        console.log(param.commonParams.Range[0]);
-//        console.log(param.commonParams.Range[1]);
-    }
+    Component.onCompleted: {idPriv.init();content.changePage.connect(changePage);login.changePage.connect(changePage);}
 
     function changePage(pageName)
     {
-        console.log(pageName);
         switch(pageName)
         {
             case "main":content.visible=true;login.visible=false;break;
@@ -72,15 +53,6 @@ Window {
         function init()
         {
             IcUiQmlApi.appCtrl.databaseSvc.initDataBase();
-//            patient_vm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::PatientVm", true);
-//            patient_vm.hello();
-//            IcUiQmlApi.appCtrl.objMgr.detachObj( "Perimeter::PatientVm", patient_vm );
-//            patientList_vm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::PatientListModelVm", true);
-//            patientList_vm.hello();
-//            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientListModelVm", patientList_vm);
-//            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false);
-//            currentProgram.hello();
-//            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);
         }
     }
 

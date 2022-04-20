@@ -8,3 +8,5 @@ CusCheckBox 1.0     CusCheckBox.qml
 CheckDisplay 1.0       CheckDisplay.qml
 NumberLineEdit 1.0  NumberLineEdit.qml
 ProgramCustomizeDisplay 1.0       ProgramCustomizeDisplay.qml
+EyeDeviationCurve 1.0   EyeDeviationCurve.qml
+VisionDiagram 1.0   VisionDiagram.qml

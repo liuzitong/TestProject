@@ -12,53 +12,13 @@ Rectangle {
     property int commonRadius:height*0.03
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
+    property string ribbonColor: "#333e44"
     property string language:IcUiQmlApi.appCtrl.language
     property alias currentPatient: patientPage.currentPatient;
 
-//    onCurrentPatientChanged: { checkPage.currentPatient=currentPatient;}
+    Settings{id:settings;anchors.fill: parent;}
 
-//    function switchContent(contentType)
-//    {
-//        if(contentType==="patientManagement")
-//        {
-//            contentSwitcher.contentType="patientManagement";
-//            checkContentButton.image.source=checkContentButton.imageSrc;
-//            seperator1.opacity=1;
-//            seperator3.opacity=0;
-//            pageLoader.changePage("patientManagement")
-//        }
-//        if(contentType==="check")
-//        {
-//            contentSwitcher.contentType="check";
-//            patientContentButton.image.source=patientContentButton.imageSrc;
-//            seperator1.opacity=0;
-//            seperator3.opacity=1;
-//            pageLoader.changePage("check")
-//        }
-//    }
-
-//    MoveParamsSetting
-//    {
-//        anchors.fill: parent;
-//        z:2;
-//    }
-
-    Settings{
-        id:settings;
-        anchors.fill: parent;
-    }
-
-    About{
-        id:about;
-        anchors.fill: parent;
-    }
-
-//    NewProgram{
-//        id:newProgram;
-//        anchors.fill: parent;
-//    }
-
-
+    About{id:about;anchors.fill: parent;}
 
     Column {
         id: column;anchors.fill: parent

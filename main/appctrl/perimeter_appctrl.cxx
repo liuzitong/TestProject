@@ -7,7 +7,7 @@
 #include "perimeter/base/service/perimeter_objmgrsvc.hxx"
 #include "perimeter/base/common/perimeter_guns.hxx"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
-
+#include "perimeter/main/appctrl/testclass.h"
 #include <QCoreApplication>
 
 // modules manager
@@ -31,7 +31,8 @@ private:
     QString     m_language="Chinese";
     bool        m_doubleName=false;
     QObject*    m_databaseSvc;
-    QObject*    m_currentPatient;
+    QObject*    m_testClass;
+//    QObject*    m_currentPatient;
 public :
     AppCtrlPriv ( AppCtrl *pa );
     ~AppCtrlPriv( );
@@ -42,12 +43,13 @@ public :
 
     //Custom Code
     QObject*    getDatabaseSvcObj() const           {return m_databaseSvc;}
+    QObject*    getTestClass() const                {return m_testClass;}
     QString     getLanguage()                       {return m_language;}
     void        setLanguage(QString value)          {m_language=value;}
     bool        getDoubleName()                     {return m_doubleName;}
     void        setDoubleName(bool value)           {m_doubleName=value;}
-    QObject*    getCurrentPatient()                 {return m_currentPatient;}
-    void        setCurrentPatient(QObject *value)   {m_currentPatient=value;}
+//    QObject*    getCurrentPatient()                 {return m_currentPatient;}
+//    void        setCurrentPatient(QObject *value)   {m_currentPatient=value;}
 };
 
 // ============================================================================
@@ -61,6 +63,7 @@ AppCtrlPriv :: AppCtrlPriv ( AppCtrl *pa )
     m_obj_mgr_svc = ObjMgrSvc::getInstance();
 //    m_databaseSvc = static_cast<QObject*>(new databaseSvc());
     m_databaseSvc = perimeter_new(databaseSvc);
+    m_testClass = perimeter_new(TestClass);
 //    m_currentPatient=perimeter_new(PatientVm);
 }
 
@@ -75,6 +78,7 @@ AppCtrlPriv :: ~AppCtrlPriv ( )
     AppSettingsSvc::freeInstance();
 //    delete m_databaseSvc;
     perimeter_delete(m_databaseSvc,databaseSvc);
+    perimeter_delete(m_testClass,TestClass);
 //    perimeter_delete(m_currentPatient,PatientVm);
 }
 
@@ -119,6 +123,11 @@ QObject*  AppCtrl :: msgBusObj() const
 
 //Custom Code
 QObject*    AppCtrl::databaseSvcObj() const             {return T_PrivPtr( m_obj )-> getDatabaseSvcObj();}
+
+QObject *  AppCtrl::getTestClass() const
+{
+   return T_PrivPtr( m_obj )-> getTestClass();
+}
 QString     AppCtrl::getLanguage()                      {return T_PrivPtr( m_obj )->getLanguage() ;}
 void        AppCtrl::setLanguage(QString value)         {T_PrivPtr( m_obj )->setLanguage(value) ;emit languageChanged(value);}
 
@@ -131,10 +140,10 @@ void AppCtrl::setDoubleName(bool value)
 {
     T_PrivPtr( m_obj )->setDoubleName(value);emit doubleNameChanged(value);
 }
-QObject*    AppCtrl::getCurrentPatient()                {
-    return T_PrivPtr( m_obj )->getCurrentPatient();
-}
-void        AppCtrl::setCurrentPatient(QObject *value)  {T_PrivPtr( m_obj )->setCurrentPatient(value);emit currentPatientChanged(value);}
+//QObject*    AppCtrl::getCurrentPatient()                {
+//    return T_PrivPtr( m_obj )->getCurrentPatient();
+//}
+//void        AppCtrl::setCurrentPatient(QObject *value)  {T_PrivPtr( m_obj )->setCurrentPatient(value);emit currentPatientChanged(value);}
 
 // ============================================================================
 // instance name

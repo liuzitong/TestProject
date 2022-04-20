@@ -33,7 +33,7 @@ void databaseSvc::initDataBase()
     qx::QxSqlDatabase::getSingleton()->setDisplayTimerDetails(true);
     qx::QxSqlDatabase::getSingleton()->setVerifyOffsetRelation(true);
     if(!isDbThere)
-        createTable();
+        Test::createTable();
 }
 
 
@@ -42,12 +42,6 @@ void databaseSvc::createTable(){
     daoError = qx::dao::create_table<CheckResult>();
     daoError = qx::dao::create_table<Program>();
 }
-
-void databaseSvc::doStuff()
-{
-    Test::doStuff();
-}
-
 
 
 }

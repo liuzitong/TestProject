@@ -1,4 +1,4 @@
-#ifndef QXPACK_IC_UI_QML_API_CXX
+﻿#ifndef QXPACK_IC_UI_QML_API_CXX
 #define QXPACK_IC_UI_QML_API_CXX
 
 #include "qxpack_ic_ui_qml_api.hxx"

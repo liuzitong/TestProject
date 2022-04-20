@@ -118,8 +118,6 @@ Item{
             ctx.arc(x_pix, y_pix, dotRadius, 0, Math.PI*2);
             ctx.stroke();
             ctx.closePath();
-//            ctx.fillStyle = "green";
-//            ctx.fill();
         }
 
 

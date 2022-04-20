@@ -43,11 +43,13 @@
 }
 
 SOURCES += \
-    $$PWD/utils/pdf_creator.cpp
+    $$PWD/utils/pdf_creator.cpp \
+    $$PWD/appctrl/testclass.cpp
 
 HEADERS += \
     $$PWD/utils/pdf_creator.h \
-    $$PWD/appctrl/test.hpp
+    $$PWD/appctrl/test.hpp \
+    $$PWD/appctrl/testclass.h
 
 RESOURCES += \
     $$PWD/view/utils/utils.qrc
