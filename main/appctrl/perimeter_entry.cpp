@@ -4,11 +4,8 @@
 #include <QThread>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <QSharedPointer>
-
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
 
 #include "perimeter/main/appctrl/perimeter_appctrl.hxx"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
@@ -96,14 +93,6 @@ static void gMsgHandler( QtMsgType type, const QMessageLogContext &ctxt, const Q
 
 }
 
-#include <boost/archive/xml_oarchive.hpp>
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/serialization/list.hpp>
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/binary_object.hpp>
-#include <perimeter/main/model/Params.h>
-#include <perimeter/main/model/utility.h>
-#include <perimeter/main/model/programModel.h>
 
 
 // ============================================================================
@@ -137,6 +126,7 @@ int  main ( int argc, char *argv[] )
         //  here create the main view
         // --------------------------------------------------------------------
         QQmlApplicationEngine *eng = new QQmlApplicationEngine;
+        eng->rootContext()->setContextProperty("applicationDirPath", QGuiApplication::applicationDirPath());
         eng->addImportPath(QStringLiteral("qrc:/") );
 
         eng->load(QUrl(QLatin1String("qrc:/perimeter/main/view/Application.qml")));

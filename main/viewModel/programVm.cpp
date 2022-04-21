@@ -176,7 +176,6 @@ Program_ptr MoveProgramVM::getProgramData()
         {
             float x=v.toMap()["x"].toFloat();
             float y=v.toMap()["y"].toFloat();
-            qDebug()<<x;
             programModel->m_data.dots.push_back({x,y});
         }
         else{

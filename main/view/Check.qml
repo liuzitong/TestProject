@@ -19,6 +19,7 @@ Item {id:root; width: 1366;height: 691
     property var currentCheckResult: null;
     Column{anchors.fill: parent;
         Rectangle{width: parent.width; height: parent.height*14/15; id:content;
+
             ChooseProgram{id:chooseProgram;anchors.fill: parent;onOk:{root.currentProgram=currentProgram;currentProgram.type!==2?staticParamsSetting.currentProgram=currentProgram:moveParamsSetting.currentProgram=currentProgram;}}
             MoveParamsSetting{id:moveParamsSetting;anchors.fill: parent;onDataRefreshed:root.currentProgramChanged();}
             StaticParamsSetting{id:staticParamsSetting;anchors.fill: parent;onDataRefreshed:{root.currentProgramChanged();}}
@@ -183,7 +184,13 @@ Item {id:root; width: 1366;height: 691
                                 model: ListModel {ListElement { text: "常规分析" } ListElement { text: "三合一图" } ListElement { text: "总览图" }}
                             }
                         }
-                        CusButton{text:"分析"; anchors.right: parent.right;onClicked: {changePage("singleAnalysis",{pageFrom:"check"})} }
+                        CusButton{text:"分析"; anchors.right: parent.right;onClicked:
+                            {
+                                var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
+                                IcUiQmlApi.appCtrl.diagramProvider.drawDiagram("haha",0,params.Range[1],currentProgram.dots,[10,22,11,33,33,22,23,24,25,11,12,13,14,15,11,12,13,14,15,10,22,11,33,33,22,23,24,25,11,12,13,14,15,11,12,13,14,15,10,22,11,33,33,22,23,24,25,11,12,13,14,15,11,12,13,14,15,10,22,11,33,33,22,23,24,25,11,12,13,14,15,11,12,13,14,15]);
+                                changePage("singleAnalysis",{pageFrom:"check"});
+                            }
+                        }
                     }
                 }
             }

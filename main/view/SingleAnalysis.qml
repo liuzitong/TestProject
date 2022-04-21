@@ -15,6 +15,7 @@ Column {
     property var currentProgram: null;
     property var currentCheckResult: null;
     property int textheight: height*0.05;
+    signal refresh();
     width: 1366;height:686
     signal changePage(var pageName,var params);
     Item{
@@ -46,15 +47,21 @@ Column {
                 }
                 Column{width: parent.width*0.75;height:parent.height;
                     Row{width: parent.width;height:parent.height*1/3;
-                        VisionDiagram{height:parent.height;width:parent.height;
-                            degLocs: [{x:3,y:27},{x:9,y:27},{x:3,y:21},{x:9,y:21},{x:15,y:21},{x:3,y:15},{x:9,y:15},{x:15,y:15},{x:21,y:15},{x:3,y:9},{x:9,y:9},{x:15,y:9},{x:21,y:9},{x:27,y:9},{x:3,y:3},{x:9,y:3},{x:15,y:3},{x:21,y:3},{x:27,y:3}];range:30;type:0;os_od:0;
-                            values: [10,22,11,33,33,22,23,24,25,11,12,13,14,15,11,12,13,14,15]}
+//                        VisionDiagram{height:parent.height;width:parent.height;
+//                            degLocs: [{x:3,y:27},{x:9,y:27},{x:3,y:21},{x:9,y:21},{x:15,y:21},{x:3,y:15},{x:9,y:15},{x:15,y:15},{x:21,y:15},{x:3,y:9},{x:9,y:9},{x:15,y:9},{x:21,y:9},{x:27,y:9},{x:3,y:3},{x:9,y:3},{x:15,y:3},{x:21,y:3},{x:27,y:3}];range:30;type:0;os_od:0;
+//                            values: [10,22,11,33,33,22,23,24,25,11,12,13,14,15,11,12,13,14,15]}
 //                        VisionDiagram{height:parent.height;width:parent.height;
 //                            degLocs: [{x:3,y:27},{x:9,y:27},{x:3,y:21},{x:9,y:21},{x:15,y:21},{x:3,y:15},{x:9,y:15},{x:15,y:15},{x:21,y:15},{x:3,y:9},{x:9,y:9},{x:15,y:9},{x:21,y:9},{x:27,y:9},{x:3,y:3},{x:9,y:3},{x:15,y:3},{x:21,y:3},{x:27,y:3}];range:30;type:1;os_od:0;
 //                            values: [0,1,1,1,1,1,1,1,1,1,1,1,2,1,0,1,0,1,1]}}
-                    VisionDiagram{height:parent.height;width:parent.height;/*canvas.smooth:false;canvas.antialiasing: false;*/
-                        degLocs: [{x:3,y:27},{x:9,y:27},{x:3,y:21},{x:9,y:21},{x:15,y:21},{x:3,y:15},{x:9,y:15},{x:15,y:15},{x:21,y:15},{x:3,y:9},{x:9,y:9},{x:15,y:9},{x:21,y:9},{x:27,y:9},{x:3,y:3},{x:9,y:3},{x:15,y:3},{x:21,y:3},{x:27,y:3}];range:30;type:1;os_od:0;
-                        values: [7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,1,7,7]}}
+//                    VisionDiagram{height:parent.height;width:parent.height;/*canvas.smooth:false;canvas.antialiasing: false;*/
+//                        degLocs: [{x:3,y:27},{x:9,y:27},{x:3,y:21},{x:9,y:21},{x:15,y:21},{x:3,y:15},{x:9,y:15},{x:15,y:15},{x:21,y:15},{x:3,y:9},{x:9,y:9},{x:15,y:9},{x:21,y:9},{x:27,y:9},{x:3,y:3},{x:9,y:3},{x:15,y:3},{x:21,y:3},{x:27,y:3}];range:30;type:1;os_od:0;
+//                        values: [7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,1,7,7]}
+                    Image {
+                        height:parent.height;width:parent.height;cache: false;        //to refresh image
+                        Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/temp/30-2.bmp";})}
+                    }
+                    }
+
                     Row{width: parent.width;height:parent.height*1/3;}
                     Row{width: parent.width;height:parent.height*1/3;}
                 }

@@ -1,10 +1,10 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 
 Rectangle {
+    signal changePage(var name);
     id:root;
     anchors.fill: parent;
     color: "blue";
-    signal changePage(string pageName)
     MouseArea{
         anchors.fill: parent;
         onClicked: {changePage("main")}

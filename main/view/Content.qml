@@ -16,6 +16,8 @@ Rectangle {
     property string language:IcUiQmlApi.appCtrl.language
     property alias currentPatient: patientPage.currentPatient;
 
+    signal changePage(var name);
+
     Settings{id:settings;anchors.fill: parent;}
 
     About{id:about;anchors.fill: parent;}
@@ -68,7 +70,7 @@ Rectangle {
                         width: parent.width;height: parent.height*0.60;
                         CusButton{
                             type:"click";isAnime: false;underImageText.text: "登录";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_login.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_login_select.svg";
-                            onClicked: {changePage("login",null);}
+                            onClicked: {changePage("login");}
                         }
                         Flow{
                             id:contentSwitcher
@@ -179,6 +181,7 @@ Rectangle {
                         console.log(params.pageFrom);
                         singleAnalysisPage.visible=true;
                         singleAnalysisPage.lastPage=params.pageFrom;
+                        singleAnalysisPage.refresh();
                         console.log(params.pageFrom);
                         break;
                 }

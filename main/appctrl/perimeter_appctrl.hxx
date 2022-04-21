@@ -7,6 +7,7 @@
 #include <QString>
 #include "perimeter/main/database/databaseSvc.h"
 
+
 namespace Perimeter {
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -23,6 +24,7 @@ class PERIMETER_API  AppCtrl : public QxPack::IcAppCtrlBase {
     Q_PROPERTY( bool      doubleName READ  getDoubleName WRITE setDoubleName NOTIFY doubleNameChanged)
 //    Q_PROPERTY( QObject*  currentPatient READ  getCurrentPatient WRITE setCurrentPatient NOTIFY currentPatientChanged)
     Q_PROPERTY( QObject*  testClass READ  getTestClass CONSTANT )
+    Q_PROPERTY( QObject*  diagramProvider READ  getDiagramProvider CONSTANT )
 
 public:
     //! ctor
@@ -41,6 +43,7 @@ public:
     //Custom Code
     QObject*    databaseSvcObj() const;
     QObject*    getTestClass() const;
+    QObject*    getDiagramProvider() const;
     QString     getLanguage();          void setLanguage(QString value);            Q_SIGNAL void  languageChanged(QString value);
     bool        getDoubleName();        void setDoubleName(bool value);             Q_SIGNAL void  doubleNameChanged(bool value);
 //    QObject*    getCurrentPatient();    void setCurrentPatient(QObject* value);     Q_SIGNAL void  currentPatientChanged(QObject* value);

@@ -135,7 +135,9 @@ void        IcUiQmlApi :: setAppCtrl( const QSharedPointer<QObject> &app_ctrl )
 // ============================================================================
 // [ static ] register in qmlengine
 // ============================================================================
-void        IcUiQmlApi :: registerApi ( ) { gRegUiQmlApi(); } // nw: 2019/05/07 added
+void        IcUiQmlApi :: registerApi ( ) {
+    gRegUiQmlApi();
+} // nw: 2019/05/07 added
 
 // ============================================================================
 // return the app ctrl
