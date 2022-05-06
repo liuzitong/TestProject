@@ -37,7 +37,7 @@ Column {
                         }
                     }
                     Column{width:parent.width;height: parent.height*0.15;spacing: root.textheight*-0.36;
-                        Repeater{model: [{name:"固视监测",param:"关闭"},{name:"固视目标",param:"中心"},{name:"固视丢失率",param:"0/0"}]
+                        Repeater{model: [{name:"瞳孔直径",param:"2mm"},{name:"视力",param:"0.8"},{name:"屈光度",param:"DS   DC X"}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:root.textheight;width: parent.width;}
                         }
                     }
@@ -58,8 +58,13 @@ Column {
 //                        values: [7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,1,7,7]}
                     Image {
                         height:parent.height;width:parent.height;cache: false;        //to refresh image
-                        Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/temp/30-2.bmp";})}
+                        Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/temp/dbDiagram.bmp";})}
                     }
+                    Image {
+                        height:parent.height;width:parent.height;cache: false;        //to refresh image
+                        Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/temp/gray.bmp";})}
+                    }
+
                     }
 
                     Row{width: parent.width;height:parent.height*1/3;}

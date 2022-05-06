@@ -80,18 +80,13 @@ Program_ptr StaticProgramVM::getProgramData()
         programModel->m_data.strategies.push_back(StaticParams::CommonParams::Strategy(v.toInt()));
     }
 
-    qDebug()<<"***********************************";
-    qDebug()<<"***********************************";
-    qDebug()<<"***********************************";
     for(auto& v:m_dots)
     {
         if(fabs(v.toPointF().x())<0.05&&fabs(v.toPointF().y())<0.05)
         {
             float x=v.toMap()["x"].toFloat();
             float y=v.toMap()["y"].toFloat();
-            qDebug()<<x;
             programModel->m_data.dots.push_back({x,y});
-//            programModel->m_data.dots.push_back({x,y});
         }
         else{
             programModel->m_data.dots.push_back({float(v.toPointF().x()),float(v.toPointF().y())});

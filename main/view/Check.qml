@@ -187,7 +187,7 @@ Item {id:root; width: 1366;height: 691
                         CusButton{text:"分析"; anchors.right: parent.right;onClicked:
                             {
                                 var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
-                                IcUiQmlApi.appCtrl.diagramProvider.drawDiagram("haha",0,params.Range[1],currentProgram.dots,[10,22,11,33,33,22,23,24,25,11,12,13,14,15,11,12,13,14,15,10,22,11,33,33,22,23,24,25,11,12,13,14,15,11,12,13,14,15,10,22,11,33,33,22,23,24,25,11,12,13,14,15,11,12,13,14,15,10,22,11,33,33,22,23,24,25,11,12,13,14,15,11,12,13,14,15]);
+                                IcUiQmlApi.appCtrl.diagramProvider.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,[27,26,27,27, 27,31,30,31,30,30, 27,31,31,30,27,30,32,27, 28,27,27,30,30,31,29,32,29,24, 29,26,0,33,33,31,33,33,33,21, 29,13,0,29,34,34,33,33,32,29, 26,24,27,31,32,34,33,30,31,27, 29,31,33,31,30,32,29,30, 28,28,29,30,32,28, 29,27,27,28]);
                                 changePage("singleAnalysis",{pageFrom:"check"});
                             }
                         }

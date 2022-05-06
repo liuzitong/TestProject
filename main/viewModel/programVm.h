@@ -9,6 +9,9 @@
 #include <qsharedpointer.h>
 namespace Perimeter
 {
+
+
+
 class StaticProgramVM:public QObject
 {
     Q_OBJECT

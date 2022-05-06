@@ -88,7 +88,7 @@ Rectangle {
 
                             CusButton{
                                 width: parent.height*2;text: "DoStuff";
-                                onClicked: {IcUiQmlApi.appCtrl.databaseSvc.doStuff();}
+                                onClicked: {IcUiQmlApi.appCtrl.testClass.test();}
                             }
                             CusButton{
                                 type:"click";isAnime: false;underImageText.text: "设置";underImageText.color: "white"; fontSize: height/4;rec.visible: false;

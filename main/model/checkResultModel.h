@@ -60,7 +60,6 @@ struct ResultData
         archive & BOOST_SERIALIZATION_NVP(shortTermFluctuation);
         archive & BOOST_SERIALIZATION_NVP(eyeMoveCurve);
         archive & BOOST_SERIALIZATION_NVP(checkdata);
-
     }
 };
 
@@ -73,6 +72,7 @@ struct CheckResultModel
     Type m_type;
     typename ParamTraits<type>::params m_params;
     ResultData<type> m_data;
+    QVector<QByteArray> m_Pic;
     QDateTime m_time;
     int m_patient_id;
     int m_program_id;
@@ -94,6 +94,9 @@ struct CheckResultModel
     CheckResult_ptr ModelToDB()
     {
         auto checkResult_ptr=CheckResult_ptr(new CheckResult());
+        checkResult_ptr->m_patient=Patient_ptr(new Patient());
+        checkResult_ptr->m_program=Program_ptr(new Program());
+
         checkResult_ptr->m_id=m_id;
         checkResult_ptr->m_type=static_cast<int>(m_type);
         checkResult_ptr->m_params=Utility::entityToQString(m_params);
@@ -103,8 +106,6 @@ struct CheckResultModel
         checkResult_ptr->m_program->m_id=m_program_id;
         return checkResult_ptr;
     }
-
-
 
 };
 

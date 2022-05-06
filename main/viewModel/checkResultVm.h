@@ -1,12 +1,26 @@
-#ifndef CHECKRESULTVM_H
+﻿#ifndef CHECKRESULTVM_H
 #define CHECKRESULTVM_H
+#include <QObject>
+namespace Perimeter
+{
 
-class checkResult;
-class checkResultVm
+class CheckResultVm: public QObject
 {
 public:
 
-    checkResultVm();
+
+    CheckResultVm();
 };
 
+class StaticCheckResultVm:public CheckResultVm
+{
+
+};
+
+
+class MoveCheckResultVm:public CheckResultVm
+{
+
+};
+}
 #endif // CHECKRESULTVM_H

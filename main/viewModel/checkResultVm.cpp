@@ -1,6 +1,9 @@
 ﻿#include "checkResultVm.h"
-
-checkResultVm::checkResultVm()
+namespace Perimeter
 {
 
+CheckResultVm::CheckResultVm()
+{
+
+}
 }

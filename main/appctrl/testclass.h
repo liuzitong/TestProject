@@ -9,8 +9,7 @@ class TestClass:public QObject
 public:
     TestClass()=default;
     ~TestClass()=default;
-    Q_INVOKABLE void hello();
-    Q_INVOKABLE void testObj(QByteArray o);
+    Q_INVOKABLE void test();
 
 };
 }

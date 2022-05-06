@@ -98,7 +98,7 @@ static void gMsgHandler( QtMsgType type, const QMessageLogContext &ctxt, const Q
 // ============================================================================
 // main entry
 // ============================================================================
-
+#include <qmath.h>
 int  main ( int argc, char *argv[] )
 {
     int ret = 0;
@@ -106,6 +106,7 @@ int  main ( int argc, char *argv[] )
 
     signal( SIGTERM, & gSigTerm_Handler );
     qInstallMessageHandler( & gMsgHandler );
+
 
 
     // start the application

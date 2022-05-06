@@ -45,13 +45,15 @@
 SOURCES += \
     $$PWD/utils/pdf_creator.cpp \
     $$PWD/appctrl/testclass.cpp \
-    $$PWD/services/diagram_provider.cpp
+    $$PWD/services/diagram_provider.cpp \
+    $$PWD/services/checkProceduce.cpp
 
 HEADERS += \
     $$PWD/utils/pdf_creator.h \
     $$PWD/appctrl/test.hpp \
     $$PWD/appctrl/testclass.h \
-    $$PWD/services/diagram_provider.h
+    $$PWD/services/diagram_provider.h \
+    $$PWD/services/checkProceduce.h
 
 RESOURCES += \
     $$PWD/view/utils/utils.qrc
