@@ -7,6 +7,7 @@
 #include "perimeter/main/viewModel/patientListModelVm.h"
 #include <perimeter/main/viewModel/programListModelVm.h>
 #include <perimeter/main/viewModel/programVm.h>
+#include <perimeter/main/viewModel/checkResultVm.h>
 // services list
 
 namespace Perimeter {
@@ -53,6 +54,7 @@ void  Main :: registerTypes( QxPack::IcAppCtrlBase *app_base )
     obj_mgr->registerType<Perimeter::ProgramListModelVm>(QStringLiteral("Perimeter::ProgramListModelVm"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::StaticProgramVM>(QStringLiteral("Perimeter::StaticProgramVM"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::MoveProgramVM>(QStringLiteral("Perimeter::MoveProgramVM"), Q_NULLPTR);
+    obj_mgr->registerType<Perimeter::CheckResultVm>(QStringLiteral("Perimeter::CheckResultVm"), Q_NULLPTR);
 }
 
 

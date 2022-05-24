@@ -19,44 +19,55 @@ PatientVm::PatientVm(const QVariantList & args)
     qDebug()<<"constructor";
     if(args.count()==0)
     {
-        m_patient=std::shared_ptr<Patient>(new Patient());
+        return;
     }
     else
     {
         Patient_List Patient_List;
+        Patient_ptr patient_ptr;
         int id=args[0].toInt();
         qx_query query("select * from patient where id=:id");
         query.bind(":id",id);
         QSqlError daoError = qx::dao::execute_query(query, Patient_List);
         if(Patient_List.count()==0)
-            m_patient=std::shared_ptr<Patient>(new Patient());
+            return;
         else
         {
-            m_patient=Patient_List.first();
+            patient_ptr=Patient_List.first();
+            m_id=patient_ptr->m_id;
+            m_patientID=patient_ptr->m_patientId;
+            m_name=patient_ptr->m_name;
+            m_sex=int(patient_ptr->m_sex);
+            m_birthDate=patient_ptr->m_birthDate;
+            m_lastUpdate=patient_ptr->m_lastUpdate;
         }
     }
+
+
 }
 
 void PatientVm::update()
 {
-    m_patient->m_lastUpdate=QDateTime::currentDateTime();
-    qx::dao::update(m_patient);
+    m_lastUpdate=QDateTime::currentDateTime();
+    auto patient_ptr=QSharedPointer<Patient>(new Patient(m_id,m_patientID,m_name,Patient::sex(m_sex),m_birthDate,m_lastUpdate));
+    qx::dao::update(patient_ptr);
 }
 
 void PatientVm::insert()
 {
-    m_patient->m_lastUpdate=QDateTime::currentDateTime();
-    qx::dao::insert(m_patient);
+    m_lastUpdate=QDateTime::currentDateTime();
+    auto patient_ptr=QSharedPointer<Patient>(new Patient(m_patientID,m_name,Patient::sex(m_sex),m_birthDate,m_lastUpdate));
+    qx::dao::update(patient_ptr);
 }
 
 
 
 
-PatientVm &PatientVm::operator=(const PatientVm &other)
-{
-    this->m_patient=other.m_patient;
-    return *this;
-}
+//PatientVm &PatientVm::operator=(const PatientVm &other)
+//{
+//    this->m_patient=other.m_patient;
+//    return *this;
+//}
 
 //PatientVm::PatientVm(PatientVm &&other)
 //{
@@ -77,47 +88,47 @@ PatientVm &PatientVm::operator=(const PatientVm &other)
 
 long PatientVm::getID()
 {
-    return  m_patient ->m_id;
+    return  m_id;
 }
 
 void PatientVm::setID(long value)
 {
-    m_patient->m_id=value;
+    m_id=value;
 }
 
 QString PatientVm::getPatientID()
 {
-   return  m_patient->m_patientId;
+   return  m_patientID;
 }
 
 void PatientVm::setPatientID(QString value)
 {
-    m_patient ->m_patientId=value;
+    m_patientID=value;
 }
 
 QString PatientVm::getName()
 {
-    return  m_patient ->m_name;
+    return  m_name;
 }
 
 void PatientVm::setName(QString value)
 {
-   m_patient->m_name=value;
+   m_name=value;
 }
 
 int PatientVm::getSex()
 {
-    return static_cast<int>( m_patient ->m_sex);
+    return m_sex;
 }
 
 void PatientVm::setSex(int value)
 {
-    m_patient ->m_sex=Patient::sex(value);
+    m_sex=value;
 }
 
 QString PatientVm::getBirthDate()
 {
-    return  m_patient->m_birthDate.toString("yyyy-MM-dd");
+    return  m_birthDate.toString("yyyy-MM-dd");
 }
 
 void PatientVm::setBirthDate(QString date)
@@ -126,7 +137,7 @@ void PatientVm::setBirthDate(QString date)
     int year=list[0].toInt();
     int month=list[1].toInt();
     int day=list[2].toInt();
-    m_patient->m_birthDate.setDate(year,month,day);
+    m_birthDate.setDate(year,month,day);
     qDebug()<<year;
     qDebug()<<month;
     qDebug()<<day;
@@ -134,12 +145,12 @@ void PatientVm::setBirthDate(QString date)
 
 QDateTime PatientVm::getLastUpdate()
 {
-    return m_patient->m_lastUpdate;
+    return m_lastUpdate;
 }
 
 void Perimeter::PatientVm::setLastUpdate(QDateTime value)
 {
-    m_patient->m_lastUpdate=value;
+    m_lastUpdate=value;
 }
 
 }

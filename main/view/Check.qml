@@ -19,7 +19,6 @@ Item {id:root; width: 1366;height: 691
     property var currentCheckResult: null;
     Column{anchors.fill: parent;
         Rectangle{width: parent.width; height: parent.height*14/15; id:content;
-
             ChooseProgram{id:chooseProgram;anchors.fill: parent;onOk:{root.currentProgram=currentProgram;currentProgram.type!==2?staticParamsSetting.currentProgram=currentProgram:moveParamsSetting.currentProgram=currentProgram;}}
             MoveParamsSetting{id:moveParamsSetting;anchors.fill: parent;onDataRefreshed:root.currentProgramChanged();}
             StaticParamsSetting{id:staticParamsSetting;anchors.fill: parent;onDataRefreshed:{root.currentProgramChanged();}}
@@ -186,9 +185,16 @@ Item {id:root; width: 1366;height: 691
                         }
                         CusButton{text:"分析"; anchors.right: parent.right;onClicked:
                             {
+                                if(currentCheckResult!=null) {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);}
+                                currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[3]);
+                                console.log(currentCheckResult.type);
+                                console.log(currentCheckResult.resultData.checkData[0]);
+                                console.log(currentCheckResult.resultData.checkData[1]);
+                                console.log(currentCheckResult.resultData.checkData[2]);
                                 var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
-                                IcUiQmlApi.appCtrl.diagramProvider.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,[27,26,27,27, 27,31,30,31,30,30, 27,31,31,30,27,30,32,27, 28,27,27,30,30,31,29,32,29,24, 29,26,0,33,33,31,33,33,33,21, 29,13,0,29,34,34,33,33,32,29, 26,24,27,31,32,34,33,30,31,27, 29,31,33,31,30,32,29,30, 28,28,29,30,32,28, 29,27,27,28]);
-                                changePage("singleAnalysis",{pageFrom:"check"});
+//                                IcUiQmlApi.appCtrl.diagramProvider.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,currentCheckResult.resultData.checkData);
+                                IcUiQmlApi.appCtrl.diagramProvider.runProcess(0,currentPatient,currentCheckResult,currentProgram);
+                                changePage("singleAnalysis",{pageFrom:"check",program:currentProgram,checkResult:currentCheckResult});
                             }
                         }
                     }

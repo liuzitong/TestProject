@@ -10,8 +10,6 @@
 namespace Perimeter
 {
 
-
-
 class StaticProgramVM:public QObject
 {
     Q_OBJECT
@@ -33,7 +31,7 @@ public:
     long getID(){return m_id;}void setID(int value){m_id=value;}
     long getType(){return m_type;}void setType(int value){m_type=value;}
     QString getName(){return m_name;}void setName(QString value){m_name=value;}
-    QObject* getParams(){return m_staticParamsVm;}
+    StaticParamsVM* getParams(){return m_staticParamsVm;}
     QVariantList getStrategies(){return m_strategies;}void setStrategies(QVariantList value){m_strategies=value;}
     QVariantList getDots(){return m_dots;}void setDots(QVariantList value){m_dots=value;}
     int getCategory(){return m_category;}void setCategory(int value){m_category=value;}
@@ -73,7 +71,7 @@ public:
     long getID(){return m_id;}void setID(int value){m_id=value;}
     long getType(){return m_type;}void setType(int value){m_type=value;}
     QString getName(){return m_name;}void setName(QString value){m_name=value;}
-    QObject* getParams(){return m_moveParamsVm;}
+    MoveParamVM* getParams(){return m_moveParamsVm;}
     QVariantList getDots(){return m_dots;}void setDots(QVariantList value){m_dots=value;}
     int getCategory(){return m_category;}void setCategory(int value){m_category=value;}
 private:

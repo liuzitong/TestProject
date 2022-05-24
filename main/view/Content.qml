@@ -14,7 +14,7 @@ Rectangle {
     property string backGroundBorderColor:"#bdc0c6"
     property string ribbonColor: "#333e44"
     property string language:IcUiQmlApi.appCtrl.language
-    property alias currentPatient: patientPage.currentPatient;
+    property var currentPatient: patientPage.currentPatient;
 
     signal changePage(var name);
 
@@ -26,7 +26,7 @@ Rectangle {
         id: column;anchors.fill: parent
         Rectangle{
             id:topRibbon;width: parent.width;height: parent.height*0.1;color: "#333e44";
-            CusButton{imageHightScale: 1;height:image.sourceSize.height;width:image.sourceSize.width; anchors.right: parent.right;  anchors.top: parent.top; rec.visible: false;imageSrc: "qrc:/Pics/base-svg/window_4close_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/window_4close_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/window_4close_3press.svg";}
+            CusButton{imageHightScale: 1;height:image.sourceSize.height;width:image.sourceSize.width; anchors.right: parent.right;  anchors.top: parent.top; rec.visible: false;imageSrc: "qrc:/Pics/base-svg/window_4close_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/window_4close_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/window_4close_3press.svg";onClicked: Qt.quit()}
             Item{
                 anchors.fill: parent;anchors.margins:parent.height*0.07;
                 Column{
@@ -39,7 +39,7 @@ Rectangle {
                             CusText{text:"电脑自动视野仪系统"; horizontalAlignment: Text.AlignLeft;color: "white";font.pointSize: height*0.5;width:height*10;}
 
                             Flow{
-                                id:patientInfo;visible: true;height: parent.height;spacing: height*0.5;
+                                id:patientInfo;visible: false;height: parent.height;spacing: height*0.5;
                                 Flow{
                                     height: parent.height;
                                     CusText{text:"姓名:  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
@@ -134,12 +134,6 @@ Rectangle {
                 switch(pageName)
                 {
                     case "patientManagement":
-                        console.log(params);
-                        if(params==="createNewPatient")
-                        {
-                            console.log("lollicon");
-                            patientPage.createNewPatient();
-                        }
                         patientPage.visible=true;
                         checkContentButton.image.source=checkContentButton.imageSrc;
                         patientContentButton.image.source=patientContentButton.pressImageSrc;
@@ -178,11 +172,12 @@ Rectangle {
 //                        patientInfo.visible=false;
                         break;
                     case "singleAnalysis":
-                        console.log(params.pageFrom);
+                        singleAnalysisPage.currentCheckResult=params.checkResult;
+                        singleAnalysisPage.currentProgram=params.program;
                         singleAnalysisPage.visible=true;
                         singleAnalysisPage.lastPage=params.pageFrom;
                         singleAnalysisPage.refresh();
-                        console.log(params.pageFrom);
+                        console.log(params.checkResult.OS_OD);
                         break;
                 }
             }

@@ -50,12 +50,6 @@ public:
 private:
     void setPatientList(Patient_List patient_list);
 
-    inline QString convertQDateToQString(QDate date)
-    {
-        int year=date.year(),month=date.month(),day=date.day();
-        QString dateStr=QString("%1-%2-%3").arg(year).arg(month).arg(day);
-        return dateStr;
-    }
 
     void* m_obj;
     friend class PatientListModelVmPriv;

@@ -5,13 +5,12 @@
 #include <QFont>
 #include <QLine>
 #include <QtMath>
-#include <QVector>
+//#include <QVector>
 #include <QPair>
-#include <qalgorithms.h>
-#include <algorithm>
 #include <QFile>
 #include <QDir>
 #include <QJsonDocument>
+#include <QDateTime>
 #include <QJsonArray>
 #include <QJsonObject>
 
@@ -19,20 +18,92 @@ namespace Perimeter {
 
 DiagramProvider::DiagramProvider(QObject *parent) : QObject(parent)
 {
+    QFile jsonFile("./data.json");
+    if( !jsonFile.open(QIODevice::ReadOnly)) {qDebug() << "read file error!";return;}
+    QJsonParseError jsonParserError;
+    auto JsonDoc = QJsonDocument::fromJson(jsonFile.readAll(),&jsonParserError);
+    m_jsonArray=JsonDoc.array();
+    jsonFile.close();
 
 }
 
-void DiagramProvider::drawDiagram(int printType, int os_od,int innerRange, int range, QVariantList dotList, QVariantList values)
+DiagramProvider::~DiagramProvider()
 {
-    m_printType=printType;
-    m_os_od=os_od;
-    m_range=range;
-    m_dotList=dotList;
-    m_values=values;
-    m_innerRange=innerRange;
-    drawDBDiagram();
-    drawGrayDiagram();
+
 }
+
+
+void DiagramProvider::runProcess(int printType,PatientVm *patient, CheckResultVm *checkResult, QObject *program)
+{
+    m_type=program->property("type").toInt();
+    m_printType=printType;
+    m_patient=patient;
+    m_checkResult=checkResult;
+    if(m_type!=2)
+    {
+        StaticProgramVM* staticProgram=static_cast<StaticProgramVM*>(program);
+        auto dotList=staticProgram->getDots();
+        m_dotList.resize(dotList.length());
+        for(int i=0;i<dotList.length();i++){m_dotList[i]=dotList[i].toPointF();}
+        auto range=staticProgram->getParams()->getCommonParams()->getRange();
+        m_innerRange=range[0];
+        m_range=range[1];
+    }
+    else
+    {
+        MoveProgramVM* moveProgram=static_cast<MoveProgramVM*>(program);
+        auto dotList=moveProgram->getDots();
+        for(int i=0;i<dotList.length();i++){m_dotList[i]=dotList[i].toPointF();}
+        auto range=moveProgram->getParams()->getRange();
+        m_innerRange=range[0];
+        m_range=range[1];
+    }
+    m_os_od=checkResult->getOS_OD();
+    auto values=checkResult->getResultData()->getCheckData();
+    m_values.resize(values.length());
+    for(int i=0;i<values.length();i++){m_values[i]=values[i].toInt();}
+
+    analysis();
+    DrawDiagram();
+}
+
+
+QPointF DiagramProvider::getClickDot(float MouseX, float MouseY,float width,float height)
+{
+    qDebug()<<QString("x:%1,y:%2,w:%3,h:%4").arg(QString::number(MouseX)).arg(QString::number(MouseY)).arg(QString::number(width)).arg(QString::number(height));
+
+    float x_degree=(MouseX/width-0.5)*m_range*2;
+    float y_degree=-(MouseY/height-0.5)*m_range*2;
+
+    qDebug()<<QString("xdegre:%1,y:dgeree:%2").arg(QString::number(x_degree)).arg(QString::number(y_degree));
+
+    QPointF nearestDot;
+    float nearest_dist_squared=10000;
+    for(int i=0;i<m_dotList.length();i++)
+    {
+        auto dot=m_dotList[i];
+        float dist_squared=pow(dot.x()-x_degree,2)+pow(dot.y()-y_degree,2);
+        if(dist_squared<nearest_dist_squared)
+        {
+            nearest_dist_squared=dist_squared;
+            nearestDot=dot;
+            m_selectedDotIndex=i;
+        }
+    }
+    return nearestDot;
+}
+
+
+QPointF DiagramProvider::getPixFromPoint(QPointF point, float width, float height)
+{
+
+    qDebug()<<QString("x:nearestDot:%1,y:nearestDot:%2").arg(QString::number(point.x())).arg(QString::number(point.y()));
+
+    float pixPerDegW=float(width/2)/m_range;
+    float pixPerDegH=float(height/2)/m_range;
+    return QPointF(width/2+(point.x()+0.0)*pixPerDegW,height/2-(point.y()-0.0)*pixPerDegH);
+}
+
 
 
 void DiagramProvider::drawPixScale()
@@ -63,10 +134,28 @@ void DiagramProvider::drawDBText()
     painter.setFont(font);
     for(int i=0;i<m_dotList.length()&&i<m_values.length();i++)             //画DB图
     {
-        auto temp=m_dotList[i].toPointF();
-        auto pixLoc=convertDegLocToPixLoc(temp.toPoint());
-        painter.drawText(QPoint(pixLoc.x()-fontPixSize/2,pixLoc.y()+fontPixSize*0.4),QString::number(m_values[i].toInt()));
-        m_image.setPixel(pixLoc.x(),pixLoc.y(),0xFFFF0000);
+        auto pixLoc=convertDegLocToPixLoc(m_dotList[i]);
+        const QRect rectangle = QRect(pixLoc.x()-fontPixSize*1.6*0.4, pixLoc.y()-fontPixSize*0.8/2, fontPixSize*1.6,fontPixSize*0.8);
+        painter.drawText(rectangle,Qt::AlignCenter,QString::number(m_values[i]));
+        m_image.setPixel(pixLoc.x(),pixLoc.y(),0xFFFF0000); //标个小红点
+    }
+}
+
+void DiagramProvider::drawDevDBText(QVector<int> values)
+{
+    QPainter painter(&m_image);
+    int fontPixSize=12;
+    QFont font("consolas");
+    font.setPixelSize(fontPixSize);
+    painter.setFont(font);
+    for(int i=0;i<m_dotList.length()&&i<values.length();i++)             //画DB图
+    {
+        auto pixLoc=convertDegLocToPixLoc(m_dotList[i]);
+        if(values[i]==-99) continue;
+
+         const QRect rectangle = QRect(pixLoc.x()-fontPixSize*1.6*0.4, pixLoc.y()-fontPixSize*0.8/2, fontPixSize*1.6,fontPixSize*0.8);
+         painter.drawText(rectangle,Qt::AlignCenter,QString::number(values[i]));
+        m_image.setPixel(pixLoc.x(),pixLoc.y(),0xFFFF0000);   //标个小红点
     }
 }
 
@@ -77,7 +166,7 @@ void DiagramProvider::drawGray()
     int left_x_axis=0,right_x_axis=0,up_y_axis=0,down_y_axis=0;
     for(auto &i:m_dotList)
     {
-        auto x=i.toPointF().x();auto y=i.toPointF().y();
+        auto x=i.x();auto y=i.y();
         if(x<left_x_axis) left_x_axis=x;
         if(x>right_x_axis) right_x_axis=x;
         if(y>up_y_axis) up_y_axis=y;
@@ -94,8 +183,8 @@ void DiagramProvider::drawGray()
         for(int j=left_x_axis;j<=right_x_axis;j+=gap)
         {
             float answerOutter=float(qPow(qAbs(i)+2,2))/(rangeX*rangeX)+float(qPow(qAbs(j)+2,2))/(rangeY*rangeY);
-            float answerInner=(float(qPow(qAbs(i)+2,2))+float(qPow(qAbs(j)+2,2)))/(m_innerRange*m_innerRange);
-            qDebug()<<QString::number(answerInner);
+            float answerInner=1.0;
+            if(m_innerRange!=0){answerInner=(float(qPow(qAbs(i)+2,2))+float(qPow(qAbs(j)+2,2)))/(m_innerRange*m_innerRange);}
             if((answerOutter<=1.0)&&(answerInner>=1.0))
                 paintLocs.append(QPoint(j,i));
         }
@@ -132,12 +221,12 @@ void DiagramProvider::drawGray()
             int index=interpolationDots[j].first;
             if(interpolationDots[j].second==0)
             {
-                totalValue=m_values[index].toFloat();
+                totalValue=m_values[index];
                 totalDist=1;
                 break;
             }
-            totalValue+=(m_values[index].toFloat()/qSqrt(interpolationDots[j].second));
-            totalDist+=1/qSqrt(interpolationDots[j].second);
+            totalValue+=(float(m_values[index])/qSqrt(interpolationDots[j].second));
+            totalDist+=1.0f/qSqrt(interpolationDots[j].second);
         }
         float interpolVal=totalValue/totalDist;
         int grayVal=qCeil(interpolVal/5);
@@ -154,14 +243,37 @@ void DiagramProvider::drawGray()
        QPoint tempPixLoc={pixLoc.x()-image.width()/2,pixLoc.y()-image.height()/2};
        painter.drawImage(tempPixLoc,image);
     }
-
 }
 
-QPoint DiagramProvider::convertDegLocToPixLoc(QPoint DegLoc)
+void DiagramProvider::drawPE(QVector<int> values)
+{
+    QPainter painter(&m_image);
+    for(int i=0;i<m_dotList.length()&&i<m_values.length();i++)             //画DB图
+    {
+        auto pixLoc=convertDegLocToPixLoc(m_dotList[i]);
+        QString path=QString(":/grays/PE")+QString::number(values[i])+".bmp";
+        QImage image(path);
+        QPoint tempPixLoc={pixLoc.x()-image.width()/2,pixLoc.y()-image.height()/2};
+        painter.drawImage(tempPixLoc,image);
+    }
+}
+
+QPoint DiagramProvider::convertDegLocToPixLoc(QPointF DegLoc)
 {
     float pixPerDegW=float(m_imageSize.width()/2)/m_range;
     float pixPerDegH=float(m_imageSize.width()/2)/m_range;
     return QPoint(m_image.width()/2+DegLoc.x()*pixPerDegW,m_image.height()/2-DegLoc.y()*pixPerDegH);
+}
+
+void DiagramProvider::DrawDiagram()
+{
+
+    drawDBDiagram();
+    drawGrayDiagram();
+    drawTotalDeviation();
+    drawPatternDeviation();
+    drawTotalPE();
+    drawPatternPE();
 }
 
 void DiagramProvider::drawDBDiagram()
@@ -182,59 +294,315 @@ void DiagramProvider::drawGrayDiagram()
 
 void DiagramProvider::drawTotalDeviation()
 {
+
     m_image.fill(qRgb(255, 255, 255));
-
-
-    QFile jsonFile("./data.json");
-    if( !jsonFile.open(QIODevice::ReadOnly)) {qDebug() << "read file error!";return;}
-    QJsonParseError jsonParserError;
-    QJsonDocument outDoc = QJsonDocument::fromJson(jsonFile.readAll(),&jsonParserError);
-    QJsonArray jsonArray=outDoc.array();
-
-
-
-
-    for(auto i:jsonArray)
-    {
-
-        auto jo=i.toObject();
-//        auto keys=jo.keys();
-//        for(auto&j:keys)
-//        {
-//            qDebug()<<j;
-
-           qDebug()<<jo["name"].toString();
-//           if(jo["name"])
-           auto arr=jo["data"].toArray();
-           QString str;
-           for(auto j:arr)
-           {
-               str+=QString::number(j.toInt())+" ";
-           }
-           qDebug()<<str;
-    }
-
-
-
-
-    jsonFile.close();
-
-
-    jsonFile.close();
+    drawDevDBText(m_dev);
     drawPixScale();
     m_image.save("./temp/TotalDeviation.bmp","bmp");
 }
 
+
 void DiagramProvider::drawPatternDeviation()
 {
+
     m_image.fill(qRgb(255, 255, 255));
+    drawDevDBText(m_mDev);
     drawPixScale();
-    m_image.save("./temp/PatternDeviation.bmp","bmp");
+    m_image.save("./temp/PatterDeviation.bmp","bmp");
+
 }
 
+void DiagramProvider::drawTotalPE()
+{
+    m_image.fill(qRgb(255, 255, 255));
+    drawPE(m_peDev);
+    drawPixScale();
+    m_image.save("./temp/TotalPE.bmp","bmp");
+}
+
+void DiagramProvider::drawPatternPE()
+{
+    m_image.fill(qRgb(255, 255, 255));
+    drawPE(m_peMDev);
+    drawPixScale();
+    m_image.save("./temp/PatternPE.bmp","bmp");
+}
+
+void DiagramProvider::analysis()
+{
+    m_pointLoc_30d.clear();
+    m_pointLoc_60d.clear();
+    m_value_30d.clear();
+    m_value_60d.clear();
+    m_age_correction=0;
+
+    m_v5.clear();
+    m_v2.clear();
+    m_v1.clear();
+    m_v05.clear();
+
+
+    m_sv.fill(0,m_dotList.length());
+    m_dev.fill(0,m_dotList.length());
+    m_mDev.fill(0,m_dotList.length());
+    m_peDev.fill(0,m_dotList.length());
+    m_peMDev.fill(0,m_dotList.length());
+
+    m_vfiRingStandard.fill(0,5);
+    m_vfiRingTest.fill(0,5);
+
+    m_md=0;
+    m_psd=0;
+
+    auto birthDate=QDate::fromString(m_patient->getBirthDate(),"yyyy-MM-dd");
+    auto currentDate=QDate::currentDate();
+
+    int m_patientAge = currentDate.year() - birthDate.year();
+    if (currentDate.month() < birthDate.month() || (currentDate.month() == birthDate.month() && currentDate.day() < birthDate.day())) { m_patientAge--;}
+
+
+    if(m_patientAge<=35){m_age_correction=0;}
+    else if(m_patientAge<=45){m_age_correction=1;}
+    else if(m_patientAge<=55){m_age_correction=2;}
+    else if(m_patientAge<=65){m_age_correction=3;}
+    else {m_age_correction=4;}
+
+
+    StaticParamsVM* params =static_cast<StaticParamsVM*>(m_checkResult->getParams()) ;
+    int cursorSize=params->getCommonParams()->getCursorSize();
+    int cursorColor=params->getCommonParams()->getCursorColor();
+    int backGroundColor=params->getCommonParams()->getBackGroundColor();
+
+    QString XY_NORMAL_VALUE;
+
+    if(cursorSize==2&&cursorColor==0)  //30 内的程序才能调尺寸,颜色,此种尺寸颜色比较精确
+    {
+        if(m_patientAge<=35){XY_NORMAL_VALUE="NORMAL_VALUE15_35";}
+        else if(m_patientAge<=45){XY_NORMAL_VALUE="NORMAL_VALUE36_45";}
+        else if(m_patientAge<=55){XY_NORMAL_VALUE="NORMAL_VALUE46_55";}
+        else if(m_patientAge<=65){XY_NORMAL_VALUE="NORMAL_VALUE56_65";}
+        else {XY_NORMAL_VALUE="NORMAL_VALUE66_75";}
+    }
+
+    else if(cursorSize==0&&cursorColor==0){XY_NORMAL_VALUE="NORMAL_VALUE36_45_B1_White";}
+    else if(cursorSize==1&&cursorColor==0){XY_NORMAL_VALUE="NORMAL_VALUE36_45_B2_White";}
+    else if(cursorSize==3&&cursorColor==0){XY_NORMAL_VALUE="NORMAL_VALUE36_45_B4_White";}
+    else if(cursorSize==4&&cursorColor==0){XY_NORMAL_VALUE="NORMAL_VALUE36_45_B5_White";}
+
+    else if(cursorSize==0&&cursorColor==1){XY_NORMAL_VALUE="NORMAL_VALUE36_45_B1_Red";}
+    else if(cursorSize==1&&cursorColor==1){XY_NORMAL_VALUE="NORMAL_VALUE36_45_B2_Red";}
+    else if(cursorSize==3&&cursorColor==1){XY_NORMAL_VALUE="NORMAL_VALUE36_45_B4_Red";}
+    else if(cursorSize==4&&cursorColor==1){XY_NORMAL_VALUE="NORMAL_VALUE36_45_B5_Red";}
+
+    else if(cursorSize==0&&cursorColor==2){XY_NORMAL_VALUE="NORMAL_VALUE36_45_B1_Blue";}
+    else if(cursorSize==1&&cursorColor==2){XY_NORMAL_VALUE="NORMAL_VALUE36_45_B2_Blue";}
+    else if(cursorSize==3&&cursorColor==2){XY_NORMAL_VALUE="NORMAL_VALUE36_45_B4_Blue";}
+    else if(cursorSize==4&&cursorColor==2){XY_NORMAL_VALUE="NORMAL_VALUE36_45_B5_Blue";}
 
 
 
+    auto jsonArrToVectorPoint=[&](QVector<QPoint>& vec,const QString& name,QJsonObject& jo)->void
+    {
+        if(jo["name"]==name)
+        {
+
+            auto arr=jo["data"].toArray();
+            for(int i=0;i<arr.count();i++)
+            {
+                auto arr2=arr[i].toArray();
+                QPoint point(arr2[0].toInt(),arr2[1].toInt());
+                vec.push_back(point);
+            }
+        }
+    };
+    auto jsonArrToVectorInt=[&](QVector<int>& vec,const QString& name,QJsonObject& jo)->void
+    {
+        if(jo["name"]==name)
+        {
+            auto arr=jo["data"].toArray();
+            for(int i=0;i<arr.count();i++){vec.push_back(arr[i].toInt());}
+        }
+    };
+
+
+
+    for(auto i:m_jsonArray)
+    {
+        auto jo=i.toObject();
+
+        jsonArrToVectorPoint(m_pointLoc_30d,"XY_NORMAL_VALUE_30d",jo);
+        jsonArrToVectorPoint(m_pointLoc_60d,"XY_NORMAL_VALUE_60d",jo);
+        jsonArrToVectorInt(m_value_30d,XY_NORMAL_VALUE,jo);
+        jsonArrToVectorInt(m_value_60d,"NORMAL_VALUE15_35_60d",jo);
+
+        if(cursorColor==2&&backGroundColor==1&&cursorSize==4)
+        {
+            jsonArrToVectorInt(m_v5,"PE_VALUE5_Blue_Yellow_B5",jo);
+            jsonArrToVectorInt(m_v2,"PE_VALUE2_Blue_Yellow_B5",jo);
+            jsonArrToVectorInt(m_v1,"PE_VALUE1_Blue_Yellow_B5",jo);
+            jsonArrToVectorInt(m_v05,"PE_VALUE05_Blue_Yellow_B5",jo);
+        }
+        else
+        {
+            jsonArrToVectorInt(m_v5,"PE_VALUE5",jo);
+            jsonArrToVectorInt(m_v2,"PE_VALUE2",jo);
+            jsonArrToVectorInt(m_v1,"PE_VALUE1",jo);
+            jsonArrToVectorInt(m_v05,"PE_VALUE05",jo);
+        }
+    }
+
+    auto getIndex=[&](QPointF& dot,QVector<QPoint>& pointLoc)->int{
+        int distMin=10000;
+        int index=-1;
+
+        for(int i=0;i<pointLoc.length();i++)
+        {
+            int dist;
+            if(m_os_od==0)
+            {
+                dist=pow(pointLoc[i].rx()-dot.x(),2)+pow(pointLoc[i].ry()-dot.y(),2);
+            }
+            else
+            {
+                dist=pow(pointLoc[i].rx()-(-dot.x()),2)+pow(pointLoc[i].ry()-dot.y(),2);
+            }
+            if(dist<distMin){distMin=dist;index=i;}
+        }
+        return index;
+    };
+
+    for(int i=0;i<m_dotList.length();i++)
+    {
+        auto dot=m_dotList[i];
+        float radius=sqrt(pow(dot.x(),2)+pow(dot.y(),2));
+        int index;
+        if(radius<=30)
+        {
+            index=getIndex(dot,m_pointLoc_30d);
+            m_sv[i]=m_value_30d[index]/10;
+            if(!(cursorSize==2&&cursorColor==0)){
+                if(cursorColor==2)
+                {
+                    if(m_sv[i]>0){m_sv[i]-=2*(m_age_correction-1);} else if(m_sv[i]<0){m_sv[i]+=2*(m_age_correction-1);}
+                }
+                else
+                {
+                    if(m_sv[i]>0){m_sv[i]-=(m_age_correction-1);} else if(m_sv[i]<0){m_sv[i]+=(m_age_correction-1);}
+                }
+            }
+
+        }
+        else if(radius<=60)
+        {
+            index=getIndex(dot,m_pointLoc_60d);
+            m_sv[i]=m_value_60d[index]/10;
+            if(m_sv[i]>0) m_sv[i]-=m_age_correction;else if(m_sv[i]<0) m_sv[i]+=m_age_correction;
+        }
+
+
+        if(m_sv[i]>0)  {m_dev[i]=m_values[i]-m_sv[i];}                                                   //dev 盲点
+        else{ m_dev[i]=-99; }
+
+
+        if(radius<=30)
+        {
+            if(m_dev[i]!=-99)
+            {
+                int v=-m_dev[i];
+                if (v<=m_v5[index]) m_peDev[i]=0;
+                else if(v<=m_v2[index]) m_peDev[i]=1;
+                else if(v<=m_v1[index]) m_peDev[i]=2;
+                else if(v<=m_v05[index]) m_peDev[i]=3;
+                else m_peDev[i]=4;
+            }
+            else{
+                m_peDev[i]=-99;
+            }
+        }
+
+        if(m_sv[i]>0)
+        {
+            int ringIndex=round(radius/6+0.4)-1;
+            if(ringIndex>4) ringIndex=4;
+
+            m_vfiRingStandard[ringIndex]+=m_sv[i];
+            m_vfiRingTest[ringIndex]+=m_values[i];
+        }
+    }
+
+
+    float vfih=0,vfid=0;
+    for(int i=0;i<5;i++)
+    {
+        if(m_vfiRingStandard[i]!=0)
+        {
+            qDebug()<<m_vfiRingTest[i];
+            qDebug()<<m_vfiRingStandard[i];
+            float temp=float(m_vfiRingTest[i])/(m_vfiRingStandard[i]+0.0001);
+            qDebug()<<temp;
+            if(temp>1){temp=1;}
+            vfih+=m_VFI_Weight[i]*temp;
+            vfid+=m_VFI_Weight[i];
+        }
+    }
+    qDebug()<<vfih;
+    qDebug()<<vfid;
+
+    m_VFI=vfih/vfid;                                     //vfi
+    qDebug()<<m_VFI;
+
+    for(auto& i: m_dev)
+    {
+        if(i!=-99) m_md+=i;
+    }
+    m_md/=(m_dev.length()-2);    //扣除盲点
+
+    qDebug()<<m_md;
+
+    for(auto& i: m_dev)
+    {
+        if(i!=-99) m_psd+=pow(i-m_md,2);
+    }
+    m_psd=sqrt(m_psd/(m_dev.length()-2));
+
+    qDebug()<<m_psd;
+
+    int md=round(m_md+m_psd);                        //到底是round 还是celling?
+    qDebug()<<md;
+
+    for(int i=0;i<m_dev.length();i++)
+    {
+        if(m_dev[i]==-99)
+            m_mDev[i]=-99;
+        else
+            m_mDev[i]=m_dev[i]-md;
+    }
+
+    for(int i=0;i<m_mDev.length();i++)
+    {
+        auto dot=m_dotList[i];
+        auto index=getIndex(dot,m_pointLoc_30d);
+        float radius=sqrt(pow(dot.x(),2)+pow(dot.y(),2));
+        if(radius<30)
+        {
+            if(m_mDev[i]==-99)
+                m_peMDev[i]=-99;
+            else
+            {
+                int v=-m_mDev[i];
+                if (v<=m_v5[index]) m_peMDev[i]=0;
+                else if(v<=m_v2[index]) m_peMDev[i]=1;
+                else if(v<=m_v1[index]) m_peMDev[i]=2;
+                else if(v<=m_v05[index]) m_peMDev[i]=3;
+                else m_peMDev[i]=4;
+            }
+        }
+
+    }
+
+
+
+}
 
 
 void DiagramProvider::drawDiagram2(QString name,int os_od ,int range, QVariantList dotList, QVariantList values)

@@ -56,19 +56,83 @@ Column {
 //                    VisionDiagram{height:parent.height;width:parent.height;/*canvas.smooth:false;canvas.antialiasing: false;*/
 //                        degLocs: [{x:3,y:27},{x:9,y:27},{x:3,y:21},{x:9,y:21},{x:15,y:21},{x:3,y:15},{x:9,y:15},{x:15,y:15},{x:21,y:15},{x:3,y:9},{x:9,y:9},{x:15,y:9},{x:21,y:9},{x:27,y:9},{x:3,y:3},{x:9,y:3},{x:15,y:3},{x:21,y:3},{x:27,y:3}];range:30;type:1;os_od:0;
 //                        values: [7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,1,7,7]}
-                    Image {
-                        height:parent.height;width:parent.height;cache: false;        //to refresh image
-                        Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/temp/dbDiagram.bmp";})}
+                        Image {
+                            height:parent.height;width:parent.height;cache: false;        //to refresh image
+                            Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/temp/dbDiagram.bmp";})}
+                        }
+                        Image {
+                            height:parent.height;width:parent.height;cache: false;        //to refresh image
+                            Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/temp/gray.bmp";})}
+                        }
+
                     }
-                    Image {
-                        height:parent.height;width:parent.height;cache: false;        //to refresh image
-                        Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/temp/gray.bmp";})}
+                    Row{
+                        width: parent.width;height:parent.height*1/3;
+                        Image {
+                            height:parent.height;width:parent.height;cache: false;        //to refresh image
+                            Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/temp/TotalDeviation.bmp";})}
+                        }
+                        Image {
+                            height:parent.height;width:parent.height;cache: false;        //to refresh image
+                            Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/temp/PatterDeviation.bmp";})}
+                        }
                     }
+                    Row{
+                        width: parent.width;height:parent.height*1/3;
+                        Image {
+                            height:parent.height;width:parent.height;cache: false;z:-1;        //to refresh image
+                            Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/temp/TotalPE.bmp";})}
+
+                        }
+                        Canvas
+                        {
+                            property var dot: null;
+                            height:parent.height;width:parent.height;
+
+//                            function drawCircle(mouseX,mouseY){console.log(mouseX+" "+mouseY);}
+
+                            function drawDot()
+                            {
+                                if(dot==null) return;
+                                var pix=IcUiQmlApi.appCtrl.diagramProvider.getPixFromPoint(dot,width,height);
+                                console.log(pix.x+" "+pix.y);
+                                var dotRadius=width/25;
+                                var ctx = getContext("2d");
+                                ctx.lineWidth = 0;
+                                ctx.strokeStyle = "blue";
+                                ctx.beginPath();
+                                ctx.arc(pix.x, pix.y, dotRadius, 0, Math.PI*2);
+                                ctx.stroke();
+                                ctx.closePath();
+                            }
+                            onPaint:
+                            {
+                                var ctx = getContext("2d")
+                                ctx.clearRect(0, 0, width, height);
+                                drawDot();
+                            }
+
+
+                            MouseArea
+                            {
+                                height:parent.height;width:parent.height;
+                                onClicked: {
+                                    parent.dot=IcUiQmlApi.appCtrl.diagramProvider.getClickDot(mouseX,mouseY,width,height);
+                                    parent.requestPaint();}
+                            }
+
+                            Image {
+                                height:parent.height;width:parent.height;cache: false;z:-1;        //to refresh image
+                                Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/temp/PatternPE.bmp";})}
+
+                            }
+                        }
+
+
+
 
                     }
 
-                    Row{width: parent.width;height:parent.height*1/3;}
-                    Row{width: parent.width;height:parent.height*1/3;}
                 }
             }
         }

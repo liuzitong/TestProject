@@ -133,15 +133,11 @@ void PatientListModelVm:: deletePatient(long id)
 
 void PatientListModelVm::getPatientListByTimeSpan(QDate from,QDate to)
 {
-    qDebug()<<"getPatientListByTimeSpan";
     if(from.toString()=="") from.setDate(1900,1,1);
     if(to.toString()=="") to=QDate::currentDate();
     qx_query query("select * from patient where lastUpdate>=:from and lastUpdate<=:to ORDER BY lastUpdate DESC");
-    QString fromStr=convertQDateToQString(from);
-    QString toStr=convertQDateToQString(to);
-    qDebug()<<QString("from:1%,to:2%").arg(fromStr).arg(toStr);
-    query.bind(":from",convertQDateToQString(from));
-    query.bind(":to",convertQDateToQString(to));
+    query.bind(":from",from.toString("yyyy-MM-dd"));
+    query.bind(":to",to.toString("yyyy-MM-dd"));
     Patient_List Patient_List;
     QSqlError daoError = qx::dao::execute_query(query, Patient_List);
     setPatientList(Patient_List);
@@ -163,7 +159,7 @@ void PatientListModelVm::getPatientListByName(QString name, QDate from, QDate to
     if(from.toString()=="") from.setDate(1900,1,1);
     if(to.toString()=="") to.setDate(QDate::currentDate().year(),QDate::currentDate().month(),QDate::currentDate().day());
     qx_query query("select * from patient where name=:name and lastUpdate>=:from and lastUpdate<=:to ORDER BY lastUpdate DESC");
-    query.bind(":name",name);query.bind(":from",convertQDateToQString(from));query.bind(":to",convertQDateToQString(to));
+    query.bind(":name",name);query.bind(":from",from.toString("yyyy-MM-dd"));query.bind(":to",to.toString("yyyy-MM-dd"));
     Patient_List Patient_List;
     QSqlError daoError = qx::dao::execute_query(query, Patient_List);
     setPatientList(Patient_List);
@@ -176,11 +172,9 @@ void PatientListModelVm::getPatientListBySex(int sex, QDate from, QDate to)
     if(to.toString()=="") to=QDate::currentDate();
     qx_query query("select * from patient where sex=:sex and lastUpdate>=:from and lastUpdate<=:to ORDER BY lastUpdate DESC");
     query.bind(":sex",sex);
-    QString fromStr=convertQDateToQString(from);
-    QString toStr=convertQDateToQString(to);
-    qDebug()<<QString("from:1%,to:2%").arg(fromStr).arg(toStr);
-    query.bind(":from",convertQDateToQString(from));
-    query.bind(":to",convertQDateToQString(to));
+
+    query.bind(":from",from.toString("yyyy-MM-dd"));
+    query.bind(":to",to.toString("yyyy-MM-dd"));
     Patient_List Patient_List;
     QSqlError daoError = qx::dao::execute_query(query, Patient_List);
     setPatientList(Patient_List);
@@ -190,11 +184,10 @@ void PatientListModelVm::getPatientListBySex(int sex, QDate from, QDate to)
 void PatientListModelVm::getPatientListByBirthDate(QDate date)
 {
     qx_query query("select * from patient where birthDate=:birthDate ORDER BY lastUpdate DESC");
-    query.bind(":birthDate",convertQDateToQString(date));
+    query.bind(":birthDate",date.toString("yyyy-MM-dd"));
     Patient_List Patient_List;
     QSqlError daoError = qx::dao::execute_query(query, Patient_List);
     setPatientList(Patient_List);
-//    return new PatientListModelVm(Patient_List);
     emit patientListChanged();
 }
 

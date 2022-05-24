@@ -28,7 +28,7 @@ public:
     Q_INVOKABLE void insert();
     Q_INVOKABLE void hello();
 //    Q_INVOKABLE int age();
-    PatientVm& operator=(const PatientVm& other);
+//    PatientVm& operator=(const PatientVm& other);
     long getID();void setID(long value);
     QString getPatientID();void setPatientID(QString value);
     QString getName();void setName(QString value);
@@ -36,9 +36,14 @@ public:
     QString getBirthDate();void setBirthDate(QString value);
     QDateTime getLastUpdate();void setLastUpdate(QDateTime lastUpdate);
 
-
 private:
-    Patient_ptr m_patient;
+    long m_id;
+    QString m_patientID;
+    QString m_name;
+    int m_sex;
+    QDate m_birthDate;
+    QDateTime m_lastUpdate;
+
 };
 }
 #endif // PATIENTVM_H

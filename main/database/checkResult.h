@@ -7,8 +7,6 @@
 class Patient;
 class Program;
 
-
-
 class QX_DLL_EXPORT_API CheckResult{
 public:
 // -- typedef
@@ -17,17 +15,18 @@ public:
 
     long m_id;
     int m_type;
+    int m_OS_OD;
     QString m_params;
     QString m_data;
-    QByteArray m_pic;
+    QVector<QVector<QByteArray>> m_pic;                   //一个点有几张照片,一共有很多个点
     QDateTime m_time;
     Patient_ptr m_patient;
     Program_ptr m_program;
     CheckResult() = default;
-    CheckResult(QString params,QString data,QByteArray pic,QDateTime time,Patient_ptr patient,Program_ptr program):
-    m_params(params),m_data(data),m_pic(pic),m_time(time),m_patient(patient),m_program(program){}
-    CheckResult(long id,QString params,QString data,QByteArray pic,QDateTime time,Patient_ptr patient,Program_ptr program):
-    m_id(id),m_params(params),m_data(data),m_pic(pic),m_time(time),m_patient(patient),m_program(program){}
+    CheckResult(int type,int OS_OD,QString params,QString data,QVector<QVector<QByteArray>> pic,QDateTime time,Patient_ptr patient,Program_ptr program):
+    m_type(type),m_OS_OD(OS_OD),m_params(params),m_data(data),m_pic(pic),m_time(time),m_patient(patient),m_program(program){}
+    CheckResult(long id,int type,int OS_OD,QString params,QString data,QVector<QVector<QByteArray>> pic,QDateTime time,Patient_ptr patient,Program_ptr program):
+    m_id(id),m_type(type),m_OS_OD(OS_OD),m_params(params),m_data(data),m_pic(pic),m_time(time),m_patient(patient),m_program(program){}
     virtual ~CheckResult(){}
 };
 

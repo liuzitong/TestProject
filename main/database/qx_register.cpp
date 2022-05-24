@@ -30,6 +30,8 @@ template <> void qx::register_class(QxClass<Patient> &t){
 QX_REGISTER_CPP_QX_API(CheckResult)
 template <> void qx::register_class(QxClass<CheckResult> &t){
     t.id(&CheckResult::m_id,"checkResult_id");
+    t.data(&CheckResult::m_type, "type");
+    t.data(&CheckResult::m_OS_OD, "OS_OD");
     t.data(&CheckResult::m_params, "params");
     t.data(&CheckResult::m_data,"data");
     t.data(&CheckResult::m_pic,"pic");

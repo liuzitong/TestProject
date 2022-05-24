@@ -18,9 +18,10 @@ class DiagramProvider : public QObject
 
 public:
     explicit DiagramProvider(QObject *parent = nullptr);
-    Q_INVOKABLE void drawDiagram(int printType,int os_od,int innerRange,int range,QVariantList dotList,QVariantList values);
-//    Q_INVOKABLE void drawDiagram2(int printType,int os_od,int innerRange,int range,QVariantList dotList,QVariantList values);
-
+    ~DiagramProvider();
+    Q_INVOKABLE void runProcess(int printType,PatientVm* patient,CheckResultVm* checkResult,QObject* program);
+    Q_INVOKABLE QPointF getClickDot(float MouseX,float MouseY,float width,float height);
+    Q_INVOKABLE QPointF getPixFromPoint(QPointF point,float width,float height);
 
 
 signals:
@@ -33,29 +34,64 @@ private:
     int m_os_od;
     int m_range;
     int m_innerRange;
-    int m_patientAge;
+    int m_selectedDotIndex;
+    int m_type;
 
-    QVariantList m_dotList;
-    QVariantList m_values;
-
+    QVector<QPointF> m_dotList;
+    QVector<int> m_values;
     CheckResultVm* m_checkResult=nullptr;
     PatientVm* m_patient=nullptr;
     QObject* m_program=nullptr;
+
+    QJsonArray m_jsonArray;
+
+    QVector<QPoint> m_pointLoc_30d;
+    QVector<QPoint> m_pointLoc_60d;
+    QVector<int> m_value_30d;
+    QVector<int> m_value_60d;
+    int m_age_correction;
+
+    QVector<int> m_v5;
+    QVector<int> m_v2;
+    QVector<int> m_v1;
+    QVector<int> m_v05;
+
+    QVector<int> m_sv;
+    QVector<int> m_dev;
+    QVector<int> m_mDev;
+    QVector<int> m_peDev;
+    QVector<int> m_peMDev;
+
+    QVector<int> m_vfiRingStandard;
+    QVector<int> m_vfiRingTest;
+
+    float m_VFI_Weight[5]={3.29f,1.28f,0.79f,0.57f,0.43f};
+    float m_md,m_psd,m_VFI;
+
 
 
 private:
     void drawPixScale();
     void drawDBText();
+    void drawDevDBText(QVector<int> values);
     void drawGray();
-    QPoint convertDegLocToPixLoc(QPoint DegLoc);
+    void drawPE(QVector<int> values);
     void drawDBDiagram();
     void drawGrayDiagram();
     void drawTotalDeviation();
     void drawPatternDeviation();
+    void drawTotalPE();
+    void drawPatternPE();
+
+    void analysis();
+
+    QPoint convertDegLocToPixLoc(QPointF DegLoc);
+
+    void DrawDiagram();
 
 
 public:
-     Q_INVOKABLE void drawDiagram2(QString name,int os_od,int range,QVariantList dotList,QVariantList values);
+    Q_INVOKABLE void drawDiagram2(QString name,int os_od,int range,QVariantList dotList,QVariantList values);
 };
 }
 #endif // DIGRAM_PROVIDER_H
