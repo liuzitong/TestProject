@@ -1,4 +1,4 @@
-﻿#include "diagram_provider.h"
+﻿#include "analysis_provider.h"
 #include <QDebug>
 #include <QImage>
 #include <QPainter>
@@ -13,10 +13,11 @@
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <perimeter/main/viewModel/analysisResult.h>
 
 namespace Perimeter {
 
-DiagramProvider::DiagramProvider(QObject *parent) : QObject(parent)
+AnalysisProvider::AnalysisProvider(QObject *parent) : QObject(parent)
 {
     QFile jsonFile("./data.json");
     if( !jsonFile.open(QIODevice::ReadOnly)) {qDebug() << "read file error!";return;}
@@ -27,13 +28,13 @@ DiagramProvider::DiagramProvider(QObject *parent) : QObject(parent)
 
 }
 
-DiagramProvider::~DiagramProvider()
+AnalysisProvider::~AnalysisProvider()
 {
 
 }
 
 
-void DiagramProvider::runProcess(int printType,PatientVm *patient, CheckResultVm *checkResult, QObject *program)
+QObject* AnalysisProvider::runProcess(int printType,PatientVm *patient, CheckResultVm *checkResult, QObject *program)
 {
     m_type=program->property("type").toInt();
     m_printType=printType;
@@ -65,10 +66,11 @@ void DiagramProvider::runProcess(int printType,PatientVm *patient, CheckResultVm
 
     analysis();
     DrawDiagram();
+    return new AnalysisResult(m_md,m_psd,m_VFI,m_GHT);
 }
 
 
-QPointF DiagramProvider::getClickDot(float MouseX, float MouseY,float width,float height)
+QPointF AnalysisProvider::getClickDot(float MouseX, float MouseY,float width,float height)
 {
     qDebug()<<QString("x:%1,y:%2,w:%3,h:%4").arg(QString::number(MouseX)).arg(QString::number(MouseY)).arg(QString::number(width)).arg(QString::number(height));
 
@@ -94,7 +96,7 @@ QPointF DiagramProvider::getClickDot(float MouseX, float MouseY,float width,floa
 }
 
 
-QPointF DiagramProvider::getPixFromPoint(QPointF point, float width, float height)
+QPointF AnalysisProvider::getPixFromPoint(QPointF point, float width, float height)
 {
 
     qDebug()<<QString("x:nearestDot:%1,y:nearestDot:%2").arg(QString::number(point.x())).arg(QString::number(point.y()));
@@ -106,7 +108,7 @@ QPointF DiagramProvider::getPixFromPoint(QPointF point, float width, float heigh
 
 
 
-void DiagramProvider::drawPixScale()
+void AnalysisProvider::drawPixScale()
 {
     QPainter painter(&m_image);
     painter.setBackground(QBrush(QColor("white")));
@@ -125,7 +127,7 @@ void DiagramProvider::drawPixScale()
     }
 }
 
-void DiagramProvider::drawDBText()
+void AnalysisProvider::drawDBText()
 {
     QPainter painter(&m_image);
     int fontPixSize=12;
@@ -141,7 +143,7 @@ void DiagramProvider::drawDBText()
     }
 }
 
-void DiagramProvider::drawDevDBText(QVector<int> values)
+void AnalysisProvider::drawDevDBText(QVector<int> values)
 {
     QPainter painter(&m_image);
     int fontPixSize=12;
@@ -159,7 +161,7 @@ void DiagramProvider::drawDevDBText(QVector<int> values)
     }
 }
 
-void DiagramProvider::drawGray()
+void AnalysisProvider::drawGray()
 {
     QPainter painter(&m_image);
     int gap= m_range/15;
@@ -245,7 +247,7 @@ void DiagramProvider::drawGray()
     }
 }
 
-void DiagramProvider::drawPE(QVector<int> values)
+void AnalysisProvider::drawPE(QVector<int> values)
 {
     QPainter painter(&m_image);
     for(int i=0;i<m_dotList.length()&&i<m_values.length();i++)             //画DB图
@@ -258,14 +260,14 @@ void DiagramProvider::drawPE(QVector<int> values)
     }
 }
 
-QPoint DiagramProvider::convertDegLocToPixLoc(QPointF DegLoc)
+QPoint AnalysisProvider::convertDegLocToPixLoc(QPointF DegLoc)
 {
     float pixPerDegW=float(m_imageSize.width()/2)/m_range;
     float pixPerDegH=float(m_imageSize.width()/2)/m_range;
     return QPoint(m_image.width()/2+DegLoc.x()*pixPerDegW,m_image.height()/2-DegLoc.y()*pixPerDegH);
 }
 
-void DiagramProvider::DrawDiagram()
+void AnalysisProvider::DrawDiagram()
 {
 
     drawDBDiagram();
@@ -276,7 +278,7 @@ void DiagramProvider::DrawDiagram()
     drawPatternPE();
 }
 
-void DiagramProvider::drawDBDiagram()
+void AnalysisProvider::drawDBDiagram()
 {
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
@@ -284,7 +286,7 @@ void DiagramProvider::drawDBDiagram()
     m_image.save("./temp/dBDiagram.bmp","bmp");
 }
 
-void DiagramProvider::drawGrayDiagram()
+void AnalysisProvider::drawGrayDiagram()
 {
      m_image.fill(qRgb(255, 255, 255));
      drawPixScale();
@@ -292,7 +294,7 @@ void DiagramProvider::drawGrayDiagram()
      m_image.save("./temp/gray.bmp","bmp");
 }
 
-void DiagramProvider::drawTotalDeviation()
+void AnalysisProvider::drawTotalDeviation()
 {
 
     m_image.fill(qRgb(255, 255, 255));
@@ -302,7 +304,7 @@ void DiagramProvider::drawTotalDeviation()
 }
 
 
-void DiagramProvider::drawPatternDeviation()
+void AnalysisProvider::drawPatternDeviation()
 {
 
     m_image.fill(qRgb(255, 255, 255));
@@ -312,7 +314,7 @@ void DiagramProvider::drawPatternDeviation()
 
 }
 
-void DiagramProvider::drawTotalPE()
+void AnalysisProvider::drawTotalPE()
 {
     m_image.fill(qRgb(255, 255, 255));
     drawPE(m_peDev);
@@ -320,7 +322,7 @@ void DiagramProvider::drawTotalPE()
     m_image.save("./temp/TotalPE.bmp","bmp");
 }
 
-void DiagramProvider::drawPatternPE()
+void AnalysisProvider::drawPatternPE()
 {
     m_image.fill(qRgb(255, 255, 255));
     drawPE(m_peMDev);
@@ -328,7 +330,7 @@ void DiagramProvider::drawPatternPE()
     m_image.save("./temp/PatternPE.bmp","bmp");
 }
 
-void DiagramProvider::analysis()
+void AnalysisProvider::analysis()
 {
     m_pointLoc_30d.clear();
     m_pointLoc_60d.clear();
@@ -434,6 +436,12 @@ void DiagramProvider::analysis()
         jsonArrToVectorPoint(m_pointLoc_60d,"XY_NORMAL_VALUE_60d",jo);
         jsonArrToVectorInt(m_value_30d,XY_NORMAL_VALUE,jo);
         jsonArrToVectorInt(m_value_60d,"NORMAL_VALUE15_35_60d",jo);
+
+        jsonArrToVectorPoint(m_GHT1_RIGHT,"GHT1_RIGHT",jo);
+        jsonArrToVectorPoint(m_GHT2_RIGHT,"GHT2_RIGHT",jo);
+        jsonArrToVectorPoint(m_GHT3_RIGHT,"GHT3_RIGHT",jo);
+        jsonArrToVectorPoint(m_GHT4_RIGHT,"GHT4_RIGHT",jo);
+        jsonArrToVectorPoint(m_GHT5_RIGHT,"GHT5_RIGHT",jo);
 
         if(cursorColor==2&&backGroundColor==1&&cursorSize==4)
         {
@@ -567,7 +575,7 @@ void DiagramProvider::analysis()
 
     qDebug()<<m_psd;
 
-    int md=round(m_md+m_psd);                        //到底是round 还是celling?
+    int md=round(m_md+m_psd);
     qDebug()<<md;
 
     for(int i=0;i<m_dev.length();i++)
@@ -597,15 +605,71 @@ void DiagramProvider::analysis()
                 else m_peMDev[i]=4;
             }
         }
-
     }
 
+    auto isGHT=[](QVector<QPoint> GHTArr,QPoint point)->bool
+    {
+        for(auto&i:GHTArr)
+        {
+            if(i.x()==point.x()&&i.y()==point.y()) return true;
+        }
+    };
 
+    float ght[5][2];
+    bool b27=false;
+    memset(ght,0,sizeof(ght));
+    for(int i=0;i<m_dotList.length();i++)
+    {
+        int v;QPoint dot;
+        if(m_mDev[i]!=-99)
+            v=-m_mDev[i];
 
+        if(m_os_od==0)
+           dot=m_dotList[i].toPoint();
+        else
+           dot={-m_dotList[i].toPoint().x(),m_dotList[i].toPoint().y()};
+
+        if(isGHT(m_GHT1_RIGHT,dot)){ght[0][0]+=v;}
+        if(isGHT(m_GHT2_RIGHT,dot)){if(v>=7&&abs(dot.x())==abs(dot.y())) b27=true;ght[1][0]+=v;}
+        if(isGHT(m_GHT3_RIGHT,dot)){ght[2][0]+=v;}
+        if(isGHT(m_GHT4_RIGHT,dot)){ght[3][0]+=v;}
+        if(isGHT(m_GHT5_RIGHT,dot)){ght[4][0]+=v;}
+        if(isGHT(m_GHT1_RIGHT,{dot.x(),-dot.y()})){ght[0][1]+=v;}
+        if(isGHT(m_GHT2_RIGHT,{dot.x(),-dot.y()})){if(v>=7&&abs(dot.x())==abs(dot.y())) b27=true;ght[1][1]+=v;}
+        if(isGHT(m_GHT3_RIGHT,{dot.x(),-dot.y()})){ght[2][1]+=v;}
+        if(isGHT(m_GHT4_RIGHT,{dot.x(),-dot.y()})){ght[3][1]+=v;}
+        if(isGHT(m_GHT5_RIGHT,{dot.x(),-dot.y()})){ght[4][1]+=v;}
+    }
+
+    ght[0][0] *= 1 / 3;
+    ght[1][0] *= 1 / 4;
+    ght[2][0] *= 1 / 5;
+    ght[3][0] *= 1 / 6;
+    ght[4][0] *= 1 / 4;
+
+    ght[0][1] *= 1 / 3;
+    ght[1][1] *= 1 / 4;
+    ght[2][1] *= 1 / 5;
+    ght[3][1] *= 1 / 6;
+    ght[4][1] *= 1 / 4;
+
+    if (ght[0][0] >= 5 || ght[0][1] >= 5 || ght[1][0] >= 5 || ght[1][1] >= 5 ||
+        ght[2][0] >= 6 || ght[2][1] >= 6 || ght[3][0] >= 6 || ght[3][1] >= 6 || ght[4][0] >= 7 || ght[4][1] >= 7)
+    {
+        m_GHT = 0;
+    }
+    else if(b27)
+    {
+        m_GHT = 1;
+    }
+    else if(ght[0][0] > 3 || ght[0][1] > 3 || ght[2][0] >= 4 || ght[2][1] >= 4 || ght[3][0] >= 4 || ght[3][1] >= 4)
+    {
+        m_GHT = 2;
+    }
 }
 
 
-void DiagramProvider::drawDiagram2(QString name,int os_od ,int range, QVariantList dotList, QVariantList values)
+void AnalysisProvider::drawDiagram2(QString name,int os_od ,int range, QVariantList dotList, QVariantList values)
 {
     qDebug()<<range;
     QSize imageSize(240,240);

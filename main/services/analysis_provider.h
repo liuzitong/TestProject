@@ -12,16 +12,19 @@
 #include <perimeter/main/viewModel/checkResultVm.h>
 
 namespace Perimeter {
-class DiagramProvider : public QObject
+class AnalysisProvider : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit DiagramProvider(QObject *parent = nullptr);
-    ~DiagramProvider();
-    Q_INVOKABLE void runProcess(int printType,PatientVm* patient,CheckResultVm* checkResult,QObject* program);
+    explicit AnalysisProvider(QObject *parent = nullptr);
+    ~AnalysisProvider();
+    Q_INVOKABLE QObject* runProcess(int printType,PatientVm* patient,CheckResultVm* checkResult,QObject* program);
     Q_INVOKABLE QPointF getClickDot(float MouseX,float MouseY,float width,float height);
     Q_INVOKABLE QPointF getPixFromPoint(QPointF point,float width,float height);
+
+
+
 
 
 signals:
@@ -56,17 +59,30 @@ private:
     QVector<int> m_v1;
     QVector<int> m_v05;
 
+    QVector<QPoint> m_GHT1_RIGHT;
+    QVector<QPoint> m_GHT2_RIGHT;
+    QVector<QPoint> m_GHT3_RIGHT;
+    QVector<QPoint> m_GHT4_RIGHT;
+    QVector<QPoint> m_GHT5_RIGHT;
+
     QVector<int> m_sv;
     QVector<int> m_dev;
     QVector<int> m_mDev;
     QVector<int> m_peDev;
     QVector<int> m_peMDev;
 
+
+
     QVector<int> m_vfiRingStandard;
     QVector<int> m_vfiRingTest;
 
+
+
     float m_VFI_Weight[5]={3.29f,1.28f,0.79f,0.57f,0.43f};
     float m_md,m_psd,m_VFI;
+    int m_GHT;
+
+
 
 
 
@@ -82,8 +98,8 @@ private:
     void drawPatternDeviation();
     void drawTotalPE();
     void drawPatternPE();
-
     void analysis();
+
 
     QPoint convertDegLocToPixLoc(QPointF DegLoc);
 
