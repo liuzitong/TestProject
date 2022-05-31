@@ -615,6 +615,7 @@ void AnalysisProvider::analysis()
         }
     };
 
+
     float ght[5][2];
     bool b27=false;
     memset(ght,0,sizeof(ght));
@@ -653,6 +654,7 @@ void AnalysisProvider::analysis()
     ght[3][1] *= 1 / 6;
     ght[4][1] *= 1 / 4;
 
+    m_GHT=3;
     if (ght[0][0] >= 5 || ght[0][1] >= 5 || ght[1][0] >= 5 || ght[1][1] >= 5 ||
         ght[2][0] >= 6 || ght[2][1] >= 6 || ght[3][0] >= 6 || ght[3][1] >= 6 || ght[4][0] >= 7 || ght[4][1] >= 7)
     {

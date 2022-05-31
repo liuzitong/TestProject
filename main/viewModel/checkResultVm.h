@@ -47,6 +47,8 @@ class ResultDataVm:public QObject
     Q_PROPERTY(int falsePositiveTestCount READ getFalsePositiveTestCount WRITE setFalsePositiveTestCount)
     Q_PROPERTY(int falseNegativeCount READ getFalseNegativeCount WRITE setFalseNegativeCount)
     Q_PROPERTY(int falseNegativeTestCount READ getFalseNegativeTestCount WRITE setFalseNegativeTestCount)
+    Q_PROPERTY(int fixationLostCount READ getFixationLostCount WRITE setFixationLostCount)
+    Q_PROPERTY(int fixationLostTestCount READ getFixationLostTestCount WRITE setFixationLostTestCount)
     Q_PROPERTY(int stimulusCount READ getStimulusCount WRITE setStimulusCount)
     Q_PROPERTY(int thresholdCount READ getThresholdCount WRITE setThresholdCount)
     Q_PROPERTY(int testTimespan READ getTestTimespan WRITE setTestTimespan)
@@ -68,6 +70,8 @@ public:
     int getFalsePositiveTestCount(){return m_falseNegativeTestCount;}void setFalsePositiveTestCount(int value){m_falsePositiveTestCount=value;}
     int getFalseNegativeCount(){return m_falseNegativeCount;}void setFalseNegativeCount(int value){m_falseNegativeCount=value;}
     int getFalseNegativeTestCount(){return m_falseNegativeTestCount;}void setFalseNegativeTestCount(int value){m_falseNegativeTestCount=value;}
+    int getFixationLostCount(){return m_fixationLostCount;}void setFixationLostCount(int value){m_fixationLostCount=value;}
+    int getFixationLostTestCount(){return m_fixationLostTestCount;}void setFixationLostTestCount(int value){m_fixationLostTestCount=value;}
     int getStimulusCount(){return m_stimulusCount;}void setStimulusCount(int value){m_stimulusCount=value;}
     int getThresholdCount(){return m_thresholdCount;}void setThresholdCount(int value){m_thresholdCount=value;}
     int getTestTimespan(){return m_testTimespan;}void setTestTimespan(int value){m_testTimespan=value;}
@@ -84,6 +88,8 @@ private:
     int m_falsePositiveTestCount;
     int m_falseNegativeCount;
     int m_falseNegativeTestCount;
+    int m_fixationLostCount;
+    int m_fixationLostTestCount;
     int m_stimulusCount;
     int m_thresholdCount;
     int m_testTimespan;

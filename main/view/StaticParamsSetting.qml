@@ -18,6 +18,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
     signal ok();
     signal dataRefreshed();
     signal cancel();
+    property bool isCustomProg;
 
     property var currentProgram;
 
@@ -57,9 +58,10 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                     Rectangle{
                         id: rectangle
                         height: parent.height*0.07;width:parent.width-2;color: "#D2D2D3";anchors.horizontalCenter: parent.horizontalCenter;
-                        TabBar {id: bar;currentIndex: 0;height: parent.height*0.8;width:parent.width*0.20; anchors.bottom: parent.bottom; anchors.bottomMargin: 0;anchors.left: parent.left; anchors.leftMargin: 0.01*parent.width;spacing: 0;
-                            Repeater { model:["常用参数","固定参数"]
-                                TabButton {width: bar.width*0.5;height: parent.height;
+                        TabBar {id: bar;currentIndex: 0;height: parent.height*0.8;width:isCustomProg?parent.width*0.20:parent.width*0.10; anchors.bottom: parent.bottom; anchors.bottomMargin: 0;anchors.left: parent.left; anchors.leftMargin: 0.01*parent.width;spacing: 0;
+                            Repeater {
+                                model:isCustomProg?["常用参数","固定参数"]:["常用参数"]
+                                TabButton {width: isCustomProg?bar.width*0.5:bar.width*1;height: parent.height;
                                     Rectangle{anchors.fill: parent;color:parent.checked? "#E3E5E8":"#D2D2D3";
                                         Rectangle{width: parent.width;height: 3;color: "#0064B6";visible: parent.parent.checked? true:false; }
                                         CusText{text:modelData; anchors.fill: parent;color:parent.parent.checked?"#0064B6":"black";font.pointSize: height*0.3}

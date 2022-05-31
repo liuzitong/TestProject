@@ -56,6 +56,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
         StaticParamsSetting
         {
             id:staticParamsSetting;
+            isCustomProg:false;
             anchors.fill: parent;
         }
 

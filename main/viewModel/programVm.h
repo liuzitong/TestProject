@@ -19,6 +19,7 @@ class StaticProgramVM:public QObject
     Q_PROPERTY(QObject* params READ getParams)
     Q_PROPERTY(QVariantList strategies READ getStrategies  WRITE setStrategies)
     Q_PROPERTY(QVariantList dots READ getDots WRITE setDots )
+    Q_PROPERTY(QVariantList report READ getReport WRITE setReport )
     Q_PROPERTY(int category READ getCategory WRITE setCategory)
 
 public:
@@ -34,6 +35,8 @@ public:
     StaticParamsVM* getParams(){return m_staticParamsVm;}
     QVariantList getStrategies(){return m_strategies;}void setStrategies(QVariantList value){m_strategies=value;}
     QVariantList getDots(){return m_dots;}void setDots(QVariantList value){m_dots=value;}
+    QVariantList getReport(){return m_report;}void setReport(QVariantList value){m_report=value;}
+
     int getCategory(){return m_category;}void setCategory(int value){m_category=value;}
 
 private:
@@ -43,6 +46,7 @@ private:
     StaticParamsVM* m_staticParamsVm;
     QVariantList m_strategies;
     QVariantList m_dots;
+    QVariantList m_report;
     int m_category;
 
     Program_ptr getProgramData();
@@ -66,6 +70,7 @@ public:
     Q_PROPERTY(QString name READ getName WRITE setName);
     Q_PROPERTY(QObject* params READ getParams);
     Q_PROPERTY(QVariantList dots READ getDots WRITE setDots);
+    Q_PROPERTY(QVariantList report READ getDots WRITE setDots )
     Q_PROPERTY(int category READ getCategory WRITE setCategory)
 
     long getID(){return m_id;}void setID(int value){m_id=value;}
@@ -80,6 +85,7 @@ private:
     QString m_name;
     MoveParamVM* m_moveParamsVm;
     QVariantList m_dots;
+    QVariantList m_report;
     int m_category;
 
     Program_ptr getProgramData();

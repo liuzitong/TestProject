@@ -10,7 +10,8 @@ HEADERS += \
     $$PWD/patientListModelVm.h \
     $$PWD/programListModelVm.h \
     $$PWD/programVm.h \
-    $$PWD/paramsVm.h
+    $$PWD/paramsVm.h \
+    $$PWD/analysisResult.h
 
 SOURCES += \
     $$PWD/checkResultVm.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
     $$PWD/patientListModelVm.cpp \
     $$PWD/programListModelVm.cpp \
     $$PWD/paramsVm.cpp \
-    $$PWD/programVm.cpp
+    $$PWD/programVm.cpp \
+    $$PWD/analysisResult.cpp
 
 

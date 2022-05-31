@@ -174,10 +174,14 @@ Rectangle {
                     case "singleAnalysis":
                         singleAnalysisPage.currentCheckResult=params.checkResult;
                         singleAnalysisPage.currentProgram=params.program;
+                        if(singleAnalysisPage.analysisResult!=null){singleAnalysisPage.analysisResult.destroy();}
+                        singleAnalysisPage.analysisResult=params.analysisResult;
                         singleAnalysisPage.visible=true;
                         singleAnalysisPage.lastPage=params.pageFrom;
                         singleAnalysisPage.refresh();
                         console.log(params.checkResult.OS_OD);
+                        console.log(params.analysisResult.md);
+                        console.log(params.analysisResult.psd);
                         break;
                 }
             }

@@ -53,6 +53,7 @@ public:
     QString m_name;
     typename ParamTraits<type>::params m_params;
     typename ProgramDataTraits<type>::data m_data;
+    std::vector<int> m_report;
     Category m_category;
 
     ProgramModel()=default;
@@ -64,6 +65,7 @@ public:
         m_name=pp->m_name;
         m_params=Utility::QStringToEntity<ParamTraits<type>::params>(pp->m_params);
         m_data=Utility::QStringToEntity<ProgramDataTraits<type>::data>(pp->m_data);
+        m_report=Utility::QStringToEntity<std::vector<int>>(pp->m_report);
         m_category=static_cast<Category>(pp->m_category);
     }
 
@@ -75,9 +77,17 @@ public:
         pp->m_name=m_name;
         pp->m_params=Utility::entityToQString(m_params);
         pp->m_data=Utility::entityToQString(m_data);
+        pp->m_report=Utility::entityToQString(m_report);
         pp->m_category=static_cast<int>(m_category);
         return pp;
     }
+
+//    template<class Archive>
+//    void serialize(Archive& archive, const unsigned int version)
+//    {
+//        archive & BOOST_SERIALIZATION_NVP(m_report);
+//    }
+
 };
 
 

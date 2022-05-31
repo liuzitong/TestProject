@@ -33,6 +33,8 @@ struct ResultData
     int falsePositiveTestCount;
     int falseNegativeCount;
     int falseNegativeTestCount;
+    int fixationLostCount;
+    int fixationLostTestCount;
     int stimulusCount;
     int thresholdCount;
     int testTimespan;
@@ -51,6 +53,8 @@ struct ResultData
         archive & BOOST_SERIALIZATION_NVP(falsePositiveTestCount);
         archive & BOOST_SERIALIZATION_NVP(falseNegativeCount);
         archive & BOOST_SERIALIZATION_NVP(falseNegativeTestCount);
+        archive & BOOST_SERIALIZATION_NVP(fixationLostCount);
+        archive & BOOST_SERIALIZATION_NVP(fixationLostTestCount);
         archive & BOOST_SERIALIZATION_NVP(stimulusCount);
         archive & BOOST_SERIALIZATION_NVP(thresholdCount);
         archive & BOOST_SERIALIZATION_NVP(testTimespan);

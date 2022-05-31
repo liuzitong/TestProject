@@ -17,13 +17,14 @@ public:
     QString m_name;
     QString m_params;
     QString m_data;
+    QString m_report;
     int m_category;
     CheckResult_List m_checkResultX;
     Program()=default;
-    Program(int type,QString name,QString params,QString data,int category=4):
-        m_type(type),m_name(name),m_params(params),m_data(data),m_category(category){}
-    Program(long id,int type,QString name,QString params,QString data,int category=4):
-        m_id(id),m_type(type),m_name(name),m_params(params),m_data(data),m_category(category){}
+    Program(int type,QString name,QString params,QString data,QString report,int category=4):
+        m_type(type),m_name(name),m_params(params),m_data(data),m_report(report),m_category(category){}
+    Program(long id,int type,QString name,QString params,QString data,QString report,int category=4):
+        m_id(id),m_type(type),m_name(name),m_params(params),m_data(data),m_report(report),m_category(category){}
     virtual ~Program(){}
 };
 

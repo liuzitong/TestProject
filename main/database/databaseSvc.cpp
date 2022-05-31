@@ -7,7 +7,6 @@
 #include "perimeter/base/common/perimeter_memcntr.hxx"
 #include <QFile>
 #include <QDebug.h>
-#include <perimeter/main/appctrl/test.hpp>
 
 namespace Perimeter {
 
@@ -33,7 +32,7 @@ void databaseSvc::initDataBase()
     qx::QxSqlDatabase::getSingleton()->setDisplayTimerDetails(true);
     qx::QxSqlDatabase::getSingleton()->setVerifyOffsetRelation(true);
     if(!isDbThere)
-        Test::createTable();
+        createTable();
 }
 
 

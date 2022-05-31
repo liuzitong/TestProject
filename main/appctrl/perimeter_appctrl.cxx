@@ -8,7 +8,7 @@
 #include "perimeter/base/common/perimeter_guns.hxx"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
 #include "perimeter/main/appctrl/testclass.h"
-#include "perimeter/main/services/diagram_provider.h"
+#include "perimeter/main/services/analysis_provider.h"
 #include <QCoreApplication>
 
 // modules manager
@@ -33,7 +33,7 @@ private:
     bool        m_doubleName=false;
     QObject*    m_databaseSvc;
     QObject*    m_testClass;
-    QObject*    m_diagramProvider;
+    QObject*    m_analysisProvider;
 
 //    QObject*    m_currentPatient;
 public :
@@ -47,7 +47,7 @@ public :
     //Custom Code
     QObject*    getDatabaseSvcObj() const           {return m_databaseSvc;}
     QObject*    getTestClass() const                {return m_testClass;}
-    QObject*    getDiagramProvider() const          {return m_diagramProvider;}
+    QObject*    getDiagramProvider() const          {return m_analysisProvider;}
     QString     getLanguage()                       {return m_language;}
     void        setLanguage(QString value)          {m_language=value;}
     bool        getDoubleName()                     {return m_doubleName;}
@@ -68,7 +68,7 @@ AppCtrlPriv :: AppCtrlPriv ( AppCtrl *pa )
 //    m_databaseSvc = static_cast<QObject*>(new databaseSvc());
     m_databaseSvc = perimeter_new(databaseSvc);
     m_testClass = perimeter_new(TestClass);
-    m_diagramProvider=perimeter_new(DiagramProvider);
+    m_analysisProvider=perimeter_new(AnalysisProvider);
 //    m_currentPatient=perimeter_new(PatientVm);
 }
 
@@ -83,7 +83,7 @@ AppCtrlPriv :: ~AppCtrlPriv ( )
     AppSettingsSvc::freeInstance();
 //    delete m_databaseSvc;
     perimeter_delete(m_databaseSvc,databaseSvc);
-    perimeter_delete(m_diagramProvider,DiagramProvider);
+    perimeter_delete(m_analysisProvider,AnalysisProvider);
     perimeter_delete(m_testClass,TestClass);
 //    perimeter_delete(m_currentPatient,PatientVm);
 }

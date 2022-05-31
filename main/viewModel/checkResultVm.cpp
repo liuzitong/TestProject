@@ -59,6 +59,8 @@ ResultDataVm::ResultDataVm(ResultData<Type::ThreshHold> resultData)
     m_falseNegativeTestCount=resultData.falseNegativeTestCount;
     m_falsePositiveCount=resultData.falsePositiveCount;
     m_falsePositiveTestCount=resultData.falsePositiveTestCount;
+    m_fixationLostCount=resultData.fixationLostCount;
+    m_fixationLostTestCount=resultData.fixationLostTestCount;
     m_stimulusCount=resultData.stimulusCount;
     m_thresholdCount=resultData.thresholdCount;
     m_testTimespan=resultData.testTimespan;
@@ -77,6 +79,8 @@ ResultDataVm::ResultDataVm(ResultData<Type::Move> resultData)
     m_falseNegativeTestCount=resultData.falseNegativeTestCount;
     m_falsePositiveCount=resultData.falsePositiveCount;
     m_falsePositiveTestCount=resultData.falsePositiveTestCount;
+    m_fixationLostCount=resultData.fixationLostCount;
+    m_fixationLostTestCount=resultData.fixationLostTestCount;
     m_stimulusCount=resultData.stimulusCount;
     m_thresholdCount=resultData.thresholdCount;
     m_testTimespan=resultData.testTimespan;

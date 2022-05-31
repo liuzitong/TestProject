@@ -238,7 +238,7 @@ public:
 
         CheckResultModel<Type::ThreshHold> crm;
         crm.m_type=Type::ThreshHold;
-        crm.m_data={1,2,3,4,10,5,3,2,3,1,3,{3,2,3,2},{11,223,11,22,33,22},{2,4,2,3,5,2,33,55,32,33}};
+        crm.m_data={1,2,3,4,11,12,10,5,3,2,3,1,3,{3,2,3,2},{11,223,11,22,33,22},{2,4,2,3,5,2,33,55,32,33}};
         crm.m_time=QDateTime::currentDateTime();
         auto cr_ptr=crm.ModelToDB();
 
@@ -293,7 +293,7 @@ public:
         CheckResult_ptr checkResult_1,checkResult_2,checkResult_3,checkResult_4;
         Program_ptr program_1,program_2;
         program_1.reset(new Program);
-        program_2.reset(new Program(2,2,"30-2","program2 params","program2 data"));
+        program_2.reset(new Program(2,2,"30-2","program2 params","program2 data",""));
 
         program_1->m_id=1;
         program_1->m_data="program1data";

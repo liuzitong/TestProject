@@ -28,6 +28,12 @@ StaticProgramVM::StaticProgramVM(const QVariantList & args)
 //    qDebug()<<programModel->m_params.commonParams.Range[0];
 //    qDebug()<<programModel->m_params.commonParams.Range[1];
     m_category=int(programModel->m_category);
+
+    for(auto& v:programModel->m_report)
+    {
+        m_report.append(v);
+    }
+
     for(auto& v:programModel->m_data.strategies)
     {
         m_strategies.append(int(v));
@@ -80,6 +86,13 @@ Program_ptr StaticProgramVM::getProgramData()
         programModel->m_data.strategies.push_back(StaticParams::CommonParams::Strategy(v.toInt()));
     }
 
+    for(auto& v:m_report)
+    {
+        programModel->m_report.push_back(v.toInt());
+    }
+
+
+
     for(auto& v:m_dots)
     {
         if(fabs(v.toPointF().x())<0.05&&fabs(v.toPointF().y())<0.05)
@@ -128,6 +141,12 @@ MoveProgramVM::MoveProgramVM(const QVariantList & args)
         m_dots.append(QPoint(v.x,v.y));
     }
 
+    for(auto& v:programModel->m_report)
+    {
+        m_report.append(v);
+    }
+
+
 }
 
 MoveProgramVM::~MoveProgramVM()
@@ -165,6 +184,7 @@ Program_ptr MoveProgramVM::getProgramData()
     programModel->m_category= Category(m_category);
 
 
+
     for(auto& v:m_dots)
     {
         if(fabs(v.toPointF().x())<0.05&&fabs(v.toPointF().y())<0.05)
@@ -177,6 +197,12 @@ Program_ptr MoveProgramVM::getProgramData()
             programModel->m_data.dots.push_back({float(v.toPointF().x()),float(v.toPointF().y())});
         }
     }
+
+    for(auto& v:m_report)
+    {
+        programModel->m_report.push_back(v.toInt());
+    }
+
 
     return programModel->ModelToDB();
 }
