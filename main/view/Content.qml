@@ -13,6 +13,7 @@ Rectangle {
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
     property string ribbonColor: "#333e44"
+    property string selectionColor: value
     property string language:IcUiQmlApi.appCtrl.language
     property var currentPatient: patientPage.currentPatient;
 
@@ -86,10 +87,10 @@ Rectangle {
                         Flow{
                             height: parent.height;anchors.right: parent.right;spacing: height*1
 
-                            CusButton{
-                                width: parent.height*2;text: "DoStuff";
-                                onClicked: {IcUiQmlApi.appCtrl.testClass.test();}
-                            }
+//                            CusButton{
+//                                width: parent.height*2;text: "DoStuff";
+//                                onClicked: {IcUiQmlApi.appCtrl.testClass.test();}
+//                            }
                             CusButton{
                                 type:"click";isAnime: false;underImageText.text: "设置";underImageText.color: "white"; fontSize: height/4;rec.visible: false;
                                 width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_set.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_set_select.svg";
@@ -178,10 +179,10 @@ Rectangle {
                         singleAnalysisPage.analysisResult=params.analysisResult;
                         singleAnalysisPage.visible=true;
                         singleAnalysisPage.lastPage=params.pageFrom;
+                        singleAnalysisPage.report=params.report;
                         singleAnalysisPage.refresh();
-                        console.log(params.checkResult.OS_OD);
-                        console.log(params.analysisResult.md);
-                        console.log(params.analysisResult.psd);
+                        console.log(params.report);
+
                         break;
                 }
             }

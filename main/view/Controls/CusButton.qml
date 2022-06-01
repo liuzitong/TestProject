@@ -2,7 +2,7 @@
 import QtQml 2.2
 Item{
     id:root
-    property alias buttonColor: rec.color;
+    property string buttonColor: "#dcdee0";
     property string hoverBorderColor: "black"
     property string pressBorderColor: "#006486"
     property string commonBorderColor: "#bdc0c6"
@@ -98,7 +98,7 @@ Item{
         id:rec
         width:parent.width
         height:parent.height
-        color: enabled?"#dcdee0":"#787878"
+        color: enabled?buttonColor:"#a0a0a0"
         radius: root.radius
         border.color: root.borderColor
         border.width: root.borderWidth

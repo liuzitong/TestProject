@@ -17,6 +17,7 @@ Item {id:root; width: 1366;height: 691
     property var currentProgram: null;
     property var currentPatient: null;
     property var currentCheckResult: null;
+
     Column{anchors.fill: parent;
         Rectangle{width: parent.width; height: parent.height*14/15; id:content;
             ChooseProgram{id:chooseProgram;anchors.fill: parent;onOk:{root.currentProgram=currentProgram;currentProgram.type!==2?staticParamsSetting.currentProgram=currentProgram:moveParamsSetting.currentProgram=currentProgram;}}
@@ -191,30 +192,61 @@ Item {id:root; width: 1366;height: 691
                     Item{id: item1; anchors.fill: parent;anchors.margins:parent.height*0.15;
                         Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
                             CusButton{text:"开始测试";
-                                onClicked:{console.log("hllo.");if(currentCheckResult!=null) {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);}
+                                onClicked:{
+                                    if(currentCheckResult!=null) {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);}
                                     currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[3]);}}
                             CusButton{text:"停止测试";}
                             CusButton{text:"切换眼别";}
                             CusComboBox{
                                 id:queryStrategy;height: parent.height;width: parent.height*3.5;
+                                property var listModel:ListModel {}
+                                property int report;
                                 borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                                 imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                                model: ListModel {ListElement { text: "常规分析" } ListElement { text: "三合一图" } ListElement { text: "总览图" }}
+//                                model:ListModel {ListElement { text: "常规分析" } ListElement { text: "三合一图" } ListElement { text: "总览图" }ListElement { text: "筛选" }}
+                                model: listModel;
+                                popDirectionDown: false;
+                                complexType: true;
+
+
+                                Component.onCompleted: {
+                                    root.currentProgramChanged.connect(function()
+                                    {
+                                        listModel.clear();
+                                        var report=currentProgram.report;
+                                        report.forEach(function(item){
+                                            console.log(item);
+                                            if(item===0) listModel.append({name:"常规分析",report:0});
+                                            if(item===1) listModel.append({name:"三合一图",report:1});
+                                            if(item===2) listModel.append({name:"总览图",report:2});
+                                            if(item===3) listModel.append({name:"筛选",report:3});
+                                        })
+                                        currentIndex=0;
+                                    })
+                                }
+                                onCurrentIndexChanged:report=listModel.get(currentIndex).report;
                             }
                         }
-                        CusButton{text:"分析"; anchors.right: parent.right;onClicked:
+                        CusButton{text:"分析"; anchors.right: parent.right;
+                            onClicked:
                             {
-
                                 console.log(currentCheckResult.type);
                                 var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
 //                                IcUiQmlApi.appCtrl.diagramProvider.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,currentCheckResult.resultData.checkData);
                                 var analysisResult=IcUiQmlApi.appCtrl.diagramProvider.runProcess(0,currentPatient,currentCheckResult,currentProgram);
-                                changePage("singleAnalysis",{pageFrom:"check",program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
+//                                if(queryStrategy.report==0){reportPage="singleAnalysis";}
+//                                else if(queryStrategy.report==1){reportPage="three-in-one";}
+//                                else if(queryStrategy.report==2){reportPage="overview";}
+//                                else if(queryStrategy.report==3){reportPage="screening";}
+
+
+                                changePage("singleAnalysis",{pageFrom:"check",report:queryStrategy.report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
                             }
                         }
                     }
                 }
             }
-        }
     }
+}
+
 }

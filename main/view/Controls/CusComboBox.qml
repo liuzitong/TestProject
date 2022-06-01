@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 
 ComboBox {
     id: control
-    model: ["First", "Second", "Third"]
+    model: ["First","Second","Third"]
     property string borderColor:"#bdc0c6"
     property string borderColorPressed:"Brown"
     property string imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
@@ -11,13 +11,17 @@ ComboBox {
     font.family:"Microsoft YaHei"
     font.pointSize:height*0.30;
     height: parent.height;
+    property bool complexType: false;
+    property bool popDirectionDown: true;
+    //    currentIndex: 0
+
 
 
     delegate: ItemDelegate {
         width: control.width
         height: control.height
         contentItem: Text {
-            text: modelData
+            text: complexType?name:modelData;
             font: control.font
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
@@ -35,12 +39,13 @@ ComboBox {
             anchors.right: parent.right
             source: imageSrc
             anchors.rightMargin: 10
+            rotation:popDirectionDown? 0:180;
         }
 
     contentItem: Text {
         leftPadding: control.height*0.5
         rightPadding: control.indicator.width + control.spacing
-        text: control.displayText
+        text: complexType?model.get(currentIndex).name:displayText;
         font: control.font
 //        color: control.pressed ? "#17a81a" : "#21be2b"
         horizontalAlignment: Text.AlignLeft
@@ -61,7 +66,7 @@ ComboBox {
     popup: Popup {
         y: control.height - 1
         width: control.width
-        implicitHeight: listview.contentHeight+(listview.count-1)*padding;
+        implicitHeight: listview.contentHeight+(listview.count-1)*padding+3;
         padding: 2;
 
         contentItem: ListView {

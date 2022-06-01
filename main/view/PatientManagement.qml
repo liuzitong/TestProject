@@ -72,7 +72,7 @@ Item{
                                 id:queryStrategy;height: parent.height;width: parent.height*5;
                                 borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                                 imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                                model: ListModel {ListElement { text: "按时间查询" } ListElement { text: "患者ID" } ListElement { text: "姓名" }ListElement { text: "性别" }ListElement { text: "出生日期" }}
+                                model: ListModel {ListElement { name: "按时间查询" } ListElement { name: "患者ID" } ListElement { name: "姓名" }ListElement { name: "性别" }ListElement { name: "出生日期" }}
                                 onCurrentIndexChanged: {
                                     patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;sex.visible=false;birthDateGroup.visible=false;dateSelection.opacity=0;
                                     switch(currentIndex)
@@ -443,7 +443,7 @@ Item{
             anchors.fill: parent;anchors.margins:parent.height*0.15;
             Item{
                 height: parent.height;width:parent.width*0.6;
-                CusButton{text:"关闭"}
+                CusButton{text:"关闭";onClicked:Qt.quit()}
                 Flow{
                     height: parent.height;spacing: height*0.8
                     anchors.horizontalCenter: parent.horizontalCenter

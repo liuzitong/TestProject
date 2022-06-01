@@ -5,6 +5,7 @@ Item {
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
     property string ribbonColor: "#333e44"
+    property string darkButtonColor:"#e0e0e0";
 
 }
 

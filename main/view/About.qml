@@ -4,14 +4,16 @@ import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0     // [HINT] this is the pre-registered module name.
 import qxpack.indcom.ui_qml_control 1.0  // [HINT] ModalPopupDialog is in it
+import perimeter.main.view.Utils 1.0
 
-ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_contro
+ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml_contro
     id:idPopup
     property alias color: idContent.color;
     reqEnterEventLoop:false;
-//    width:1280; height: 960;
+//    width: 1366;height: 680;
 //    property alias contentWidth : idContent.implicitWidth;
 //    property alias contentHeight: idContent.implicitHeight;
+
 
    contentItem:
    Rectangle{
@@ -19,14 +21,14 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_contro
         Rectangle
         {
         // [HINT] Popup element need implicitWidth & implicitHeight to calc. the right position
-            id: menu; width:idPopup.width*0.35; height: idPopup.height*0.6;color: "#dcdee0";radius: 5;/*width:480; height:480;*/
+            id: menu; width:idPopup.width*0.32; height: idPopup.height*0.7;color: "#f0f1f2";radius: 5;/*width:480; height:480;*/
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             border.color: "#7C7C7C";
             Column{
                 anchors.fill: parent;
                 Canvas{
-                    id:header;height: parent.height/12;width: parent.width;
+                    id:header;height: parent.height/14;width: parent.width;
                     property alias radius: menu.radius;
                     onPaint: {
                         var ctx = getContext("2d");
@@ -76,14 +78,14 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_contro
                             Item{height:parent.height*0.06;width: parent.width; }
 
                             CusText{
-                                height:parent.height*0.05;width: parent.width;
+                                height:parent.height*0.04;width: parent.width;
                                 text: "型    号: Perimeter" ;horizontalAlignment: Text.AlignLeft;
                                 font.pointSize:height*0.6;
                             }
                             Item{height:parent.height*0.06;width: parent.width; }
 
                             CusText{
-                                height:parent.height*0.05;width: parent.width;
+                                height:parent.height*0.04;width: parent.width;
                                 text: "软件版本: 1.0"
                                 horizontalAlignment: Text.AlignLeft;
                                 font.pointSize:height*0.6;
@@ -94,9 +96,10 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_contro
                             }
 
                             CusText{
-                                height:parent.height*0.05;width: parent.width;
+                                height:parent.height*0.04;width: parent.width;
                                 text: "版权所有 ©2019 重庆贝奥新视野医疗设备有限公司"
-                                horizontalAlignment: Text.AlignLeft;
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                horizontalAlignment: Text.AlignHCenter
                                 font.pointSize:height*0.6;
                             }
                             Item{height:parent.height*0.12;width: parent.width; }
@@ -107,6 +110,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_contro
                         Item{
                             height: parent.height*0.08; anchors.bottom: parent.bottom; width: parent.width;
                             CusButton{
+                                buttonColor: "#e0e0e0";
                                 text:"确定"
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 onClicked: {

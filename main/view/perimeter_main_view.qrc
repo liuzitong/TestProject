@@ -16,6 +16,7 @@
         <file>SaveToAnotherProgram.qml</file>
         <file>ChooseProgram.qml</file>
         <file>SingleAnalysis.qml</file>
+        <file>SingleField.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>
