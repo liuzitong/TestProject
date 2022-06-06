@@ -57,8 +57,10 @@ void PatientVm::insert()
 {
     m_lastUpdate=QDateTime::currentDateTime();
     auto patient_ptr=QSharedPointer<Patient>(new Patient(m_patientID,m_name,Patient::sex(m_sex),m_birthDate,m_lastUpdate));
-    qx::dao::update(patient_ptr);
+    qx::dao::insert(patient_ptr);
 }
+
+
 
 
 

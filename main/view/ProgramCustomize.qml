@@ -28,7 +28,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 //    property int type;
 //    property var newProgram;
     signal changePage(var pageName,var params);
-    function rePaintCanvas(){display.requestPaint();}
+//    function rePaintCanvas(){display.requestPaint();}
     Rectangle{id:content;width: parent.width;height: parent.height*14/15
         NewProgram{
             id:newProgram;
@@ -228,7 +228,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                 displayCanvas.requestPaint();
 
                             }
-                            onDotListChanged:{console.log("changed");currentProgram.dots=dotList;currentProgram.type===2?moveParamsSetting.currentProgramChanged():staticParamsSetting.currentProgramChanged();}
+                            onDotListChanged:{if(currentProgram!==null) {currentProgram.dots=dotList;currentProgram.type===2?moveParamsSetting.currentProgramChanged():staticParamsSetting.currentProgramChanged();}}
                         }
                     }
                 }

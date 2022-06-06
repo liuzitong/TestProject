@@ -13,7 +13,7 @@ Rectangle {
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
     property string ribbonColor: "#333e44"
-    property string selectionColor: value
+    property string selectionColor: "";
     property string language:IcUiQmlApi.appCtrl.language
     property var currentPatient: patientPage.currentPatient;
 
@@ -117,7 +117,7 @@ Rectangle {
             Check{id:checkPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
             ProgramCustomize{id:programPage;anchors.fill: parent;visible: false;onChangePage: contentPage.changePage(pageName,params);}
             AnalysisLobby{id:analysisLobbypage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
-            SingleAnalysis{id:singleAnalysisPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
+            Analysis{id:analysisPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
 
 //            Component.onCompleted: {
 //                IcUiQmlApi.appCtrl.changePage.connect(changePage);
@@ -130,8 +130,8 @@ Rectangle {
 
             function changePage(pageName,params)
             {
-                console.log(pageName);
-                patientPage.visible=false;checkPage.visible=false;programPage.visible=false;analysisLobbypage.visible=false;singleAnalysisPage.visible=false;
+                console.log("change to page "+pageName);
+                patientPage.visible=false;checkPage.visible=false;programPage.visible=false;analysisLobbypage.visible=false;analysisPage.visible=false;
                 switch(pageName)
                 {
                     case "patientManagement":
@@ -172,17 +172,15 @@ Rectangle {
                         checkContentButton.image.source=checkContentButton.imageSrc;
 //                        patientInfo.visible=false;
                         break;
-                    case "singleAnalysis":
-                        singleAnalysisPage.currentCheckResult=params.checkResult;
-                        singleAnalysisPage.currentProgram=params.program;
-                        if(singleAnalysisPage.analysisResult!=null){singleAnalysisPage.analysisResult.destroy();}
-                        singleAnalysisPage.analysisResult=params.analysisResult;
-                        singleAnalysisPage.visible=true;
-                        singleAnalysisPage.lastPage=params.pageFrom;
-                        singleAnalysisPage.report=params.report;
-                        singleAnalysisPage.refresh();
-                        console.log(params.report);
-
+                    case "analysis":
+                        analysisPage.currentCheckResult=params.checkResult;
+                        analysisPage.currentProgram=params.program;
+                        if(analysisPage.analysisResult!==null){analysisPage.analysisResult.destroy();}
+                        analysisPage.analysisResult=params.analysisResult;
+                        analysisPage.visible=true;
+                        analysisPage.lastPage=params.pageFrom;
+                        analysisPage.report=params.report;
+                        analysisPage.refresh();
                         break;
                 }
             }

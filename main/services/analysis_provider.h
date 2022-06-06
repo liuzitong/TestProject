@@ -106,8 +106,8 @@ private:
     void DrawDiagram();
 
 
-public:
-    Q_INVOKABLE void drawDiagram2(QString name,int os_od,int range,QVariantList dotList,QVariantList values);
+//public:
+//    Q_INVOKABLE void drawDiagram2(QString name,int os_od,int range,QVariantList dotList,QVariantList values);
 };
 }
 #endif // DIGRAM_PROVIDER_H

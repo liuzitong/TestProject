@@ -170,7 +170,6 @@ Item{
                                     Component.onCompleted: {
                                         patientListModelVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::PatientListModelVm", true);
 //                                        patientListModelVm.getPatientListByTimeSpan(dateFrom.text,dateTo.text);
-                                        patientListModelVm.hello();
                                     }
                                     Component.onDestruction: {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientListModelVm",patientListModelVm);}
                                     Component{

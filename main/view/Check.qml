@@ -215,7 +215,7 @@ Item {id:root; width: 1366;height: 691
                                         listModel.clear();
                                         var report=currentProgram.report;
                                         report.forEach(function(item){
-                                            console.log(item);
+//                                            console.log(item);
                                             if(item===0) listModel.append({name:"常规分析",report:0});
                                             if(item===1) listModel.append({name:"三合一图",report:1});
                                             if(item===2) listModel.append({name:"总览图",report:2});
@@ -240,7 +240,7 @@ Item {id:root; width: 1366;height: 691
 //                                else if(queryStrategy.report==3){reportPage="screening";}
 
 
-                                changePage("singleAnalysis",{pageFrom:"check",report:queryStrategy.report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
+                                changePage("analysis",{pageFrom:"check",report:queryStrategy.report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
                             }
                         }
                     }

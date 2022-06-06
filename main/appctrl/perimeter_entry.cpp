@@ -66,6 +66,16 @@ static void gMsgHandler( QtMsgType type, const QMessageLogContext &ctxt, const Q
     } break;
 
     case QtWarningMsg : {
+        if  (
+                msg.contains("QFont")||
+                msg.contains(R"(Binding loop detected for property "margins")")||
+                msg.contains(R"(Binding loop detected for property "font.pointSize")")||
+                msg.contains("TypeError: Cannot read property")||
+                msg.contains("depends on non-NOTIFYable properties")||
+                QString(ctxt.function).contains("QQmlJavaScriptExpression")
+            )
+        break;
+
         fmt_str = QString("[Warn ] 0x%1 %2 ( ln:%3, %4 %5 )\n")
                   .arg( t_id, 0, 16 ).arg( msg ).arg( ctxt.line ).arg( QString( ctxt.function )).arg( tmp );
     } break;

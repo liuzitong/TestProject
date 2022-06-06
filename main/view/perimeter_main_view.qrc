@@ -15,8 +15,10 @@
         <file>StaticParamsSetting.qml</file>
         <file>SaveToAnotherProgram.qml</file>
         <file>ChooseProgram.qml</file>
-        <file>SingleAnalysis.qml</file>
-        <file>SingleField.qml</file>
+        <file>Analysis.qml</file>
+        <file>StaticAnalysis.qml</file>
+        <file>MoveAnalysis.qml</file>
+        <file>StaticAnalysisContent.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

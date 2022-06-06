@@ -10,7 +10,7 @@ import perimeter.main.view.Utils 1.0
 Column {
     id:root
     anchors.fill:parent;
-    property string lastPage: null;
+    property string lastPage: "";
     property var currentPatient: null;
     property var currentProgram: null;
     property var currentCheckResult: null;
@@ -19,9 +19,20 @@ Column {
     property int textHeight: height*0.05;
 
     signal refresh();
-    width: 1366;height:686
     signal changePage(var pageName,var params);
-    onRefresh: {console.log(report);content.source="SingleField.qml";
+
+    onRefresh: {
+        console.log("report type is "+report);
+        var type=currentProgram.type;
+        if(type!==2)
+        {
+            content.source="StaticAnalysis.qml";
+        }
+        else
+        {
+            content.source="MoveAnalysis.qml";
+        }
+
         content.item.refresh();
         content.item.textHeight=textHeight;
         content.item.currentPatient=currentPatient;
@@ -29,14 +40,29 @@ Column {
         content.item.currentCheckResult=currentCheckResult;
         content.item.analysisResult=analysisResult;
     }
-//    Item{
-//        id:content;
-//        width: parent.width;height: parent.height*14/15;
-        Loader{
-            id:content;
-            width: parent.width;height: parent.height*14/15;
-        }
+
+
+    Loader{
+        id:content;
+        width: parent.width;height: parent.height*14/15;
+    }
+
+
+//    onRefresh: {
+//        sf.textHeight=textHeight;
+//        sf.currentPatient=currentPatient;
+//        sf.currentProgram=currentProgram;
+//        sf.currentCheckResult=currentCheckResult;
+//        sf.analysisResult=analysisResult;
+//        sf.refresh();
 //    }
+
+
+//    SingleField{
+//        id:sf;
+//        width: parent.width;height: parent.height*14/15;
+//    }
+
     Rectangle{id:bottomRibbon;width: parent.width;height: parent.height*1/15;color:CommonSettings.ribbonColor;
         Row{anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.20;
@@ -72,3 +98,8 @@ Column {
         }
     }
 }
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

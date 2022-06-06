@@ -35,7 +35,6 @@ Canvas{
         if(dots!==null)
         {
             var ctx = getContext("2d")
-            console.log(dots.length);
             for(var i=1;i<dots.length;i++)
             {
                 var temp=dots[i];
