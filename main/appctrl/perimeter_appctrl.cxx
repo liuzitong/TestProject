@@ -47,7 +47,7 @@ public :
     //Custom Code
     QObject*    getDatabaseSvcObj() const           {return m_databaseSvc;}
     QObject*    getTestClass() const                {return m_testClass;}
-    QObject*    getDiagramProvider() const          {return m_analysisProvider;}
+    QObject*    getAnalysisProvider() const          {return m_analysisProvider;}
     QString     getLanguage()                       {return m_language;}
     void        setLanguage(QString value)          {m_language=value;}
     bool        getDoubleName()                     {return m_doubleName;}
@@ -135,9 +135,9 @@ QObject *  AppCtrl::getTestClass() const
     return T_PrivPtr( m_obj )-> getTestClass();
 }
 
-QObject *AppCtrl::getDiagramProvider() const
+QObject *AppCtrl::getAnalysisProvider() const
 {
-    return T_PrivPtr( m_obj )-> getDiagramProvider();
+    return T_PrivPtr( m_obj )-> getAnalysisProvider();
 }
 QString     AppCtrl::getLanguage()                      {return T_PrivPtr( m_obj )->getLanguage() ;}
 void        AppCtrl::setLanguage(QString value)         {T_PrivPtr( m_obj )->setLanguage(value) ;emit languageChanged(value);}

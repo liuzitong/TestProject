@@ -19,12 +19,10 @@ class AnalysisProvider : public QObject
 public:
     explicit AnalysisProvider(QObject *parent = nullptr);
     ~AnalysisProvider();
-    Q_INVOKABLE QObject* runProcess(int printType,PatientVm* patient,CheckResultVm* checkResult,QObject* program);
+    Q_INVOKABLE QObject* runProcess(int report,PatientVm* patient,CheckResultVm* checkResult,QObject* program);
     Q_INVOKABLE QPointF getClickDot(float MouseX,float MouseY,float width,float height);
     Q_INVOKABLE QPointF getPixFromPoint(QPointF point,float width,float height);
-
-
-
+    Q_INVOKABLE int getSelectedDotIndex(){return m_selectedDotIndex;};
 
 
 signals:
@@ -33,12 +31,12 @@ public slots:
 private:
     QSize m_imageSize=QSize(240,240);
     QImage m_image=QImage(m_imageSize, QImage::Format_RGB32);
-    int m_printType;   //0,30-2
+    int m_report;   //0,30-2
     int m_os_od;
     int m_range;
     int m_innerRange;
     int m_selectedDotIndex;
-    int m_type;
+    int m_programType;
 
     QVector<QPointF> m_dotList;
     QVector<int> m_values;
@@ -94,6 +92,7 @@ private:
     void drawPE(QVector<int> values);
     void drawDBDiagram();
     void drawGrayDiagram();
+    void drawDefectDepthDiagram();
     void drawTotalDeviation();
     void drawPatternDeviation();
     void drawTotalPE();
@@ -101,13 +100,12 @@ private:
     void analysis();
 
 
+
     QPoint convertDegLocToPixLoc(QPointF DegLoc);
 
     void DrawDiagram();
 
 
-//public:
-//    Q_INVOKABLE void drawDiagram2(QString name,int os_od,int range,QVariantList dotList,QVariantList values);
 };
 }
 #endif // DIGRAM_PROVIDER_H

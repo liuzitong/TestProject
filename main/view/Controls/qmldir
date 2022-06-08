@@ -10,3 +10,4 @@ NumberLineEdit 1.0  NumberLineEdit.qml
 ProgramCustomizeDisplay 1.0       ProgramCustomizeDisplay.qml
 ShortTermFluctuation 1.0   ShortTermFluctuation.qml
 VisionDiagram 1.0   VisionDiagram.qml
+AnalysisDiagram 1.0 AnalysisDiagram.qml

@@ -33,12 +33,13 @@ Column {
             content.source="MoveAnalysis.qml";
         }
 
-        content.item.refresh();
         content.item.textHeight=textHeight;
         content.item.currentPatient=currentPatient;
         content.item.currentProgram=currentProgram;
         content.item.currentCheckResult=currentCheckResult;
         content.item.analysisResult=analysisResult;
+        content.item.report=report;
+        content.item.refresh();
     }
 
 

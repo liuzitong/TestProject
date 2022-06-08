@@ -232,8 +232,8 @@ Item {id:root; width: 1366;height: 691
                             {
                                 console.log(currentCheckResult.type);
                                 var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
-//                                IcUiQmlApi.appCtrl.diagramProvider.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,currentCheckResult.resultData.checkData);
-                                var analysisResult=IcUiQmlApi.appCtrl.diagramProvider.runProcess(0,currentPatient,currentCheckResult,currentProgram);
+//                                IcUiQmlApi.appCtrl.AnalysisProvider.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,currentCheckResult.resultData.checkData);
+                                var analysisResult=IcUiQmlApi.appCtrl.AnalysisProvider.runProcess(queryStrategy.report,currentPatient,currentCheckResult,currentProgram);
 //                                if(queryStrategy.report==0){reportPage="singleAnalysis";}
 //                                else if(queryStrategy.report==1){reportPage="three-in-one";}
 //                                else if(queryStrategy.report==2){reportPage="overview";}
