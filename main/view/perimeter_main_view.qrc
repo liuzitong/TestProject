@@ -20,6 +20,8 @@
         <file>MoveAnalysis.qml</file>
         <file>StaticAnalysisReportSingle.qml</file>
         <file>StaticAnalysisReportThreeInOne.qml</file>
+        <file>StaticAnalysisReportOverView.qml</file>
+        <file>StaticAnalysisReportScreening.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

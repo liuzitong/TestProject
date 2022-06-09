@@ -193,8 +193,9 @@ Item {id:root; width: 1366;height: 691
                         Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
                             CusButton{text:"开始测试";
                                 onClicked:{
-                                    if(currentCheckResult!=null) {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);}
-                                    currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[3]);}}
+                                    if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
+                                    if(queryStrategy.report!=3) currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[3]);
+                                    else currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[5]);}}
                             CusButton{text:"停止测试";}
                             CusButton{text:"切换眼别";}
                             CusComboBox{

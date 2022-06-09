@@ -66,7 +66,16 @@ QObject* AnalysisProvider::runProcess(int report,PatientVm *patient, CheckResult
 
     analysis();
     DrawDiagram();
-    return new AnalysisResult(m_md,m_psd,m_VFI,m_GHT);
+    int dotSeen=0;
+    int dotWeakSeen=0;
+    int dotUnseen=0;
+    for(auto& i:m_values)
+    {
+        if(i==0) dotUnseen++;
+        else if(i==1) dotWeakSeen++;
+        else if(i==2) dotSeen++;
+    }
+    return new AnalysisResult(m_md,m_psd,m_VFI,m_GHT,dotSeen,dotWeakSeen,dotUnseen);
 }
 
 
@@ -127,28 +136,7 @@ void AnalysisProvider::drawPixScale()
     }
 }
 
-void AnalysisProvider::drawDBText()
-{
-    QPainter painter(&m_image);
-    int fontPixSize=12;
-    QFont font("consolas");
-    font.setPixelSize(fontPixSize);
-    painter.setFont(font);
-    QPoint blindDot;
 
-    if(m_os_od==0) blindDot={-14,0};else blindDot={14,0};
-    auto pixLoc=convertDegLocToPixLoc(blindDot);
-    QImage blindImage(":/grays/SE3.bmp");
-    painter.drawImage(QPoint{pixLoc.x()-blindImage.width()/2,pixLoc.y()-blindImage.height()/2},blindImage);
-
-    for(int i=0;i<m_dotList.length()&&i<m_values.length();i++)             //画DB图
-    {
-        auto pixLoc=convertDegLocToPixLoc(m_dotList[i]);
-        const QRect rectangle = QRect(pixLoc.x()-fontPixSize*1.6*0.4, pixLoc.y()-fontPixSize*0.8/2, fontPixSize*1.6,fontPixSize*0.8);
-        painter.drawText(rectangle,Qt::AlignCenter,QString::number(m_values[i]));
-        m_image.setPixel(pixLoc.x(),pixLoc.y(),0xFFFF0000); //标个小红点
-    }
-}
 
 void AnalysisProvider::drawDevDBText(QVector<int> values)
 {
@@ -168,91 +156,6 @@ void AnalysisProvider::drawDevDBText(QVector<int> values)
     }
 }
 
-void AnalysisProvider::drawGray()
-{
-    QPainter painter(&m_image);
-    int gap= m_range/15;
-    int left_x_axis=0,right_x_axis=0,up_y_axis=0,down_y_axis=0;
-    for(auto &i:m_dotList)
-    {
-        auto x=i.x();auto y=i.y();
-        if(x<left_x_axis) left_x_axis=x;
-        if(x>right_x_axis) right_x_axis=x;
-        if(y>up_y_axis) up_y_axis=y;
-        if(y<down_y_axis) down_y_axis=y;
-    }
-
-
-
-    int rangeX=qMax(qAbs(left_x_axis),right_x_axis)+1.5*gap;;int rangeY=qMax(qAbs(down_y_axis),up_y_axis)+1.5*gap;
-
-    QVector<QPoint> paintLocs;
-    for(int i=up_y_axis;i>=down_y_axis;i-=gap)
-    {
-        for(int j=left_x_axis;j<=right_x_axis;j+=gap)
-        {
-            float answerOutter=float(qPow(qAbs(i)+2,2))/(rangeX*rangeX)+float(qPow(qAbs(j)+2,2))/(rangeY*rangeY);
-            float answerInner=1.0;
-            if(m_innerRange!=0){answerInner=(float(qPow(qAbs(i)+2,2))+float(qPow(qAbs(j)+2,2)))/(m_innerRange*m_innerRange);}
-            if((answerOutter<=1.0)&&(answerInner>=1.0))
-                paintLocs.append(QPoint(j,i));
-        }
-    }
-
-    for(int i=0;i<paintLocs.length();i++)
-    {
-        QVector<QPair<int,int>> distIndexList;
-        for(int j=0;j<m_dotList.length();j++)
-        {
-            auto dot=m_dotList[j].toPoint();
-            int dist=qPow(paintLocs[i].x()-dot.x(),2)+qPow(paintLocs[i].y()-dot.y(),2);
-            distIndexList.append(QPair<int,int>(j,dist));
-        }
-
-        std::sort(distIndexList.begin(),distIndexList.end(),[](QPair<int,int> a,QPair<int,int> b){return a.second<b.second;});
-        QVector<QPair<int,int>> interpolationDots;
-        for(int j=0;j<4;j++)
-        {
-            if(j<2)
-            {
-                interpolationDots.append(distIndexList[j]);
-            }
-            else
-            {
-                if(distIndexList[j].second<=2*qPow(3*gap,2))
-                    interpolationDots.append(distIndexList[j]);
-            }
-        }
-
-        float totalValue=0,totalDist=0;
-        for(int j=0;j<interpolationDots.length();j++)
-        {
-            int index=interpolationDots[j].first;
-            if(interpolationDots[j].second==0)
-            {
-                totalValue=m_values[index];
-                totalDist=1;
-                break;
-            }
-            totalValue+=(float(m_values[index])/qSqrt(interpolationDots[j].second));
-            totalDist+=1.0f/qSqrt(interpolationDots[j].second);
-        }
-        float interpolVal=totalValue/totalDist;
-        int grayVal=qCeil(interpolVal/5);
-        if(grayVal>9) grayVal=9;
-
-
-
-       QPoint tempPoint;
-       if(paintLocs[i].x()>0) tempPoint.setX(paintLocs[i].x()+2); else tempPoint.setX(paintLocs[i].x()-2);
-       if(paintLocs[i].y()>0) tempPoint.setY(paintLocs[i].y()+2); else tempPoint.setY(paintLocs[i].y()-2);
-       auto pixLoc=convertDegLocToPixLoc(tempPoint);
-       QString path=QString(":/grays/Gray")+QString::number(grayVal)+".bmp";
-       QImage image(path);
-       QPoint tempPixLoc={pixLoc.x()-image.width()/2,pixLoc.y()-image.height()/2};
-       painter.drawImage(tempPixLoc,image);
-    }
-}
 
 void AnalysisProvider::drawPE(QVector<int> values)
 {
@@ -270,14 +173,23 @@ void AnalysisProvider::drawPE(QVector<int> values)
 QPoint AnalysisProvider::convertDegLocToPixLoc(QPointF DegLoc)
 {
     float pixPerDegW=float(m_imageSize.width()/2)/m_range;
-    float pixPerDegH=float(m_imageSize.width()/2)/m_range;
+    float pixPerDegH=float(m_imageSize.height()/2)/m_range;
     return QPoint(m_image.width()/2+DegLoc.x()*pixPerDegW,m_image.height()/2-DegLoc.y()*pixPerDegH);
 }
+
+//QPoint AnalysisProvider::convertDegLocToPixLocLarge(QPointF DegLoc)
+//{
+//    float pixPerDegW=float(m_imageSizeLarge.width()/2)/m_range;
+//    float pixPerDegH=float(m_imageSizeLarge.height()/2)/m_range;
+//    return QPoint(m_imageSizeLarge.width()/2+DegLoc.x()*pixPerDegW,m_imageSizeLarge.height()/2-DegLoc.y()*pixPerDegH);
+//}
 
 void AnalysisProvider::DrawDiagram()
 {
     if(m_report==0)                 //single
     {
+        m_imageSize=QSize(240,240);
+        m_image=QImage(m_imageSize, QImage::Format_RGB32);
         drawDBDiagram();
         drawGrayDiagram();
         drawTotalDeviation();
@@ -287,17 +199,55 @@ void AnalysisProvider::DrawDiagram()
     }
     if(m_report==1)
     {
+        m_imageSize=QSize(240,240);
+        m_image=QImage(m_imageSize, QImage::Format_RGB32);
         drawGrayDiagram();
         drawDefectDepthDiagram();
         drawDBDiagram();
     }
+
+    if(m_report==2)
+    {
+        m_imageSize=QSize(240,240);
+        m_image=QImage(m_imageSize, QImage::Format_RGB32);
+        drawDBDiagram();
+        drawGrayDiagram();
+        drawTotalPE();
+        drawPatternPE();
+    }
+
+    if(m_report==3)
+    {
+        m_imageSize=QSize(480,480);
+        m_image=QImage(m_imageSize, QImage::Format_RGB32);
+        drawScreening();
+    }
+
 }
+
 
 void AnalysisProvider::drawDBDiagram()
 {
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
-    drawDBText();
+    QPainter painter(&m_image);
+    int fontPixSize=12;
+    QFont font("consolas");
+    font.setPixelSize(fontPixSize);
+    painter.setFont(font);
+    QPoint blindDot;
+    if(m_os_od==0) blindDot={-14,0};else blindDot={14,0};
+    auto pixLoc=convertDegLocToPixLoc(blindDot);
+    QImage blindImage(":/grays/SE3.bmp");
+    painter.drawImage(QPoint{pixLoc.x()-blindImage.width()/2,pixLoc.y()-blindImage.height()/2},blindImage);
+
+    for(int i=0;i<m_dotList.length()&&i<m_values.length();i++)             //画DB图
+    {
+        auto pixLoc=convertDegLocToPixLoc(m_dotList[i]);
+        const QRect rectangle = QRect(pixLoc.x()-fontPixSize*1.6*0.4, pixLoc.y()-fontPixSize*0.8/2, fontPixSize*1.6,fontPixSize*0.8);
+        painter.drawText(rectangle,Qt::AlignCenter,QString::number(m_values[i]));
+        m_image.setPixel(pixLoc.x(),pixLoc.y(),0xFFFF0000); //标个小红点
+    }
     m_image.save("./temp/dBDiagram.bmp","bmp");
 }
 
@@ -305,7 +255,90 @@ void AnalysisProvider::drawGrayDiagram()
 {
      m_image.fill(qRgb(255, 255, 255));
      drawPixScale();
-     drawGray();
+     QPainter painter(&m_image);
+     int gap= m_range/15;
+     int left_x_axis=0,right_x_axis=0,up_y_axis=0,down_y_axis=0;
+     for(auto &i:m_dotList)
+     {
+         auto x=i.x();auto y=i.y();
+         if(x<left_x_axis) left_x_axis=x;
+         if(x>right_x_axis) right_x_axis=x;
+         if(y>up_y_axis) up_y_axis=y;
+         if(y<down_y_axis) down_y_axis=y;
+     }
+
+
+
+     int rangeX=qMax(qAbs(left_x_axis),right_x_axis)+1.5*gap;;int rangeY=qMax(qAbs(down_y_axis),up_y_axis)+1.5*gap;
+
+     QVector<QPoint> paintLocs;
+     for(int i=up_y_axis;i>=down_y_axis;i-=gap)
+     {
+         for(int j=left_x_axis;j<=right_x_axis;j+=gap)
+         {
+             float answerOutter=float(qPow(qAbs(i)+2,2))/(rangeX*rangeX)+float(qPow(qAbs(j)+2,2))/(rangeY*rangeY);
+             float answerInner=1.0;
+             if(m_innerRange!=0){answerInner=(float(qPow(qAbs(i)+2,2))+float(qPow(qAbs(j)+2,2)))/(m_innerRange*m_innerRange);}
+             if((answerOutter<=1.0)&&(answerInner>=1.0))
+                 paintLocs.append(QPoint(j,i));
+         }
+     }
+
+     for(int i=0;i<paintLocs.length();i++)
+     {
+         QVector<QPair<int,int>> distIndexList;
+         for(int j=0;j<m_dotList.length();j++)
+         {
+             auto dot=m_dotList[j].toPoint();
+             int dist=qPow(paintLocs[i].x()-dot.x(),2)+qPow(paintLocs[i].y()-dot.y(),2);
+             distIndexList.append(QPair<int,int>(j,dist));
+         }
+
+         std::sort(distIndexList.begin(),distIndexList.end(),[](QPair<int,int> a,QPair<int,int> b){return a.second<b.second;});
+         QVector<QPair<int,int>> interpolationDots;
+         for(int j=0;j<4;j++)
+         {
+             if(j<2)
+             {
+                 interpolationDots.append(distIndexList[j]);
+             }
+             else
+             {
+                 if(distIndexList[j].second<=2*qPow(3*gap,2))
+                     interpolationDots.append(distIndexList[j]);
+             }
+         }
+
+         float totalValue=0,totalDist=0;
+         for(int j=0;j<interpolationDots.length();j++)
+         {
+             int index=interpolationDots[j].first;
+             if(interpolationDots[j].second==0)
+             {
+                 totalValue=m_values[index];
+                 totalDist=1;
+                 break;
+             }
+             totalValue+=(float(m_values[index])/qSqrt(interpolationDots[j].second));
+             totalDist+=1.0f/qSqrt(interpolationDots[j].second);
+         }
+         float interpolVal=totalValue/totalDist;
+         int grayVal=qCeil(interpolVal/5);
+         if(grayVal>9) grayVal=9;
+
+
+
+        QPoint tempPoint;
+        if(paintLocs[i].x()>0) tempPoint.setX(paintLocs[i].x()+2); else tempPoint.setX(paintLocs[i].x()-2);
+        if(paintLocs[i].y()>0) tempPoint.setY(paintLocs[i].y()+2); else tempPoint.setY(paintLocs[i].y()-2);
+        auto pixLoc=convertDegLocToPixLoc(tempPoint);
+        QString path=QString(":/grays/Gray")+QString::number(grayVal)+".bmp";
+        QImage image(path);
+        QPoint tempPixLoc={pixLoc.x()-image.width()/2,pixLoc.y()-image.height()/2};
+        painter.drawImage(tempPixLoc,image);
+     }
+
+
      m_image.save("./temp/gray.bmp","bmp");
 }
 
@@ -342,8 +375,8 @@ void AnalysisProvider::drawTotalDeviation()
 {
 
     m_image.fill(qRgb(255, 255, 255));
-    drawDevDBText(m_dev);
     drawPixScale();
+    drawDevDBText(m_dev);
     m_image.save("./temp/TotalDeviation.bmp","bmp");
 }
 
@@ -352,8 +385,8 @@ void AnalysisProvider::drawPatternDeviation()
 {
 
     m_image.fill(qRgb(255, 255, 255));
-    drawDevDBText(m_mDev);
     drawPixScale();
+    drawDevDBText(m_mDev);
     m_image.save("./temp/PatterDeviation.bmp","bmp");
 
 }
@@ -361,17 +394,46 @@ void AnalysisProvider::drawPatternDeviation()
 void AnalysisProvider::drawTotalPE()
 {
     m_image.fill(qRgb(255, 255, 255));
-    drawPE(m_peDev);
     drawPixScale();
+    drawPE(m_peDev);
     m_image.save("./temp/TotalPE.bmp","bmp");
 }
 
 void AnalysisProvider::drawPatternPE()
 {
     m_image.fill(qRgb(255, 255, 255));
-    drawPE(m_peMDev);
     drawPixScale();
+    drawPE(m_peMDev);
     m_image.save("./temp/PatternPE.bmp","bmp");
+}
+
+void AnalysisProvider::drawScreening()
+{
+    m_image.fill(qRgb(255, 255, 255));
+    drawPixScale();
+    QPainter painter(&m_image);
+    QPoint blindDot;
+    if(m_os_od==0) blindDot={-14,0};else blindDot={14,0};
+    auto pixLoc=convertDegLocToPixLoc(blindDot);
+    QImage blindImage(":/grays/SE3.bmp");
+    painter.drawImage(QPoint{pixLoc.x()-blindImage.width()/2,pixLoc.y()-blindImage.height()/2},blindImage);
+
+    QImage screenImageSE0(":/grays/SE0.bmp");
+    QImage screenImageSE1(":/grays/SE1.bmp");
+    QImage screenImageSE2(":/grays/SE2.bmp");
+    for(int i=0;i<m_dotList.length()&&i<m_values.length();i++)
+    {
+        auto pixLoc=convertDegLocToPixLoc(m_dotList[i]);
+        auto imageLoc=QPoint{pixLoc.x()-screenImageSE0.width()/2,pixLoc.y()-screenImageSE0.height()/2};
+        switch (m_values[i])
+        {
+        case 0:painter.drawImage(imageLoc,screenImageSE2);break;
+        case 1:painter.drawImage(imageLoc,screenImageSE1);break;
+        case 2:painter.drawImage(imageLoc,screenImageSE0);break;
+        default:break;
+        }
+    }
+    m_image.save("./temp/Screening.bmp","bmp");
 }
 
 void AnalysisProvider::analysis()
@@ -712,6 +774,9 @@ void AnalysisProvider::analysis()
     {
         m_GHT = 2;
     }
+
+
+
 }
 
 }

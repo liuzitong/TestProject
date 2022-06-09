@@ -35,12 +35,12 @@ Item {
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }
-            Item{
-                width:parent.width*0.72-parent.height*2;height:parent.height;
-                CusText{ width:parent.width;height:parent.height*0.15;verticalAlignment: Text.AlignVCenter;
-                    text: "    ("+currentProgram.params.commonParams.Range[1]+")" ;
-                    horizontalAlignment: Text.AlignLeft; anchors.left: parent.left; anchors.leftMargin: 0;anchors.verticalCenter: parent.verticalCenter}
-            }
+//            Item{
+//                width:parent.width*0.72-parent.height*2;height:parent.height;
+//                CusText{ width:parent.width;height:parent.height*0.15;verticalAlignment: Text.AlignVCenter;
+//                    text: "    ("+currentProgram.params.commonParams.Range[1]+")" ;
+//                    horizontalAlignment: Text.AlignLeft; anchors.left: parent.left; anchors.leftMargin: 0;anchors.verticalCenter: parent.verticalCenter}
+//            }
         }
 
         Row{

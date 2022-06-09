@@ -29,8 +29,10 @@ signals:
 
 public slots:
 private:
-    QSize m_imageSize=QSize(240,240);
-    QImage m_image=QImage(m_imageSize, QImage::Format_RGB32);
+    QSize m_imageSize;
+    QImage m_image;
+//    QSize m_imageSizeLarge=QSize(720,720);
+//    QImage m_imageLarge=QImage(m_imageSize, QImage::Format_RGB32);
     int m_report;   //0,30-2
     int m_os_od;
     int m_range;
@@ -86,22 +88,26 @@ private:
 
 private:
     void drawPixScale();
-    void drawDBText();
+
     void drawDevDBText(QVector<int> values);
-    void drawGray();
+    void drawTotalDeviation();
+    void drawPatternDeviation();
+
     void drawPE(QVector<int> values);
+    void drawTotalPE();
+    void drawPatternPE();
+
     void drawDBDiagram();
     void drawGrayDiagram();
     void drawDefectDepthDiagram();
-    void drawTotalDeviation();
-    void drawPatternDeviation();
-    void drawTotalPE();
-    void drawPatternPE();
+
+    void drawScreening();
     void analysis();
 
 
 
     QPoint convertDegLocToPixLoc(QPointF DegLoc);
+//    QPoint convertDegLocToPixLocLarge(QPointF DegLoc);
 
     void DrawDiagram();
 
