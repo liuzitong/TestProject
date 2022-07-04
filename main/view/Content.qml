@@ -1,4 +1,4 @@
-﻿import QtQuick 2.6
+import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -14,7 +14,7 @@ Rectangle {
     property string backGroundBorderColor:"#bdc0c6"
     property string ribbonColor: "#333e44"
     property string selectionColor: "";
-    property string language:IcUiQmlApi.appCtrl.language
+    property string language:IcUiQmlApi.appCtrl.settings.language
     property var currentPatient: patientPage.currentPatient;
 
     signal changePage(var name);
@@ -87,10 +87,11 @@ Rectangle {
                         Flow{
                             height: parent.height;anchors.right: parent.right;spacing: height*1
 
-//                            CusButton{
-//                                width: parent.height*2;text: "DoStuff";
-//                                onClicked: {IcUiQmlApi.appCtrl.testClass.test();}
-//                            }
+                            CusButton{
+                                width: parent.height*2;text: "DoStuff";
+//                                onClicked: {IcUiQmlApi.appCtrl.AnalysisProvider.showReport();}
+                                onClicked: {IcUiQmlApi.appCtrl.testClass.test();}
+                            }
                             CusButton{
                                 type:"click";isAnime: false;underImageText.text: "设置";underImageText.color: "white"; fontSize: height/4;rec.visible: false;
                                 width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_set.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_set_select.svg";

@@ -1,4 +1,4 @@
-﻿#include <QCoreApplication>
+#include <QCoreApplication>
 #include <QDebug>
 #include <QMessageLogContext>
 #include <QThread>
@@ -6,6 +6,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QSharedPointer>
+#include <QApplication>
 
 #include "perimeter/main/appctrl/perimeter_appctrl.hxx"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
@@ -14,6 +15,7 @@
 #include "qxpack/indcom/sys/qxpack_ic_eventloopbarrier.hxx"
 #include "qxpack/indcom/sys/qxpack_ic_appdcl_priv.hxx"
 #include "qxpack/indcom/ui_qml_base/qxpack_ic_ui_qml_api.hxx"
+
 
 
 #include <cstdio>
@@ -108,6 +110,7 @@ static void gMsgHandler( QtMsgType type, const QMessageLogContext &ctxt, const Q
 // main entry
 // ============================================================================
 #include <qmath.h>
+
 int  main ( int argc, char *argv[] )
 {
     int ret = 0;
@@ -121,7 +124,17 @@ int  main ( int argc, char *argv[] )
     // start the application
     gPrintMemCntr("pre-stage");
     {
-        QGuiApplication app(argc, argv);
+        QApplication app(argc, argv);
+
+//        LimeReport::ReportEngine* report = new LimeReport::ReportEngine();
+
+//        report->dataManager()->clearUserVariables();
+
+//        report->setShowProgressDialog(false);
+//        report->designReport();
+
+
+
 
         Perimeter::AppCtrl *app_ctrl = new Perimeter::AppCtrl;
         app_ctrl->doInit();

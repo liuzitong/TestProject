@@ -43,19 +43,19 @@
 }
 
 SOURCES += \
-    $$PWD/utils/pdf_creator.cpp \
     $$PWD/appctrl/testclass.cpp \
     $$PWD/services/checkProceduce.cpp \
     $$PWD/services/analysis_provider.cpp
 
 HEADERS += \
-    $$PWD/utils/pdf_creator.h \
     $$PWD/appctrl/testclass.h \
     $$PWD/services/checkProceduce.h \
     $$PWD/services/analysis_provider.h
 
 RESOURCES += \
     $$PWD/view/utils/utils.qrc
+
+FORMS +=
 
 
 

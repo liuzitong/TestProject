@@ -1,4 +1,4 @@
-﻿#ifndef PARAMS_H
+#ifndef PARAMS_H
 #define PARAMS_H
 
 #define OPTION int
@@ -19,8 +19,8 @@
 enum class CursorColor{white,red,blue};
 enum class CursorSize{I,II,III,IV,V};
 enum class BackGroundColor{white,yellow};
-enum class FixationViewSelection{centerPoint,smallDiamond,bigDiamond,bottomPoint};
-enum class EyeMoveAlarmMode{dontAlarm,onlyAlarm,alarmAndPause};
+enum class FixationTarget{centerPoint,smallDiamond,bigDiamond,bottomPoint};
+enum class FixationMonitor{dontAlarm,onlyAlarm,alarmAndPause};
 enum class Type { ThreshHold=0, Screening,Move  };
 enum class Category { ThreshHold=0, Screening,Special,Move,Custom  };
 
@@ -48,8 +48,8 @@ struct StaticParams/*:public QObject*/
         int                         intervalTime;
         ON_OFF                      centerDotCheck;
         ON_OFF                      shortTermFluctuation;
-        FixationViewSelection       fixationViewSelection;
-        EyeMoveAlarmMode            eyeMoveAlarmMode;
+        FixationTarget              fixationTarget;
+        FixationMonitor             fixationMonitor;
         ON_OFF                      blindDotTest;
 
         template<class Archive>
@@ -66,8 +66,8 @@ struct StaticParams/*:public QObject*/
             archive & BOOST_SERIALIZATION_NVP(intervalTime);
             archive & BOOST_SERIALIZATION_NVP(centerDotCheck);
             archive & BOOST_SERIALIZATION_NVP(shortTermFluctuation);
-            archive & BOOST_SERIALIZATION_NVP(fixationViewSelection);
-            archive & BOOST_SERIALIZATION_NVP(eyeMoveAlarmMode);
+            archive & BOOST_SERIALIZATION_NVP(fixationTarget);
+            archive & BOOST_SERIALIZATION_NVP(fixationMonitor);
             archive & BOOST_SERIALIZATION_NVP(blindDotTest);
         }
 
@@ -127,12 +127,12 @@ struct MoveParams
     CursorSize                  cursorSize;
     BackGroundColor             backGroundColor;
 
-//    FixationViewSelection       fixationViewSelection;
+//    FixationTarget       fixationTarget;
     int                         speed;
     int                         brightness;
     MoveMethod                  moveMethod;
     MoveDistance                moveDistance;
-    EyeMoveAlarmMode            eyeMoveAlarmMode;
+    FixationMonitor             fixationMonitor;
 
     template<class Archive>
     void serialize(Archive& archive, const unsigned int version)
@@ -142,12 +142,12 @@ struct MoveParams
         archive & BOOST_SERIALIZATION_NVP(cursorColor);
         archive & BOOST_SERIALIZATION_NVP(cursorSize);
         archive & BOOST_SERIALIZATION_NVP(backGroundColor);
-//        archive & BOOST_SERIALIZATION_NVP(fixationViewSelection);
+//        archive & BOOST_SERIALIZATION_NVP(fixationTarget);
         archive & BOOST_SERIALIZATION_NVP(speed);
         archive & BOOST_SERIALIZATION_NVP(brightness);
         archive & BOOST_SERIALIZATION_NVP(moveMethod);
         archive & BOOST_SERIALIZATION_NVP(moveDistance);
-        archive & BOOST_SERIALIZATION_NVP(eyeMoveAlarmMode);
+        archive & BOOST_SERIALIZATION_NVP(fixationMonitor);
     }
 
 //    QString ToQString()

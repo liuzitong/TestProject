@@ -41,7 +41,7 @@ public:
     static void  registerApi( );
 
     //! return current application controller
-    QObject*  appCtrl() const;
+    static QObject*  appCtrl();
 
     //! return the version of this API set
     QString  apiVersion() const;

@@ -1,4 +1,4 @@
-﻿#include "testclass.h"
+#include "testclass.h"
 
 #include <QJsonArray>
 #include <qfile.h>
@@ -6,7 +6,7 @@
 #include <QJsonObject>
 #include <perimeter/main/model/checkResultModel.h>
 #include <perimeter/main/viewModel/checkResultVm.h>
-
+#include "perimeter/main/viewModel/settings.h"
 namespace Perimeter {
 void TestClass::test()
 {
@@ -44,14 +44,20 @@ void TestClass::test()
 
 //    qx::dao::insert(ptr);
 
-    auto checkresultvm=new CheckResultVm({3});
-    qDebug()<<checkresultvm->getType();
-    qDebug()<<checkresultvm->getOS_OD();
-    auto data=checkresultvm->getResultData()->getCheckData();
-    for(auto &i:data)
-    {
-        qDebug()<<i.toInt();
-    }
-
+//    auto checkresultvm=new CheckResultVm({3});
+//    qDebug()<<checkresultvm->getType();
+//    qDebug()<<checkresultvm->getOS_OD();
+//    auto data=checkresultvm->getResultData()->getCheckData();
+//    for(auto &i:data)
+//    {
+//        qDebug()<<i.toInt();
+//    }
+    Settings settings;
+    settings.m_hospitalName="西南医院";
+    settings.m_deviceInfo="perimeter";
+    settings.m_version="1.2.1.1";
+    settings.m_language="Chinese";
+    settings.m_doubleName=true;
+    settings.save();
 }
 }

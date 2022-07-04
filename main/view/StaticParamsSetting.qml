@@ -198,16 +198,16 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"固视选择"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
                                        CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:["中心点","小菱形","大菱形","底点"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.fixationViewSelection;
-                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.fixationViewSelection=currentIndex;})}
+                                            width: parent.width*0.6; anchors.right: parent.right;model:["中心点","小菱形","大菱形","底点"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.fixationTarget;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.fixationTarget=currentIndex;})}
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"眼动模式报警"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
                                        CusComboBox{
-                                           width: parent.width*0.6; anchors.right: parent.right;model:["不报警","只报警","报警并暂停"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.eyeMoveAlarmMode;
-                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.eyeMoveAlarmMode=currentIndex;})}
+                                           width: parent.width*0.6; anchors.right: parent.right;model:["不报警","只报警","报警并暂停"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.fixationMonitor;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.fixationMonitor=currentIndex;})}
                                        }
                                    }
                                    Item{

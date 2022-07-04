@@ -1,4 +1,4 @@
-﻿import QtQuick 2.6
+import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -34,7 +34,7 @@ Item {id:root; width: 1366;height: 691
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
                                                 CusText{text:"程序名"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 LineEdit {
-                                                    text:""; width: parent.width*0.70;textfeild.readOnly: true; textfeild.font.pointSize:if(IcUiQmlApi.appCtrl.language!=="Chinese") return programDisplay.height*0.29; else return parent.height/3;
+                                                    text:""; width: parent.width*0.70;textfeild.readOnly: true; textfeild.font.pointSize:if(IcUiQmlApi.appCtrl.settings.language!=="Chinese") return checkDisplay.height*0.29; else return parent.height/3;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){text=currentProgram.name});}
                                                 }
                                             }

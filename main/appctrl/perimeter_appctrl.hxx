@@ -1,4 +1,4 @@
-﻿#ifndef PERIMETER_APPCTRL_HXX
+#ifndef PERIMETER_APPCTRL_HXX
 #define PERIMETER_APPCTRL_HXX
 
 #include "perimeter/base/common/perimeter_def.h"
@@ -20,11 +20,10 @@ class PERIMETER_API  AppCtrl : public QxPack::IcAppCtrlBase {
     Q_PROPERTY( QObject*  objMgr READ  objMgrObj CONSTANT )
     Q_PROPERTY( QObject*  msgBus READ  msgBusObj CONSTANT )
     Q_PROPERTY( QObject*  databaseSvc READ  databaseSvcObj CONSTANT )
-    Q_PROPERTY( QString   language READ  getLanguage WRITE setLanguage NOTIFY languageChanged)
-    Q_PROPERTY( bool      doubleName READ  getDoubleName WRITE setDoubleName NOTIFY doubleNameChanged)
 //    Q_PROPERTY( QObject*  currentPatient READ  getCurrentPatient WRITE setCurrentPatient NOTIFY currentPatientChanged)
     Q_PROPERTY( QObject*  testClass READ  getTestClass CONSTANT )
     Q_PROPERTY( QObject*  AnalysisProvider READ  getAnalysisProvider CONSTANT )
+    Q_PROPERTY( QObject* settings READ getSettings CONSTANT)
 
 public:
     //! ctor
@@ -44,8 +43,8 @@ public:
     QObject*    databaseSvcObj() const;
     QObject*    getTestClass() const;
     QObject*    getAnalysisProvider() const;
-    QString     getLanguage();          void setLanguage(QString value);            Q_SIGNAL void  languageChanged(QString value);
-    bool        getDoubleName();        void setDoubleName(bool value);             Q_SIGNAL void  doubleNameChanged(bool value);
+    QObject*    getSettings();
+
 //    QObject*    getCurrentPatient();    void setCurrentPatient(QObject* value);     Q_SIGNAL void  currentPatientChanged(QObject* value);
 //    Q_SIGNAL void  changePage(QString value);
 protected:

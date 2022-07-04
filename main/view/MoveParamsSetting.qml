@@ -181,8 +181,8 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                        CusText{text:"眼动模式报警"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
                                        CusComboBox{
                                            width: parent.width*0.6; anchors.right: parent.right;model:["不报警","只报警","报警并暂停"];
-                                           currentIndex:currentProgram===null?0:currentProgram.params.eyeMoveAlarmMode;
-                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.eyeMoveAlarmMode=currentIndex;})}
+                                           currentIndex:currentProgram===null?0:currentProgram.params.fixationMonitor;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixationMonitor=currentIndex;})}
                                        }
                                    }
                                 }

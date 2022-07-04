@@ -1,4 +1,4 @@
-﻿import QtQuick 2.7
+import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
@@ -79,14 +79,14 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                             CusText{
                                 height:parent.height*0.04;width: parent.width;
-                                text: "型    号: Perimeter" ;horizontalAlignment: Text.AlignLeft;
+                                text: "设备型号: " +IcUiQmlApi.appCtrl.settings.deviceInfo;horizontalAlignment: Text.AlignLeft;
                                 font.pointSize:height*0.6;
                             }
                             Item{height:parent.height*0.06;width: parent.width; }
 
                             CusText{
                                 height:parent.height*0.04;width: parent.width;
-                                text: "软件版本: 1.0"
+                                text: "软件版本: "+IcUiQmlApi.appCtrl.settings.version;
                                 horizontalAlignment: Text.AlignLeft;
                                 font.pointSize:height*0.6;
                             }

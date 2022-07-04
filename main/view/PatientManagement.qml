@@ -1,4 +1,4 @@
-﻿import QtQuick 2.6
+import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -9,8 +9,8 @@ import perimeter.main.view.Utils 1.0
 
 Item{
     id:root;
-    property string language:IcUiQmlApi.appCtrl.language
-    property bool doubleName:IcUiQmlApi.appCtrl.doubleName
+    property string language:IcUiQmlApi.appCtrl.settings.language
+    property bool doubleName:IcUiQmlApi.appCtrl.settings.doubleName
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
     property var currentPatient:null;
@@ -20,6 +20,9 @@ Item{
     width: 1440
     height: 700
     anchors.fill:parent;
+    Component.onCompleted: createNewPatient();
+
+
 
     function createNewPatient(){
         if(currentPatient!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientVm", currentPatient);
@@ -79,13 +82,13 @@ Item{
                                     {
                                     case 0:dateSelection.opacity=1;break;
                                     case 1:patientID.visible=true;dateSelection.opacity=0;break;
-                                    case 2:if(!doubleName) {chineseName.visible=true;} else{englishNameGroup.visible=true;} dateSelection.opacity=1;break;
+                                    case 2:if(!IcUiQmlApi.appCtrl.settings.doubleName) {chineseName.visible=true;} else{englishNameGroup.visible=true;} dateSelection.opacity=1;break;
                                     case 3:sex.visible=true;dateSelection.opacity=1;break;
                                     case 4:birthDateGroup.visible=true;dateSelection.opacity=0;break;
                                     }
                                 }
                                 Component.onCompleted: {
-                                    IcUiQmlApi.appCtrl.doubleNameChanged.connect(onCurrentIndexChanged)
+                                     root.doubleNameChanged.connect(currentIndexChanged);
                                 }
                             }
 
@@ -123,7 +126,7 @@ Item{
                                     patientInfoListView.patientListModelVm.getPatientListByPatientId(patientID.text);break;
                                 case 2:
                                     console.log(chineseName.text);
-                                    if( !IcUiQmlApi.appCtrl.doubleName) patientInfoListView.patientListModelVm.getPatientListByName(chineseName.text,dateFrom.text,dateTo.text);
+                                    if(!doubleName) patientInfoListView.patientListModelVm.getPatientListByName(chineseName.text,dateFrom.text,dateTo.text);
                                     else  patientInfoListView.patientListModelVm.getPatientListByName(firstName.text+" "+lastName.text,dateFrom.text,dateTo.text);
                                     break;
                                 case 3:patientInfoListView.patientListModelVm.getPatientListBySex(sex.currentIndex,dateFrom.text,dateTo.text);break;
@@ -296,7 +299,7 @@ Item{
                             id:newPatient;anchors.fill: parent;spacing: patientInfo.rowHight
                             Component.onCompleted: {
                                 showControl();
-                                IcUiQmlApi.appCtrl.doubleNameChanged.connect(showControl)
+                                IcUiQmlApi.appCtrl.settings.doubleNameChanged.connect(showControl)
                             }
 
                             function showControl()
@@ -488,13 +491,13 @@ Item{
                     id:patientSaveButton;text:"保存";
                     enabled: false;
                     onClicked:{
-                        var Name="";
-                        if(!doubleName){ Name=newChineseName.text; }
-                        else {Name = newEnglishFirstName.text+" "+newEnglishLastName.text;}
+                        var name="";
+                        if(!doubleName){ name=newChineseName.text; }
+                        else {name = newEnglishFirstName.text+" "+newEnglishLastName.text;}
                         if(currentPatient!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientVm", currentPatient);
                         currentPatient=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::PatientVm", false);
                         currentPatient.patientId=newPatientId.text;
-                        currentPatient.name=newChineseName.text;
+                        currentPatient.name=name;
                         currentPatient.sex=genderSelect.gender;
                         currentPatient.birthDate=newBirthDate.text;
                         currentPatient.insert();

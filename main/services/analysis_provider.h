@@ -1,4 +1,4 @@
-﻿#ifndef DIGRAM_PROVIDER_H
+#ifndef DIGRAM_PROVIDER_H
 #define DIGRAM_PROVIDER_H
 
 #include <QObject>
@@ -10,6 +10,8 @@
 #include <perimeter/main/viewModel/programVm.h>
 #include <perimeter/main/viewModel/patientVm.h>
 #include <perimeter/main/viewModel/checkResultVm.h>
+#include "perimeter/third-part/LimeReport/limereport/LimeReport"
+#include "perimeter/third-part/LimeReport/limereport/lrpreviewreportwindow.h"
 
 namespace Perimeter {
 class AnalysisProvider : public QObject
@@ -23,6 +25,7 @@ public:
     Q_INVOKABLE QPointF getClickDot(float MouseX,float MouseY,float width,float height);
     Q_INVOKABLE QPointF getPixFromPoint(QPointF point,float width,float height);
     Q_INVOKABLE int getSelectedDotIndex(){return m_selectedDotIndex;};
+    Q_INVOKABLE void showReport();
 
 
 signals:
@@ -39,6 +42,8 @@ private:
     int m_innerRange;
     int m_selectedDotIndex;
     int m_programType;
+
+    LimeReport::ReportEngine* m_reportEngine;
 
     QVector<QPointF> m_dotList;
     QVector<int> m_values;
@@ -82,6 +87,8 @@ private:
     float m_md,m_psd,m_VFI;
     int m_GHT;
 
+    int m_patientAge;
+
 
 
 
@@ -110,6 +117,7 @@ private:
 //    QPoint convertDegLocToPixLocLarge(QPointF DegLoc);
 
     void DrawDiagram();
+
 
 
 };

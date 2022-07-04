@@ -1,4 +1,4 @@
-﻿import QtQuick 2.7
+import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import qxpack.indcom.ui_qml_base 1.0     // [HINT] this is the pre-registered module name.
@@ -59,33 +59,21 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     id:languageSelection;height: parent.height;width:parent.width*0.60;
                                     borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                                     imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                                    model: ListModel {ListElement { name: "中文" } ListElement { name: "English" } ListElement { name: "其它" } }
+                                    model: ListModel {ListElement { name: "中文" } ListElement { name: "English" }}
+                                    currentIndex: IcUiQmlApi.appCtrl.settings.language==="Chinese"?0:1;
                                 }
                             }
                             Flow{
                                 height: column.rowHeight;width: parent.width*0.7; anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
                                 CusText{text:"医院名称";width: parent.width*0.25}
-                                LineEdit{height: column.rowHeight;width:parent.width*0.60;}
+                                LineEdit{id:hospitalName;height: column.rowHeight;width:parent.width*0.60;text:IcUiQmlApi.appCtrl.settings.hospitalName}
                             }
-
                             Flow{
                                 height: column.rowHeight;width: parent.width*0.7; anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
                                 CusText{text:"双姓名输入";width: parent.width*0.25}
-//                                CheckBox{
-//                                    id:doubleName;height: column.rowHeight;width: height;
-//                                    onClicked:
-//                                    {
-//                                        console.log(doubleName.checked);
-//                                    }
-//                                }
-                                CusCheckBox{id:doubleName;
-                                            onCheckedChanged:
-                                            {
-                                                console.log(doubleName.checked);
-                                            }}
-                            }
+                                CusCheckBox{id:doubleName;checked:IcUiQmlApi.appCtrl.settings.doubleName;}
                         }
-
+                        }
                         Item{
                             height: column.rowHeight; anchors.bottom: parent.bottom; anchors.bottomMargin: 0; anchors.horizontalCenter: parent.horizontalCenter; width: parent.width*0.6
                             CusButton
@@ -96,18 +84,19 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                 anchors.leftMargin: 0
                                 onClicked:
                                 {
-                                    if(languageSelection.currentIndex==0) IcUiQmlApi.appCtrl.language="Chinese";
-                                    if(languageSelection.currentIndex==1) IcUiQmlApi.appCtrl.language="English";
+                                    if(languageSelection.currentIndex==0) IcUiQmlApi.appCtrl.settings.language="Chinese";
+                                    if(languageSelection.currentIndex==1) IcUiQmlApi.appCtrl.settings.language="English";
+
                                     console.log(doubleName.checked);
-                                    IcUiQmlApi.appCtrl.doubleName=doubleName.checked;
-                                    console.log(IcUiQmlApi.appCtrl.doubleName);
+                                    IcUiQmlApi.appCtrl.settings.doubleName=doubleName.checked;
+                                    IcUiQmlApi.appCtrl.settings.hospitalName=hospitalName.text;
+                                    IcUiQmlApi.appCtrl.settings.save();
                                     idPopup.close();
                                 }
                             }
                             CusButton{buttonColor: CommonSettings.darkButtonColor;text:"取消"; anchors.right: parent.right; anchors.rightMargin: 0;onClicked: {idPopup.close();}}
                         }
                     }
-
                 }
             }
         }

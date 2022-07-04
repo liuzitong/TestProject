@@ -1,4 +1,4 @@
-﻿#include "analysis_provider.h"
+#include "analysis_provider.h"
 #include <QDebug>
 #include <QImage>
 #include <QPainter>
@@ -13,8 +13,10 @@
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <perimeter/main/viewModel/analysisResult.h>
-
+#include "perimeter/main/viewModel/analysisResult.h"
+#include "perimeter/main/appctrl/perimeter_appctrl.hxx"
+#include <QFileDialog>
+#include <QApplication>
 namespace Perimeter {
 
 AnalysisProvider::AnalysisProvider(QObject *parent) : QObject(parent)
@@ -64,7 +66,7 @@ QObject* AnalysisProvider::runProcess(int report,PatientVm *patient, CheckResult
     m_values.resize(values.length());
     for(int i=0;i<values.length();i++){m_values[i]=values[i].toInt();}
 
-    analysis();
+
     DrawDiagram();
     int dotSeen=0;
     int dotWeakSeen=0;
@@ -113,6 +115,60 @@ QPointF AnalysisProvider::getPixFromPoint(QPointF point, float width, float heig
     float pixPerDegW=float(width/2)/m_range;
     float pixPerDegH=float(height/2)/m_range;
     return QPointF(width/2+(point.x()+0.0)*pixPerDegW,height/2-(point.y()-0.0)*pixPerDegH);
+}
+
+void AnalysisProvider::showReport()
+{
+    qDebug()<<"lol";
+
+
+     m_reportEngine = new LimeReport::ReportEngine();
+     m_reportEngine->loadFromFile("./reports/Single.lrxml");
+
+     auto manager=m_reportEngine->dataManager();
+
+     manager->clearUserVariables();
+
+//     report->setShowProgressDialog(false);
+//     report->designReport();
+//     QString fileName = QFileDialog::getOpenFileName(nullptr,"Select report file",QApplication::applicationDirPath()+"/reports/","*.lrxml");
+     manager->setReportVariable("hospitalName", "西南");
+     manager->setReportVariable("name",m_patient->getName());
+     manager->setReportVariable("birthDate",m_patient->getBirthDate().replace('-','/'));
+     manager->setReportVariable("checkDate", m_checkResult->getTime().date().toString("yyyy/MM/dd"));
+     manager->setReportVariable("ID", m_patient->getPatientID());
+     manager->setReportVariable("age", m_patientAge);
+     manager->setReportVariable("checkTime", m_checkResult->getTime().time().toString("H:mm:ss"));
+     manager->setReportVariable("sex", m_patient->getSex()==0?"male":"female");
+
+     auto commomParams=static_cast<StaticParamsVM*>(m_checkResult->getParams())->getCommonParams();
+     QString fixationMonitor;switch (commomParams->getFixationMonitor()) {case 0:fixationMonitor="No Alarm"; break;case 1:fixationMonitor="Only Alarm";break;case 2:fixationMonitor="Pause And Alarm";break;}
+     QString fixationTarget;switch (commomParams->getFixationTarget()){case 0:fixationTarget="Center Point";break;case 1:fixationTarget="Small Diamond";break;case 2:fixationTarget="Big Diamond";break;case 3:fixationTarget="Bottom Point";break;}
+
+     m_checkResult->getResultData()->getFixationLostCount();
+     m_checkResult->getResultData()->getFixationLostTestCount();
+     manager->setReportVariable("fixationMonitor","Fixation Monitor:"+fixationMonitor);
+
+
+
+     manager->setReportVariable("deviceInfo", "设备信息:Perimeter");
+     manager->setReportVariable("version", "版本:1.2.1.1");
+
+
+     manager->setReportVariable("DBImagePath","./temp/dBDiagram.bmp");
+
+
+//     report->previewReport();
+//     delete report;
+     m_reportEngine->setShowProgressDialog(true);
+//     report->setSettings()
+
+     m_reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,33);
+     m_reportEngine->previewReport(/*LimeReport::PreviewHint::ShowAllPreviewBars*/);
+
+     qDebug()<<"deleted";
+
+
 }
 
 
@@ -190,6 +246,7 @@ void AnalysisProvider::DrawDiagram()
     {
         m_imageSize=QSize(240,240);
         m_image=QImage(m_imageSize, QImage::Format_RGB32);
+        analysis();
         drawDBDiagram();
         drawGrayDiagram();
         drawTotalDeviation();
@@ -201,6 +258,7 @@ void AnalysisProvider::DrawDiagram()
     {
         m_imageSize=QSize(240,240);
         m_image=QImage(m_imageSize, QImage::Format_RGB32);
+        analysis();
         drawGrayDiagram();
         drawDefectDepthDiagram();
         drawDBDiagram();
@@ -210,6 +268,7 @@ void AnalysisProvider::DrawDiagram()
     {
         m_imageSize=QSize(240,240);
         m_image=QImage(m_imageSize, QImage::Format_RGB32);
+        analysis();
         drawDBDiagram();
         drawGrayDiagram();
         drawTotalPE();
@@ -465,7 +524,7 @@ void AnalysisProvider::analysis()
     auto birthDate=QDate::fromString(m_patient->getBirthDate(),"yyyy-MM-dd");
     auto currentDate=QDate::currentDate();
 
-    int m_patientAge = currentDate.year() - birthDate.year();
+    m_patientAge = currentDate.year() - birthDate.year();
     if (currentDate.month() < birthDate.month() || (currentDate.month() == birthDate.month() && currentDate.day() < birthDate.day())) { m_patientAge--;}
 
 

@@ -1,4 +1,4 @@
-﻿import QtQuick 2.6
+import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -45,13 +45,13 @@ Item
                         Repeater{
                             property var params: currentCheckResult.params.commonParams;
                             property int timeSpan:currentCheckResult.resultData.testTimespan;
-                            property var alarmMode: ["不报警","只报警","报警并暂停"];
-                            property var fixationViewSelection: ["中心点","小菱形","大菱形","底点"]
+                            property var fixationMonitor: ["不报警","只报警","报警并暂停"];
+                            property var fixationTarget: ["中心点","小菱形","大菱形","底点"]
                             property var centerDotCheck: ["打开","关闭"];
 
                             model: [
-                                {name:"眼动报警模式",param:alarmMode[params.eyeMoveAlarmMode]},
-                                {name:"固视选择",param:fixationViewSelection[params.fixationViewSelection]},
+                                {name:"眼动报警模式",param:fixationMonitor[params.fixationMonitor]},
+                                {name:"固视选择",param:fixationTarget[params.fixationTarget]},
                                 {name:"固视丢失率",param:Math.round(currentCheckResult.resultData.fixationLostCount/currentCheckResult.resultData.fixationLostTestCount*100)+"%"},
                                 {name:"假阳性率",param:Math.round(currentCheckResult.resultData.falsePositiveCount/currentCheckResult.resultData.falsePositiveTestCount*100)+"%"},
                                 {name:"假阴性率",param:Math.round(currentCheckResult.resultData.falseNegativeCount/currentCheckResult.resultData.falseNegativeTestCount*100)+"%"},
@@ -66,10 +66,11 @@ Item
                             property var params: currentCheckResult.params.commonParams;
                             property var cursorSize: ["I","II","III","IV","V"];
                             property var cursorColor: ["白色","红色","蓝色"];
+                            property var backGroundColor: ["31.5 ASB","315 ASB"];
                             property var strategy: ["全阈值","智能交互式","快速智能交互式","二区法","三区法","量化缺损","单刺激"]
                             model: [
                                 {name:"刺激光标",param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
-                                {name:"背景光",param:"31.5 ASB"},
+                                {name:"背景光",param:backGroundColor[params.backGroundColor]},
                                 {name:"策略",param:strategy[params.strategy]}]
                             CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }

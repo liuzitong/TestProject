@@ -1,4 +1,4 @@
-﻿import QtQuick 2.6
+import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -10,7 +10,7 @@ import perimeter.main.view.Controls 1.0
 Window {
     id: window;visible: true;width: 1366;height: 768;title: qsTr("Hello World");
     minimumWidth: 1366;minimumHeight: 768;property string currentpage: "Login";
-    property string language: IcUiQmlApi.appCtrl.language
+    property string language: IcUiQmlApi.appCtrl.settings.language
     Content{id:content;anchors.fill: parent;}
     Login{id:login;visible: false;anchors.fill: parent;}
 

@@ -1,4 +1,4 @@
-﻿#include "patientListModelVm.h"
+#include "patientListModelVm.h"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
 #include <QList>
 
@@ -157,7 +157,7 @@ void PatientListModelVm::getPatientListByPatientId(QString id)
 void PatientListModelVm::getPatientListByName(QString name, QDate from, QDate to)
 {
     if(from.toString()=="") from.setDate(1900,1,1);
-    if(to.toString()=="") to.setDate(QDate::currentDate().year(),QDate::currentDate().month(),QDate::currentDate().day());
+    if(to.toString()=="") to=QDate::currentDate().addDays(1);
     qx_query query("select * from patient where name=:name and lastUpdate>=:from and lastUpdate<=:to ORDER BY lastUpdate DESC");
     query.bind(":name",name);query.bind(":from",from.toString("yyyy-MM-dd"));query.bind(":to",to.toString("yyyy-MM-dd"));
     Patient_List Patient_List;
@@ -169,7 +169,7 @@ void PatientListModelVm::getPatientListByName(QString name, QDate from, QDate to
 void PatientListModelVm::getPatientListBySex(int sex, QDate from, QDate to)
 {
     if(from.toString()=="") from.setDate(1900,1,1);
-    if(to.toString()=="") to=QDate::currentDate();
+    if(to.toString()=="") to=QDate::currentDate().addDays(1);
     qx_query query("select * from patient where sex=:sex and lastUpdate>=:from and lastUpdate<=:to ORDER BY lastUpdate DESC");
     query.bind(":sex",sex);
 

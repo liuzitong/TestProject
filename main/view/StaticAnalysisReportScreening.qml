@@ -37,9 +37,9 @@ Item {
         {
             anchors.fill: parent;
             model:[
-                {img:"qrc:/grays/SE0.bmp",text:"看见:"+(analysisResult.dotSeen+analysisResult.dotWeakSeen)+"/"+currentProgram.dots.length},
-                {img:"qrc:/grays/SE2.bmp",text:"未看见:"+analysisResult.dotUnseen+"/"+currentProgram.dots.length},
-                {img:"qrc:/grays/SE3.bmp",text:"盲点"}
+                {img:"qrc:/grays/SE0.bmp",text:":看见:"+(analysisResult.dotSeen+analysisResult.dotWeakSeen)+"/"+currentProgram.dots.length},
+                {img:"qrc:/grays/SE2.bmp",text:":未看见:"+analysisResult.dotUnseen+"/"+currentProgram.dots.length},
+                {img:"qrc:/grays/SE3.bmp",text:":盲点"}
             ]
             Row{
                 height: parent.height*0.15;width: parent.width;spacing: height*0.2

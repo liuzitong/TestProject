@@ -1,4 +1,4 @@
-﻿import QtQuick 2.7
+import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
@@ -55,7 +55,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
                     Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
                     Rectangle { anchors.bottom: parent.bottom; anchors.bottomMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
                     PathView { id: idYearList; clip: true; anchors.fill: parent; pathItemCount: 3; preferredHighlightBegin: 0.5; preferredHighlightEnd: 0.5; highlightRangeMode: PathView.StrictlyEnforceRange;
-                        delegate: Label { width: 100; height: 60; text: currentValue; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
+                        delegate: Label { width: 100; height: 60; text: modelData; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
                         path: Path { startX: idYear.width / 2 ; startY: 0;
                             PathAttribute { name: "pixelSize"; value: 18 }
                             PathAttribute { name: "color"; value: 1 }
@@ -74,7 +74,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
                     Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
                     Rectangle { anchors.bottom: parent.bottom; anchors.bottomMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
                     PathView { id: idMonthList; clip: true; anchors.fill: parent; pathItemCount: 3; preferredHighlightBegin: 0.5; preferredHighlightEnd: 0.5; highlightRangeMode: PathView.StrictlyEnforceRange;
-                        delegate: Label { width: 100; height: 60; text: currentValue; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
+                        delegate: Label { width: 100; height: 60; text: modelData; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
                         path: Path { startX: idMonth.width / 2 ; startY: 0;
                             PathAttribute { name: "pixelSize"; value: 18 }
                             PathAttribute { name: "color"; value: 1 }
@@ -93,7 +93,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
                     Rectangle { anchors.top: parent.top; anchors.topMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
                     Rectangle { anchors.bottom: parent.bottom; anchors.bottomMargin: 60; width: parent.width; height: 1; color: "#FF8025"; }
                     PathView { id: idDayList; clip: true; anchors.fill: parent; pathItemCount: 3; preferredHighlightBegin: 0.5; preferredHighlightEnd: 0.5; highlightRangeMode: PathView.StrictlyEnforceRange;
-                        delegate: Label { width: 100; height: 60; text: currentValue; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
+                        delegate: Label { width: 100; height: 60; text: modelData; font.pixelSize: PathView.pixelSize; color: PathView.color ? "#FAFAFA" : "#FF8025"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; }
                         path: Path { startX: idDay.width / 2 ; startY: 0;
                             PathAttribute { name: "pixelSize"; value: 18 }
                             PathAttribute { name: "color"; value: 1 }
@@ -132,7 +132,7 @@ ModalPopupDialog {   // this is the wrapped Popup element in ui_qml_control
             idYearList.movementEnded.connect( yearChanged );
             idMonthList.movementEnded.connect( monthChanged );
             idDayList.movementEnded.connect( dayChanged );
-            yearChanged( );monthChanged( );dayChanged( );
+//            yearChanged( );monthChanged( );dayChanged( );   //好像没用也.
         }
 
         // ====================================================================
