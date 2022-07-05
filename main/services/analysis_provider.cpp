@@ -17,6 +17,9 @@
 #include "perimeter/main/appctrl/perimeter_appctrl.hxx"
 #include <QFileDialog>
 #include <QApplication>
+#include <QtMath>
+#include "perimeter/third-part/qxpack/indcom/ui_qml_base/qxpack_ic_ui_qml_api.hxx"
+
 namespace Perimeter {
 
 AnalysisProvider::AnalysisProvider(QObject *parent) : QObject(parent)
@@ -36,12 +39,13 @@ AnalysisProvider::~AnalysisProvider()
 }
 
 
-QObject* AnalysisProvider::runProcess(int report,PatientVm *patient, CheckResultVm *checkResult, QObject *program)
+QObject* AnalysisProvider::runProcess(int report,PatientVm *patient, CheckResultVm *checkResult, QObject *program,QVariant diagramWidth)
 {
     m_programType=program->property("type").toInt();
     m_report=report;
     m_patient=patient;
     m_checkResult=checkResult;
+    m_previewDiagramWidth=int(diagramWidth.toFloat());
     if(m_programType!=2)
     {
         StaticProgramVM* staticProgram=static_cast<StaticProgramVM*>(program);
@@ -66,18 +70,32 @@ QObject* AnalysisProvider::runProcess(int report,PatientVm *patient, CheckResult
     m_values.resize(values.length());
     for(int i=0;i<values.length();i++){m_values[i]=values[i].toInt();}
 
-
     DrawDiagram();
+    if(m_psd>4.3) m_p_psd=0.5;
+    else if(m_psd>3.7) m_p_psd=1;
+    else if(m_psd>3.2) m_p_psd=2;
+    else if(m_psd>2.5) m_p_psd=5;
+    else if(m_psd>2.0) m_p_psd=10;
+
+    if(m_md<-5.5)  m_p_md=0.5;
+    else if(m_md<-3.5) m_p_md=1;
+    else if(m_md<-2.6) m_p_md=2;
+    else if(m_md<-2.0) m_p_md=5;
+    else if(m_md<-1.5) m_p_md=10;
+
     int dotSeen=0;
     int dotWeakSeen=0;
     int dotUnseen=0;
-    for(auto& i:m_values)
+    if(report==3)
     {
-        if(i==0) dotUnseen++;
-        else if(i==1) dotWeakSeen++;
-        else if(i==2) dotSeen++;
+        for(auto& i:m_values)
+        {
+            if(i==0) dotUnseen++;
+            else if(i==1) dotWeakSeen++;
+            else if(i==2) dotSeen++;
+        }
     }
-    return new AnalysisResult(m_md,m_psd,m_VFI,m_GHT,dotSeen,dotWeakSeen,dotUnseen);
+    return new AnalysisResult(m_md,m_p_md,m_psd,m_p_psd,m_VFI,m_GHT,dotSeen,dotWeakSeen,dotUnseen);
 }
 
 
@@ -119,48 +137,80 @@ QPointF AnalysisProvider::getPixFromPoint(QPointF point, float width, float heig
 
 void AnalysisProvider::showReport()
 {
-    qDebug()<<"lol";
+    if(m_reportEngine!=nullptr){m_reportEngine = new LimeReport::ReportEngine();}
+    m_reportEngine->loadFromFile("./reports/Single.lrxml");
+
+    auto manager=m_reportEngine->dataManager();
 
 
-     m_reportEngine = new LimeReport::ReportEngine();
-     m_reportEngine->loadFromFile("./reports/Single.lrxml");
+    manager->clearUserVariables();
 
-     auto manager=m_reportEngine->dataManager();
-
-     manager->clearUserVariables();
-
-//     report->setShowProgressDialog(false);
-//     report->designReport();
-//     QString fileName = QFileDialog::getOpenFileName(nullptr,"Select report file",QApplication::applicationDirPath()+"/reports/","*.lrxml");
-     manager->setReportVariable("hospitalName", "西南");
-     manager->setReportVariable("name",m_patient->getName());
-     manager->setReportVariable("birthDate",m_patient->getBirthDate().replace('-','/'));
-     manager->setReportVariable("checkDate", m_checkResult->getTime().date().toString("yyyy/MM/dd"));
-     manager->setReportVariable("ID", m_patient->getPatientID());
-     manager->setReportVariable("age", m_patientAge);
-     manager->setReportVariable("checkTime", m_checkResult->getTime().time().toString("H:mm:ss"));
-     manager->setReportVariable("sex", m_patient->getSex()==0?"male":"female");
-
-     auto commomParams=static_cast<StaticParamsVM*>(m_checkResult->getParams())->getCommonParams();
-     QString fixationMonitor;switch (commomParams->getFixationMonitor()) {case 0:fixationMonitor="No Alarm"; break;case 1:fixationMonitor="Only Alarm";break;case 2:fixationMonitor="Pause And Alarm";break;}
-     QString fixationTarget;switch (commomParams->getFixationTarget()){case 0:fixationTarget="Center Point";break;case 1:fixationTarget="Small Diamond";break;case 2:fixationTarget="Big Diamond";break;case 3:fixationTarget="Bottom Point";break;}
-
-     m_checkResult->getResultData()->getFixationLostCount();
-     m_checkResult->getResultData()->getFixationLostTestCount();
-     manager->setReportVariable("fixationMonitor","Fixation Monitor:"+fixationMonitor);
+//    report->setShowProgressDialog(false);
+//    report->designReport();
+//    QString fileName = QFileDialog::getOpenFileName(nullptr,"Select report file",QApplication::applicationDirPath()+"/reports/","*.lrxml");
+    manager->setReportVariable("hospitalName",QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("hospitalName").toString());
+    manager->setReportVariable("name",m_patient->getName());
+    manager->setReportVariable("birthDate",m_patient->getBirthDate().replace('-','/'));
+    manager->setReportVariable("checkDate", m_checkResult->getTime().date().toString("yyyy/MM/dd"));
+    manager->setReportVariable("ID", m_patient->getPatientID());
+    manager->setReportVariable("age", m_patientAge);
+    manager->setReportVariable("checkTime", m_checkResult->getTime().time().toString("H:mm:ss"));
+    manager->setReportVariable("sex", m_patient->getSex()==0?"male":"female");
 
 
+    auto commomParams=static_cast<StaticParamsVM*>(m_checkResult->getParams())->getCommonParams();
+    QString fixationMonitor;switch (commomParams->getFixationMonitor()) {case 0:fixationMonitor="No Alarm"; break;case 1:fixationMonitor="Only Alarm";break;case 2:fixationMonitor="Pause And Alarm";break;}
+    QString fixationTarget;switch (commomParams->getFixationTarget()){case 0:fixationTarget="Center Point";break;case 1:fixationTarget="Small Diamond";break;case 2:fixationTarget="Big Diamond";break;case 3:fixationTarget="Bottom Point";break;}
+    manager->setReportVariable("fixationMonitor","Fixation Monitor: "+fixationMonitor);
+    manager->setReportVariable("fixationTarget","Fixation Target: "+fixationTarget);
+    auto resultData=m_checkResult->getResultData();
+    manager->setReportVariable("fixationLosses","Fixation Losses: "+QString::number(resultData->getFixationLostCount())+"/"+QString::number(resultData->getFixationLostTestCount()));
+    manager->setReportVariable("falsePositiveRate","False POS Errors: "+QString::number(qRound(float(resultData->getFalsePositiveCount())/resultData->getFalsePositiveTestCount()*100))+"%");
+    manager->setReportVariable("falseNegativeRate","False NEG Errors: "+QString::number(qRound(float(resultData->getFalseNegativeCount())/resultData->getFalseNegativeTestCount()*100))+"%");
+    QTime time;time.setHMS(0,0,0);time=time.addSecs(resultData->getTestTimespan());
+    manager->setReportVariable("testTime","Test Duration: "+time.toString("mm:ss"));
+    manager->setReportVariable("centerDotCheck",QString("Fovea: ")+(commomParams->getCenterDotCheck()?"ON":"OFF"));
 
-     manager->setReportVariable("deviceInfo", "设备信息:Perimeter");
-     manager->setReportVariable("version", "版本:1.2.1.1");
+    QString cursorSize;switch(commomParams->getCursorSize()){case 0:cursorSize="I";break;case 1:cursorSize="II";break;case 2:cursorSize="III";break;case 3:cursorSize="IV";break;case 4:cursorSize="V";break;}
+    QString cursorColor;switch(commomParams->getCursorColor()){case 0:cursorColor="White";break;case 1:cursorColor="Red";break;case 2:cursorColor="Blue";break;}
+    manager->setReportVariable("stimCursor","Stimulus: "+cursorSize+","+cursorColor);
+    manager->setReportVariable("backgroundColor","Background: "+QString(commomParams->getBackGroundColor()==0?"31.5":"315")+" ASB");
+    QString strategy;switch(commomParams->getStrategy()){case 0:strategy="fullThreshold";break;case 1:strategy="smartInteractive";break;case 2:strategy="fastInteractive";break;case 3:strategy="oneStage";break;case 4:strategy="twoStages";break;case 5:strategy="quantifyDefects";break;case 6:strategy="singleStimulation";break;}
+    manager->setReportVariable("Strategy","Strategy: "+strategy);
+
+    manager->setReportVariable("pupilDiameter","Pupil Diameter: ");
+    manager->setReportVariable("visualAcuity","Visual Acuity: ");
+    manager->setReportVariable("Rx_Ry",QString("Rx: ")+"Ry: ");
+
+    manager->setReportVariable("DBImagePath","./temp/dBDiagram.bmp");
+    manager->setReportVariable("GrayImagePath","./temp/gray.bmp");
+    manager->setReportVariable("TotalDeviationImagePath","./temp/TotalDeviation.bmp");
+    manager->setReportVariable("PatternDeviationImagePath","./temp/PatterDeviation.bmp");
+    manager->setReportVariable("TotalPEImagePath","./temp/TotalPE.bmp");
+    manager->setReportVariable("PatternPEImagePath","./temp/PatternPE.bmp");
+
+    manager->setReportVariable("VFI","VFI: "+QString::number(qRound(m_VFI*100))+"%");
+    QString GHT;switch (m_GHT){case 0:GHT="Out of limits";break;case 1:GHT="Low sensitivity";break;case 2:GHT="Border of limits";break;case 3:GHT="Within normal limits";break;}
+    manager->setReportVariable("GHT","GHT: "+GHT);
+    manager->setReportVariable("MD",QString("MD: ")+QString::number(m_md)+" (P<"+QString::number(m_p_md)+"%)");
+    manager->setReportVariable("PSD",QString("PSD: ")+QString::number(m_psd)+" (P<"+QString::number(m_p_psd)+"%)");
+
+    manager->setReportVariable("TotalDeviation","TotalDeviation");
+    manager->setReportVariable("PatternDeviation","PatternDeviation");
+    manager->setReportVariable("DoctorSign","DoctorSign");
 
 
-     manager->setReportVariable("DBImagePath","./temp/dBDiagram.bmp");
+    manager->setReportVariable("comment", "comment:");
+    manager->setReportVariable("deviceInfo", "设备信息:Perimeter");
+    manager->setReportVariable("version", "版本:1.2.1.1");
+
+
 
 
 //     report->previewReport();
 //     delete report;
      m_reportEngine->setShowProgressDialog(true);
+
 //     report->setSettings()
 
      m_reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,33);
@@ -175,9 +225,11 @@ void AnalysisProvider::showReport()
 
 void AnalysisProvider::drawPixScale()
 {
+
     QPainter painter(&m_image);
     painter.setBackground(QBrush(QColor("white")));
     painter.setBrush(QBrush(QColor("black")));
+    painter.setPen({Qt::black,1});
     painter.drawLine(QLine(0,m_image.height()/2,m_image.width(),m_image.height()/2));
     painter.drawLine(QLine(m_image.width()/2,0,m_image.width()/2,m_image.height()));
 
@@ -197,7 +249,7 @@ void AnalysisProvider::drawPixScale()
 void AnalysisProvider::drawDevDBText(QVector<int> values)
 {
     QPainter painter(&m_image);
-    int fontPixSize=12;
+    int fontPixSize=m_image.width()/17;
     QFont font("consolas");
     font.setPixelSize(fontPixSize);
     painter.setFont(font);
@@ -228,8 +280,8 @@ void AnalysisProvider::drawPE(QVector<int> values)
 
 QPoint AnalysisProvider::convertDegLocToPixLoc(QPointF DegLoc)
 {
-    float pixPerDegW=float(m_imageSize.width()/2)/m_range;
-    float pixPerDegH=float(m_imageSize.height()/2)/m_range;
+    float pixPerDegW=float(m_image.width()/2)/m_range;
+    float pixPerDegH=float(m_image.height()/2)/m_range;
     return QPoint(m_image.width()/2+DegLoc.x()*pixPerDegW,m_image.height()/2-DegLoc.y()*pixPerDegH);
 }
 
@@ -242,10 +294,11 @@ QPoint AnalysisProvider::convertDegLocToPixLoc(QPointF DegLoc)
 
 void AnalysisProvider::DrawDiagram()
 {
+
     if(m_report==0)                 //single
     {
-        m_imageSize=QSize(240,240);
-        m_image=QImage(m_imageSize, QImage::Format_RGB32);
+        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        m_image=QImage(imageSize, QImage::Format_RGB32);
         analysis();
         drawDBDiagram();
         drawGrayDiagram();
@@ -256,8 +309,8 @@ void AnalysisProvider::DrawDiagram()
     }
     if(m_report==1)
     {
-        m_imageSize=QSize(240,240);
-        m_image=QImage(m_imageSize, QImage::Format_RGB32);
+        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        m_image=QImage(imageSize, QImage::Format_RGB32);
         analysis();
         drawGrayDiagram();
         drawDefectDepthDiagram();
@@ -266,8 +319,8 @@ void AnalysisProvider::DrawDiagram()
 
     if(m_report==2)
     {
-        m_imageSize=QSize(240,240);
-        m_image=QImage(m_imageSize, QImage::Format_RGB32);
+        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        m_image=QImage(imageSize, QImage::Format_RGB32);
         analysis();
         drawDBDiagram();
         drawGrayDiagram();
@@ -277,11 +330,54 @@ void AnalysisProvider::DrawDiagram()
 
     if(m_report==3)
     {
-        m_imageSize=QSize(480,480);
-        m_image=QImage(m_imageSize, QImage::Format_RGB32);
+        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        m_image=QImage(imageSize, QImage::Format_RGB32);
         drawScreening();
     }
 
+}
+
+void AnalysisProvider::DrawReportDiagram()
+{
+    if(m_report==0)                 //single
+    {
+        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        m_image=QImage(imageSize, QImage::Format_RGB32);
+        analysis();
+        drawDBDiagram();
+        drawGrayDiagram();
+        drawTotalDeviation();
+        drawPatternDeviation();
+        drawTotalPE();
+        drawPatternPE();
+    }
+    if(m_report==1)
+    {
+        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        m_image=QImage(imageSize, QImage::Format_RGB32);
+        analysis();
+        drawGrayDiagram();
+        drawDefectDepthDiagram();
+        drawDBDiagram();
+    }
+
+    if(m_report==2)
+    {
+        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        m_image=QImage(imageSize, QImage::Format_RGB32);
+        analysis();
+        drawDBDiagram();
+        drawGrayDiagram();
+        drawTotalPE();
+        drawPatternPE();
+    }
+
+    if(m_report==3)
+    {
+        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        m_image=QImage(imageSize, QImage::Format_RGB32);
+        drawScreening();
+    }
 }
 
 
@@ -290,7 +386,7 @@ void AnalysisProvider::drawDBDiagram()
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
     QPainter painter(&m_image);
-    int fontPixSize=12;
+    int fontPixSize=m_image.width()/17;
     QFont font("consolas");
     font.setPixelSize(fontPixSize);
     painter.setFont(font);

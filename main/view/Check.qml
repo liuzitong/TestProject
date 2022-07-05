@@ -147,7 +147,7 @@ Item {id:root; width: 1366;height: 691
                                                 LineEdit{text:"0.0";width: parent.width*0.5;textfeild.readOnly: true;}
                                             }
                                             Row{id: row;width:parent.width;height: parent.height*0.7/3;spacing: width*0.05;
-                                                CusCheckBox{}
+                                                CusCheckBox{enabled: false;}
                                                 CusText{text:"眼动警报"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 Image {source: "qrc:/Pics/capture-svg/btn_alarm.svg";height:parent.height*0.6; anchors.verticalCenter: parent.verticalCenter;width: height; }
                                             }
@@ -233,8 +233,9 @@ Item {id:root; width: 1366;height: 691
                             {
                                 console.log(currentCheckResult.type);
                                 var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
+                                var diagramWidth=root.height*14/15*0.92*0.97/3;
 //                                IcUiQmlApi.appCtrl.AnalysisProvider.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,currentCheckResult.resultData.checkData);
-                                var analysisResult=IcUiQmlApi.appCtrl.AnalysisProvider.runProcess(queryStrategy.report,currentPatient,currentCheckResult,currentProgram);
+                                var analysisResult=IcUiQmlApi.appCtrl.AnalysisProvider.runProcess(queryStrategy.report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
 //                                if(queryStrategy.report==0){reportPage="singleAnalysis";}
 //                                else if(queryStrategy.report==1){reportPage="three-in-one";}
 //                                else if(queryStrategy.report==2){reportPage="overview";}

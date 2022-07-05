@@ -21,7 +21,7 @@ class AnalysisProvider : public QObject
 public:
     explicit AnalysisProvider(QObject *parent = nullptr);
     ~AnalysisProvider();
-    Q_INVOKABLE QObject* runProcess(int report,PatientVm* patient,CheckResultVm* checkResult,QObject* program);
+    Q_INVOKABLE QObject* runProcess(int report,PatientVm* patient,CheckResultVm* checkResult,QObject* program,QVariant diagramWidth);
     Q_INVOKABLE QPointF getClickDot(float MouseX,float MouseY,float width,float height);
     Q_INVOKABLE QPointF getPixFromPoint(QPointF point,float width,float height);
     Q_INVOKABLE int getSelectedDotIndex(){return m_selectedDotIndex;};
@@ -32,7 +32,6 @@ signals:
 
 public slots:
 private:
-    QSize m_imageSize;
     QImage m_image;
 //    QSize m_imageSizeLarge=QSize(720,720);
 //    QImage m_imageLarge=QImage(m_imageSize, QImage::Format_RGB32);
@@ -43,7 +42,7 @@ private:
     int m_selectedDotIndex;
     int m_programType;
 
-    LimeReport::ReportEngine* m_reportEngine;
+    LimeReport::ReportEngine* m_reportEngine=nullptr;
 
     QVector<QPointF> m_dotList;
     QVector<int> m_values;
@@ -84,10 +83,11 @@ private:
 
 
     float m_VFI_Weight[5]={3.29f,1.28f,0.79f,0.57f,0.43f};
-    float m_md,m_psd,m_VFI;
+    float m_md,m_psd,m_VFI,m_p_md,m_p_psd;
     int m_GHT;
 
     int m_patientAge;
+    int m_previewDiagramWidth;
 
 
 
@@ -117,6 +117,7 @@ private:
 //    QPoint convertDegLocToPixLocLarge(QPointF DegLoc);
 
     void DrawDiagram();
+    void DrawReportDiagram();
 
 
 

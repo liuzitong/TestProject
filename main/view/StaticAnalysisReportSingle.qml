@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+import QtQuick 2.0
 import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
@@ -23,7 +23,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/temp/dbDiagram.bmp";
                 range:root.range;
-                onClicked:root.clearDot();
+                onClicked:{root.clearDot();console.log("width is:"+width);}
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }
             Item{width: parent.width*0.1;height: parent.height;}

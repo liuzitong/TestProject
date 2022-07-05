@@ -1,4 +1,4 @@
-﻿import QtQuick 2.6
+import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -70,7 +70,7 @@ Row{
 
             Image{
                 z:-1;
-                height:parent.height;width:height;cache: false;        //to refresh image
+                height:parent.height; smooth: false;width:height;cache: false;        //to refresh image
                 Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + root.source;})}
             }
         }

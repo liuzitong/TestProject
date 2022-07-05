@@ -11,14 +11,14 @@ Item
 {
     id:root;
     signal refresh();
-    property var textHeight;
+    property int textHeight:height*0.05;
     property var currentPatient: null;
     property var currentProgram: null;
     property var currentCheckResult: null;
     property var analysisResult: null;
     property var report:null;                           //0:常规,1:三合一,2:总览,3:筛选
-    width: 1366;
-    height: 660;
+//    width: 1366;
+//    height: 660;
     onRefresh:
     {
         switch(report)
@@ -84,7 +84,7 @@ Item
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
-                    Item{ id: item2;width:parent.width;height: parent.height*0.10;anchors.left: parent.left;anchors.leftMargin: (width-322)/2
+                    Item{ id: item2;width:parent.width;height: parent.height*0.10;anchors.left: parent.left;
                         ShortTermFluctuation{ dots:if(currentCheckResult!==null) currentCheckResult.resultData.shortTermFluctuation;  }
                     }
                 }
@@ -102,3 +102,8 @@ Item
 
 }
 
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

@@ -1,4 +1,4 @@
-﻿import QtQuick 2.6
+import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -16,7 +16,7 @@ Column {
     property var currentCheckResult: null;
     property var analysisResult: null;
     property int report;
-    property int textHeight: height*0.05;
+//    property int textHeight: height*0.05;
 
     signal refresh();
     signal changePage(var pageName,var params);
@@ -33,7 +33,7 @@ Column {
             content.source="MoveAnalysis.qml";
         }
 
-        content.item.textHeight=textHeight;
+//        content.item.textHeight=textHeight;
         content.item.currentPatient=currentPatient;
         content.item.currentProgram=currentProgram;
         content.item.currentCheckResult=currentCheckResult;
