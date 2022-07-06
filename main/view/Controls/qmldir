@@ -1,4 +1,4 @@
-﻿module perimeter.main.view.Controls
+module perimeter.main.view.Controls
 CusButton 1.0       CusButton.qml
 LineEdit 1.0        LineEdit.qml
 CusComboBox 1.0     CusComboBox.qml
@@ -8,6 +8,6 @@ CusCheckBox 1.0     CusCheckBox.qml
 CheckDisplay 1.0       CheckDisplay.qml
 NumberLineEdit 1.0  NumberLineEdit.qml
 ProgramCustomizeDisplay 1.0       ProgramCustomizeDisplay.qml
-ShortTermFluctuation 1.0   ShortTermFluctuation.qml
+FixationDeviation 1.0   FixationDeviation.qml
 VisionDiagram 1.0   VisionDiagram.qml
 AnalysisDiagram 1.0 AnalysisDiagram.qml

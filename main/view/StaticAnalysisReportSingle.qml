@@ -21,7 +21,7 @@ Item {
             AnalysisDiagram{
                 width: parent.height;height:parent.height*1.25;
                 anchors.verticalCenter: parent.verticalCenter
-                source:"/temp/dbDiagram.bmp";
+                source:"/previewImage/dbDiagram.bmp";
                 range:root.range;
                 onClicked:{root.clearDot();console.log("width is:"+width);}
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
@@ -30,7 +30,7 @@ Item {
             AnalysisDiagram{
                 width: parent.height;height:parent.height*1.25;
                 anchors.verticalCenter: parent.verticalCenter
-                source:"/temp/gray.bmp";
+                source:"/previewImage/gray.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
@@ -48,7 +48,7 @@ Item {
             AnalysisDiagram{
                 width: parent.height;height:parent.height*1.25;
                 anchors.verticalCenter: parent.verticalCenter
-                source:"/temp/TotalDeviation.bmp";
+                source:"/previewImage/TotalDeviation.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
@@ -57,7 +57,7 @@ Item {
             AnalysisDiagram{
                 width: parent.height;height:parent.height*1.25;
                 anchors.verticalCenter: parent.verticalCenter
-                source:"/temp/PatterDeviation.bmp";
+                source:"/previewImage/PatterDeviation.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
@@ -85,7 +85,7 @@ Item {
             AnalysisDiagram{
                 width: parent.height;height:parent.height*1.25;
                 anchors.verticalCenter: parent.verticalCenter
-                source:"/temp/TotalPE.bmp";
+                source:"/previewImage/TotalPE.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
@@ -93,7 +93,7 @@ Item {
             AnalysisDiagram{
                 width: parent.height;height:parent.height*1.25;
                 anchors.verticalCenter: parent.verticalCenter
-                source:"/temp/PatternPE.bmp";
+                source:"/previewImage/PatternPE.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
@@ -106,9 +106,9 @@ Item {
                         anchors.fill: parent;
                         model: [{image:"qrc:/grays/PE1.bmp",pe:"<5%"},{image:"qrc:/grays/PE2.bmp",pe:"<2%"},{image:"qrc:/grays/PE3.bmp",pe:"<1%"},{image:"qrc:/grays/PE4.bmp",pe:"<0.5%"}]
                         Row{
-                            height: parent.height*0.18;width: parent.width;spacing: height*0.5
-                            Image {height: sourceSize.height;width:sourceSize.width;anchors.verticalCenter: parent.verticalCenter;source: modelData.image}
-                            CusText{height: parent.height;text:modelData.pe; horizontalAlignment: Text.AlignLeft;anchors.verticalCenter: parent.verticalCenter;font.pointSize: height*0.50}
+                            height: parent.height*0.14;width: parent.width;spacing: height*0.5
+                            Image {height: sourceSize.height*2; fillMode: Image.PreserveAspectFit; width:sourceSize.height*2;smooth: false;source: modelData.image}
+                            CusText{height: parent.height;text:modelData.pe; horizontalAlignment: Text.AlignLeft;anchors.verticalCenter: parent.verticalCenter;font.pointSize: height*0.70}
                         }
                     }
                 }

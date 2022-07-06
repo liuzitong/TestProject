@@ -10,7 +10,7 @@
         <file>NumberLineEdit.qml</file>
         <file>ProgramCustomizeDisplay.qml</file>
         <file>CheckDisplay.qml</file>
-        <file>ShortTermFluctuation.qml</file>
+        <file>FixationDeviation.qml</file>
         <file>VisionDiagram.qml</file>
         <file>AnalysisDiagram.qml</file>
     </qresource>

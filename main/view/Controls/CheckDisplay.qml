@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+import QtQuick 2.0
 
 Item{
     id:root;
@@ -25,6 +25,7 @@ Item{
     }
 
     signal painted();
+    antialiasing: true
 
     Component.onCompleted:
     {
@@ -40,6 +41,7 @@ Item{
         property double widthMargin: (width-diameter)/2;
         property double heightMargin:height*0.015;
         property int fontSize: diameter*0.022;
+        smooth: false
 
 
         function drawDashRound(x, y, radius, length)

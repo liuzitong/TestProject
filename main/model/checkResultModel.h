@@ -1,4 +1,4 @@
-﻿#ifndef CHECKRESULTMODEL_H
+#ifndef CHECKRESULTMODEL_H
 #define CHECKRESULTMODEL_H
 #include "Params.h"
 #include "Point.h"
@@ -41,8 +41,7 @@ struct ResultData
     int ambientLight;
     int E_Light_pv;
     int T_Light_pv;
-    std::vector<int> shortTermFluctuation;
-    std::vector<int> eyeMoveCurve;
+    std::vector<int> fixationDeviation;
     typename CheckDataTraits<T>::checkData checkdata;
 
     template<class Archive>
@@ -61,8 +60,7 @@ struct ResultData
         archive & BOOST_SERIALIZATION_NVP(ambientLight);
         archive & BOOST_SERIALIZATION_NVP(E_Light_pv);
         archive & BOOST_SERIALIZATION_NVP(T_Light_pv);
-        archive & BOOST_SERIALIZATION_NVP(shortTermFluctuation);
-        archive & BOOST_SERIALIZATION_NVP(eyeMoveCurve);
+        archive & BOOST_SERIALIZATION_NVP(fixationDeviation);
         archive & BOOST_SERIALIZATION_NVP(checkdata);
     }
 };

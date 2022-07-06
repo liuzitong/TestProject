@@ -21,7 +21,7 @@ Item {
                 width: parent.height;height:parent.height;
                 textTop:"阈值(dB)"
                 anchors.verticalCenter: parent.verticalCenter
-                source:"/temp/dbDiagram.bmp";
+                source:"/previewImage/dbDiagram.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
@@ -30,7 +30,7 @@ Item {
                 width: parent.height;height:parent.height;
                 textTop:"灰度图"
                 anchors.verticalCenter: parent.verticalCenter
-                source:"/temp/gray.bmp";
+                source:"/previewImage/gray.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
@@ -59,7 +59,7 @@ Item {
                 width: parent.height;height:parent.height;
                 textTop:"总体偏差"
                 anchors.verticalCenter: parent.verticalCenter
-                source:"/temp/TotalPE.bmp";
+                source:"/previewImage/TotalPE.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
@@ -68,7 +68,7 @@ Item {
                 width: parent.height;height:parent.height;
                 textTop:"模式偏差"
                 anchors.verticalCenter: parent.verticalCenter
-                source:"/temp/PatternPE.bmp";
+                source:"/previewImage/PatternPE.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}

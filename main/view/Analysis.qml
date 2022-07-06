@@ -96,7 +96,7 @@ Column {
 //                                var reportWindow=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::Report", false,[0]);
 //                                reportWindow.showWindow();
 //                                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::Report",reportWindow);
-                                IcUiQmlApi.appCtrl.AnalysisProvider.showReport();
+                                IcUiQmlApi.appCtrl.AnalysisProvider.showReport(queryStrategy.currentIndex);
                             }
                         }
                         CusComboBox{

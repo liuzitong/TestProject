@@ -1,4 +1,4 @@
-﻿#ifndef CHECKRESULTVM_H
+#ifndef CHECKRESULTVM_H
 #define CHECKRESULTVM_H
 #include <QObject>
 #include <perimeter/main/model/checkResultModel.h>
@@ -55,8 +55,7 @@ class ResultDataVm:public QObject
     Q_PROPERTY(int ambientLight READ getAmbientLight WRITE setAmbientLight)
     Q_PROPERTY(int E_Light_pv READ getE_Light_pv WRITE setE_Light_pv)
     Q_PROPERTY(int T_Light_pv READ getT_Light_pv WRITE setT_Light_pv)
-    Q_PROPERTY(QVariantList shortTermFluctuation READ getShortTermFluctuation WRITE setShortTermFluctuation)
-    Q_PROPERTY(QVariantList eyeMoveCurve READ getEyeMoveCurve WRITE setEyeMoveCurve)
+    Q_PROPERTY(QVariantList fixationDeviation READ getFixationDeviation WRITE setFixationDeviation)
     Q_PROPERTY(QVariantList checkData READ getCheckData WRITE setCheckData)
 
 
@@ -78,8 +77,7 @@ public:
     int getAmbientLight(){return m_ambientLight;}void setAmbientLight(int value){m_ambientLight=value;}
     int getE_Light_pv(){return m_E_Light_pv;}void setE_Light_pv(int value){m_E_Light_pv=value;}
     int getT_Light_pv(){return m_T_Light_pv;}void setT_Light_pv(int value){m_T_Light_pv=value;}
-    QVariantList getShortTermFluctuation(){return m_shortTermFluctuation;}void setShortTermFluctuation(QVariantList value){m_shortTermFluctuation=value;}
-    QVariantList getEyeMoveCurve(){return m_eyeMoveCurve;}void setEyeMoveCurve(QVariantList value){m_eyeMoveCurve=value;}
+    QVariantList getFixationDeviation(){return m_fixationDeviation;}void setFixationDeviation(QVariantList value){m_fixationDeviation=value;}
     QVariantList getCheckData(){return m_checkData;}void setCheckData(QVariantList value){m_checkData=value;}
 
 private:
@@ -96,8 +94,7 @@ private:
     int m_ambientLight;
     int m_E_Light_pv;
     int m_T_Light_pv;
-    QVariantList m_shortTermFluctuation;
-    QVariantList m_eyeMoveCurve;
+    QVariantList m_fixationDeviation;
     QVariantList m_checkData;       //非移动时为int 移动时是QPoint
 };
 

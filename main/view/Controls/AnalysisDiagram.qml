@@ -17,7 +17,7 @@ Row{
     signal clearDot;
     signal clicked;
     width: parent.height;height:parent.height;
-    property int fontSize: 25
+    property int fontSize:width<=400?width/25:width/60;
 //    anchors.horizontalCenter: parent.horizontalCenter;
     Column{
         width: parent.height*0.8;height:parent.height;
@@ -83,7 +83,7 @@ Row{
         }
         Item{
             width: parent.width;height:parent.height*0.8;
-            CusText{width: parent.width;height:fontSize; horizontalAlignment: Text.AlignLeft;anchors.verticalCenter: parent.verticalCenter
+            CusText{width: parent.width;height:parent.height/10; horizontalAlignment: Text.AlignLeft;anchors.verticalCenter: parent.verticalCenter;font.pointSize: root.fontSize;
             text: " ("+root.range+")"}
         }
         Item {

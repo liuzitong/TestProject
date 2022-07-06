@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+import QtQuick 2.0
 import QtQml 2.2
 Item{
     id:root
@@ -8,7 +8,7 @@ Item{
     property string imageSrc:"qrc:/Pics/base-svg/btn_checkbox_1normal.svg";
     property string hoverImageSrc: "qrc:/Pics/base-svg/btn_checkbox_2hover.svg";
     property string pressImageSrc: "qrc:/Pics/base-svg/btn_checkbox_3press.svg";
-    property string backGroundColor:enabled? "#f0f2f3":"Gray";
+    property string backGroundColor:enabled? "#f0f2f3":"#989898";
     signal clicked;
 
     Image {

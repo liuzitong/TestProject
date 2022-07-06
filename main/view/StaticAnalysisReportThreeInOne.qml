@@ -24,7 +24,7 @@ Item {
             AnalysisDiagram{
                 width: parent.height;height:parent.height;
                 anchors.horizontalCenter: parent.horizontalCenter
-                source:"/temp/gray.bmp";
+                source:"/previewImage/gray.bmp";
                 textTop:"灰度图";
                 range:root.range;
                 onClicked:root.clearDot();
@@ -39,7 +39,7 @@ Item {
                 width: parent.height;height:parent.height;
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width*0.07
-                source:"/temp/defectDepth.bmp";
+                source:"/previewImage/defectDepth.bmp";
                 textTop:"缺陷深度(db)";
                 textBottom:"□=4db的预期";
                 range:root.range;
@@ -52,7 +52,7 @@ Item {
                 width: parent.height;height:parent.height;
                 anchors.right: parent.right
                 anchors.rightMargin: parent.width*0.07
-                source:"/temp/dBDiagram.bmp";
+                source:"/previewImage/dBDiagram.bmp";
                 textTop:"阈值(dB)";
                 range:root.range;
                 onClicked:root.clearDot();

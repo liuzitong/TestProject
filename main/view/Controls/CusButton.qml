@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+import QtQuick 2.0
 import QtQml 2.2
 Item{
     id:root
@@ -29,7 +29,7 @@ Item{
     signal entered()
     signal exited()
     onEnabledChanged: {
-        enabled?buttonColor="#dcdee0":buttonColor="#787878";
+        enabled?buttonColor="#dcdee0":buttonColor="#989898";
     }
 
     MouseArea{

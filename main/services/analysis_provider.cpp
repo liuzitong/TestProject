@@ -46,6 +46,7 @@ QObject* AnalysisProvider::runProcess(int report,PatientVm *patient, CheckResult
     m_patient=patient;
     m_checkResult=checkResult;
     m_previewDiagramWidth=int(diagramWidth.toFloat());
+    qDebug()<<m_previewDiagramWidth;
     if(m_programType!=2)
     {
         StaticProgramVM* staticProgram=static_cast<StaticProgramVM*>(program);
@@ -70,7 +71,7 @@ QObject* AnalysisProvider::runProcess(int report,PatientVm *patient, CheckResult
     m_values.resize(values.length());
     for(int i=0;i<values.length();i++){m_values[i]=values[i].toInt();}
 
-    DrawDiagram();
+
     if(m_psd>4.3) m_p_psd=0.5;
     else if(m_psd>3.7) m_p_psd=1;
     else if(m_psd>3.2) m_p_psd=2;
@@ -95,6 +96,9 @@ QObject* AnalysisProvider::runProcess(int report,PatientVm *patient, CheckResult
             else if(i==2) dotSeen++;
         }
     }
+
+    DrawDiagram();
+    analysis();
     return new AnalysisResult(m_md,m_p_md,m_psd,m_p_psd,m_VFI,m_GHT,dotSeen,dotWeakSeen,dotUnseen);
 }
 
@@ -135,9 +139,16 @@ QPointF AnalysisProvider::getPixFromPoint(QPointF point, float width, float heig
     return QPointF(width/2+(point.x()+0.0)*pixPerDegW,height/2-(point.y()-0.0)*pixPerDegH);
 }
 
-void AnalysisProvider::showReport()
+void AnalysisProvider::showReport(int report)
 {
-    if(m_reportEngine!=nullptr){m_reportEngine = new LimeReport::ReportEngine();}
+    if(m_report!=report)
+    {
+        analysis();
+        m_report=report;
+    }
+    DrawReportDiagram();
+    if(m_reportEngine==nullptr){m_reportEngine = new LimeReport::ReportEngine();}
+//    auto m_reportEngine = new LimeReport::ReportEngine();
     m_reportEngine->loadFromFile("./reports/Single.lrxml");
 
     auto manager=m_reportEngine->dataManager();
@@ -182,12 +193,12 @@ void AnalysisProvider::showReport()
     manager->setReportVariable("visualAcuity","Visual Acuity: ");
     manager->setReportVariable("Rx_Ry",QString("Rx: ")+"Ry: ");
 
-    manager->setReportVariable("DBImagePath","./temp/dBDiagram.bmp");
-    manager->setReportVariable("GrayImagePath","./temp/gray.bmp");
-    manager->setReportVariable("TotalDeviationImagePath","./temp/TotalDeviation.bmp");
-    manager->setReportVariable("PatternDeviationImagePath","./temp/PatterDeviation.bmp");
-    manager->setReportVariable("TotalPEImagePath","./temp/TotalPE.bmp");
-    manager->setReportVariable("PatternPEImagePath","./temp/PatternPE.bmp");
+    manager->setReportVariable("DBImagePath","./reportImage/dBDiagram.bmp");
+    manager->setReportVariable("GrayImagePath","./reportImage/gray.bmp");
+    manager->setReportVariable("TotalDeviationImagePath","./reportImage/TotalDeviation.bmp");
+    manager->setReportVariable("PatternDeviationImagePath","./reportImage/PatterDeviation.bmp");
+    manager->setReportVariable("TotalPEImagePath","./reportImage/TotalPE.bmp");
+    manager->setReportVariable("PatternPEImagePath","./reportImage/PatternPE.bmp");
 
     manager->setReportVariable("VFI","VFI: "+QString::number(qRound(m_VFI*100))+"%");
     QString GHT;switch (m_GHT){case 0:GHT="Out of limits";break;case 1:GHT="Low sensitivity";break;case 2:GHT="Border of limits";break;case 3:GHT="Within normal limits";break;}
@@ -213,7 +224,7 @@ void AnalysisProvider::showReport()
 
 //     report->setSettings()
 
-     m_reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,33);
+     m_reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,50);
      m_reportEngine->previewReport(/*LimeReport::PreviewHint::ShowAllPreviewBars*/);
 
      qDebug()<<"deleted";
@@ -222,14 +233,14 @@ void AnalysisProvider::showReport()
 }
 
 
-
+#include <qmath.h>
 void AnalysisProvider::drawPixScale()
 {
-
+    int scale=m_isPreview?1:2;
     QPainter painter(&m_image);
     painter.setBackground(QBrush(QColor("white")));
     painter.setBrush(QBrush(QColor("black")));
-    painter.setPen({Qt::black,1});
+    painter.setPen({Qt::black,float(scale)});
     painter.drawLine(QLine(0,m_image.height()/2,m_image.width(),m_image.height()/2));
     painter.drawLine(QLine(m_image.width()/2,0,m_image.width()/2,m_image.height()));
 
@@ -238,8 +249,8 @@ void AnalysisProvider::drawPixScale()
     {
         if(i!=segmentCount)
         {
-            painter.drawLine(QLine((float(m_image.width()-1))/(segmentCount*2)*i,m_image.height()/2-2,(float(m_image.width()-1))/(segmentCount*2)*i,m_image.height()/2+2));
-            painter.drawLine(QLine(m_image.width()/2-2,(float(m_image.height()-1))/(segmentCount*2)*i,m_image.width()/2+2,(float(m_image.height()-1))/(segmentCount*2)*i));
+            painter.drawLine(QLine((float(m_image.width()-scale))/(segmentCount*2)*i+scale/2,m_image.height()/2-2*scale,(float(m_image.width()-scale))/(segmentCount*2)*i+scale/2,m_image.height()/2+2*scale));
+            painter.drawLine(QLine(m_image.width()/2-2*scale,(float(m_image.height()-scale))/(segmentCount*2)*i+scale/2,m_image.width()/2+2*scale,(float(m_image.height()-scale))/(segmentCount*2)*i+scale/2));
         }
     }
 }
@@ -249,7 +260,7 @@ void AnalysisProvider::drawPixScale()
 void AnalysisProvider::drawDevDBText(QVector<int> values)
 {
     QPainter painter(&m_image);
-    int fontPixSize=m_image.width()/17;
+    int fontPixSize=m_image.width()/18;
     QFont font("consolas");
     font.setPixelSize(fontPixSize);
     painter.setFont(font);
@@ -268,13 +279,20 @@ void AnalysisProvider::drawDevDBText(QVector<int> values)
 void AnalysisProvider::drawPE(QVector<int> values)
 {
     QPainter painter(&m_image);
+    float scale;
+    if(m_isPreview)
+    {
+        scale=qCeil(float(m_image.width())/240*1.5);
+    }
+    else scale=4;
     for(int i=0;i<m_dotList.length()&&i<m_values.length();i++)             //画DB图
     {
         auto pixLoc=convertDegLocToPixLoc(m_dotList[i]);
         QString path=QString(":/grays/PE")+QString::number(values[i])+".bmp";
         QImage image(path);
-        QPoint tempPixLoc={pixLoc.x()-image.width()/2,pixLoc.y()-image.height()/2};
-        painter.drawImage(tempPixLoc,image);
+        auto scaledImage=image.scaled(image.width()*scale,image.height()*scale);
+        QPoint tempPixLoc={pixLoc.x()-scaledImage.width()/2,pixLoc.y()-scaledImage.height()/2};
+        painter.drawImage(tempPixLoc,scaledImage);
     }
 }
 
@@ -295,11 +313,12 @@ QPoint AnalysisProvider::convertDegLocToPixLoc(QPointF DegLoc)
 void AnalysisProvider::DrawDiagram()
 {
 
+    m_imageSavePath="./previewImage";
+    m_isPreview=true;
     if(m_report==0)                 //single
     {
         QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
         m_image=QImage(imageSize, QImage::Format_RGB32);
-        analysis();
         drawDBDiagram();
         drawGrayDiagram();
         drawTotalDeviation();
@@ -311,7 +330,6 @@ void AnalysisProvider::DrawDiagram()
     {
         QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
         m_image=QImage(imageSize, QImage::Format_RGB32);
-        analysis();
         drawGrayDiagram();
         drawDefectDepthDiagram();
         drawDBDiagram();
@@ -321,7 +339,6 @@ void AnalysisProvider::DrawDiagram()
     {
         QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
         m_image=QImage(imageSize, QImage::Format_RGB32);
-        analysis();
         drawDBDiagram();
         drawGrayDiagram();
         drawTotalPE();
@@ -339,13 +356,16 @@ void AnalysisProvider::DrawDiagram()
 
 void AnalysisProvider::DrawReportDiagram()
 {
+    m_imageSavePath="./reportImage";
+    m_isPreview=false;
     if(m_report==0)                 //single
     {
-        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        QSize imageSize={550,550};
         m_image=QImage(imageSize, QImage::Format_RGB32);
-        analysis();
         drawDBDiagram();
         drawGrayDiagram();
+        imageSize={500,500};
+        m_image=QImage(imageSize, QImage::Format_RGB32);
         drawTotalDeviation();
         drawPatternDeviation();
         drawTotalPE();
@@ -353,9 +373,8 @@ void AnalysisProvider::DrawReportDiagram()
     }
     if(m_report==1)
     {
-        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        QSize imageSize={550,550};
         m_image=QImage(imageSize, QImage::Format_RGB32);
-        analysis();
         drawGrayDiagram();
         drawDefectDepthDiagram();
         drawDBDiagram();
@@ -363,9 +382,8 @@ void AnalysisProvider::DrawReportDiagram()
 
     if(m_report==2)
     {
-        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        QSize imageSize={550,550};
         m_image=QImage(imageSize, QImage::Format_RGB32);
-        analysis();
         drawDBDiagram();
         drawGrayDiagram();
         drawTotalPE();
@@ -374,7 +392,7 @@ void AnalysisProvider::DrawReportDiagram()
 
     if(m_report==3)
     {
-        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        QSize imageSize={1100,1100};
         m_image=QImage(imageSize, QImage::Format_RGB32);
         drawScreening();
     }
@@ -386,7 +404,7 @@ void AnalysisProvider::drawDBDiagram()
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
     QPainter painter(&m_image);
-    int fontPixSize=m_image.width()/17;
+    int fontPixSize=m_image.width()/18;
     QFont font("consolas");
     font.setPixelSize(fontPixSize);
     painter.setFont(font);
@@ -394,6 +412,10 @@ void AnalysisProvider::drawDBDiagram()
     if(m_os_od==0) blindDot={-14,0};else blindDot={14,0};
     auto pixLoc=convertDegLocToPixLoc(blindDot);
     QImage blindImage(":/grays/SE3.bmp");
+    float scale;
+    if(m_isPreview){ scale=1;}
+    else scale=3;
+    blindImage=blindImage.scaled(blindImage.width()*scale,blindImage.height()*scale);
     painter.drawImage(QPoint{pixLoc.x()-blindImage.width()/2,pixLoc.y()-blindImage.height()/2},blindImage);
 
     for(int i=0;i<m_dotList.length()&&i<m_values.length();i++)             //画DB图
@@ -403,7 +425,7 @@ void AnalysisProvider::drawDBDiagram()
         painter.drawText(rectangle,Qt::AlignCenter,QString::number(m_values[i]));
         m_image.setPixel(pixLoc.x(),pixLoc.y(),0xFFFF0000); //标个小红点
     }
-    m_image.save("./temp/dBDiagram.bmp","bmp");
+    m_image.save(m_imageSavePath+"/dBDiagram.bmp","bmp");
 }
 
 void AnalysisProvider::drawGrayDiagram()
@@ -489,12 +511,16 @@ void AnalysisProvider::drawGrayDiagram()
         auto pixLoc=convertDegLocToPixLoc(tempPoint);
         QString path=QString(":/grays/Gray")+QString::number(grayVal)+".bmp";
         QImage image(path);
-        QPoint tempPixLoc={pixLoc.x()-image.width()/2,pixLoc.y()-image.height()/2};
-        painter.drawImage(tempPixLoc,image);
+        float scale;
+        if(m_isPreview){scale=1;}
+        else scale=2;
+        auto scaledImage=image.scaled(image.width()*scale,image.height()*scale);
+        QPoint tempPixLoc={pixLoc.x()-scaledImage.width()/2,pixLoc.y()-scaledImage.height()/2};
+        painter.drawImage(tempPixLoc,scaledImage);
      }
 
 
-     m_image.save("./temp/gray.bmp","bmp");
+     m_image.save(m_imageSavePath+"/gray.bmp","bmp");
 }
 
 void AnalysisProvider::drawDefectDepthDiagram()
@@ -502,7 +528,7 @@ void AnalysisProvider::drawDefectDepthDiagram()
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
     QPainter painter(&m_image);
-    int fontPixSize=12;
+    int fontPixSize=m_image.width()/18;
     QFont font("consolas");
     font.setPixelSize(fontPixSize);
     painter.setFont(font);
@@ -513,7 +539,15 @@ void AnalysisProvider::drawDefectDepthDiagram()
         if(m_dev[i]==-99) continue;
         if(m_dev[i]>-4)
         {
+            float scale;
+            if(m_isPreview)
+            {
+                scale=qFloor(float(m_image.width())/240);
+                if(scale<1) scale=1;
+            }
+            else scale=3;
             QImage image(":/grays/DE0.bmp");
+            image=image.scaled(image.width()*scale,image.height()*scale);
             painter.drawImage(QPointF{pixLoc.x()-image.width()*0.48,pixLoc.y()-image.height()*0.50},image);
         }
         else
@@ -523,7 +557,7 @@ void AnalysisProvider::drawDefectDepthDiagram()
             m_image.setPixel(pixLoc.x(),pixLoc.y(),0xFFFF0000);   //标个小红点
         }
     }
-    m_image.save("./temp/defectDepth.bmp","bmp");
+    m_image.save(m_imageSavePath+"/defectDepth.bmp","bmp");
 }
 
 void AnalysisProvider::drawTotalDeviation()
@@ -532,7 +566,7 @@ void AnalysisProvider::drawTotalDeviation()
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
     drawDevDBText(m_dev);
-    m_image.save("./temp/TotalDeviation.bmp","bmp");
+    m_image.save(m_imageSavePath+"/TotalDeviation.bmp","bmp");
 }
 
 
@@ -542,7 +576,7 @@ void AnalysisProvider::drawPatternDeviation()
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
     drawDevDBText(m_mDev);
-    m_image.save("./temp/PatterDeviation.bmp","bmp");
+    m_image.save(m_imageSavePath+"/PatterDeviation.bmp","bmp");
 
 }
 
@@ -551,7 +585,7 @@ void AnalysisProvider::drawTotalPE()
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
     drawPE(m_peDev);
-    m_image.save("./temp/TotalPE.bmp","bmp");
+    m_image.save(m_imageSavePath+"/TotalPE.bmp","bmp");
 }
 
 void AnalysisProvider::drawPatternPE()
@@ -559,7 +593,7 @@ void AnalysisProvider::drawPatternPE()
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
     drawPE(m_peMDev);
-    m_image.save("./temp/PatternPE.bmp","bmp");
+    m_image.save(m_imageSavePath+"/PatternPE.bmp","bmp");
 }
 
 void AnalysisProvider::drawScreening()
@@ -571,11 +605,23 @@ void AnalysisProvider::drawScreening()
     if(m_os_od==0) blindDot={-14,0};else blindDot={14,0};
     auto pixLoc=convertDegLocToPixLoc(blindDot);
     QImage blindImage(":/grays/SE3.bmp");
-    painter.drawImage(QPoint{pixLoc.x()-blindImage.width()/2,pixLoc.y()-blindImage.height()/2},blindImage);
-
     QImage screenImageSE0(":/grays/SE0.bmp");
     QImage screenImageSE1(":/grays/SE1.bmp");
     QImage screenImageSE2(":/grays/SE2.bmp");
+    int scale=m_isPreview?1:3;
+//    int scale;
+//    if(m_isPreview)
+//    {
+//        scale=qCeil(float(m_image.width())/500);
+//    }
+//    else scale=3;
+    QImage image(":/grays/DE0.bmp");
+    image=image.scaled(image.width()*scale,image.height()*scale);
+    screenImageSE0=screenImageSE0.scaled(screenImageSE0.width()*scale,screenImageSE0.height()*scale);
+    screenImageSE1=screenImageSE1.scaled(screenImageSE1.width()*scale,screenImageSE1.height()*scale);
+    screenImageSE2=screenImageSE2.scaled(screenImageSE2.width()*scale,screenImageSE2.height()*scale);
+    blindImage=blindImage.scaled(blindImage.width()*scale,blindImage.height()*scale);
+    painter.drawImage(QPoint{pixLoc.x()-blindImage.width()/2,pixLoc.y()-blindImage.height()/2},blindImage);
     for(int i=0;i<m_dotList.length()&&i<m_values.length();i++)
     {
         auto pixLoc=convertDegLocToPixLoc(m_dotList[i]);
@@ -588,7 +634,7 @@ void AnalysisProvider::drawScreening()
         default:break;
         }
     }
-    m_image.save("./temp/Screening.bmp","bmp");
+    m_image.save(m_imageSavePath+"/Screening.bmp","bmp");
 }
 
 void AnalysisProvider::analysis()

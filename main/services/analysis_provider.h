@@ -25,7 +25,7 @@ public:
     Q_INVOKABLE QPointF getClickDot(float MouseX,float MouseY,float width,float height);
     Q_INVOKABLE QPointF getPixFromPoint(QPointF point,float width,float height);
     Q_INVOKABLE int getSelectedDotIndex(){return m_selectedDotIndex;};
-    Q_INVOKABLE void showReport();
+    Q_INVOKABLE void showReport(int report);
 
 
 signals:
@@ -41,6 +41,7 @@ private:
     int m_innerRange;
     int m_selectedDotIndex;
     int m_programType;
+
 
     LimeReport::ReportEngine* m_reportEngine=nullptr;
 
@@ -87,6 +88,9 @@ private:
     int m_GHT;
 
     int m_patientAge;
+
+    QString m_imageSavePath;
+    bool m_isPreview;
     int m_previewDiagramWidth;
 
 

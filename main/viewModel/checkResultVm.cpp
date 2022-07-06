@@ -1,4 +1,4 @@
-﻿#include "checkResultVm.h"
+#include "checkResultVm.h"
 #include "paramsVm.h"
 namespace Perimeter
 {
@@ -67,8 +67,7 @@ ResultDataVm::ResultDataVm(ResultData<Type::ThreshHold> resultData)
     m_ambientLight=resultData.ambientLight;
     m_E_Light_pv=resultData.E_Light_pv;
     m_T_Light_pv=resultData.T_Light_pv;
-    for(auto &i:resultData.shortTermFluctuation){m_shortTermFluctuation.append(i);}
-    for(auto &i:resultData.eyeMoveCurve){m_eyeMoveCurve.append(i);}
+    for(auto &i:resultData.fixationDeviation){m_fixationDeviation.append(i);}
     for(auto &i:resultData.checkdata){m_checkData.append(i);}
 }
 
@@ -87,8 +86,7 @@ ResultDataVm::ResultDataVm(ResultData<Type::Move> resultData)
     m_ambientLight=resultData.ambientLight;
     m_E_Light_pv=resultData.E_Light_pv;
     m_T_Light_pv=resultData.T_Light_pv;
-    for(auto &i:resultData.shortTermFluctuation){m_shortTermFluctuation.append(i);}
-    for(auto &i:resultData.eyeMoveCurve){m_eyeMoveCurve.append(i);}
+    for(auto &i:resultData.fixationDeviation){m_fixationDeviation.append(i);}
     for(auto &i:resultData.checkdata){m_checkData.append(QPointF{i.x,i.y});}
 }
 

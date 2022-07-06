@@ -140,18 +140,18 @@ Item {id:root; width: 1366;height: 691
                                 }
                                 Rectangle{id:eyeOptionsGroup; width: parent.width*0.83;height: parent.height*0.25;anchors.horizontalCenter: parent.horizontalCenter; border.color: backGroundBorderColor;color: backGroundColor; radius: width*0.03;
                                     Item{ anchors.fill: parent;anchors.margins: parent.height*0.1;
-                                        Column{anchors.fill: parent;spacing: 0.15*height;
-                                            Row{width:parent.width;height: parent.height*0.7/3;spacing: width*0.05;
+                                        Column{anchors.fill: parent;spacing: 0.125*height;
+                                            Row{width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{}
                                                 CusText{text:"瞳孔尺寸"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 LineEdit{text:"0.0";width: parent.width*0.5;textfeild.readOnly: true;}
                                             }
-                                            Row{id: row;width:parent.width;height: parent.height*0.7/3;spacing: width*0.05;
+                                            Row{id: row;width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{enabled: false;}
                                                 CusText{text:"眼动警报"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 Image {source: "qrc:/Pics/capture-svg/btn_alarm.svg";height:parent.height*0.6; anchors.verticalCenter: parent.verticalCenter;width: height; }
                                             }
-                                            Row{width:parent.width;height: parent.height*0.7/3;spacing: width*0.05;
+                                            Row{width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{}
                                                 CusText{text:"固视偏移"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                             }
@@ -160,14 +160,14 @@ Item {id:root; width: 1366;height: 691
                                 }
                                 Item{
                                     width: parent.width*0.83;height: parent.height*0.07;anchors.horizontalCenter: parent.horizontalCenter;
-                                    ShortTermFluctuation{ anchors.horizontalCenter: parent.horizontalCenter;dots:if(currentCheckResult!==null) currentCheckResult.resultData.shortTermFluctuation;}
+                                    FixationDeviation{ anchors.horizontalCenter: parent.horizontalCenter;dots:if(currentCheckResult!==null) currentCheckResult.resultData.fixationDeviation;}
                                 }
                             }
                         }
                     }
                     Rectangle{width: parent.width*0.5;height: parent.height;color:backGroundColorCheckPanel;
                         CusText{text:"右眼"; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;height: parent.height*0.05;}
-                        CheckDisplay{id:checkDisplay;currentProgram:root.currentProgram;}
+                        CheckDisplay{id:checkDisplay; currentProgram:root.currentProgram;}
                     }
                 }
             }
@@ -233,7 +233,25 @@ Item {id:root; width: 1366;height: 691
                             {
                                 console.log(currentCheckResult.type);
                                 var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
-                                var diagramWidth=root.height*14/15*0.92*0.97/3;
+
+                                var diagramWidth;
+                                if(queryStrategy.report==0)
+                                {
+                                    diagramWidth=root.height*14/15*0.92*0.97/3*1.25*0.8;
+                                }
+                                else if(queryStrategy.report==1)
+                                {
+                                    diagramWidth=root.height*14/15*0.92*0.47*0.8;
+                                }
+                                else if(queryStrategy.report==2)
+                                {
+                                    diagramWidth=root.height*14/15*0.92*0.40*0.8;
+                                }
+                                else if(queryStrategy.report==3)
+                                {
+                                    diagramWidth=root.height*14/15*0.92*0.8;
+                                }
+
 //                                IcUiQmlApi.appCtrl.AnalysisProvider.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,currentCheckResult.resultData.checkData);
                                 var analysisResult=IcUiQmlApi.appCtrl.AnalysisProvider.runProcess(queryStrategy.report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
 //                                if(queryStrategy.report==0){reportPage="singleAnalysis";}

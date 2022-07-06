@@ -21,7 +21,7 @@ Item {
         AnalysisDiagram{
             width: height;height:parent.height;
             anchors.verticalCenter: parent.verticalCenter
-            source:"/temp/Screening.bmp";
+            source:"/previewImage/Screening.bmp";
             range:root.range;
             onClicked:root.clearDot();
             Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
