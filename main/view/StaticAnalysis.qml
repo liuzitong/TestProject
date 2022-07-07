@@ -85,7 +85,7 @@ Item
                         }
                     }
                     Item{ id: item2;width:parent.width;height: parent.height*0.10;anchors.left: parent.left;
-                        FixationDeviation{ dots:if(currentCheckResult!==null) currentCheckResult.resultData.FixationDeviation;  }
+                        FixationDeviation{ dots:if(currentCheckResult!==null) currentCheckResult.resultData.fixationDeviation; }
                     }
                 }
 

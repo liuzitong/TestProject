@@ -86,6 +86,7 @@ private:
     float m_VFI_Weight[5]={3.29f,1.28f,0.79f,0.57f,0.43f};
     float m_md,m_psd,m_VFI,m_p_md,m_p_psd;
     int m_GHT;
+    int m_dotSeen,m_dotWeakSeen,m_dotUnseen;
 
     int m_patientAge;
 
@@ -113,6 +114,7 @@ private:
     void drawDefectDepthDiagram();
 
     void drawScreening();
+    void drawFixationDeviation();
     void analysis();
 
 

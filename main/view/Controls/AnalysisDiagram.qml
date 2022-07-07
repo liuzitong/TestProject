@@ -17,7 +17,7 @@ Row{
     signal clearDot;
     signal clicked;
     width: parent.height;height:parent.height;
-    property int fontSize:width<=400?width/25:width/60;
+    property int fontSize:width<=400?width/30:width/60;
 //    anchors.horizontalCenter: parent.horizontalCenter;
     Column{
         width: parent.height*0.8;height:parent.height;

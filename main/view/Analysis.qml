@@ -40,6 +40,7 @@ Column {
         content.item.analysisResult=analysisResult;
         content.item.report=report;
         content.item.refresh();
+//        queryStrategy.currentIndex=report;
     }
 
 
@@ -96,15 +97,40 @@ Column {
 //                                var reportWindow=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::Report", false,[0]);
 //                                reportWindow.showWindow();
 //                                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::Report",reportWindow);
-                                IcUiQmlApi.appCtrl.AnalysisProvider.showReport(queryStrategy.currentIndex);
+                                IcUiQmlApi.appCtrl.AnalysisProvider.showReport(queryStrategy.report);
                             }
                         }
                         CusComboBox{
+                            property var listModel:ListModel {}
+                            property int report;
                             id:queryStrategy;height: parent.height;width: parent.height*3.5;
                             borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                             imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                            model: ListModel {ListElement { text: "常规分析" } ListElement { text: "三合一图" } ListElement { text: "总览图" }ListElement { text: "筛选" }}
+                            model: listModel;
+                            complexType: true;
+                            Component.onCompleted: {
+                                root.refresh.connect(function()
+                                {
+                                    listModel.clear();
+                                    var report=currentProgram.report;
+                                    report.forEach(function(item){
+                                        if(item===0) listModel.append({name:"常规分析",report:0});
+                                        if(item===1) listModel.append({name:"三合一图",report:1});
+                                        if(item===2) listModel.append({name:"总览图",report:2});
+                                        if(item===3) listModel.append({name:"筛选",report:3});
+                                    })
 
+                                    for(var i=0;i<listModel.count;i++)
+                                    {
+                                        if(root.report===listModel.get(i).report)
+                                        {
+                                            currentIndex=i;
+                                            break;
+                                        }
+                                    }
+                                })
+                            }
+                            onCurrentIndexChanged:report=listModel.get(currentIndex).report;
                         }
                     }
                 }
