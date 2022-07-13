@@ -10,9 +10,9 @@ namespace Perimeter{
 class CheckSvc: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(PatientVm* patient READ getPatient)
-    Q_PROPERTY(QObject* program READ getProgram)
-    Q_PROPERTY(CheckResultVm* checkResult READ getCheckResult NOTIFY checkResultChanged)
+    Q_PROPERTY(PatientVm* patient READ getPatient WRITE setPatient)
+    Q_PROPERTY(QObject* program READ getProgram WRITE setProgram)
+    Q_PROPERTY(CheckResultVm* checkResult READ getCheckResult WRITE setCheckResult NOTIFY checkResultChanged)
     Q_PROPERTY(int checkState READ getCheckState WRITE setCheckState NOTIFY checkStateChanged)
 public:
     explicit CheckSvc(QObject *parent = nullptr){};
@@ -23,9 +23,9 @@ public:
     Q_INVOKABLE void stop();
 
 public:
-    PatientVm* getPatient(){return m_patientVm;}
-    QObject* getProgram(){return m_programVm;}
-    CheckResultVm* getCheckResult(){return m_checkResultVm;}Q_SIGNAL void checkResultChanged();
+    PatientVm* getPatient(){return m_patientVm;}void setPatient(PatientVm* value){m_patientVm=value;}
+    QObject* getProgram(){return m_programVm;}void setProgram(QObject* value){m_programVm=value;}
+    CheckResultVm* getCheckResult(){return m_checkResultVm;}void setCheckResult(CheckResultVm* value){m_checkResultVm=value;} Q_SIGNAL void checkResultChanged();
     int getCheckState(){return m_checkState;}void setCheckState(int value){m_checkState=value;emit checkStateChanged();}Q_SIGNAL void checkStateChanged();
 //public slots:
 //  void handleResults(const QString &);

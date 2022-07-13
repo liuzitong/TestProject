@@ -10,13 +10,11 @@
 #include "utility.h"
 
 
-
 template<Type T>
 struct CheckDataTraits
 {
     typedef std::vector<int> checkData;
 };
-
 
 template<>
 struct CheckDataTraits<Type::Move>

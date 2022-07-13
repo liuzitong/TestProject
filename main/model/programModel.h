@@ -1,4 +1,4 @@
-﻿#ifndef PROGRAM_MODEL
+#ifndef PROGRAM_MODEL
 #define PROGRAM_MODEL
 #include "Params.h"
 #include "Point.h"

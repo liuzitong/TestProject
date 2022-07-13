@@ -14,7 +14,7 @@ class CheckResultVm: public QObject
     Q_PROPERTY(int type READ getType WRITE setType)
     Q_PROPERTY(int OS_OD READ getOS_OD WRITE setOS_OD)
     Q_PROPERTY(QDateTime time READ getTime WRITE setTime)
-    Q_PROPERTY(QObject* params READ getParams)
+    Q_PROPERTY(QObject* params READ getParams WRITE setParams )
     Q_PROPERTY(ResultDataVm* resultData READ getResultData)
 
 public:
@@ -25,7 +25,19 @@ public:
     int getType(){return m_type;}void setType(int value){m_type=value;}
     int getOS_OD(){return m_OS_OD;}void setOS_OD(int value){m_OS_OD=value;}
     QDateTime getTime(){return m_time;}void setTime(QDateTime value){m_time=value;}
-    QObject* getParams(){return m_params;}
+    QObject* getParams(){return m_params;}void setParams(QObject* value){
+        if(m_type==0)
+        {
+            auto val=static_cast<StaticParamsVM*>(value);
+            auto m_val=static_cast<StaticParamsVM*>(m_params);
+            *m_val=*val;
+        }
+        else if(m_type==1){
+            auto val=static_cast<MoveParamsVM*>(value);
+            auto m_val=static_cast<MoveParamsVM*>(m_params);
+            *m_val=*val;
+        }
+    }
     ResultDataVm* getResultData(){return m_resultData;}
 
 private:

@@ -116,7 +116,7 @@ MoveProgramVM::MoveProgramVM(const QVariantList & args)
 {
     if(args.count()==0)
     {
-        m_moveParamsVm=new MoveParamVM();
+        m_moveParamsVm=new MoveParamsVM();
         return;
     }
 //    qDebug()<<"move programvm cons";
@@ -132,7 +132,7 @@ MoveProgramVM::MoveProgramVM(const QVariantList & args)
     m_id=programModel->m_id;
     m_name=programModel->m_name;
     m_type=int(programModel->m_type);
-    m_moveParamsVm=new MoveParamVM(programModel->m_params);
+    m_moveParamsVm=new MoveParamsVM(programModel->m_params);
     m_category=int(programModel->m_category);
 
     for(auto& v:programModel->m_data.dots)

@@ -190,14 +190,23 @@ Item {id:root; width: 1366;height: 691
                 }
                 Item{ height: parent.height;width:parent.width*0.50;
                     Item{id: item1; anchors.fill: parent;anchors.margins:parent.height*0.15;
-                        Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
-                            CusButton{text:"开始测试";
+                        Flow{
+                            id:checkControl
+                            height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
+                            property bool started: false
+                            CusButton{
+                                text:!checkControl.started?"开始测试":"暂停测试";
                                 onClicked:{
-/*                                    if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
-                                    if(queryStrategy.report!=3) currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[3]);
-                                    else currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[5])*/;
+                                    if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
+                                    if(currentProgram.type===0)
+                                    {
+                                        if(queryStrategy.report!=3) currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[3]);
+                                        else currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[5]);
+                                    }
 
-//                                    if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
+
+
+                                    if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
                                     if(currentProgram.type===0){
                                         currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,["Threshold"]);
                                     }
@@ -205,11 +214,15 @@ Item {id:root; width: 1366;height: 691
                                     {
                                         currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,["Move"]);
                                     }
-
-//                                  IcUiQmlApi.appCtrl.checkSvc.start();
+                                    currentCheckResult.params=currentProgram.params;
+                                    IcUiQmlApi.appCtrl.checkSvc.program=currentProgram;
+                                    IcUiQmlApi.appCtrl.checkSvc.patient=currentPatient;
+                                    IcUiQmlApi.appCtrl.checkSvc.checkResult=currentCheckResult;
+                                    !checkControl.started?IcUiQmlApi.appCtrl.checkSvc.start():IcUiQmlApi.appCtrl.checkSvc.pause();
+                                    checkControl.started=!checkControl.started;
                                 }
                             }
-                            CusButton{text:"停止测试";}
+                            CusButton{text:"停止测试";onClicked: {IcUiQmlApi.appCtrl.checkSvc.stop();checkControl.started=false;}}
                             CusButton{text:"切换眼别";}
                             CusComboBox{
                                 id:queryStrategy;height: parent.height;width: parent.height*3.5;

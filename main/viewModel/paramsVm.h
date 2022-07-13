@@ -113,7 +113,7 @@ private:
     FixedParamsVM* m_fixedParamsVM;
 };
 
-class MoveParamVM:public QObject
+class MoveParamsVM:public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList<int> Range READ getRange WRITE setRange)
@@ -129,8 +129,9 @@ class MoveParamVM:public QObject
     Q_PROPERTY(int fixationMonitor READ getFixationMonitor WRITE setFixationMonitor)
 
 public:
-    MoveParamVM()=default;
-    MoveParamVM(MoveParams& moveParams){m_moveParams=moveParams;}
+    MoveParamsVM()=default;
+    MoveParamsVM(MoveParams& moveParams){m_moveParams=moveParams;}
+    MoveParamsVM& operator=(MoveParamsVM& other){m_moveParams=other.m_moveParams;return *this;}
     MoveParams getData(){return m_moveParams;}
     QList<int> getRange(){return QList<int>{m_moveParams.Range[0],m_moveParams.Range[1]};}void setRange(QList<int> value){m_moveParams.Range[0]=value[0];m_moveParams.Range[1]=value[1];}
     int getStrategy(){return int(m_moveParams.strategy);}void setStrategy(int value){m_moveParams.strategy=MoveParams::Strategy(value);}

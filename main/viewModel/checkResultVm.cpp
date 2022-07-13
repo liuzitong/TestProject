@@ -7,14 +7,14 @@ CheckResultVm::CheckResultVm(const QVariantList & args)
 {
     if(args[0].toString()=="Threshold")
     {
-        m_type=1;
+        m_type=0;
         m_params=new StaticParamsVM();
         m_resultData=new ResultDataVm();
     }
     else if(args[0].toString()=="Move")
     {
-        m_type=args[1].toInt();
-        m_params=new MoveParamVM();
+        m_type=1;
+        m_params=new MoveParamsVM();
         m_resultData=new ResultDataVm();
     }
     else
@@ -47,7 +47,7 @@ CheckResultVm::CheckResultVm(const QVariantList & args)
             m_OS_OD=checkResultModel->m_OS_OD;
             m_pic=checkResultModel->m_pic;
             m_time=checkResultModel->m_time;
-            m_params=new MoveParamVM(checkResultModel->m_params);
+            m_params=new MoveParamsVM(checkResultModel->m_params);
             m_resultData=new ResultDataVm(checkResultModel->m_data);
             m_patient_id=checkResultModel->m_patient_id;
             m_program_id=checkResultModel->m_program_id;
@@ -94,7 +94,7 @@ CheckResult_ptr CheckResultVm::getCheckResultData()
         checkResultModel->m_OS_OD=m_OS_OD;
         checkResultModel->m_pic=m_pic;
         checkResultModel->m_time=m_time;
-        checkResultModel->m_params=static_cast<MoveParamVM*>(m_params)->getData();
+        checkResultModel->m_params=static_cast<MoveParamsVM*>(m_params)->getData();
         checkResultModel->m_data=m_resultData->getMoveData();
         checkResultModel->m_patient_id=m_patient_id;
         checkResultModel->m_program_id=m_program_id;

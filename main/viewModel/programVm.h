@@ -1,4 +1,4 @@
-﻿#ifndef PROGRAMVM_H
+#ifndef PROGRAMVM_H
 #define PROGRAMVM_H
 #include <QObject>
 #include <perimeter/main/model/programModel.h>
@@ -17,7 +17,7 @@ class StaticProgramVM:public QObject
     Q_PROPERTY(int type READ getType WRITE setType)
     Q_PROPERTY(QString name READ getName WRITE setName);
     Q_PROPERTY(QObject* params READ getParams)
-    Q_PROPERTY(QVariantList strategies READ getStrategies  WRITE setStrategies)
+    Q_PROPERTY(QVariantList strategies READ getStrategies WRITE setStrategies)
     Q_PROPERTY(QVariantList dots READ getDots WRITE setDots )
     Q_PROPERTY(QVariantList report READ getReport WRITE setReport )
     Q_PROPERTY(int category READ getCategory WRITE setCategory)
@@ -76,14 +76,14 @@ public:
     long getID(){return m_id;}void setID(int value){m_id=value;}
     long getType(){return m_type;}void setType(int value){m_type=value;}
     QString getName(){return m_name;}void setName(QString value){m_name=value;}
-    MoveParamVM* getParams(){return m_moveParamsVm;}
+    MoveParamsVM* getParams(){return m_moveParamsVm;}
     QVariantList getDots(){return m_dots;}void setDots(QVariantList value){m_dots=value;}
     int getCategory(){return m_category;}void setCategory(int value){m_category=value;}
 private:
     long m_id;
     int m_type;
     QString m_name;
-    MoveParamVM* m_moveParamsVm;
+    MoveParamsVM* m_moveParamsVm;
     QVariantList m_dots;
     QVariantList m_report;
     int m_category;

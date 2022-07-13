@@ -10,54 +10,20 @@
 namespace Perimeter {
 void TestClass::test()
 {
-//    qDebug()<<"hello world";
-//    QFile jsonFile("./data.json");
-//    if( !jsonFile.open(QIODevice::ReadOnly)) {qDebug() << "read file error!";return;}
-//    QJsonParseError jsonParserError;
-//    QJsonDocument outDoc = QJsonDocument::fromJson(jsonFile.readAll(),&jsonParserError);
-//    QJsonArray jsonArray=outDoc.array();
-//    for(auto i:jsonArray)
-//    {
-//        auto jo=i.toObject();
-//        qDebug()<<jo["name"].toString();
-//        auto arr=jo["data"].toArray();
-//        QString str;
-//        for(auto j:arr)
-//        {
-//            str+=QString::number(j.toInt())+" ";
-//        }
-//        qDebug()<<str;
 
-//    }
-//    jsonFile.close();
+    using Params=StaticParams::CommonParams;
+    CheckResultModel<Type::Move> checkResultModel;
+    checkResultModel.m_type=Type::Move;
+    checkResultModel.m_OS_OD=0;
+    checkResultModel.m_params={{}};
+    checkResultModel.m_data={0,2,10,4,10,3,10,3,6,100,50,30,30,{4,8,10,11,15},{{-9,30},{30,20},{30,-10},{-20,-10}}};
+    checkResultModel.m_time=QDateTime::currentDateTime();
+    checkResultModel.m_patient_id=1;
+    checkResultModel.m_program_id=1;
+    auto ptr=checkResultModel.ModelToDB();
 
-//    using Params=StaticParams::CommonParams;
-//    CheckResultModel<Type::ThreshHold> checkResultModel;
-//    checkResultModel.m_type=Type::ThreshHold;
-//    checkResultModel.m_params={{{15,30},Params::Strategy::fullThreshold},{}};
-//    checkResultModel.m_data={0,0,0,0,0,0,0,0,0,0,0,{1,2,3},{2,2,4,5},{27,26,27,27, 27,31,30,31,30,30, 27,31,31,30,27,30,32,27, 28,27,27,30,30,31,29,32,29,24, 29,26,0,33,33,31,33,33,33,21, 29,13,0,29,34,34,33,33,32,29, 26,24,27,31,32,34,33,30,31,27, 29,31,33,31,30,32,29,30, 28,28,29,30,32,28, 29,27,27,28}};
-//    checkResultModel.m_time=QDateTime::currentDateTime();
-//    checkResultModel.m_patient_id=1;
-//    checkResultModel.m_program_id=1;
+    qx::dao::insert(ptr);
 
-//    auto ptr=checkResultModel.ModelToDB();
 
-//    qx::dao::insert(ptr);
-
-//    auto checkresultvm=new CheckResultVm({3});
-//    qDebug()<<checkresultvm->getType();
-//    qDebug()<<checkresultvm->getOS_OD();
-//    auto data=checkresultvm->getResultData()->getCheckData();
-//    for(auto &i:data)
-//    {
-//        qDebug()<<i.toInt();
-//    }
-    Settings settings;
-    settings.m_hospitalName="西南医院";
-    settings.m_deviceInfo="perimeter";
-    settings.m_version="1.2.1.1";
-    settings.m_language="Chinese";
-    settings.m_doubleName=true;
-    settings.save();
 }
 }
