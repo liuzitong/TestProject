@@ -20,6 +20,7 @@ class CheckResultVm: public QObject
 public:
     Q_INVOKABLE explicit CheckResultVm(const QVariantList &);
     Q_INVOKABLE virtual ~CheckResultVm();
+    Q_INVOKABLE void insertCheckResult();
     int getID(){return m_id;}void setID(int value){m_id=value;}
     int getType(){return m_type;}void setType(int value){m_type=value;}
     int getOS_OD(){return m_OS_OD;}void setOS_OD(int value){m_OS_OD=value;}
@@ -28,6 +29,7 @@ public:
     ResultDataVm* getResultData(){return m_resultData;}
 
 private:
+    CheckResult_ptr getCheckResultData();
     long m_id;
     int m_type;
     int m_OS_OD;
@@ -79,7 +81,8 @@ public:
     int getT_Light_pv(){return m_T_Light_pv;}void setT_Light_pv(int value){m_T_Light_pv=value;}
     QVariantList getFixationDeviation(){return m_fixationDeviation;}void setFixationDeviation(QVariantList value){m_fixationDeviation=value;}
     QVariantList getCheckData(){return m_checkData;}void setCheckData(QVariantList value){m_checkData=value;}
-
+    ResultData<Type::ThreshHold> getThresholdData();
+    ResultData<Type::Move> getMoveData();
 private:
     int m_alarm;
     int m_falsePositiveCount;
@@ -97,6 +100,7 @@ private:
     QVariantList m_fixationDeviation;
     QVariantList m_checkData;       //非移动时为int 移动时是QPoint
 };
+
 
 
 

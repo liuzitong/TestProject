@@ -1,4 +1,4 @@
-﻿#include "programVm.h"
+#include "programVm.h"
 #include <qDebug>
 #include <math.h>
 namespace Perimeter {
@@ -58,7 +58,6 @@ void StaticProgramVM::updateProgram()
 
 void StaticProgramVM::insertProgram()
 {
-
     Program_ptr pp=getProgramData();
     QSqlError error=qx::dao::insert(pp);
 }

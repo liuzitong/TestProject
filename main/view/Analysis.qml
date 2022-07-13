@@ -90,14 +90,7 @@ Column {
                         CusButton{
                             text:"打印";onClicked:
                             {
-//                                var reportWindow=IcUiQmlApi.appCtrl.objMgr.attachObj("Dialog", false,[0]);
-//                                reportWindow.showWindow();
-//                                IcUiQmlApi.appCtrl.objMgr.detachObj("Dialog",reportWindow);
-
-//                                var reportWindow=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::Report", false,[0]);
-//                                reportWindow.showWindow();
-//                                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::Report",reportWindow);
-                                IcUiQmlApi.appCtrl.AnalysisProvider.showReport(queryStrategy.report);
+                                IcUiQmlApi.appCtrl.analysisSvc.showReport(queryStrategy.report);
                             }
                         }
                         CusComboBox{
@@ -107,6 +100,7 @@ Column {
                             borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                             imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
                             model: listModel;
+                            property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
                             complexType: true;
                             Component.onCompleted: {
                                 root.refresh.connect(function()
@@ -114,10 +108,7 @@ Column {
                                     listModel.clear();
                                     var report=currentProgram.report;
                                     report.forEach(function(item){
-                                        if(item===0) listModel.append({name:"常规分析",report:0});
-                                        if(item===1) listModel.append({name:"三合一图",report:1});
-                                        if(item===2) listModel.append({name:"总览图",report:2});
-                                        if(item===3) listModel.append({name:"筛选",report:3});
+                                        listModel.append({name:reportNames[item],report:item});
                                     })
 
                                     for(var i=0;i<listModel.count;i++)

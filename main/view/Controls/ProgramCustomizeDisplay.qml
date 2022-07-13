@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+import QtQuick 2.0
 
 Item{
     id:root;
@@ -72,13 +72,13 @@ Item{
             }
         }
 
-        function drawDashRound(x, y, radius, length)
+        function drawDashCircle(x, y, radius, length)
         {
 //            console.log("drawDsh");
             var step=length/radius
             for (var b = 0, e = step ; e <=Math.PI*2; b += step*2, e += step*2)
             {
-                 var ctx = getContext("2d")
+                var ctx = getContext("2d")
                 ctx.lineWidth = 0;
                 ctx.strokeStyle = "black";
                 ctx.fillStyle="white";
@@ -86,6 +86,29 @@ Item{
                 ctx.arc(x, y, radius, b, e);
                 ctx.stroke();
                 ctx.closePath();
+            }
+        }
+
+        function drawDashLine(pointBegin,radius,angle,length)
+        {
+            var ctx = getContext("2d")
+            ctx.strokeStyle="black";
+            ctx.lineWidth=1;
+
+            for(var loc=0;loc<radius;loc+=length*2)
+            {
+                ctx.beginPath();
+                ctx.moveTo(pointBegin.x+loc*Math.cos(angle),pointBegin.y+loc*Math.sin(angle));
+                if(loc+length>radius)
+                {
+                    ctx.lineTo(pointBegin.x+radius*Math.cos(angle),pointBegin.y+radius*Math.sin(angle));
+                }
+                else
+                {
+                    ctx.lineTo(pointBegin.x+(loc+length)*Math.cos(angle),pointBegin.y+(loc+length)*Math.sin(angle));
+                }
+                ctx.closePath();
+                ctx.stroke();
             }
         }
 
@@ -143,7 +166,7 @@ Item{
         function drawDot(dot)
         {
             var orthCoord;
-            if(type==2) {orthCoord=polarToOrth(dot)}else{orthCoord=dot}
+            if(type===2) {orthCoord=polarToOrth(dot)}else{orthCoord=dot}
 
             var x_pix=(orthCoord.x/degreeRange)*(diameter*0.5)+width/2;
             var y_pix=(-orthCoord.y/degreeRange)*(diameter*0.5)+height/2;
@@ -190,12 +213,11 @@ Item{
             if(degreeStart==0){degreeStart=degreeStep=degreeRange/3;}
             else{degreeStep=(degreeRange-degreeStart)/2;}
 
-//            console.log("start:"+degreeStart+"  step:"+degreeStep);
             var i;
             for(i=3;i>=1;i--)
             {
                 if(i!==3)
-                     drawDashRound(width/2,height/2,(degreeStart+degreeStep*(i-1))/degreeRange*diameter/2, 3)
+                     drawDashCircle(width/2,height/2,(degreeStart+degreeStep*(i-1))/degreeRange*diameter/2, 3)
                 else{
                     ctx.lineWidth = 0;
                     ctx.strokeStyle = "black";
@@ -218,6 +240,20 @@ Item{
             ctx.lineTo(width/2,heightMargin+diameter);
             ctx.closePath();
             ctx.stroke();
+
+
+            if(type==2)
+            {
+                for(i=1;i<12;i++)
+                {
+                    if(i%3==0) continue;
+                    else
+                    {
+                        drawDashLine({x:width/2,y:height/2},diameter/2,Math.PI/6*i,3)
+                    }
+                }
+            }
+
 
             for(i=-3;i<=3;i++)
             {

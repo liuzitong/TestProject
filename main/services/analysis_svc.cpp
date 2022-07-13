@@ -1,4 +1,4 @@
-#include "analysis_provider.h"
+#include "analysis_svc.h"
 #include <QDebug>
 #include <QImage>
 #include <QPainter>
@@ -22,7 +22,8 @@
 
 namespace Perimeter {
 
-AnalysisProvider::AnalysisProvider(QObject *parent) : QObject(parent)
+
+AnalysisSvc::AnalysisSvc(QObject *parent) : QObject(parent)
 {
     QFile jsonFile("./data.json");
     if( !jsonFile.open(QIODevice::ReadOnly)) {qDebug() << "read file error!";return;}
@@ -33,13 +34,13 @@ AnalysisProvider::AnalysisProvider(QObject *parent) : QObject(parent)
 
 }
 
-AnalysisProvider::~AnalysisProvider()
+AnalysisSvc::~AnalysisSvc()
 {
 
 }
 
 
-QObject* AnalysisProvider::runProcess(int report,PatientVm *patient, CheckResultVm *checkResult, QObject *program,QVariant diagramWidth)
+QObject* AnalysisSvc::runProcess(int report,PatientVm *patient, CheckResultVm *checkResult, QObject *program,QVariant diagramWidth)
 {
     m_programType=program->property("type").toInt();
     m_report=report;
@@ -90,7 +91,7 @@ QObject* AnalysisProvider::runProcess(int report,PatientVm *patient, CheckResult
 }
 
 
-QPointF AnalysisProvider::getClickDot(float MouseX, float MouseY,float width,float height)
+QPointF AnalysisSvc::getClickDot(float MouseX, float MouseY,float width,float height)
 {
     qDebug()<<QString("x:%1,y:%2,w:%3,h:%4").arg(QString::number(MouseX)).arg(QString::number(MouseY)).arg(QString::number(width)).arg(QString::number(height));
 
@@ -116,7 +117,7 @@ QPointF AnalysisProvider::getClickDot(float MouseX, float MouseY,float width,flo
 }
 
 
-QPointF AnalysisProvider::getPixFromPoint(QPointF point, float width, float height)
+QPointF AnalysisSvc::getPixFromPoint(QPointF point, float width, float height)
 {
 
     qDebug()<<QString("x:nearestDot:%1,y:nearestDot:%2").arg(QString::number(point.x())).arg(QString::number(point.y()));
@@ -126,7 +127,7 @@ QPointF AnalysisProvider::getPixFromPoint(QPointF point, float width, float heig
     return QPointF(width/2+(point.x()+0.0)*pixPerDegW,height/2-(point.y()-0.0)*pixPerDegH);
 }
 
-void AnalysisProvider::showReport(int report)
+void AnalysisSvc::showReport(int report)
 {
     if(m_report!=report)
     {
@@ -249,7 +250,7 @@ void AnalysisProvider::showReport(int report)
 
 
 #include <qmath.h>
-void AnalysisProvider::drawPixScale()
+void AnalysisSvc::drawPixScale()
 {
     int scale=m_isPreview?1:2;
     QPainter painter(&m_image);
@@ -272,7 +273,7 @@ void AnalysisProvider::drawPixScale()
 
 
 
-void AnalysisProvider::drawDevDBText(QVector<int> values)
+void AnalysisSvc::drawDevDBText(QVector<int> values)
 {
     QPainter painter(&m_image);
     int fontPixSize=m_image.width()/18;
@@ -291,7 +292,7 @@ void AnalysisProvider::drawDevDBText(QVector<int> values)
 }
 
 
-void AnalysisProvider::drawPE(QVector<int> values)
+void AnalysisSvc::drawPE(QVector<int> values)
 {
     QPainter painter(&m_image);
     float scale;
@@ -311,21 +312,21 @@ void AnalysisProvider::drawPE(QVector<int> values)
     }
 }
 
-QPoint AnalysisProvider::convertDegLocToPixLoc(QPointF DegLoc)
+QPoint AnalysisSvc::convertDegLocToPixLoc(QPointF DegLoc)
 {
     float pixPerDegW=float(m_image.width()/2)/m_range;
     float pixPerDegH=float(m_image.height()/2)/m_range;
     return QPoint(m_image.width()/2+DegLoc.x()*pixPerDegW,m_image.height()/2-DegLoc.y()*pixPerDegH);
 }
 
-//QPoint AnalysisProvider::convertDegLocToPixLocLarge(QPointF DegLoc)
+//QPoint AnalysisSvc::convertDegLocToPixLocLarge(QPointF DegLoc)
 //{
 //    float pixPerDegW=float(m_imageSizeLarge.width()/2)/m_range;
 //    float pixPerDegH=float(m_imageSizeLarge.height()/2)/m_range;
 //    return QPoint(m_imageSizeLarge.width()/2+DegLoc.x()*pixPerDegW,m_imageSizeLarge.height()/2-DegLoc.y()*pixPerDegH);
 //}
 
-void AnalysisProvider::DrawDiagram()
+void AnalysisSvc::DrawDiagram()
 {
 
     m_imageSavePath="./previewImage";
@@ -369,7 +370,7 @@ void AnalysisProvider::DrawDiagram()
 
 }
 
-void AnalysisProvider::DrawReportDiagram()
+void AnalysisSvc::DrawReportDiagram()
 {
     m_imageSavePath="./reportImage";
     m_isPreview=false;
@@ -416,7 +417,7 @@ void AnalysisProvider::DrawReportDiagram()
 }
 
 
-void AnalysisProvider::drawDBDiagram()
+void AnalysisSvc::drawDBDiagram()
 {
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
@@ -445,7 +446,7 @@ void AnalysisProvider::drawDBDiagram()
     m_image.save(m_imageSavePath+"/dBDiagram.bmp","bmp");
 }
 
-void AnalysisProvider::drawGrayDiagram()
+void AnalysisSvc::drawGrayDiagram()
 {
      m_image.fill(qRgb(255, 255, 255));
      drawPixScale();
@@ -540,7 +541,7 @@ void AnalysisProvider::drawGrayDiagram()
      m_image.save(m_imageSavePath+"/gray.bmp","bmp");
 }
 
-void AnalysisProvider::drawDefectDepthDiagram()
+void AnalysisSvc::drawDefectDepthDiagram()
 {
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
@@ -577,7 +578,7 @@ void AnalysisProvider::drawDefectDepthDiagram()
     m_image.save(m_imageSavePath+"/defectDepth.bmp","bmp");
 }
 
-void AnalysisProvider::drawTotalDeviation()
+void AnalysisSvc::drawTotalDeviation()
 {
 
     m_image.fill(qRgb(255, 255, 255));
@@ -587,7 +588,7 @@ void AnalysisProvider::drawTotalDeviation()
 }
 
 
-void AnalysisProvider::drawPatternDeviation()
+void AnalysisSvc::drawPatternDeviation()
 {
 
     m_image.fill(qRgb(255, 255, 255));
@@ -597,7 +598,7 @@ void AnalysisProvider::drawPatternDeviation()
 
 }
 
-void AnalysisProvider::drawTotalPE()
+void AnalysisSvc::drawTotalPE()
 {
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
@@ -605,7 +606,7 @@ void AnalysisProvider::drawTotalPE()
     m_image.save(m_imageSavePath+"/TotalPE.bmp","bmp");
 }
 
-void AnalysisProvider::drawPatternPE()
+void AnalysisSvc::drawPatternPE()
 {
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
@@ -613,7 +614,7 @@ void AnalysisProvider::drawPatternPE()
     m_image.save(m_imageSavePath+"/PatternPE.bmp","bmp");
 }
 
-void AnalysisProvider::drawScreening()
+void AnalysisSvc::drawScreening()
 {
     m_image.fill(qRgb(255, 255, 255));
     drawPixScale();
@@ -654,7 +655,7 @@ void AnalysisProvider::drawScreening()
     m_image.save(m_imageSavePath+"/Screening.bmp","bmp");
 }
 
-void AnalysisProvider::drawFixationDeviation()
+void AnalysisSvc::drawFixationDeviation()
 {
 
     int scale=2;
@@ -680,7 +681,7 @@ void AnalysisProvider::drawFixationDeviation()
     image.save("./reportImage/FixationDeviation.bmp","bmp");
 }
 
-void AnalysisProvider::analysis()
+void AnalysisSvc::analysis()
 {
     m_pointLoc_30d.clear();
     m_pointLoc_60d.clear();

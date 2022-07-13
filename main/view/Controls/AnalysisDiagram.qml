@@ -39,7 +39,7 @@ Row{
             function drawDot()
             {
                 if(dot==null) return;
-                var pix=IcUiQmlApi.appCtrl.AnalysisProvider.getPixFromPoint(dot,width,height);
+                var pix=IcUiQmlApi.appCtrl.AnalysisSvc.getPixFromPoint(dot,width,height);
                 console.log(pix.x+" "+pix.y);
                 var dotRadius=width/25;
                 var ctx = getContext("2d");
@@ -62,7 +62,7 @@ Row{
                 height:parent.height;width:parent.height;
                 onClicked: {
                     root.clicked();
-                    parent.dot=IcUiQmlApi.appCtrl.AnalysisProvider.getClickDot(mouseX,mouseY,width,height);
+                    parent.dot=IcUiQmlApi.appCtrl.AnalysisSvc.getClickDot(mouseX,mouseY,width,height);
                     parent.requestPaint();
                 }
 

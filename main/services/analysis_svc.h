@@ -14,13 +14,13 @@
 #include "perimeter/third-part/LimeReport/limereport/lrpreviewreportwindow.h"
 
 namespace Perimeter {
-class AnalysisProvider : public QObject
+class AnalysisSvc : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit AnalysisProvider(QObject *parent = nullptr);
-    ~AnalysisProvider();
+    explicit AnalysisSvc(QObject *parent = nullptr);
+    ~AnalysisSvc();
     Q_INVOKABLE QObject* runProcess(int report,PatientVm* patient,CheckResultVm* checkResult,QObject* program,QVariant diagramWidth);
     Q_INVOKABLE QPointF getClickDot(float MouseX,float MouseY,float width,float height);
     Q_INVOKABLE QPointF getPixFromPoint(QPointF point,float width,float height);
@@ -28,9 +28,6 @@ public:
     Q_INVOKABLE void showReport(int report);
 
 
-signals:
-
-public slots:
 private:
     QImage m_image;
 //    QSize m_imageSizeLarge=QSize(720,720);

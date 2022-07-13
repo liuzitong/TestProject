@@ -1,4 +1,4 @@
-﻿import QtQuick 2.7
+import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
@@ -215,7 +215,6 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             anchors.verticalCenter: parent.verticalCenter
                             CusButton{text:"取消";onClicked: idPopup.close();}
                             CusButton{text:"确定";onClicked:{ok();idPopup.close();dataRefreshed();}}
-                            CusButton{text:"aa";onClicked: console.log(currentProgram.params.brightness);}
                         }
                     }
                 }

@@ -8,12 +8,13 @@
 #include "perimeter/base/common/perimeter_guns.hxx"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
 #include "perimeter/main/appctrl/testclass.h"
-#include "perimeter/main/services/analysis_provider.h"
+#include "perimeter/main/services/analysis_svc.h"
 #include <QCoreApplication>
 #include "perimeter/main/viewModel/settings.h"
-
+#include "perimeter/main/viewModel/checkResultVm.h"
 // modules manager
 #include "perimeter/main/perimeter_main.hxx"
+#include "perimeter/main/services/check_svc.h"
 
 namespace Perimeter {
 
@@ -34,8 +35,9 @@ private:
     bool        m_doubleName=false;
     QObject*    m_databaseSvc;
     QObject*    m_testClass;
-    QObject*    m_analysisProvider;
+    QObject*    m_analysisSvc;
     QObject*    m_settings;
+    QObject*    m_checkSvc;
 
 //    QObject*    m_currentPatient;
 public :
@@ -49,7 +51,8 @@ public :
     //Custom Code
     QObject*    getDatabaseSvcObj() const           {return m_databaseSvc;}
     QObject*    getTestClass() const                {return m_testClass;}
-    QObject*    getAnalysisProvider() const          {return m_analysisProvider;}
+    QObject*    getAnalysisSvc() const              {return m_analysisSvc;}
+    QObject*    getCheckSvc() const                 {return m_checkSvc;}
     QObject*    getSettings()                       {return m_settings;}
     QString     getLanguage()                       {return m_language;}
     void        setLanguage(QString value)          {m_language=value;}
@@ -73,7 +76,8 @@ AppCtrlPriv :: AppCtrlPriv ( AppCtrl *pa )
 //    m_databaseSvc = static_cast<QObject*>(new databaseSvc());
     m_databaseSvc = perimeter_new(databaseSvc);
     m_testClass = perimeter_new(TestClass);
-    m_analysisProvider=perimeter_new(AnalysisProvider);
+    m_analysisSvc=perimeter_new(AnalysisSvc);
+    m_checkSvc=perimeter_new(CheckSvc);
     m_settings=perimeter_new(Settings);
 //    m_currentPatient=perimeter_new(PatientVm);
 }
@@ -89,7 +93,8 @@ AppCtrlPriv :: ~AppCtrlPriv ( )
     AppSettingsSvc::freeInstance();
 //    delete m_databaseSvc;
     perimeter_delete(m_databaseSvc,databaseSvc);
-    perimeter_delete(m_analysisProvider,AnalysisProvider);
+    perimeter_delete(m_analysisSvc,AnalysisSvc);
+    perimeter_delete(m_checkSvc,CheckSvc);
     perimeter_delete(m_testClass,TestClass);
     perimeter_delete(m_settings,Settings);
 //    perimeter_delete(m_currentPatient,PatientVm);
@@ -142,9 +147,14 @@ QObject *  AppCtrl::getTestClass() const
     return T_PrivPtr( m_obj )-> getTestClass();
 }
 
-QObject *AppCtrl::getAnalysisProvider() const
+QObject *AppCtrl::getAnalysisSvc() const
 {
-    return T_PrivPtr( m_obj )-> getAnalysisProvider();
+    return T_PrivPtr( m_obj )-> getAnalysisSvc();
+}
+
+QObject *AppCtrl::getCheckSvc() const
+{
+     return T_PrivPtr( m_obj )-> getCheckSvc();
 }
 
 QObject *AppCtrl::getSettings()

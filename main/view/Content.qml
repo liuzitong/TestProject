@@ -89,7 +89,7 @@ Rectangle {
 
                             CusButton{
                                 width: parent.height*2;text: "DoStuff";
-//                                onClicked: {IcUiQmlApi.appCtrl.AnalysisProvider.showReport();}
+//                                onClicked: {IcUiQmlApi.appCtrl.AnalysisSvc.showReport();}
                                 onClicked: {IcUiQmlApi.appCtrl.testClass.test();}
                             }
                             CusButton{

@@ -167,7 +167,7 @@ Item {id:root; width: 1366;height: 691
                     }
                     Rectangle{width: parent.width*0.5;height: parent.height;color:backGroundColorCheckPanel;
                         CusText{text:"右眼"; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;height: parent.height*0.05;}
-                        CheckDisplay{id:checkDisplay; currentProgram:root.currentProgram;}
+                        CheckDisplay{id:checkDisplay; currentProgram:root.currentProgram;currentCheckResult:root.currentCheckResult}
                     }
                 }
             }
@@ -193,14 +193,28 @@ Item {id:root; width: 1366;height: 691
                         Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
                             CusButton{text:"开始测试";
                                 onClicked:{
-                                    if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
+/*                                    if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
                                     if(queryStrategy.report!=3) currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[3]);
-                                    else currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[5]);}}
+                                    else currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[5])*/;
+
+//                                    if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
+                                    if(currentProgram.type===0){
+                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,["Threshold"]);
+                                    }
+                                    else
+                                    {
+                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,["Move"]);
+                                    }
+
+//                                  IcUiQmlApi.appCtrl.checkSvc.start();
+                                }
+                            }
                             CusButton{text:"停止测试";}
                             CusButton{text:"切换眼别";}
                             CusComboBox{
                                 id:queryStrategy;height: parent.height;width: parent.height*3.5;
                                 property var listModel:ListModel {}
+                                property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
                                 property int report;
                                 borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                                 imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
@@ -210,16 +224,14 @@ Item {id:root; width: 1366;height: 691
                                 complexType: true;
 
 
+
                                 Component.onCompleted: {
                                     root.currentProgramChanged.connect(function()
                                     {
                                         listModel.clear();
                                         var report=currentProgram.report;
                                         report.forEach(function(item){
-                                            if(item===0) listModel.append({name:"常规分析",report:0});
-                                            if(item===1) listModel.append({name:"三合一图",report:1});
-                                            if(item===2) listModel.append({name:"总览图",report:2});
-                                            if(item===3) listModel.append({name:"筛选",report:3});
+                                            listModel.append({name:reportNames[item],report:item});
                                         })
                                         currentIndex=0;
                                     })
@@ -249,8 +261,8 @@ Item {id:root; width: 1366;height: 691
                                     diagramWidth=root.height*14/15*0.92*0.8;
                                 }
 
-//                                IcUiQmlApi.appCtrl.AnalysisProvider.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,currentCheckResult.resultData.checkData);
-                                var analysisResult=IcUiQmlApi.appCtrl.AnalysisProvider.runProcess(queryStrategy.report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
+//                                IcUiQmlApi.appCtrl.AnalysisSvc.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,currentCheckResult.resultData.checkData);
+                                var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(queryStrategy.report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
 //                                if(queryStrategy.report==0){reportPage="singleAnalysis";}
 //                                else if(queryStrategy.report==1){reportPage="three-in-one";}
 //                                else if(queryStrategy.report==2){reportPage="overview";}

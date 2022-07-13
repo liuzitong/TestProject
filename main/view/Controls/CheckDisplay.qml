@@ -5,9 +5,11 @@ Item{
     anchors.fill: parent;anchors.margins: parent.height*0.03;
     property alias range: displayCanvas.degreeRange;
     property alias displayCanvas: displayCanvas;
+    property var currentProgram: null;
+    property var currentCheckResult:null;
     property var dBList:[];
     property var dotList:[];
-    property var currentProgram: null;
+
     property int state:0;                        //0 no started;
 
     onCurrentProgramChanged: {
@@ -44,7 +46,7 @@ Item{
         smooth: false
 
 
-        function drawDashRound(x, y, radius, length)
+        function drawDashCircle(x, y, radius, length)
         {
 //            console.log("drawDsh");
             var step=length/radius
@@ -58,6 +60,29 @@ Item{
                 ctx.arc(x, y, radius, b, e);
                 ctx.stroke();
                 ctx.closePath();
+            }
+        }
+
+        function drawDashLine(pointBegin,radius,angle,length)
+        {
+            var ctx = getContext("2d")
+            ctx.strokeStyle="black";
+            ctx.lineWidth=1;
+
+            for(var loc=0;loc<radius;loc+=length*2)
+            {
+                ctx.beginPath();
+                ctx.moveTo(pointBegin.x+loc*Math.cos(angle),pointBegin.y+loc*Math.sin(angle));
+                if(loc+length>radius)
+                {
+                    ctx.lineTo(pointBegin.x+radius*Math.cos(angle),pointBegin.y+radius*Math.sin(angle));
+                }
+                else
+                {
+                    ctx.lineTo(pointBegin.x+(loc+length)*Math.cos(angle),pointBegin.y+(loc+length)*Math.sin(angle));
+                }
+                ctx.closePath();
+                ctx.stroke();
             }
         }
 
@@ -157,7 +182,7 @@ Item{
             for(i=3;i>=1;i--)
             {
                 if(i!==3)
-                     drawDashRound(width/2,height/2,(degreeStart+degreeStep*(i-1))/degreeRange*diameter/2, 3)
+                     drawDashCircle(width/2,height/2,(degreeStart+degreeStep*(i-1))/degreeRange*diameter/2, 3)
                 else{
                     ctx.lineWidth = 0;
                     ctx.strokeStyle = "black";
@@ -181,6 +206,18 @@ Item{
             ctx.closePath();
             ctx.stroke();
 
+            if(currentProgram.type===2)
+            {
+                for(i=1;i<12;i++)
+                {
+                    if(i%3==0) continue;
+                    else
+                    {
+                        drawDashLine({x:width/2,y:height/2},diameter/2,Math.PI/6*i,3)
+                    }
+                }
+            }
+
             for(i=-3;i<=3;i++)
             {
                 if(i!==0)
@@ -200,8 +237,11 @@ Item{
                     }
                 }
             }
-//            drawText("o",mouseCoord.x,mouseCoord.y,fontSize);
+
             dotList.forEach(function(item){drawDot(item);})
+
+
+
             root.painted();
         }
     }
