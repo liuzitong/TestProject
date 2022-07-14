@@ -12,8 +12,8 @@ void TestClass::test()
 {
 
     using Params=StaticParams::CommonParams;
-    CheckResultModel<Type::Move> checkResultModel;
-    checkResultModel.m_type=Type::Move;
+    CheckResultModel<Type::Dynamic> checkResultModel;
+    checkResultModel.m_type=Type::Dynamic;
     checkResultModel.m_OS_OD=0;
     checkResultModel.m_params={{}};
     checkResultModel.m_data={0,2,10,4,10,3,10,3,6,100,50,30,30,{4,8,10,11,15},{{-9,30},{30,20},{30,-10},{-20,-10}}};

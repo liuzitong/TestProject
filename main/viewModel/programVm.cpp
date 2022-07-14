@@ -112,11 +112,11 @@ Program_ptr StaticProgramVM::getProgramData()
 
 
 
-MoveProgramVM::MoveProgramVM(const QVariantList & args)
+DynamicProgramVM::DynamicProgramVM(const QVariantList & args)
 {
     if(args.count()==0)
     {
-        m_moveParamsVm=new MoveParamsVM();
+        m_dynamicParamsVm=new DynamicParamsVM();
         return;
     }
 //    qDebug()<<"move programvm cons";
@@ -128,11 +128,11 @@ MoveProgramVM::MoveProgramVM(const QVariantList & args)
     QSqlError daoError = qx::dao::execute_query(query, program_List);
     Program_ptr program_ptr=program_List.first();
 //    qDebug()<<program_ptr->m_params;
-    auto programModel=QSharedPointer<ProgramModel<Type::Move>>(new ProgramModel<Type::Move>(program_ptr));
+    auto programModel=QSharedPointer<ProgramModel<Type::Dynamic>>(new ProgramModel<Type::Dynamic>(program_ptr));
     m_id=programModel->m_id;
     m_name=programModel->m_name;
     m_type=int(programModel->m_type);
-    m_moveParamsVm=new MoveParamsVM(programModel->m_params);
+    m_dynamicParamsVm=new DynamicParamsVM(programModel->m_params);
     m_category=int(programModel->m_category);
 
     for(auto& v:programModel->m_data.dots)
@@ -148,38 +148,38 @@ MoveProgramVM::MoveProgramVM(const QVariantList & args)
 
 }
 
-MoveProgramVM::~MoveProgramVM()
+DynamicProgramVM::~DynamicProgramVM()
 {
-    delete m_moveParamsVm;
+    delete m_dynamicParamsVm;
 }
 
-void MoveProgramVM::updateProgram()
+void DynamicProgramVM::updateProgram()
 {
     Program_ptr pp=getProgramData();
     QSqlError error=qx::dao::update(pp);
 }
 
-void MoveProgramVM::insertProgram()
+void DynamicProgramVM::insertProgram()
 {
     Program_ptr pp=getProgramData();
     QSqlError error=qx::dao::insert(pp);
 }
 
-void MoveProgramVM::deleteProgram()
+void DynamicProgramVM::deleteProgram()
 {
     Program_ptr pp=getProgramData();
     QSqlError error=qx::dao::delete_by_id(pp);
 }
 
 
-Program_ptr MoveProgramVM::getProgramData()
+Program_ptr DynamicProgramVM::getProgramData()
 {
-    QSharedPointer<ProgramModel<Type::Move>> programModel=QSharedPointer<ProgramModel<Type::Move>>(new ProgramModel<Type::Move>());
+    QSharedPointer<ProgramModel<Type::Dynamic>> programModel=QSharedPointer<ProgramModel<Type::Dynamic>>(new ProgramModel<Type::Dynamic>());
     programModel->m_id=m_id;
     programModel->m_type=Type(m_type);
     programModel->m_name=m_name;
 //    qDebug()<<m_name;
-    programModel->m_params=m_moveParamsVm->getData();
+    programModel->m_params=m_dynamicParamsVm->getData();
     programModel->m_category= Category(m_category);
 
 

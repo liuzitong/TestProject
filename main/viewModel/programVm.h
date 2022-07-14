@@ -55,12 +55,12 @@ private:
     Q_DISABLE_COPY(StaticProgramVM);
 };
 
-class MoveProgramVM:public QObject
+class DynamicProgramVM:public QObject
 {
     Q_OBJECT
 public:
-    Q_INVOKABLE explicit MoveProgramVM(const QVariantList &);
-    Q_INVOKABLE virtual ~MoveProgramVM();
+    Q_INVOKABLE explicit DynamicProgramVM(const QVariantList &);
+    Q_INVOKABLE virtual ~DynamicProgramVM();
     Q_INVOKABLE void updateProgram();
     Q_INVOKABLE void insertProgram();
     Q_INVOKABLE void deleteProgram();
@@ -76,7 +76,7 @@ public:
     long getID(){return m_id;}void setID(int value){m_id=value;}
     long getType(){return m_type;}void setType(int value){m_type=value;}
     QString getName(){return m_name;}void setName(QString value){m_name=value;}
-    MoveParamsVM* getParams(){return m_moveParamsVm;}
+    DynamicParamsVM* getParams(){return m_dynamicParamsVm;}
     QVariantList getDots(){return m_dots;}void setDots(QVariantList value){m_dots=value;}
     QVariantList getReport(){return m_report;}void setReport(QVariantList value){m_report=value;}
     int getCategory(){return m_category;}void setCategory(int value){m_category=value;}
@@ -84,14 +84,14 @@ private:
     long m_id;
     int m_type;
     QString m_name;
-    MoveParamsVM* m_moveParamsVm;
+    DynamicParamsVM* m_dynamicParamsVm;
     QVariantList m_dots;
     QVariantList m_report;
     int m_category;
 
     Program_ptr getProgramData();
-//    QSharedPointer<ProgramModel<Type::Move>> programModel;
-    Q_DISABLE_COPY(MoveProgramVM);
+//    QSharedPointer<ProgramModel<Type::Dynamic>> programModel;
+    Q_DISABLE_COPY(DynamicProgramVM);
 };
 }
 

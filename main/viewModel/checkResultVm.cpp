@@ -14,10 +14,10 @@ CheckResultVm::CheckResultVm(const QVariantList & args)
         m_params=new StaticParamsVM();
         m_resultData=new ResultDataVm();
     }
-    else if(args[0].toString()=="Move")
+    else if(args[0].toString()=="Dynamic")
     {
         m_type=1;
-        m_params=new MoveParamsVM();
+        m_params=new DynamicParamsVM();
         m_resultData=new ResultDataVm();
     }
     else
@@ -29,7 +29,7 @@ CheckResultVm::CheckResultVm(const QVariantList & args)
         QSqlError daoError = qx::dao::execute_query(query, checkResult_List);
         CheckResult_ptr checkResult_ptr=checkResult_List.first();
         Type type=static_cast<Type>(checkResult_ptr->m_type);
-        if(type!=Type::Move)
+        if(type!=Type::Dynamic)
         {
             auto checkResultModel=QSharedPointer<CheckResultModel<Type::ThreshHold>>(new CheckResultModel<Type::ThreshHold>(checkResult_ptr));
             m_id=checkResultModel->m_id;
@@ -44,13 +44,13 @@ CheckResultVm::CheckResultVm(const QVariantList & args)
         }
         else
         {
-            auto checkResultModel=QSharedPointer<CheckResultModel<Type::Move>>(new CheckResultModel<Type::Move>(checkResult_ptr));
+            auto checkResultModel=QSharedPointer<CheckResultModel<Type::Dynamic>>(new CheckResultModel<Type::Dynamic>(checkResult_ptr));
             m_id=checkResultModel->m_id;
             m_type=int(checkResultModel->m_type);
             m_OS_OD=checkResultModel->m_OS_OD;
             m_pic=checkResultModel->m_pic;
             m_time=checkResultModel->m_time;
-            m_params=new MoveParamsVM(checkResultModel->m_params);
+            m_params=new DynamicParamsVM(checkResultModel->m_params);
             m_resultData=new ResultDataVm(checkResultModel->m_data);
             m_patient_id=checkResultModel->m_patient_id;
             m_program_id=checkResultModel->m_program_id;
@@ -93,14 +93,14 @@ CheckResult_ptr CheckResultVm::getCheckResultData()
     }
     else
     {
-        QSharedPointer<CheckResultModel<Type::Move>> checkResultModel=QSharedPointer<CheckResultModel<Type::Move>>(new CheckResultModel<Type::Move>());
+        QSharedPointer<CheckResultModel<Type::Dynamic>> checkResultModel=QSharedPointer<CheckResultModel<Type::Dynamic>>(new CheckResultModel<Type::Dynamic>());
         checkResultModel->m_id=m_id;
         checkResultModel->m_type=Type(m_type);
         checkResultModel->m_OS_OD=m_OS_OD;
         checkResultModel->m_pic=m_pic;
         checkResultModel->m_time=m_time;
-        checkResultModel->m_params=static_cast<MoveParamsVM*>(m_params)->getData();
-        checkResultModel->m_data=m_resultData->getMoveData();
+        checkResultModel->m_params=static_cast<DynamicParamsVM*>(m_params)->getData();
+        checkResultModel->m_data=m_resultData->getDynamicData();
         checkResultModel->m_patient_id=m_patient_id;
         checkResultModel->m_program_id=m_program_id;
         return checkResultModel->ModelToDB();
@@ -128,7 +128,7 @@ ResultDataVm::ResultDataVm(ResultData<Type::ThreshHold> resultData)
     for(auto &i:resultData.checkdata){m_checkData.append(i);}
 }
 
-ResultDataVm::ResultDataVm(ResultData<Type::Move> resultData)
+ResultDataVm::ResultDataVm(ResultData<Type::Dynamic> resultData)
 {
     m_alarm=resultData.alarm;
     m_falsePositiveCount=resultData.falsePositiveCount;
@@ -167,9 +167,9 @@ ResultData<Type::ThreshHold> ResultDataVm::getThresholdData()
     return resultData;
 }
 
-ResultData<Type::Move> ResultDataVm::getMoveData()
+ResultData<Type::Dynamic> ResultDataVm::getDynamicData()
 {
-    ResultData<Type::Move> resultData;
+    ResultData<Type::Dynamic> resultData;
     resultData.alarm=m_alarm;
     resultData.falsePositiveCount=m_falsePositiveCount;
     resultData.falsePositiveTestCount=m_falsePositiveTestCount;

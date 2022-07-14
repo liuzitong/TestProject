@@ -30,7 +30,7 @@ Column {
         }
         else
         {
-            content.source="MoveAnalysis.qml";
+            content.source="DynamicAnalysis.qml";
         }
 
 //        content.item.textHeight=textHeight;

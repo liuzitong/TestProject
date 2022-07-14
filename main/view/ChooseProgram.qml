@@ -73,30 +73,30 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     programListModelVmThreshold.refreshData();
                                     programListModelVmScreening.refreshData();
                                     programListModelVmSpecial.refreshData();
-                                    programListModelVmMove.refreshData();
+                                    programListModelVmDynamic.refreshData();
                                     programListModelVmCustom.refreshData();
                                 }
 
                                 property var programListModelVmThreshold: null;
                                 property var programListModelVmScreening: null;
                                 property var programListModelVmSpecial: null;
-                                property var programListModelVmMove: null;
+                                property var programListModelVmDynamic: null;
                                 property var programListModelVmCustom: null;
                                 Component.onCompleted: {
                                     programListModelVmThreshold=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[0]);
                                     programListModelVmScreening=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[1]);
                                     programListModelVmSpecial=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[2])
-                                    programListModelVmMove=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[3]);
+                                    programListModelVmDynamic=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[3]);
                                     programListModelVmCustom=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[4]);
                                 }
                                 Component.onDestruction: {
                                     IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmThreshold);
                                     IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmScreening);
                                     IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmSpecial);
-                                    IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmMove);
+                                    IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmDynamic);
                                     IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmCustom);
                                 }
-                                model:[programListModelVmThreshold,programListModelVmScreening,programListModelVmSpecial,programListModelVmMove,programListModelVmCustom]
+                                model:[programListModelVmThreshold,programListModelVmScreening,programListModelVmSpecial,programListModelVmDynamic,programListModelVmCustom]
                                 Item {id: homeTab;anchors.fill: parent;anchors.margins: height*0.07;
                                     ListView {
                                         id:listView;spacing: -1;anchors.fill: parent;
@@ -142,14 +142,14 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                 {
                                     if(currentProgram.type!==2)
                                     {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
-                                    else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::MoveProgramVM", currentProgram);}
+                                    else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicProgramVM", currentProgram);}
                                 }
                                 if(program_type!==2)
                                 {
                                     currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[program_id]);
                                 }
                                 else{
-                                    currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false,[program_id]);
+                                    currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicProgramVM", false,[program_id]);
                                 }
                                 idPopup.close();
                                 ok();

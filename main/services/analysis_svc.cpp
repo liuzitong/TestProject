@@ -13,7 +13,7 @@
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonObject>
-#include "perimeter/main/viewModel/analysisResult.h"
+#include "perimeter/main/viewModel/staticAnalysisResult.h"
 #include "perimeter/main/appctrl/perimeter_appctrl.hxx"
 #include <QFileDialog>
 #include <QApplication>
@@ -60,10 +60,10 @@ QObject* AnalysisSvc::runProcess(int report,PatientVm *patient, CheckResultVm *c
     }
     else
     {
-        MoveProgramVM* moveProgram=static_cast<MoveProgramVM*>(program);
-        auto dotList=moveProgram->getDots();
+        DynamicProgramVM* dynamicProgram=static_cast<DynamicProgramVM*>(program);
+        auto dotList=dynamicProgram->getDots();
         for(int i=0;i<dotList.length();i++){m_dotList[i]=dotList[i].toPointF();}
-        auto range=moveProgram->getParams()->getRange();
+        auto range=dynamicProgram->getParams()->getRange();
         m_innerRange=range[0];
         m_range=range[1];
     }
@@ -72,22 +72,31 @@ QObject* AnalysisSvc::runProcess(int report,PatientVm *patient, CheckResultVm *c
     m_values.resize(values.length());
     for(int i=0;i<values.length();i++){m_values[i]=values[i].toInt();}
 
-    m_dotSeen=0;
-    m_dotWeakSeen=0;
-    m_dotUnseen=0;
-    if(report==3)
+    if(m_programType!=2)
     {
-        for(auto& i:m_values)
+        staticAnalysis();
+        m_dotSeen=0;
+        m_dotWeakSeen=0;
+        m_dotUnseen=0;
+        if(report==3)
         {
-            if(i==0) m_dotUnseen++;
-            else if(i==1) m_dotWeakSeen++;
-            else if(i==2) m_dotSeen++;
+            for(auto& i:m_values)
+            {
+                if(i==0) m_dotUnseen++;
+                else if(i==1) m_dotWeakSeen++;
+                else if(i==2) m_dotSeen++;
+            }
         }
+        DrawDiagram();
+        return new StaticAnalysisResult(m_md,m_p_md,m_psd,m_p_psd,m_VFI,m_GHT,m_dotSeen,m_dotWeakSeen,m_dotUnseen);
+    }
+    else
+    {
+        dynamicAnalysis();
+        DrawDiagram();
+        return nullptr;
     }
 
-    analysis();
-    DrawDiagram();
-    return new AnalysisResult(m_md,m_p_md,m_psd,m_p_psd,m_VFI,m_GHT,m_dotSeen,m_dotWeakSeen,m_dotUnseen);
 }
 
 
@@ -131,7 +140,7 @@ void AnalysisSvc::showReport(int report)
 {
     if(m_report!=report)
     {
-        analysis();
+        staticAnalysis();
         m_report=report;
     }
     DrawReportDiagram();
@@ -681,7 +690,7 @@ void AnalysisSvc::drawFixationDeviation()
     image.save("./reportImage/FixationDeviation.bmp","bmp");
 }
 
-void AnalysisSvc::analysis()
+void AnalysisSvc::staticAnalysis()
 {
     m_pointLoc_30d.clear();
     m_pointLoc_60d.clear();
@@ -1037,6 +1046,11 @@ void AnalysisSvc::analysis()
     }
 
 
+
+}
+
+void AnalysisSvc::dynamicAnalysis()
+{
 
 }
 

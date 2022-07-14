@@ -11,13 +11,13 @@
         <file>NewProgram.qml</file>
         <file>About.qml</file>
         <file>Settings.qml</file>
-        <file>MoveParamsSetting.qml</file>
+        <file>DynamicParamsSetting.qml</file>
         <file>StaticParamsSetting.qml</file>
         <file>SaveToAnotherProgram.qml</file>
         <file>ChooseProgram.qml</file>
         <file>Analysis.qml</file>
         <file>StaticAnalysis.qml</file>
-        <file>MoveAnalysis.qml</file>
+        <file>DynamicAnalysis.qml</file>
         <file>StaticAnalysisReportSingle.qml</file>
         <file>StaticAnalysisReportThreeInOne.qml</file>
         <file>StaticAnalysisReportOverView.qml</file>

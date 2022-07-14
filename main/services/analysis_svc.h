@@ -78,8 +78,6 @@ private:
     QVector<int> m_vfiRingStandard;
     QVector<int> m_vfiRingTest;
 
-
-
     float m_VFI_Weight[5]={3.29f,1.28f,0.79f,0.57f,0.43f};
     float m_md,m_psd,m_VFI,m_p_md,m_p_psd;
     int m_GHT;
@@ -112,7 +110,8 @@ private:
 
     void drawScreening();
     void drawFixationDeviation();
-    void analysis();
+    void staticAnalysis();
+    void dynamicAnalysis();
 
 
 

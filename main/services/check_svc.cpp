@@ -68,7 +68,7 @@ void CheckSvc::start()
         auto params=static_cast<StaticParamsVM*>(m_checkResultVm->getParams());
     }else
     {
-        auto params=static_cast<MoveParamsVM*>(m_checkResultVm->getParams());
+        auto params=static_cast<DynamicParamsVM*>(m_checkResultVm->getParams());
         qDebug()<<params->getBrightness();
     }
     CheckSvcWorker *worker = new CheckSvcWorker(&m_checkState,m_patientVm,m_programVm,m_checkResultVm);

@@ -113,7 +113,7 @@ private:
     FixedParamsVM* m_fixedParamsVM;
 };
 
-class MoveParamsVM:public QObject
+class DynamicParamsVM:public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList<int> Range READ getRange WRITE setRange)
@@ -124,28 +124,28 @@ class MoveParamsVM:public QObject
 //    Q_PROPERTY(int fixationTarget READ getFixationTarget WRITE setFixationTarget)
     Q_PROPERTY(int speed READ getSpeed WRITE setSpeed)
     Q_PROPERTY(int brightness READ getBrightness WRITE setBrightness)
-    Q_PROPERTY(int moveMethod READ getMoveMethod WRITE setMoveMethod)
-    Q_PROPERTY(int moveDistance READ getMoveDistance WRITE setMoveDistance)
+    Q_PROPERTY(int dynamicMethod READ getDynamicMethod WRITE setDynamicMethod)
+    Q_PROPERTY(int dynamicDistance READ getDynamicDistance WRITE setDynamicDistance)
     Q_PROPERTY(int fixationMonitor READ getFixationMonitor WRITE setFixationMonitor)
 
 public:
-    MoveParamsVM()=default;
-    MoveParamsVM(MoveParams& moveParams){m_moveParams=moveParams;}
-    MoveParamsVM& operator=(MoveParamsVM& other){m_moveParams=other.m_moveParams;return *this;}
-    MoveParams getData(){return m_moveParams;}
-    QList<int> getRange(){return QList<int>{m_moveParams.Range[0],m_moveParams.Range[1]};}void setRange(QList<int> value){m_moveParams.Range[0]=value[0];m_moveParams.Range[1]=value[1];}
-    int getStrategy(){return int(m_moveParams.strategy);}void setStrategy(int value){m_moveParams.strategy=MoveParams::Strategy(value);}
-    int getCursorColor(){return int(m_moveParams.cursorColor);}void setCursorColor(int value){m_moveParams.cursorColor=CursorColor(value);}
-    int getCursorSize(){return int(m_moveParams.cursorSize);}void setCursorSize(int value){m_moveParams.cursorSize=CursorSize(value);}
-    int getBackGroundColor(){return int(m_moveParams.backGroundColor);}void setBackGroundColor(int value){m_moveParams.backGroundColor=BackGroundColor(value);}
-//    int getFixationTarget(){return int(m_moveParams->fixationTarget);}void setFixationTarget(int value){m_moveParams->fixationTarget=FixationTarget(value);}
-    int getSpeed(){return m_moveParams.speed;}void setSpeed(float value){m_moveParams.speed=value;}
-    int getBrightness(){return m_moveParams.brightness;}void setBrightness(int value){m_moveParams.brightness=value;}
-    int getMoveMethod(){return int(m_moveParams.moveMethod);}void setMoveMethod(int value){m_moveParams.moveMethod=MoveParams::MoveMethod(value);}
-    int getMoveDistance(){return int(m_moveParams.moveDistance);}void setMoveDistance(int value){m_moveParams.moveDistance=MoveParams::MoveDistance(value);}
-    int getFixationMonitor(){return int(m_moveParams.fixationMonitor);}void setFixationMonitor(int value){m_moveParams.fixationMonitor=FixationMonitor(value);}
+    DynamicParamsVM()=default;
+    DynamicParamsVM(DynamicParams& dynamicParams){m_dynamicParams=dynamicParams;}
+    DynamicParamsVM& operator=(DynamicParamsVM& other){m_dynamicParams=other.m_dynamicParams;return *this;}
+    DynamicParams getData(){return m_dynamicParams;}
+    QList<int> getRange(){return QList<int>{m_dynamicParams.Range[0],m_dynamicParams.Range[1]};}void setRange(QList<int> value){m_dynamicParams.Range[0]=value[0];m_dynamicParams.Range[1]=value[1];}
+    int getStrategy(){return int(m_dynamicParams.strategy);}void setStrategy(int value){m_dynamicParams.strategy=DynamicParams::Strategy(value);}
+    int getCursorColor(){return int(m_dynamicParams.cursorColor);}void setCursorColor(int value){m_dynamicParams.cursorColor=CursorColor(value);}
+    int getCursorSize(){return int(m_dynamicParams.cursorSize);}void setCursorSize(int value){m_dynamicParams.cursorSize=CursorSize(value);}
+    int getBackGroundColor(){return int(m_dynamicParams.backGroundColor);}void setBackGroundColor(int value){m_dynamicParams.backGroundColor=BackGroundColor(value);}
+//    int getFixationTarget(){return int(m_dynamicParams->fixationTarget);}void setFixationTarget(int value){m_dynamicParams->fixationTarget=FixationTarget(value);}
+    int getSpeed(){return m_dynamicParams.speed;}void setSpeed(float value){m_dynamicParams.speed=value;}
+    int getBrightness(){return m_dynamicParams.brightness;}void setBrightness(int value){m_dynamicParams.brightness=value;}
+    int getDynamicMethod(){return int(m_dynamicParams.dynamicMethod);}void setDynamicMethod(int value){m_dynamicParams.dynamicMethod=DynamicParams::DynamicMethod(value);}
+    int getDynamicDistance(){return int(m_dynamicParams.dynamicDistance);}void setDynamicDistance(int value){m_dynamicParams.dynamicDistance=DynamicParams::DynamicDistance(value);}
+    int getFixationMonitor(){return int(m_dynamicParams.fixationMonitor);}void setFixationMonitor(int value){m_dynamicParams.fixationMonitor=FixationMonitor(value);}
 private:
-    MoveParams m_moveParams;
+    DynamicParams m_dynamicParams;
 };
 
 #endif // PARAMSVM_H

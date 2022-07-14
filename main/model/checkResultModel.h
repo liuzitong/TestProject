@@ -17,7 +17,7 @@ struct CheckDataTraits
 };
 
 template<>
-struct CheckDataTraits<Type::Move>
+struct CheckDataTraits<Type::Dynamic>
 {
     typedef std::vector<Point> checkData;
 };

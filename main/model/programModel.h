@@ -19,7 +19,7 @@ struct StaticProgramData      //ot
     }
 };
 
-struct MoveProgramData
+struct DynamicProgramData
 {
     std::vector<Point> dots;  //Only For Standard,other don't have this
     template<class Archive>
@@ -37,9 +37,9 @@ struct ProgramDataTraits
 };
 
 template <>
-struct ProgramDataTraits<Type::Move>
+struct ProgramDataTraits<Type::Dynamic>
 {
-    typedef MoveProgramData data;
+    typedef DynamicProgramData data;
 };
 
 

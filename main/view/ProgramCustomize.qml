@@ -13,7 +13,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
     property var currentProgram: null;
     property var content;
 //    onCurrentProgramChanged: {
-//        if(currentProgram.type!==2){staticParamsSetting.currentProgram=currentProgram;}else{moveParamsSetting.currentProgram=currentProgram;}}
+//        if(currentProgram.type!==2){staticParamsSetting.currentProgram=currentProgram;}else{dynamicParamsSetting.currentProgram=currentProgram;}}
 
 
     Component.onDestruction: {
@@ -21,7 +21,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
         {
             if(currentProgram.type!==2)
             {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
-            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::MoveProgramVM", currentProgram);}
+            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicProgramVM", currentProgram);}
         }
 
     }
@@ -46,9 +46,9 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 
         }
 
-        MoveParamsSetting
+        DynamicParamsSetting
         {
-            id:moveParamsSetting;
+            id:dynamicParamsSetting;
             anchors.fill: parent;
 
         }
@@ -89,30 +89,30 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         programListModelVmThreshold.refreshData();
                                         programListModelVmScreening.refreshData();
                                         programListModelVmSpecial.refreshData();
-                                        programListModelVmMove.refreshData();
+                                        programListModelVmDynamic.refreshData();
                                         programListModelVmCustom.refreshData();
                                     }
 
                                     property var programListModelVmThreshold: null;
                                     property var programListModelVmScreening: null;
                                     property var programListModelVmSpecial: null;
-                                    property var programListModelVmMove: null;
+                                    property var programListModelVmDynamic: null;
                                     property var programListModelVmCustom: null;
                                     Component.onCompleted: {
                                         programListModelVmThreshold=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[0]);
                                         programListModelVmScreening=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[1]);
                                         programListModelVmSpecial=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[2])
-                                        programListModelVmMove=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[3]);
+                                        programListModelVmDynamic=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[3]);
                                         programListModelVmCustom=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgramListModelVm", false,[4]);
                                     }
                                     Component.onDestruction: {
                                         IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmThreshold);
                                         IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmScreening);
                                         IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmSpecial);
-                                        IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmMove);
+                                        IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmDynamic);
                                         IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgramListModelVm",programListModelVmCustom);
                                     }
-                                    model:[programListModelVmThreshold,programListModelVmScreening,programListModelVmSpecial,programListModelVmMove,programListModelVmCustom]
+                                    model:[programListModelVmThreshold,programListModelVmScreening,programListModelVmSpecial,programListModelVmDynamic,programListModelVmCustom]
                                     Item {id: homeTab;anchors.fill: parent;anchors.margins: height*0.03;
                                         ListView {
                                             id:listView;spacing: -1;anchors.fill: parent;
@@ -134,7 +134,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                                         {
                                                             if(currentProgram.type!==2)
                                                             {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
-                                                            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::MoveProgramVM", currentProgram);}
+                                                            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicProgramVM", currentProgram);}
                                                         }
 
                                                         var type=model.type;
@@ -145,8 +145,8 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                                             staticParamsSetting.currentProgram=currentProgram;
                                                         }
                                                         else{
-                                                            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false,[model.program_id]);
-                                                            moveParamsSetting.currentProgram=currentProgram;
+                                                            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicProgramVM", false,[model.program_id]);
+                                                            dynamicParamsSetting.currentProgram=currentProgram;
                                                         }
                                                         var params=currentProgram.params;
                                                         strategyStack.currentProgramChanged();
@@ -228,7 +228,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                 displayCanvas.requestPaint();
 
                             }
-                            onDotListChanged:{if(currentProgram!==null) {currentProgram.dots=dotList;currentProgram.type===2?moveParamsSetting.currentProgramChanged():staticParamsSetting.currentProgramChanged();}}
+                            onDotListChanged:{if(currentProgram!==null) {currentProgram.dots=dotList;currentProgram.type===2?dynamicParamsSetting.currentProgramChanged():staticParamsSetting.currentProgramChanged();}}
                         }
                     }
                 }
@@ -246,7 +246,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         {
                                             if(currentProgram.type!==2)
                                             {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
-                                            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::MoveProgramVM", currentProgram);}
+                                            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicProgramVM", currentProgram);}
                                         }
 
                                         var type=newProgram.type;
@@ -257,8 +257,8 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                             staticParamsSetting.currentProgram=currentProgram;
                                         }
                                         else{
-                                            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::MoveProgramVM", false);
-                                            moveParamsSetting.currentProgram=currentProgram;
+                                            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicProgramVM", false);
+                                            dynamicParamsSetting.currentProgram=currentProgram;
                                         }
 
                                         currentProgram.type=type;
@@ -327,7 +327,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
             Item{height: parent.height;width:parent.width*0.648;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter
-                        CusButton{id:paramsSetting;text:"参数设置";enabled:false;onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { moveParamsSetting.open();}}
+                        CusButton{id:paramsSetting;text:"参数设置";enabled:false;onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { dynamicParamsSetting.open();}}
                         CusButton{text:"圆形选点";}
                         CusButton{text:"矩形选点";}
                         }

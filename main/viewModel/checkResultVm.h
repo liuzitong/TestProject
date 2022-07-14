@@ -33,8 +33,8 @@ public:
             *m_val=*val;
         }
         else if(m_type==1){
-            auto val=static_cast<MoveParamsVM*>(value);
-            auto m_val=static_cast<MoveParamsVM*>(m_params);
+            auto val=static_cast<DynamicParamsVM*>(value);
+            auto m_val=static_cast<DynamicParamsVM*>(m_params);
             *m_val=*val;
         }
     }
@@ -76,7 +76,7 @@ class ResultDataVm:public QObject
 public:
     Q_INVOKABLE explicit ResultDataVm()=default;
     explicit ResultDataVm(ResultData<Type::ThreshHold> resultData);
-    explicit ResultDataVm(ResultData<Type::Move> resultData);
+    explicit ResultDataVm(ResultData<Type::Dynamic> resultData);
     Q_INVOKABLE virtual ~ResultDataVm()=default;
     int getAlarm(){return m_alarm;}void setAlarm(int value){m_alarm=value;}
     int getFalsePositiveCount(){return m_falsePositiveCount;}void setFalsePositiveCount(int value){m_falsePositiveCount=value;}
@@ -94,7 +94,7 @@ public:
     QVariantList getFixationDeviation(){return m_fixationDeviation;}void setFixationDeviation(QVariantList value){m_fixationDeviation=value;}
     QVariantList getCheckData(){return m_checkData;}void setCheckData(QVariantList value){m_checkData=value;}
     ResultData<Type::ThreshHold> getThresholdData();
-    ResultData<Type::Move> getMoveData();
+    ResultData<Type::Dynamic> getDynamicData();
 private:
     int m_alarm;
     int m_falsePositiveCount;

@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-class AnalysisResult : public QObject
+class StaticAnalysisResult : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(float md READ getmd)
@@ -16,9 +16,9 @@ class AnalysisResult : public QObject
     Q_PROPERTY(int dotWeakSeen READ getDotWeakSeen)
     Q_PROPERTY(int dotUnseen READ getDotUnseen)
 public:
-    Q_INVOKABLE explicit AnalysisResult(float md,float p_md, float psd,float p_psd, float VFI, int GHT,int dotSeen,int dotWeakSeen,int dotUnseen, QObject *parent=nullptr):
+    Q_INVOKABLE explicit StaticAnalysisResult(float md,float p_md, float psd,float p_psd, float VFI, int GHT,int dotSeen,int dotWeakSeen,int dotUnseen, QObject *parent=nullptr):
         QObject(parent),m_md(md),m_p_md(p_md),m_psd(psd),m_p_psd(p_psd),m_VFI(VFI),m_GHT(GHT),m_dotSeen(dotSeen),m_dotWeakSeen(dotWeakSeen),m_dotUnseen(dotUnseen){};
-    Q_INVOKABLE virtual ~AnalysisResult()=default;
+    Q_INVOKABLE virtual ~StaticAnalysisResult()=default;
     float getmd(){return m_md;}
     float getpsd(){return m_psd;}
     float getVFI(){return m_VFI;}

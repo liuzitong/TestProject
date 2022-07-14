@@ -22,8 +22,8 @@ Item {id:root; width: 1366;height: 691
 
     Column{anchors.fill: parent;
         Rectangle{width: parent.width; height: parent.height*14/15; id:content;
-            ChooseProgram{id:chooseProgram;anchors.fill: parent;onOk:{root.currentProgram=currentProgram;currentProgram.type!==2?staticParamsSetting.currentProgram=currentProgram:moveParamsSetting.currentProgram=currentProgram;}}
-            MoveParamsSetting{id:moveParamsSetting;anchors.fill: parent;onDataRefreshed:root.currentProgramChanged();}
+            ChooseProgram{id:chooseProgram;anchors.fill: parent;onOk:{root.currentProgram=currentProgram;currentProgram.type!==2?staticParamsSetting.currentProgram=currentProgram:dynamicParamsSetting.currentProgram=currentProgram;}}
+            DynamicParamsSetting{id:dynamicParamsSetting;anchors.fill: parent;onDataRefreshed:root.currentProgramChanged();}
             StaticParamsSetting{id:staticParamsSetting;anchors.fill: parent;isCustomProg:false;onDataRefreshed:{root.currentProgramChanged();}}
             Item{anchors.fill: parent;anchors.margins: 2;
                 Row{anchors.fill: parent;spacing: 2;
@@ -189,7 +189,7 @@ Item {id:root; width: 1366;height: 691
                     Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                         Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
                             CusButton{text:"选择程序";onClicked: chooseProgram.open();}
-                            CusButton{id:paramsSetting;text:"参数选择";enabled:!(currentProgram===null);onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { moveParamsSetting.open();}}
+                            CusButton{id:paramsSetting;text:"参数选择";enabled:!(currentProgram===null);onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { dynamicParamsSetting.open();}}
                         }
                     }
                 }
@@ -229,7 +229,7 @@ Item {id:root; width: 1366;height: 691
 //                                        }
 //                                        else
 //                                        {
-//                                            currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,["Move"]);
+//                                            currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,["Dynamic"]);
 //                                        }
 //                                        currentCheckResult.OS_OD=os_od.value;
 //                                        currentCheckResult.params=currentProgram.params;

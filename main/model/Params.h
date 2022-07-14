@@ -21,8 +21,8 @@ enum class CursorSize{I,II,III,IV,V};
 enum class BackGroundColor{white,yellow};
 enum class FixationTarget{centerPoint,smallDiamond,bigDiamond,bottomPoint};
 enum class FixationMonitor{dontAlarm,onlyAlarm,alarmAndPause};
-enum class Type { ThreshHold=0, Screening,Move  };
-enum class Category { ThreshHold=0, Screening,Special,Move,Custom  };
+enum class Type { ThreshHold=0, Screening,Dynamic  };
+enum class Category { ThreshHold=0, Screening,Special,Dynamic,Custom  };
 
 
 struct StaticParams/*:public QObject*/
@@ -116,11 +116,11 @@ struct StaticParams/*:public QObject*/
     }
 };
 
-struct MoveParams
+struct DynamicParams
 {
     enum class Strategy{standard,blindArea,darkArea,straightLine};
-    enum class MoveMethod{_4Lines,_6Lines,_8Lines};
-    enum class MoveDistance{_5,_10,_15};
+    enum class DynamicMethod{_4Lines,_6Lines,_8Lines};
+    enum class DynamicDistance{_5,_10,_15};
     int                         Range[2];
     Strategy                    strategy;
     CursorColor                 cursorColor;
@@ -130,8 +130,8 @@ struct MoveParams
 //    FixationTarget       fixationTarget;
     int                         speed;
     int                         brightness;
-    MoveMethod                  moveMethod;
-    MoveDistance                moveDistance;
+    DynamicMethod               dynamicMethod;
+    DynamicDistance             dynamicDistance;
     FixationMonitor             fixationMonitor;
 
     template<class Archive>
@@ -145,8 +145,8 @@ struct MoveParams
 //        archive & BOOST_SERIALIZATION_NVP(fixationTarget);
         archive & BOOST_SERIALIZATION_NVP(speed);
         archive & BOOST_SERIALIZATION_NVP(brightness);
-        archive & BOOST_SERIALIZATION_NVP(moveMethod);
-        archive & BOOST_SERIALIZATION_NVP(moveDistance);
+        archive & BOOST_SERIALIZATION_NVP(dynamicMethod);
+        archive & BOOST_SERIALIZATION_NVP(dynamicDistance);
         archive & BOOST_SERIALIZATION_NVP(fixationMonitor);
     }
 
@@ -167,9 +167,9 @@ struct ParamTraits
 
 
 template <>
-struct ParamTraits<Type::Move>
+struct ParamTraits<Type::Dynamic>
 {
-    typedef MoveParams params;
+    typedef DynamicParams params;
 };
 
 
