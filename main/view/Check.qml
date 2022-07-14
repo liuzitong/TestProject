@@ -18,6 +18,8 @@ Item {id:root; width: 1366;height: 691
     property var currentPatient: null;
     property var currentCheckResult: null;
 
+    Component.onCompleted: {IcUiQmlApi.appCtrl.checkSvc.checkResultChanged.connect(currentCheckResultChanged);}
+
     Column{anchors.fill: parent;
         Rectangle{width: parent.width; height: parent.height*14/15; id:content;
             ChooseProgram{id:chooseProgram;anchors.fill: parent;onOk:{root.currentProgram=currentProgram;currentProgram.type!==2?staticParamsSetting.currentProgram=currentProgram:moveParamsSetting.currentProgram=currentProgram;}}
@@ -166,7 +168,10 @@ Item {id:root; width: 1366;height: 691
                         }
                     }
                     Rectangle{width: parent.width*0.5;height: parent.height;color:backGroundColorCheckPanel;
-                        CusText{text:"右眼"; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;height: parent.height*0.05;}
+                        CusText{
+                            id:os_od;
+                            property int value: 0;
+                            text:value===0?"左眼":"右眼"; z: 1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;height: parent.height*0.05;}
                         CheckDisplay{id:checkDisplay; currentProgram:root.currentProgram;currentCheckResult:root.currentCheckResult}
                     }
                 }
@@ -192,38 +197,63 @@ Item {id:root; width: 1366;height: 691
                     Item{id: item1; anchors.fill: parent;anchors.margins:parent.height*0.15;
                         Flow{
                             id:checkControl
+                            property int checkState: IcUiQmlApi.appCtrl.checkSvc.checkState;
                             height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
-                            property bool started: false
                             CusButton{
-                                text:!checkControl.started?"开始测试":"暂停测试";
+                                text:/*(checkControl.checkState>=2)?"开始测试":"暂停测试";*/
+                                {if(checkControl.checkState>=3) return "开始测试";if(checkControl.checkState==2) return "恢复检查";if(checkControl.checkState==1) return "暂停检查"}
                                 onClicked:{
                                     if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
-                                    if(currentProgram.type===0)
+                                    if(currentProgram.type===0||currentProgram.type===1)
                                     {
                                         if(queryStrategy.report!=3) currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[3]);
                                         else currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[5]);
                                     }
-
-
-
-                                    if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
-                                    if(currentProgram.type===0){
-                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,["Threshold"]);
-                                    }
                                     else
                                     {
-                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,["Move"]);
+                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[6]);
                                     }
-                                    currentCheckResult.params=currentProgram.params;
-                                    IcUiQmlApi.appCtrl.checkSvc.program=currentProgram;
-                                    IcUiQmlApi.appCtrl.checkSvc.patient=currentPatient;
-                                    IcUiQmlApi.appCtrl.checkSvc.checkResult=currentCheckResult;
-                                    !checkControl.started?IcUiQmlApi.appCtrl.checkSvc.start():IcUiQmlApi.appCtrl.checkSvc.pause();
-                                    checkControl.started=!checkControl.started;
+
+//                                    console.log(checkControl.checkState);
+//                                    if(checkControl.checkState>=3)
+//                                    {
+
+//                                        if(currentCheckResult!=null)
+//                                        {
+//                                            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
+//                                            currentCheckResult=null;
+//                                        }
+
+//                                        if(currentProgram.type===0){
+//                                            currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,["Threshold"]);
+//                                        }
+//                                        else
+//                                        {
+//                                            currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,["Move"]);
+//                                        }
+//                                        currentCheckResult.OS_OD=os_od.value;
+//                                        currentCheckResult.params=currentProgram.params;
+//                                        IcUiQmlApi.appCtrl.checkSvc.program=currentProgram;
+//                                        IcUiQmlApi.appCtrl.checkSvc.patient=currentPatient;
+//                                        IcUiQmlApi.appCtrl.checkSvc.checkResult=currentCheckResult;
+//                                        IcUiQmlApi.appCtrl.checkSvc.start();
+
+//                                    }
+//                                    if(checkControl.checkState==2)
+//                                    {
+//                                        IcUiQmlApi.appCtrl.checkSvc.resume();
+//                                    }
+//                                    if(checkControl.checkState==1)
+//                                    {
+//                                        IcUiQmlApi.appCtrl.checkSvc.pause();
+//                                    }
+
                                 }
                             }
-                            CusButton{text:"停止测试";onClicked: {IcUiQmlApi.appCtrl.checkSvc.stop();checkControl.started=false;}}
-                            CusButton{text:"切换眼别";}
+                            CusButton{text:"停止测试";onClicked: {
+                                    IcUiQmlApi.appCtrl.checkSvc.stop();
+                                }}
+                            CusButton{text:"切换眼别";onClicked:os_od.value=(os_od.value+1)%2;}
                             CusComboBox{
                                 id:queryStrategy;height: parent.height;width: parent.height*3.5;
                                 property var listModel:ListModel {}
@@ -257,21 +287,12 @@ Item {id:root; width: 1366;height: 691
                             {
                                 var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
                                 var diagramWidth;
-                                if(queryStrategy.report==0)
+                                switch (queryStrategy.report)
                                 {
-                                    diagramWidth=root.height*14/15*0.92*0.97/3*1.25*0.8;
-                                }
-                                else if(queryStrategy.report==1)
-                                {
-                                    diagramWidth=root.height*14/15*0.92*0.47*0.8;
-                                }
-                                else if(queryStrategy.report==2)
-                                {
-                                    diagramWidth=root.height*14/15*0.92*0.40*0.8;
-                                }
-                                else if(queryStrategy.report==3)
-                                {
-                                    diagramWidth=root.height*14/15*0.92*0.8;
+                                case 0:diagramWidth=root.height*14/15*0.92*0.97/3*1.25*0.8;break;
+                                case 1:diagramWidth=root.height*14/15*0.92*0.47*0.8;break;
+                                case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
+                                case 3:case 4:diagramWidth=root.height*14/15*0.92*0.8;break;
                                 }
 
 //                                IcUiQmlApi.appCtrl.AnalysisSvc.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,currentCheckResult.resultData.checkData);

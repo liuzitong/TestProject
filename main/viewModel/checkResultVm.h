@@ -80,7 +80,7 @@ public:
     Q_INVOKABLE virtual ~ResultDataVm()=default;
     int getAlarm(){return m_alarm;}void setAlarm(int value){m_alarm=value;}
     int getFalsePositiveCount(){return m_falsePositiveCount;}void setFalsePositiveCount(int value){m_falsePositiveCount=value;}
-    int getFalsePositiveTestCount(){return m_falseNegativeTestCount;}void setFalsePositiveTestCount(int value){m_falsePositiveTestCount=value;}
+    int getFalsePositiveTestCount(){return m_falsePositiveTestCount;}void setFalsePositiveTestCount(int value){m_falsePositiveTestCount=value;}
     int getFalseNegativeCount(){return m_falseNegativeCount;}void setFalseNegativeCount(int value){m_falseNegativeCount=value;}
     int getFalseNegativeTestCount(){return m_falseNegativeTestCount;}void setFalseNegativeTestCount(int value){m_falseNegativeTestCount=value;}
     int getFixationLostCount(){return m_fixationLostCount;}void setFixationLostCount(int value){m_fixationLostCount=value;}

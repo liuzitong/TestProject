@@ -70,7 +70,7 @@ public:
     Q_PROPERTY(QString name READ getName WRITE setName);
     Q_PROPERTY(QObject* params READ getParams);
     Q_PROPERTY(QVariantList dots READ getDots WRITE setDots);
-    Q_PROPERTY(QVariantList report READ getDots WRITE setDots )
+    Q_PROPERTY(QVariantList report READ getReport WRITE setReport )
     Q_PROPERTY(int category READ getCategory WRITE setCategory)
 
     long getID(){return m_id;}void setID(int value){m_id=value;}
@@ -78,6 +78,7 @@ public:
     QString getName(){return m_name;}void setName(QString value){m_name=value;}
     MoveParamsVM* getParams(){return m_moveParamsVm;}
     QVariantList getDots(){return m_dots;}void setDots(QVariantList value){m_dots=value;}
+    QVariantList getReport(){return m_report;}void setReport(QVariantList value){m_report=value;}
     int getCategory(){return m_category;}void setCategory(int value){m_category=value;}
 private:
     long m_id;

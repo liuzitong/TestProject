@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+import QtQuick 2.0
 
 
 Canvas{
@@ -35,7 +35,7 @@ Canvas{
         if(dots!==null)
         {
             var ctx = getContext("2d")
-            for(var i=1;i<dots.length;i++)
+            for(var i=0;i<dots.length;i++)
             {
                 var temp=dots[i];
                 temp=convertY(temp)
@@ -43,8 +43,8 @@ Canvas{
                 ctx.strokeStyle="black";
                 ctx.lineWidth=0;
                 ctx.beginPath();
-                ctx.moveTo(i,13);
-                ctx.lineTo(i,temp);
+                ctx.moveTo(i+1,13);
+                ctx.lineTo(i+1,temp);
                 ctx.closePath();
                 ctx.stroke();
             }

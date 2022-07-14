@@ -100,8 +100,8 @@ public:
         m_fixedParamsVM=new FixedParamsVM(staticParams.fixedParams);
     }
     StaticParamsVM& operator =(StaticParamsVM& other){
-        m_commonParamsVM=other.m_commonParamsVM;
-        m_fixedParamsVM=other.m_fixedParamsVM;
+        *m_commonParamsVM=*(other.m_commonParamsVM);
+        *m_fixedParamsVM=*(other.m_fixedParamsVM);
         return *this;
     }
     CommonParamsVM* getCommonParams(){return m_commonParamsVM;}/*void setCommonParams(QObject* value){m_commonParams=value;}*/

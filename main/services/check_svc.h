@@ -13,28 +13,29 @@ class CheckSvc: public QObject
     Q_PROPERTY(PatientVm* patient READ getPatient WRITE setPatient)
     Q_PROPERTY(QObject* program READ getProgram WRITE setProgram)
     Q_PROPERTY(CheckResultVm* checkResult READ getCheckResult WRITE setCheckResult NOTIFY checkResultChanged)
-    Q_PROPERTY(int checkState READ getCheckState WRITE setCheckState NOTIFY checkStateChanged)
+    Q_PROPERTY(int checkState READ getCheckState /*WRITE setCheckState*/ NOTIFY checkStateChanged)
 public:
-    explicit CheckSvc(QObject *parent = nullptr){};
+    explicit CheckSvc(QObject *parent = nullptr){m_checkState=3;}
     ~CheckSvc()=default;
     Q_INVOKABLE void start();
     Q_INVOKABLE void pause();
     Q_INVOKABLE void resume();
     Q_INVOKABLE void stop();
 
+signals:
+  void setCheckState(int value);
+
 public:
     PatientVm* getPatient(){return m_patientVm;}void setPatient(PatientVm* value){m_patientVm=value;}
     QObject* getProgram(){return m_programVm;}void setProgram(QObject* value){m_programVm=value;}
     CheckResultVm* getCheckResult(){return m_checkResultVm;}void setCheckResult(CheckResultVm* value){m_checkResultVm=value;} Q_SIGNAL void checkResultChanged();
-    int getCheckState(){return m_checkState;}void setCheckState(int value){m_checkState=value;emit checkStateChanged();}Q_SIGNAL void checkStateChanged();
+    int getCheckState(){return m_checkState;}/*void setCheckState(int value){m_checkState=value;emit checkStateChanged();}*/Q_SIGNAL void checkStateChanged();
 //public slots:
 //  void handleResults(const QString &);
-//signals:
-//  void operate(const QString &);
 
 private:
     QThread m_workerThread;
-    int m_checkState;                        //0:start,1:checking,2:pausing,3:abort,4:finished
+    int m_checkState;                        //0:start,1:checking,2:pausing,3:stopped,4:finished
     PatientVm* m_patientVm;
     QObject* m_programVm;
     CheckResultVm* m_checkResultVm;
