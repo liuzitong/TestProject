@@ -285,14 +285,14 @@ Item {id:root; width: 1366;height: 691
                         CusButton{text:"分析"; anchors.right: parent.right;
                             onClicked:
                             {
-                                var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
+//                                var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
                                 var diagramWidth;
                                 switch (queryStrategy.report)
                                 {
                                 case 0:diagramWidth=root.height*14/15*0.92*0.97/3*1.25*0.8;break;
                                 case 1:diagramWidth=root.height*14/15*0.92*0.47*0.8;break;
                                 case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
-                                case 3:case 4:diagramWidth=root.height*14/15*0.92*0.8;break;
+                                case 3:case 4:case 5:case 6:case7:diagramWidth=root.height*14/15*0.92*0.8;break;
                                 }
 
 //                                IcUiQmlApi.appCtrl.AnalysisSvc.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,currentCheckResult.resultData.checkData);

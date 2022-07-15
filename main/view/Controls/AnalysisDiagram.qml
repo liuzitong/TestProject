@@ -30,7 +30,7 @@ Row{
             Component.onCompleted:
             {
                 root.clearDot.connect(function(){
-                    console.log("cleardot");
+//                    console.log("cleardot");
                     dot=null;
                     requestPaint();
                 })
