@@ -39,11 +39,11 @@ private:
     int m_selectedDotIndex;
     int m_programType;
 
-
     LimeReport::ReportEngine* m_reportEngine=nullptr;
 
     QVector<QPointF> m_dotList;
-    QVector<int> m_values;
+    QVector<int> m_staticValues;
+    QVector<QPointF> m_dynamicValues;
     CheckResultVm* m_checkResult=nullptr;
     PatientVm* m_patient=nullptr;
     QObject* m_program=nullptr;
@@ -73,8 +73,6 @@ private:
     QVector<int> m_peDev;
     QVector<int> m_peMDev;
 
-
-
     QVector<int> m_vfiRingStandard;
     QVector<int> m_vfiRingTest;
 
@@ -95,6 +93,7 @@ private:
 
 private:
     void drawPixScale();
+    void drawRoundCrossPixScale();
 
     void drawDevDBText(QVector<int> values);
     void drawTotalDeviation();
@@ -109,15 +108,17 @@ private:
     void drawDefectDepthDiagram();
 
     void drawScreening();
+    void drawDynamic();
+
     void drawFixationDeviation();
+
     void staticAnalysis();
     void dynamicAnalysis();
 
 
 
-    QPoint convertDegLocToPixLoc(QPointF DegLoc);
-//    QPoint convertDegLocToPixLocLarge(QPointF DegLoc);
 
+    QPoint convertDegLocToPixLoc(QPointF DegLoc);
     void DrawDiagram();
     void DrawReportDiagram();
 

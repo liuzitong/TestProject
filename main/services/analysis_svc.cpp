@@ -61,26 +61,27 @@ QObject* AnalysisSvc::runProcess(int report,PatientVm *patient, CheckResultVm *c
     else
     {
         DynamicProgramVM* dynamicProgram=static_cast<DynamicProgramVM*>(program);
-        auto dotList=dynamicProgram->getDots();
+        auto dotList=checkResult->getResultData()->getCheckData();
+        m_dotList.resize(dotList.length());
         for(int i=0;i<dotList.length();i++){m_dotList[i]=dotList[i].toPointF();}
         auto range=dynamicProgram->getParams()->getRange();
         m_innerRange=range[0];
         m_range=range[1];
     }
     m_os_od=checkResult->getOS_OD();
-    auto values=checkResult->getResultData()->getCheckData();
-    m_values.resize(values.length());
-    for(int i=0;i<values.length();i++){m_values[i]=values[i].toInt();}
 
     if(m_programType!=2)
     {
+        auto values=checkResult->getResultData()->getCheckData();
+        m_staticValues.resize(values.length());
+        for(int i=0;i<values.length();i++){m_staticValues[i]=values[i].toInt();}
         staticAnalysis();
         m_dotSeen=0;
         m_dotWeakSeen=0;
         m_dotUnseen=0;
         if(report==3)
         {
-            for(auto& i:m_values)
+            for(auto& i:m_staticValues)
             {
                 if(i==0) m_dotUnseen++;
                 else if(i==1) m_dotWeakSeen++;
@@ -92,6 +93,10 @@ QObject* AnalysisSvc::runProcess(int report,PatientVm *patient, CheckResultVm *c
     }
     else
     {
+        auto values=checkResult->getResultData()->getCheckData();
+        qDebug()<<values.length();
+        m_dynamicValues.resize(values.length());
+        for(int i=0;i<values.length();i++){m_dynamicValues[i]=values[i].toPointF();}
         dynamicAnalysis();
         DrawDiagram();
         return nullptr;
@@ -258,12 +263,11 @@ void AnalysisSvc::showReport(int report)
 }
 
 
-#include <qmath.h>
+
 void AnalysisSvc::drawPixScale()
 {
     int scale=m_isPreview?1:2;
     QPainter painter(&m_image);
-    painter.setBackground(QBrush(QColor("white")));
     painter.setBrush(QBrush(QColor("black")));
     painter.setPen({Qt::black,float(scale)});
     painter.drawLine(QLine(0,m_image.height()/2,m_image.width(),m_image.height()/2));
@@ -278,6 +282,56 @@ void AnalysisSvc::drawPixScale()
             painter.drawLine(QLine(m_image.width()/2-2*scale,(float(m_image.height()-scale))/(segmentCount*2)*i+scale/2,m_image.width()/2+2*scale,(float(m_image.height()-scale))/(segmentCount*2)*i+scale/2));
         }
     }
+}
+
+void AnalysisSvc::drawRoundCrossPixScale()
+{
+    int scale=m_isPreview?1:2;
+    QPainter painter(&m_image);
+
+    painter.setBrush(QBrush(QColor("black")));
+    painter.setPen({Qt::black,float(scale)});
+    painter.drawLine(QLine(0,m_image.height()/2,m_image.width(),m_image.height()/2));
+    painter.drawLine(QLine(m_image.width()/2,0,m_image.width()/2,m_image.height()));
+
+//    auto drawDashLine=[]()->void{};
+    int segmentCount=m_range/10;
+    QPen pen;
+    pen.setDashPattern({float(3*scale),float(5*scale)});
+    pen.setWidth(float(scale));
+    pen.setColor(Qt::black);
+    painter.setPen(pen);
+    painter.setBrush(Qt::NoBrush);
+    painter.setRenderHint(QPainter::RenderHint::Antialiasing);
+    for(int i=1;i<=segmentCount;i++)
+    {
+        int radius=float(m_image.width())/2/segmentCount*i+scale/2;
+        painter.drawEllipse({m_image.height()/2,m_image.width()/2},radius,radius);
+    }
+
+    qreal radius=m_image.width()/2;
+    for(int i=1;i<12;i++)
+    {
+        if(i%3!=0)
+        {
+            auto angle=M_PI/6*i;
+            painter.drawLine(QLine{m_image.width()/2,m_image.height()/2,int(m_image.width()/2+radius*qSin(angle)),int(m_image.height()/2+radius*qCos(angle))});
+        }
+    }
+
+
+    painter.setRenderHint(QPainter::RenderHint::Antialiasing,false);
+    painter.setPen({Qt::black,float(scale)});
+    for(int i=0;i<=segmentCount*2;i++)
+    {
+        if(i!=segmentCount)
+        {
+            painter.drawLine(QLine((float(m_image.width()-scale))/(segmentCount*2)*i+scale/2,m_image.height()/2-4*scale,(float(m_image.width()-scale))/(segmentCount*2)*i+scale/2,m_image.height()/2+4*scale));
+            painter.drawLine(QLine(m_image.width()/2-4*scale,(float(m_image.height()-scale))/(segmentCount*2)*i+scale/2,m_image.width()/2+4*scale,(float(m_image.height()-scale))/(segmentCount*2)*i+scale/2));
+        }
+    }
+
+
 }
 
 
@@ -310,7 +364,7 @@ void AnalysisSvc::drawPE(QVector<int> values)
         scale=qCeil(float(m_image.width())/240*1.5);
     }
     else scale=4;
-    for(int i=0;i<m_dotList.length()&&i<m_values.length();i++)             //画DB图
+    for(int i=0;i<m_dotList.length()&&i<m_staticValues.length();i++)             //画DB图
     {
         auto pixLoc=convertDegLocToPixLoc(m_dotList[i]);
         QString path=QString(":/grays/PE")+QString::number(values[i])+".bmp";
@@ -328,12 +382,6 @@ QPoint AnalysisSvc::convertDegLocToPixLoc(QPointF DegLoc)
     return QPoint(m_image.width()/2+DegLoc.x()*pixPerDegW,m_image.height()/2-DegLoc.y()*pixPerDegH);
 }
 
-//QPoint AnalysisSvc::convertDegLocToPixLocLarge(QPointF DegLoc)
-//{
-//    float pixPerDegW=float(m_imageSizeLarge.width()/2)/m_range;
-//    float pixPerDegH=float(m_imageSizeLarge.height()/2)/m_range;
-//    return QPoint(m_imageSizeLarge.width()/2+DegLoc.x()*pixPerDegW,m_imageSizeLarge.height()/2-DegLoc.y()*pixPerDegH);
-//}
 
 void AnalysisSvc::DrawDiagram()
 {
@@ -375,6 +423,12 @@ void AnalysisSvc::DrawDiagram()
         QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
         m_image=QImage(imageSize, QImage::Format_RGB32);
         drawScreening();
+    }
+    if(m_report>3)
+    {
+        QSize imageSize={m_previewDiagramWidth,m_previewDiagramWidth};
+        m_image=QImage(imageSize, QImage::Format_RGB32);
+        drawDynamic();
     }
 
 }
@@ -445,11 +499,11 @@ void AnalysisSvc::drawDBDiagram()
     blindImage=blindImage.scaled(blindImage.width()*scale,blindImage.height()*scale);
     painter.drawImage(QPoint{pixLoc.x()-blindImage.width()/2,pixLoc.y()-blindImage.height()/2},blindImage);
 
-    for(int i=0;i<m_dotList.length()&&i<m_values.length();i++)             //画DB图
+    for(int i=0;i<m_dotList.length()&&i<m_staticValues.length();i++)             //画DB图
     {
         auto pixLoc=convertDegLocToPixLoc(m_dotList[i]);
         const QRect rectangle = QRect(pixLoc.x()-fontPixSize*1.6*0.4, pixLoc.y()-fontPixSize*0.8/2, fontPixSize*1.6,fontPixSize*0.8);
-        painter.drawText(rectangle,Qt::AlignCenter,QString::number(m_values[i]));
+        painter.drawText(rectangle,Qt::AlignCenter,QString::number(m_staticValues[i]));
         m_image.setPixel(pixLoc.x(),pixLoc.y(),0xFFFF0000); //标个小红点
     }
     m_image.save(m_imageSavePath+"/dBDiagram.bmp","bmp");
@@ -519,11 +573,11 @@ void AnalysisSvc::drawGrayDiagram()
              int index=interpolationDots[j].first;
              if(interpolationDots[j].second==0)
              {
-                 totalValue=m_values[index];
+                 totalValue=m_staticValues[index];
                  totalDist=1;
                  break;
              }
-             totalValue+=(float(m_values[index])/qSqrt(interpolationDots[j].second));
+             totalValue+=(float(m_staticValues[index])/qSqrt(interpolationDots[j].second));
              totalDist+=1.0f/qSqrt(interpolationDots[j].second);
          }
          float interpolVal=totalValue/totalDist;
@@ -649,11 +703,11 @@ void AnalysisSvc::drawScreening()
     screenImageSE2=screenImageSE2.scaled(screenImageSE2.width()*scale,screenImageSE2.height()*scale);
     blindImage=blindImage.scaled(blindImage.width()*scale,blindImage.height()*scale);
     painter.drawImage(QPoint{pixLoc.x()-blindImage.width()/2,pixLoc.y()-blindImage.height()/2},blindImage);
-    for(int i=0;i<m_dotList.length()&&i<m_values.length();i++)
+    for(int i=0;i<m_dotList.length()&&i<m_staticValues.length();i++)
     {
         auto pixLoc=convertDegLocToPixLoc(m_dotList[i]);
         auto imageLoc=QPoint{pixLoc.x()-screenImageSE0.width()/2,pixLoc.y()-screenImageSE0.height()/2};
-        switch (m_values[i])
+        switch (m_staticValues[i])
         {
         case 0:painter.drawImage(imageLoc,screenImageSE2);break;
         case 1:painter.drawImage(imageLoc,screenImageSE1);break;
@@ -662,6 +716,27 @@ void AnalysisSvc::drawScreening()
         }
     }
     m_image.save(m_imageSavePath+"/Screening.bmp","bmp");
+}
+
+void AnalysisSvc::drawDynamic()
+{
+    m_image.fill(qRgb(255, 255, 255));
+    drawRoundCrossPixScale();
+    int scale=m_isPreview?1:2;
+    QPainter painter(&m_image);
+    painter.setBackground(QBrush(QColor("white")));
+    painter.setBrush(QBrush(QColor("black")));
+    painter.setPen({Qt::black,float(scale)});
+    qDebug()<<m_dynamicValues.length();
+    for(int i=0;i<m_dynamicValues.length();i++)
+    {
+        auto begin=convertDegLocToPixLoc(m_dynamicValues[i]);
+        auto end=convertDegLocToPixLoc(m_dynamicValues[(i+1)%m_dynamicValues.length()]);
+        painter.drawLine(QLine(begin.x(),begin.y(),end.x(),end.y()));
+        painter.drawEllipse(begin,3*scale,3*scale);
+    }
+
+    m_image.save(m_imageSavePath+"/Dynamic.bmp","bmp");
 }
 
 void AnalysisSvc::drawFixationDeviation()
@@ -689,6 +764,8 @@ void AnalysisSvc::drawFixationDeviation()
     }
     image.save("./reportImage/FixationDeviation.bmp","bmp");
 }
+
+
 
 void AnalysisSvc::staticAnalysis()
 {
@@ -867,7 +944,7 @@ void AnalysisSvc::staticAnalysis()
         }
 
 
-        if(m_sv[i]>0)  {m_dev[i]=m_values[i]-m_sv[i];}                                                   //dev 盲点
+        if(m_sv[i]>0)  {m_dev[i]=m_staticValues[i]-m_sv[i];}                                                   //dev 盲点
         else{ m_dev[i]=-99; }
 
 
@@ -893,7 +970,7 @@ void AnalysisSvc::staticAnalysis()
             if(ringIndex>4) ringIndex=4;
 
             m_vfiRingStandard[ringIndex]+=m_sv[i];
-            m_vfiRingTest[ringIndex]+=m_values[i];
+            m_vfiRingTest[ringIndex]+=m_staticValues[i];
         }
     }
 

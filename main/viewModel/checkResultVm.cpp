@@ -143,6 +143,7 @@ ResultDataVm::ResultDataVm(ResultData<Type::Dynamic> resultData)
     m_ambientLight=resultData.ambientLight;
     m_E_Light_pv=resultData.E_Light_pv;
     m_T_Light_pv=resultData.T_Light_pv;
+
     for(auto &i:resultData.fixationDeviation){m_fixationDeviation.append(i);}
     for(auto &i:resultData.checkdata){m_checkData.append(QPointF{i.x,i.y});}
 }
