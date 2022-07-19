@@ -1,4 +1,4 @@
-﻿import QtQuick 2.7
+import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
@@ -93,7 +93,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
 //                                    model: ListModel {ListElement { text: "阈值" } ListElement { text: "筛选" } ListElement { text: "移动" }}
                                     model:strategies[typeComboBox.currentIndex];
-                                    onCurrentIndexChanged: if(type!=1){strategy=currentIndex;}else{strategy=currentIndex+3;}
+                                    onCurrentIndexChanged: if(type==1){strategy=currentIndex;}else if(type==2){strategy=currentIndex+3;}else if(type==3){strategy=currentIndex+7}
                                 }
                             }
                             Item{

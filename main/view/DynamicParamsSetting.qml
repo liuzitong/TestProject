@@ -163,8 +163,8 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                        CusText{text:"移动方式"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
                                        CusComboBox{
                                            width: parent.width*0.6; anchors.right: parent.right;model:["4","6","8"];
-                                           currentIndex:currentProgram===null?0:currentProgram.params.moveMethod;
-                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.moveMethod=currentIndex;})}
+                                           currentIndex:currentProgram===null?0:currentProgram.params.dynamicMethod;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.dynamicMethod=currentIndex;})}
                                        }
                                    }
                                    Item{
@@ -172,8 +172,8 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                        CusText{text:"移动距离"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
                                        CusComboBox{
                                            width: parent.width*0.6; anchors.right: parent.right;model:["5","10","15"];
-                                           currentIndex:currentProgram===null?0:currentProgram.params.moveDistance;
-                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.moveDistance=currentIndex;})}
+                                           currentIndex:currentProgram===null?0:currentProgram.params.dynamicDistance;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.dynamicDistance=currentIndex;})}
                                        }
                                    }
                                    Item{

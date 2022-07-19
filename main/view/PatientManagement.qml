@@ -481,7 +481,7 @@ Item{
                         }
 
                     }
-                    CusButton{text:"查看报告";enabled:currentPatient!==null;onClicked: {root.changePage("analysisLobby",null);}}
+                    CusButton{text:"查看报告";/*enabled:currentPatient!==null;*/onClicked: {root.changePage("analysisLobby",null);}}
                 }
             }
             Flow{

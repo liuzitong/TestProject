@@ -78,7 +78,7 @@ Item
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
-                    Item{ id: item2;width:parent.width;height: parent.height*0.25; anchors.left: parent.left;
+                    Item{ id: item2;width:parent.width;height: parent.height*0.20; anchors.left: parent.left;
                         FixationDeviation{ anchors.bottom: parent.bottom; dots:if(currentCheckResult!==null) currentCheckResult.resultData.fixationDeviation; }
                     }
 
