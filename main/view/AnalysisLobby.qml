@@ -14,19 +14,28 @@ Column {
     signal changePage(var pageName,var params);
     signal refresh()
 
-    Component.onCompleted: {content.model=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::AnalysisLobbyListVm", false);}
+//    onRefresh: {content.model=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::AnalysisLobbyListVm", false,currentPatient.id,queryStrategy.currentIndex,image.height);}
+
+//    Component.onCompleted: {}
 
     ListView{
-//        property var listModel: ListModel{ListElement{year:"1998";dayMonth:"06/28";} ListElement{year:"2004";dayMonth:"06/28";}ListElement{year:"2004";dayMonth:"06/28";}ListElement{year:"2004";dayMonth:"06/28";}}
+        property var listModel: ListModel{ListElement{year:"1998";dayMonth:"06/28";} ListElement{year:"2004";dayMonth:"06/28";}ListElement{year:"2004";dayMonth:"06/28";}ListElement{year:"2004";dayMonth:"06/28";}}
         id:content;
         width: parent.width;
         height: parent.height*14/15
+        snapMode: ListView.SnapOneItem
         spacing: -2;
+        clip:true;
 //        model:checkDateListModel;
-//        model:listModel;
-//        model:ListModel{ListElement{year:"1998";dayMonth:"06/28";picList:["dBDiagram.bmp","dBDiagram.bmp","dBDiagram.bmp","dBDiagram.bmp"]}}
+        model:listModel;
+//        model:ListModel{ListElement{year:"1998";dayMonth:"06/28";}}
         delegate: checkRowDelegate
         signal cancelSelected();
+        signal setIndex();
+        Component.onCompleted:
+        {
+
+        }
 
         Component{
             id:checkRowDelegate
@@ -52,13 +61,18 @@ Column {
 
                         ListView{
                             height: parent.height*0.9
+                            highlightRangeMode: ListView.ApplyRange
+                            //                            snapMode: ListView.SnapOneItem
                             anchors.verticalCenter: parent.verticalCenter
                             clip: true
                             orientation: ListView.Horizontal
                             spacing: height*0.15
-                            width:parent.width*0.85;
-                            model:picList;
+                            width:parent.width*0.93;
+                            model:["dBDiagram.bmp","dBDiagram.bmp","dBDiagram.bmp","dBDiagram.bmp"];
                             delegate: checkImgDelegate
+//                            Component.onCompleted: positionViewAtIndex(0,ListView.Beginning);
+                            Component.onCompleted: content.setIndex.connect(function(){console.log("setIndex");positionViewAtBeginning();})
+
 
                             Component
                             {
@@ -69,13 +83,15 @@ Column {
                                     width: parent.height;
 
                                     Image {
+                                        id:image
                                         height:parent.height-4;
                                         anchors.verticalCenter: parent.verticalCenter
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         fillMode: Image.PreserveAspectFit
     //                                    width: sourceSize.width;
     //                                    source: "./analysisLobbyImage/"+modelData;
-                                        source:"file:///" + applicationDirPath + "/analysisLobbyImage/"+picName;
+//                                        source:"file:///" + applicationDirPath + "/analysisLobbyImage/"+picName;
+                                        source:"file:///" + applicationDirPath + "/analysisLobbyImage/"+modelData;
                                         smooth: false;
                                         cache: false;        //to refresh image
     //                                    Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + source;})}
@@ -102,10 +118,6 @@ Column {
                                         content.cancelSelected.connect(function(){selected=false;})
                                     }
                                 }
-
-
-
-
                             }
                         }
 
@@ -145,10 +157,10 @@ Column {
                             id:queryStrategy;height: parent.height;width: parent.height*3.5;
                             borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                             imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                            model: ListModel {ListElement { text: "常规分析" } ListElement { text: "三合一图" } ListElement { text: "总览图" }}
+                            model: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线" ]
                         }
-                        CusButton{text:"进展分析";}
-                        CusButton{text:"视岛图";}
+                        CusButton{text:"进展分析";onClicked:{console.log("gogog");/*content.positionViewAtBeginning();*/}}
+                        CusButton{text:"视岛图";onClicked:{console.log((content.height-10)/4*0.9-4);/*content.setIndex()*/}}
                         }
                     }
                 }
@@ -170,7 +182,13 @@ Column {
                     id: item1
                     anchors.fill: parent
                     anchors.margins:parent.height*0.15;
-                    CusButton{text:"分析"; anchors.right: parent.right;onClicked: {changePage("singleAnalysis",{pageFrom:"analysisLobby"})}}
+                    CusButton{
+                        text:"分析"; anchors.right: parent.right;
+                        onClicked:
+                        {
+                            changePage("analysis",{pageFrom:"check",report:queryStrategy.report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
+                        }
+                    }
                 }
             }
         }

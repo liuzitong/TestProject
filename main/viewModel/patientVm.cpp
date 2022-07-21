@@ -1,4 +1,4 @@
-﻿#include "PatientVm.h"
+#include "PatientVm.h"
 #include "perimeter/main/database/patient.h"
 #include "perimeter/base/common/perimeter_def.h"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
@@ -153,6 +153,15 @@ QDateTime PatientVm::getLastUpdate()
 void Perimeter::PatientVm::setLastUpdate(QDateTime value)
 {
     m_lastUpdate=value;
+}
+
+int PatientVm::getAge() const
+{
+    int age;
+    auto currentDate=QDateTime::currentDateTime().date();
+    age = currentDate.year()- m_birthDate.year();
+    if (currentDate.month() < m_birthDate.month() || (currentDate.month() == m_birthDate.month() && currentDate.day() < m_birthDate.day())) { age--;}
+    return age;
 }
 
 }

@@ -1,4 +1,4 @@
-﻿#ifndef PATIENTVM_H
+#ifndef PATIENTVM_H
 #define PATIENTVM_H
 #include "perimeter/base/common/perimeter_def.h"
 #include "perimeter/main/database/patient.h"
@@ -18,6 +18,7 @@ class PERIMETER_API PatientVm: public QObject
     Q_PROPERTY(int sex READ getSex WRITE setSex)
     Q_PROPERTY(QString birthDate READ getBirthDate WRITE setBirthDate)
     Q_PROPERTY(QDateTime lastUpdate READ getLastUpdate WRITE setLastUpdate)
+    Q_PROPERTY(int age READ getAge)
 
 public:
 //    Q_INVOKABLE PatientVm();
@@ -35,6 +36,7 @@ public:
     int getSex();void setSex(int value);
     QString getBirthDate();void setBirthDate(QString value);
     QDateTime getLastUpdate();void setLastUpdate(QDateTime lastUpdate);
+    int getAge() const;
 
 private:
     long m_id;
