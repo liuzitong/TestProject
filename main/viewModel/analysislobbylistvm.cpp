@@ -71,36 +71,22 @@ AnalysisLobbyListVm::AnalysisLobbyListVm()
 AnalysisLobbyListVm::AnalysisLobbyListVm(const QVariantList &args)
 {
     initialize();
-
     int id=args[0].toInt();
-//    m_report=args[1].toInt();
     m_imageHeight=args[1].toFloat();
-
-
-//    qx_query query;
-//    query.where("id").isEqualTo(patient_id);
-//    Patient_List patient_List;
-//    QSqlError daoError = qx::dao::execute_query(query, patient_List);
     Patient_ptr patient_ptr(new Patient());patient_ptr->m_id=id;
     qx::dao::fetch_by_id(patient_ptr);
     auto birthDate=patient_ptr->m_birthDate;
-
     auto currentDate=QDateTime::currentDateTime().date();
     m_patientAge = currentDate.year()- birthDate.year();
     if (currentDate.month() < birthDate.month() || (currentDate.month() ==birthDate.month() && currentDate.day() < birthDate.day()))
         { m_patientAge--;}
 
-
-
     qx_query query;
     query.where("patient_id").isEqualTo(id);
-
     CheckResult_List checkResult_list;
     qx::dao::fetch_by_query(query, checkResult_list);              //不能用execute_query
     qDebug()<<checkResult_list.size();
     generateModelListData(checkResult_list);
-
-    m_dataList.clear();
 }
 
 void AnalysisLobbyListVm::initialize()
@@ -241,7 +227,8 @@ void AnalysisLobbyListVm::generateModelListData(CheckResult_List checkResult_lis
     {
         Data data;
         data.year=QString::number(dateList[i].year());
-        data.monthDay=QString::number(dateList[i].month())+"/"+QString::number(dateList[i].day());
+//        data.monthDay=QString::number(dateList[i].month())+"/"+QString::number(dateList[i].day());
+        data.monthDay=dateList[i].toString("MM/dd");
         qDebug()<<data.year;
         qDebug()<<data.monthDay;
         SimpleCheckResultList* simpleCheckResultList=new SimpleCheckResultList();
@@ -264,23 +251,14 @@ void AnalysisLobbyListVm::generateModelListData(CheckResult_List checkResult_lis
 QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
 {
     QString os_od=checkResult_ptr->m_OS_OD?"OS":"OD";
-    QString checkTime=checkResult_ptr->m_time.time().toString("HH-mm-ss");
-//    qx_query query("select * from Program");
-//    query.where("program_id").isEqualTo(int(checkResult_ptr->m_program->m_id));
-//    Program_List program_List;
-//    QSqlError daoError = qx::dao::execute_query(query, program_List);
-//    auto program_ptr=program_List.first();
-//    qx_query query;
-//    query.where("program_id").isEqualTo(int(checkResult_ptr->m_program->m_id));
-//    Program_List program_List;
-//    QSqlError daoError = qx::dao::fetch_by_query(query, program_List);
-//    auto program_ptr=program_List.first();
+    QString checkTime=checkResult_ptr->m_time.time().toString("HH:mm:ss");
     Program_ptr program_ptr(new Program());
     program_ptr->m_id=checkResult_ptr->m_program->m_id;
     qx::dao::fetch_by_id(program_ptr);
     QString programName=program_ptr->m_name;
-    m_image=QImage(m_imageHeight*0.8,m_imageHeight,QImage::Format_ARGB32);
-    m_diagram=QImage(m_imageHeight*0.7,m_imageHeight*0.7,QImage::Format_ARGB32);
+    m_image=QImage(m_imageHeight*0.8,m_imageHeight*0.8,QImage::Format_ARGB32);
+    auto total=QImage(m_imageHeight*0.8,m_imageHeight,QImage::Format_ARGB32);
+    auto info=QImage(m_imageHeight*0.8,m_imageHeight*0.2,QImage::Format_ARGB32);
     qDebug()<<programName;
     auto program_reports= Utility::QStringToEntity<std::vector<int>>(program_ptr->m_report);
     for(auto&i:program_reports)
@@ -294,29 +272,49 @@ QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
     {
         auto crm=CheckResultModel<Type::ThreshHold>(checkResult_ptr);
         auto pm=ProgramModel<Type::ThreshHold>(program_ptr);
-        return drawPatternPE(crm,pm);
+        drawPatternPE(crm,pm);
     }
     else if(checkReport(1))      //三合一显示量化缺损
     {
         auto crm=CheckResultModel<Type::ThreshHold>(checkResult_ptr);
         auto pm=ProgramModel<Type::ThreshHold>(program_ptr);
-        return drawDefectDepth(crm,pm);
+        drawDefectDepth(crm,pm);
     }
     else if(checkReport(3))      //显示筛选
     {
         auto crm=CheckResultModel<Type::ThreshHold>(checkResult_ptr);
         auto pm=ProgramModel<Type::ThreshHold>(program_ptr);
-        return drawScreening(crm,pm);
+        drawScreening(crm,pm);
     }
     else                         //移动
     {
         auto crm=CheckResultModel<Type::Dynamic>(checkResult_ptr);
         auto pm=ProgramModel<Type::Dynamic>(program_ptr);
-        return drawDynamic(crm,pm);
+        drawDynamic(crm,pm);
     }
+    info.fill(qRgb(255, 255, 255));
+    QPainter painter(&info);
+//    int fontPixSize=info.height()*0.7;
+//    font.setPixelSize(fontPixSize);
+//    font.setBold(true);
+    painter.setFont({"consolas",int(info.height()*0.5),QFont::Weight::Bold});
+    painter.drawText(QRect{QPoint{int(info.width()*0.03),int(info.height()*0.2)},QPoint{int(info.width()*0.22),int(info.height()*0.8)}},Qt::AlignCenter,os_od);
+    painter.drawLine(QPoint{int(info.width()*0.25),int(info.height()*0.1)},QPoint{int(info.width()*0.25),int(info.height()*0.9)});
+    painter.setFont({"consolas",int(info.height()*0.30),QFont::Weight::Black});
+    painter.drawText(QRect{QPoint{int(info.width()*0.28),int(info.height()*0.10)},QPoint{int(info.width()*0.95),int(info.height()*0.5)}},Qt::AlignCenter,programName);
+    painter.drawText(QRect{QPoint{int(info.width()*0.28),int(info.height()*0.5)},QPoint{int(info.width()*0.95),int(info.height()*0.90)}},Qt::AlignCenter,checkTime);
+
+
+    QString imageSavePath="./analysisLobbyImage/"+QString::number(checkResult_ptr->m_id)+".bmp";
+    total.fill(qRgb(255, 255, 255));
+    QPainter painter2(&total);
+    painter2.drawImage((total.width()-m_image.width())/2,0,m_image);
+    painter2.drawImage(0,total.height()*0.8+1,info);
+    total.save(imageSavePath);
+    return imageSavePath;
 }
 
-QString AnalysisLobbyListVm::drawPatternPE(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel)
+void AnalysisLobbyListVm::drawPatternPE(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel)
 {
     m_image.fill(qRgb(255, 255, 255));
     initData(checkResultModel);
@@ -327,7 +325,6 @@ QString AnalysisLobbyListVm::drawPatternPE(CheckResultModel<Type::ThreshHold>& c
     int cursorSize=int(params.commonParams.cursorSize);
     int cursorColor=int(params.commonParams.cursorColor);
     auto checkResultValues=checkResultModel.m_data.checkdata;
-    QString imageSavePath="./analysisLobbyImage/"+QString::number(checkResultModel.m_id)+".bmp";
     QVector<QPointF> dotList;
     for(auto&i:programModel.m_data.dots){dotList.append({i.x,i.y});}
 
@@ -466,11 +463,9 @@ QString AnalysisLobbyListVm::drawPatternPE(CheckResultModel<Type::ThreshHold>& c
         QPoint tempPixLoc={pixLoc.x()-scaledImage.width()/2,pixLoc.y()-scaledImage.height()/2};
         painter.drawImage(tempPixLoc,scaledImage);
     }
-    m_image.save(imageSavePath,"bmp");
-    return imageSavePath;
 }
 
-QString AnalysisLobbyListVm::drawDefectDepth(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel)
+void AnalysisLobbyListVm::drawDefectDepth(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel)
 {
     m_image.fill(qRgb(255, 255, 255));
     initData(checkResultModel);
@@ -481,7 +476,6 @@ QString AnalysisLobbyListVm::drawDefectDepth(CheckResultModel<Type::ThreshHold>&
     int cursorSize=int(params.commonParams.cursorSize);
     int cursorColor=int(params.commonParams.cursorColor);
     auto checkResultValues=checkResultModel.m_data.checkdata;
-    QString imageSavePath="./analysisLobbyImage/"+QString::number(checkResultModel.m_id)+".bmp";
     QVector<QPointF> dotList;
     for(auto&i:programModel.m_data.dots){dotList.append({i.x,i.y});}
     QPainter painter(&m_image);
@@ -547,18 +541,15 @@ QString AnalysisLobbyListVm::drawDefectDepth(CheckResultModel<Type::ThreshHold>&
             m_image.setPixel(pixLoc.x(),pixLoc.y(),0xFFFF0000);   //标个小红点
         }
     }
-    m_image.save(imageSavePath,"bmp");
-    return imageSavePath;
 }
 
-QString AnalysisLobbyListVm::drawScreening(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel)
+void AnalysisLobbyListVm::drawScreening(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel)
 {
     m_image.fill(qRgb(255, 255, 255));
     int range=programModel.m_params.commonParams.Range[1];
     int os_od=checkResultModel.m_OS_OD;
     drawPixScale(range);
     auto checkResultValues=checkResultModel.m_data.checkdata;
-    QString imageSavePath="./analysisLobbyImage/"+QString::number(checkResultModel.m_id)+".bmp";
     QVector<QPointF> dotList;
     for(auto&i:programModel.m_data.dots){dotList.append({i.x,i.y});}
     QPainter painter(&m_image);
@@ -595,17 +586,14 @@ QString AnalysisLobbyListVm::drawScreening(CheckResultModel<Type::ThreshHold>& c
         default:break;
         }
     }
-    m_image.save(imageSavePath,"bmp");
-    return imageSavePath;
 }
 
-QString AnalysisLobbyListVm::drawDynamic(CheckResultModel<Type::Dynamic>& checkResultModel,ProgramModel<Type::Dynamic>& programModel)
+void AnalysisLobbyListVm::drawDynamic(CheckResultModel<Type::Dynamic>& checkResultModel,ProgramModel<Type::Dynamic>& programModel)
 {
     m_image.fill(qRgb(255, 255, 255));
     int range=programModel.m_params.Range[1];
     QVector<QPointF> dynamicValues;
     for(auto&i:checkResultModel.m_data.checkdata){dynamicValues.append({i.x,i.y});}
-    QString imageSavePath="./analysisLobbyImage/"+QString::number(checkResultModel.m_id)+".bmp";
     drawRoundCrossPixScale(range);
     int scale=1;
     QPainter painter(&m_image);
@@ -620,9 +608,6 @@ QString AnalysisLobbyListVm::drawDynamic(CheckResultModel<Type::Dynamic>& checkR
         painter.drawLine(QLine(begin.x(),begin.y(),end.x(),end.y()));
         painter.drawEllipse(begin,3*scale,3*scale);
     }
-
-    m_image.save(imageSavePath,"bmp");
-    return imageSavePath;
 }
 
 void AnalysisLobbyListVm::drawPixScale(int range)
@@ -680,17 +665,17 @@ void AnalysisLobbyListVm::drawRoundCrossPixScale(int range)
             }
         }
 
-
-        painter.setRenderHint(QPainter::RenderHint::Antialiasing,false);
-        painter.setPen({Qt::black,float(scale)});
-        for(int i=0;i<=segmentCount*2;i++)
-        {
-            if(i!=segmentCount)
-            {
-                painter.drawLine(QLine((float(m_image.width()-scale))/(segmentCount*2)*i+scale/2,m_image.height()/2-4*scale,(float(m_image.width()-scale))/(segmentCount*2)*i+scale/2,m_image.height()/2+4*scale));
-                painter.drawLine(QLine(m_image.width()/2-4*scale,(float(m_image.height()-scale))/(segmentCount*2)*i+scale/2,m_image.width()/2+4*scale,(float(m_image.height()-scale))/(segmentCount*2)*i+scale/2));
-            }
-        }
+//不会截断线了 难看
+//        painter.setRenderHint(QPainter::RenderHint::Antialiasing,false);
+//        painter.setPen({Qt::black,float(scale)});
+//        for(int i=0;i<=segmentCount*2;i++)
+//        {
+//            if(i!=segmentCount)
+//            {
+//                painter.drawLine(QLine((float(m_image.width()-scale))/(segmentCount*2)*i+scale/2,m_image.height()/2-4*scale,(float(m_image.width()-scale))/(segmentCount*2)*i+scale/2,m_image.height()/2+4*scale));
+//                painter.drawLine(QLine(m_image.width()/2-4*scale,(float(m_image.height()-scale))/(segmentCount*2)*i+scale/2,m_image.width()/2+4*scale,(float(m_image.height()-scale))/(segmentCount*2)*i+scale/2));
+//            }
+//        }
 }
 
 QPoint AnalysisLobbyListVm::convertDegLocToPixLoc(QPointF DegLoc,int range)

@@ -15,7 +15,7 @@ Column {
     signal refresh()
 
     onRefresh: {content.model=IcUiQmlApi.appCtrl.objMgr.
-        attachObj("Perimeter::AnalysisLobbyListVm", false,[currentPatient.id,(content.height-10)/4*0.9]);}
+        attachObj("Perimeter::AnalysisLobbyListVm", false,[currentPatient.id,((content.height-10)/4*0.9-4)]);}
 
 //    Component.onCompleted: {}
 
@@ -29,7 +29,7 @@ Column {
         clip:true;
 //        model:checkDateListModel;
 //        model:listModel;
-//        model:ListModel{ListElement{year:"1998";dayMonth:"06/28";}}
+//        model:ListModel{ListElement{year:"1998";monthDay:"06/28";}}
         delegate: checkRowDelegate
         signal cancelSelected();
         signal setIndex();
@@ -57,7 +57,7 @@ Column {
                             width: parent.width*0.07
                             Item {width:parent.width;height: parent.height*0.18;}
                             CusText{width:parent.width;height: parent.height*0.27;text: year ;horizontalAlignment: Text.AlignHCenter}
-                            CusText{width:parent.width;height:parent.height*0.32;text:dayMonth ;horizontalAlignment: Text.AlignHCenter}
+                            CusText{width:parent.width;height:parent.height*0.35;text:monthDay ;horizontalAlignment: Text.AlignHCenter}
                         }
 
                         ListView{
@@ -69,9 +69,10 @@ Column {
                             orientation: ListView.Horizontal
                             spacing: height*0.15
                             width:parent.width*0.93;
-                            model:["dBDiagram.bmp","dBDiagram.bmp","dBDiagram.bmp","dBDiagram.bmp"];
-                            delegate: checkImgDelegate
+                            model:simpleCheckResult
+//                            model:["dBDiagram.bmp","dBDiagram.bmp","dBDiagram.bmp","dBDiagram.bmp"];
 //                            Component.onCompleted: positionViewAtIndex(0,ListView.Beginning);
+                            delegate: checkImgDelegate
                             Component.onCompleted: content.setIndex.connect(function(){console.log("setIndex");positionViewAtBeginning();})
 
 
@@ -80,19 +81,20 @@ Column {
                                 id:checkImgDelegate
                                 Item{
                                     property bool selected: false
-                                    height: parent.height;
-                                    width: parent.height;
+                                    height: Math.floor(parent.height);
+                                    width: Math.floor((parent.height-4)*0.8)+4;
 
                                     Image {
                                         id:image
-                                        height:parent.height-4;
+                                        height:parent.height()-4;
                                         anchors.verticalCenter: parent.verticalCenter
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         fillMode: Image.PreserveAspectFit
     //                                    width: sourceSize.width;
     //                                    source: "./analysisLobbyImage/"+modelData;
+                                        source:"file:///" + applicationDirPath +picName;
 //                                        source:"file:///" + applicationDirPath + "/analysisLobbyImage/"+picName;
-                                        source:"file:///" + applicationDirPath + "/analysisLobbyImage/"+modelData;
+//                                        source:"file:///" + applicationDirPath + "/analysisLobbyImage/"+modelData;
                                         smooth: false;
                                         cache: false;        //to refresh image
     //                                    Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + source;})}
@@ -102,7 +104,12 @@ Column {
                                     {
                                         anchors.fill: parent;
                                         z:1;
-                                        onClicked:{content.cancelSelected();parent.selected=true;}
+                                        onClicked:{
+                                            content.cancelSelected();parent.selected=true;console.log(checkResultId)
+                                            console.log(image.width);
+                                            console.log(image.height);
+                                        }
+
 
                                     }
 

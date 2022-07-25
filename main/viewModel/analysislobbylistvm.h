@@ -37,10 +37,10 @@ private:
     void generateModelListData(CheckResult_List checkResult_list);
     QString drawImage(CheckResult_ptr checkResult_ptr);
     void initData(CheckResultModel<Type::ThreshHold>& checkResultModel);
-    QString drawPatternPE(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel);
-    QString drawDefectDepth(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel);
-    QString drawScreening(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel);
-    QString drawDynamic(CheckResultModel<Type::Dynamic>& checkResultModel,ProgramModel<Type::Dynamic>& programModel);
+    void drawPatternPE(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel);
+    void drawDefectDepth(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel);
+    void drawScreening(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel);
+    void drawDynamic(CheckResultModel<Type::Dynamic>& checkResultModel,ProgramModel<Type::Dynamic>& programModel);
     void drawPixScale(int range);
     void drawRoundCrossPixScale(int range);
     QPoint convertDegLocToPixLoc(QPointF DegLoc,int range);
@@ -50,7 +50,7 @@ private:
 //    int m_age;
     float m_imageHeight;
     QImage m_image;
-    QImage m_diagram;
+//    QImage m_totalInfo;
 
     QJsonArray m_jsonArray;
     QVector<QPoint> m_pointLoc_30d;
