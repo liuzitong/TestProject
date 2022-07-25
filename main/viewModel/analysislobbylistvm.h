@@ -33,17 +33,40 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const override;
     virtual QHash<int, QByteArray> roleNames() const override;
 private:
+    void initialize();
     void generateModelListData(CheckResult_List checkResult_list);
-    QList<Data> m_dataList;
-    int m_age;
-    float m_imageHeight;
     QString drawImage(CheckResult_ptr checkResult_ptr);
+    void initData(CheckResultModel<Type::ThreshHold>& checkResultModel);
+    QString drawPatternPE(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel);
+    QString drawDefectDepth(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel);
+    QString drawScreening(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel);
+    QString drawDynamic(CheckResultModel<Type::Dynamic>& checkResultModel,ProgramModel<Type::Dynamic>& programModel);
+    void drawPixScale(int range);
+    void drawRoundCrossPixScale(int range);
+    QPoint convertDegLocToPixLoc(QPointF DegLoc,int range);
+    int getIndex(QPointF& dot,QVector<QPoint>& pointLoc,int os_od);
 
-    void drawPatternPE(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel);
-    void drawDefectDepth(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel);
-    void drawScreening(CheckResultModel<Type::ThreshHold>& checkResultModel,ProgramModel<Type::ThreshHold>& programModel);
-    void drawDynamic(CheckResultModel<Type::Dynamic>& checkResultModel,ProgramModel<Type::Dynamic>& programModel);
+    QList<Data> m_dataList;
+//    int m_age;
+    float m_imageHeight;
+    QImage m_image;
+    QImage m_diagram;
 
+    QJsonArray m_jsonArray;
+    QVector<QPoint> m_pointLoc_30d;
+    QVector<QPoint> m_pointLoc_60d;
+    QVector<int> m_value_30d;
+    QVector<int> m_value_60d;
+
+    int m_patientAge;
+    int m_age_correction;
+
+    QVector<int> m_v5;
+    QVector<int> m_v2;
+    QVector<int> m_v1;
+    QVector<int> m_v05;
+
+    QString m_imageSavePath;
 };
 }
 

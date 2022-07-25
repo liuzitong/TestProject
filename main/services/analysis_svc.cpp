@@ -97,7 +97,7 @@ QObject* AnalysisSvc::runProcess(int report,PatientVm *patient, CheckResultVm *c
         qDebug()<<values.length();
         m_dynamicValues.resize(values.length());
         for(int i=0;i<values.length();i++){m_dynamicValues[i]=values[i].toPointF();}
-        dynamicAnalysis();
+//        dynamicAnalysis();
         DrawDiagram();
         return nullptr;
     }
@@ -1024,7 +1024,7 @@ void AnalysisSvc::staticAnalysis()
 
 //    qDebug()<<m_psd;
 
-    int md=round(m_md+m_psd);
+    int md_correction=round(m_md+m_psd);
 //    qDebug()<<md;
 
     for(int i=0;i<m_dev.length();i++)
@@ -1032,7 +1032,7 @@ void AnalysisSvc::staticAnalysis()
         if(m_dev[i]==-99)
             m_mDev[i]=-99;
         else
-            m_mDev[i]=m_dev[i]-md;
+            m_mDev[i]=m_dev[i]-md_correction;
     }
 
     for(int i=0;i<m_mDev.length();i++)
@@ -1126,9 +1126,9 @@ void AnalysisSvc::staticAnalysis()
 
 }
 
-void AnalysisSvc::dynamicAnalysis()
-{
+//void AnalysisSvc::dynamicAnalysis()
+//{
 
-}
+//}
 
 }

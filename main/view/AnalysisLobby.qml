@@ -14,12 +14,13 @@ Column {
     signal changePage(var pageName,var params);
     signal refresh()
 
-//    onRefresh: {content.model=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::AnalysisLobbyListVm", false,currentPatient.id,queryStrategy.currentIndex,image.height);}
+    onRefresh: {content.model=IcUiQmlApi.appCtrl.objMgr.
+        attachObj("Perimeter::AnalysisLobbyListVm", false,[currentPatient.id,(content.height-10)/4*0.9]);}
 
 //    Component.onCompleted: {}
 
     ListView{
-        property var listModel: ListModel{ListElement{year:"1998";dayMonth:"06/28";} ListElement{year:"2004";dayMonth:"06/28";}ListElement{year:"2004";dayMonth:"06/28";}ListElement{year:"2004";dayMonth:"06/28";}}
+//        property var listModel: ListModel{ListElement{year:"1998";dayMonth:"06/28";} ListElement{year:"2004";dayMonth:"06/28";}ListElement{year:"2004";dayMonth:"06/28";}ListElement{year:"2004";dayMonth:"06/28";}}
         id:content;
         width: parent.width;
         height: parent.height*14/15
@@ -27,7 +28,7 @@ Column {
         spacing: -2;
         clip:true;
 //        model:checkDateListModel;
-        model:listModel;
+//        model:listModel;
 //        model:ListModel{ListElement{year:"1998";dayMonth:"06/28";}}
         delegate: checkRowDelegate
         signal cancelSelected();
@@ -56,7 +57,7 @@ Column {
                             width: parent.width*0.07
                             Item {width:parent.width;height: parent.height*0.18;}
                             CusText{width:parent.width;height: parent.height*0.27;text: year ;horizontalAlignment: Text.AlignHCenter}
-                            CusText{width:parent.width;height:parent.height*0.32;text:monthDay ;horizontalAlignment: Text.AlignHCenter}
+                            CusText{width:parent.width;height:parent.height*0.32;text:dayMonth ;horizontalAlignment: Text.AlignHCenter}
                         }
 
                         ListView{

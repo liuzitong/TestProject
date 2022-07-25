@@ -113,7 +113,7 @@ private:
     void drawFixationDeviation();
 
     void staticAnalysis();
-    void dynamicAnalysis();
+//    void dynamicAnalysis();               //动态没有分析
 
 
 
