@@ -50,7 +50,7 @@ private:
 //    int m_age;
     float m_imageHeight;
     QImage m_image;
-//    QImage m_totalInfo;
+    int m_imageSerial=0;
 
     QJsonArray m_jsonArray;
     QVector<QPoint> m_pointLoc_30d;

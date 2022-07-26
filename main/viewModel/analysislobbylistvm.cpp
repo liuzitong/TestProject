@@ -305,7 +305,8 @@ QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
     painter.drawText(QRect{QPoint{int(info.width()*0.28),int(info.height()*0.5)},QPoint{int(info.width()*0.95),int(info.height()*0.90)}},Qt::AlignCenter,checkTime);
 
 
-    QString imageSavePath="./analysisLobbyImage/"+QString::number(checkResult_ptr->m_id)+".bmp";
+    QString imageSavePath="./analysisLobbyImage/"+QString::number(m_imageSerial)+".bmp";
+    m_imageSerial++;
     total.fill(qRgb(255, 255, 255));
     QPainter painter2(&total);
     painter2.drawImage((total.width()-m_image.width())/2,0,m_image);

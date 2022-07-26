@@ -3,11 +3,8 @@
 namespace Perimeter
 {
 
-static int count=0;
 CheckResultVm::CheckResultVm(const QVariantList & args)
 {
-    qDebug()<<count;
-    count++;
     if(args[0].toString()=="Threshold")
     {
         m_type=0;
@@ -61,8 +58,6 @@ CheckResultVm::CheckResultVm(const QVariantList & args)
 
 CheckResultVm::~CheckResultVm()
 {
-    count--;
-    qDebug()<<count;
     delete m_params;
     delete m_resultData;
 }

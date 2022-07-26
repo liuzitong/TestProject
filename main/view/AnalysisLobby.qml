@@ -11,116 +11,81 @@ Column {
     anchors.fill:parent;
     property var currentPatient: null;
     property string backGroundColor: CommonSettings.backGroundColor;
+    property var currentCheckResult:null;
+    property var analysisLobbyListVm: null;
+    property var currentProgram: null;
     signal changePage(var pageName,var params);
     signal refresh()
 
-    onRefresh: {content.model=IcUiQmlApi.appCtrl.objMgr.
+    onRefresh: {
+        if(analysisLobbyListVm!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::AnalysisLobbyListVm",analysisLobbyListVm);
+        analysisLobbyListVm=IcUiQmlApi.appCtrl.objMgr.
         attachObj("Perimeter::AnalysisLobbyListVm", false,[currentPatient.id,((content.height-10)/4*0.9-4)]);}
 
-//    Component.onCompleted: {}
-
     ListView{
-//        property var listModel: ListModel{ListElement{year:"1998";dayMonth:"06/28";} ListElement{year:"2004";dayMonth:"06/28";}ListElement{year:"2004";dayMonth:"06/28";}ListElement{year:"2004";dayMonth:"06/28";}}
-        id:content;
-        width: parent.width;
-        height: parent.height*14/15
-        snapMode: ListView.SnapOneItem
-        spacing: -2;
-        clip:true;
-//        model:checkDateListModel;
-//        model:listModel;
-//        model:ListModel{ListElement{year:"1998";monthDay:"06/28";}}
+        id:content;width: parent.width;height: parent.height*14/15;snapMode: ListView.SnapOneItem;spacing: -2;clip:true;model:analysisLobbyListVm;
         delegate: checkRowDelegate
         signal cancelSelected();
-        signal setIndex();
-        Component.onCompleted:
-        {
-
-        }
-
-        Component{
-            id:checkRowDelegate
-
-            Column{
-                width: content.width;
-                height: (content.height+6)/4;
+//        signal setIndex();
+        Component{id:checkRowDelegate
+            Column{width: content.width;height: (content.height+6)/4;
                 Rectangle{width: parent.width;height: 2;color: "white"}
-                Rectangle{
-                    width: parent.width;height:(content.height-10)/4;
-                    color: backGroundColor;
-                    Row{
-                        id: row
-                        anchors.fill: parent;
-                        Column{
-                            height: parent.height*0.8;
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: parent.width*0.07
+                Rectangle{width: parent.width;height:(content.height-10)/4;color: backGroundColor;
+                    Row{id: row;anchors.fill: parent;
+                        Column{height: parent.height*0.8;anchors.verticalCenter: parent.verticalCenter;width: parent.width*0.07;
                             Item {width:parent.width;height: parent.height*0.18;}
                             CusText{width:parent.width;height: parent.height*0.27;text: year ;horizontalAlignment: Text.AlignHCenter}
                             CusText{width:parent.width;height:parent.height*0.35;text:monthDay ;horizontalAlignment: Text.AlignHCenter}
                         }
 
                         ListView{
-                            height: parent.height*0.9
-                            highlightRangeMode: ListView.ApplyRange
-                            //                            snapMode: ListView.SnapOneItem
-                            anchors.verticalCenter: parent.verticalCenter
-                            clip: true
-                            orientation: ListView.Horizontal
-                            spacing: height*0.15
-                            width:parent.width*0.93;
-                            model:simpleCheckResult
-//                            model:["dBDiagram.bmp","dBDiagram.bmp","dBDiagram.bmp","dBDiagram.bmp"];
-//                            Component.onCompleted: positionViewAtIndex(0,ListView.Beginning);
+                            height: parent.height*0.9;anchors.verticalCenter: parent.verticalCenter;clip: true;orientation: ListView.Horizontal;
+                            spacing: height*0.15;width:parent.width*0.93;model:simpleCheckResult;
                             delegate: checkImgDelegate
-                            Component.onCompleted: content.setIndex.connect(function(){console.log("setIndex");positionViewAtBeginning();})
-
-
                             Component
                             {
                                 id:checkImgDelegate
                                 Item{
-                                    property bool selected: false
-                                    height: Math.floor(parent.height);
-                                    width: Math.floor((parent.height-4)*0.8)+4;
-
+                                    property bool selected: false;height: Math.floor(parent.height);width: Math.floor((parent.height-4)*0.8)+4;
                                     Image {
-                                        id:image
-                                        height:parent.height()-4;
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        fillMode: Image.PreserveAspectFit
-    //                                    width: sourceSize.width;
-    //                                    source: "./analysisLobbyImage/"+modelData;
-                                        source:"file:///" + applicationDirPath +picName;
-//                                        source:"file:///" + applicationDirPath + "/analysisLobbyImage/"+picName;
-//                                        source:"file:///" + applicationDirPath + "/analysisLobbyImage/"+modelData;
-                                        smooth: false;
-                                        cache: false;        //to refresh image
-    //                                    Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + source;})}
-
+                                        id:image;height:parent.height-4;anchors.verticalCenter: parent.verticalCenter;anchors.horizontalCenter: parent.horizontalCenter;fillMode: Image.PreserveAspectFit
+                                        source:"file:///" + applicationDirPath +picName;smooth: false;cache: false;
                                     }
                                     MouseArea
                                     {
-                                        anchors.fill: parent;
-                                        z:1;
+                                        anchors.fill: parent;z:1;
                                         onClicked:{
-                                            content.cancelSelected();parent.selected=true;console.log(checkResultId)
-                                            console.log(image.width);
-                                            console.log(image.height);
+                                            content.cancelSelected();parent.selected=true;
+                                            console.log(checkResultId);
+                                            if(currentCheckResult!==null)
+                                            {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm", currentCheckResult);}
+                                            currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[checkResultId]);
+                                            if(currentProgram!==null)
+                                            {
+                                                if(currentProgram.type!==2)
+                                                {
+                                                    IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);
+
+                                                }
+                                                else
+                                                {
+                                                    IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicProgramVM", currentProgram);
+                                                }
+                                            }
+                                            if(currentCheckResult.type!==2)
+                                            {
+                                                currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[currentCheckResult.program_id]);
+                                            }
+                                            else
+                                            {
+                                                currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicProgramVM", false,[currentCheckResult.program_id]);
+                                            }
+
+
                                         }
 
-
                                     }
-
-                                    Rectangle
-                                    {
-                                        anchors.fill: parent;
-                                        color: "blue";
-                                        opacity: parent.selected?1:0;
-                                        z:-1;
-
-                                    }
+                                    Rectangle{anchors.fill: parent;color: "blue";opacity: parent.selected?1:0;z:-1;}
                                     Component.onCompleted:
                                     {
                                         content.cancelSelected.connect(function(){selected=false;})
@@ -128,16 +93,11 @@ Column {
                                 }
                             }
                         }
-
                     }
                 }
                 Rectangle{width: parent.width;height: 2;color: "white"}
             }
-
         }
-
-
-
     }
     Rectangle
     {
@@ -161,11 +121,39 @@ Column {
                     Flow{
                         height: parent.height;spacing: height*0.8
                         anchors.horizontalCenter: parent.horizontalCenter
+//                        CusComboBox{
+//                            id:queryStrategy;height: parent.height;width: parent.height*3.5;
+//                            borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
+//                            imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
+//                            model: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线" ]
+//                        }
+
                         CusComboBox{
                             id:queryStrategy;height: parent.height;width: parent.height*3.5;
+                            property var listModel:ListModel {}
+                            property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
+                            property int report;
                             borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                             imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                            model: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线" ]
+                            model: listModel;
+                            popDirectionDown: false;
+                            complexType: true;
+
+
+                            Component.onCompleted: {
+                                root.currentProgramChanged.connect(function()
+                                {
+                                    console.log(currentProgram.name);
+                                    listModel.clear();
+                                    var report=currentProgram.report;
+                                    report.forEach(function(item){
+                                        console.log(item);
+                                        listModel.append({name:reportNames[item],report:item});
+                                    })
+                                    currentIndex=0;
+                                })
+                            }
+                            onCurrentIndexChanged:report=listModel.get(currentIndex).report;
                         }
                         CusButton{text:"进展分析";onClicked:{console.log("gogog");/*content.positionViewAtBeginning();*/}}
                         CusButton{text:"视岛图";onClicked:{console.log((content.height-10)/4*0.9-4);/*content.setIndex()*/}}

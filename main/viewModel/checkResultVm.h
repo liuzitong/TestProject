@@ -13,9 +13,11 @@ class CheckResultVm: public QObject
     Q_PROPERTY(long id READ getID WRITE setID)
     Q_PROPERTY(int type READ getType WRITE setType)
     Q_PROPERTY(int OS_OD READ getOS_OD WRITE setOS_OD)
-    Q_PROPERTY(QDateTime time READ getTime WRITE setTime)
     Q_PROPERTY(QObject* params READ getParams WRITE setParams )
     Q_PROPERTY(ResultDataVm* resultData READ getResultData)
+    Q_PROPERTY(QDateTime time READ getTime WRITE setTime)
+    Q_PROPERTY(int patient_id READ getPatient_id WRITE setPatient_id)
+    Q_PROPERTY(int program_id READ getProgram_id WRITE setProgram_id)
 
 public:
     Q_INVOKABLE explicit CheckResultVm(const QVariantList &);
@@ -24,7 +26,6 @@ public:
     int getID(){return m_id;}void setID(int value){m_id=value;}
     int getType(){return m_type;}void setType(int value){m_type=value;}
     int getOS_OD(){return m_OS_OD;}void setOS_OD(int value){m_OS_OD=value;}
-    QDateTime getTime(){return m_time;}void setTime(QDateTime value){m_time=value;}
     QObject* getParams(){return m_params;}void setParams(QObject* value){
         if(m_type==0)
         {
@@ -39,6 +40,10 @@ public:
         }
     }
     ResultDataVm* getResultData(){return m_resultData;}
+    QDateTime getTime(){return m_time;}void setTime(QDateTime value){m_time=value;}
+    int getPatient_id(){return m_patient_id;}void setPatient_id(int value){m_patient_id=value;}
+    int getProgram_id(){return m_program_id;}void setProgram_id(int value){m_program_id=value;}
+
 
 private:
     CheckResult_ptr getCheckResultData();
