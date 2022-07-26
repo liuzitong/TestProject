@@ -152,7 +152,8 @@ Rectangle {
                         seperator2.opacity=1;
                         seperator3.opacity=0;
                         patientInfo.visible=true;
-                        analysisLobbypage.refresh();
+                        if(params==="patientManagement")
+                            analysisLobbypage.refresh();
                         break;
                     case "check":
                         checkPage.visible=true;

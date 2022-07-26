@@ -25,6 +25,7 @@ public:
     AnalysisLobbyListVm();
     Q_INVOKABLE explicit AnalysisLobbyListVm(const QVariantList &args);
     Q_INVOKABLE virtual ~AnalysisLobbyListVm() Q_DECL_OVERRIDE;
+    Q_INVOKABLE void deleteCheckResult(int id);
     Q_INVOKABLE void refreshData();
 
 
@@ -46,7 +47,7 @@ private:
     QPoint convertDegLocToPixLoc(QPointF DegLoc,int range);
     int getIndex(QPointF& dot,QVector<QPoint>& pointLoc,int os_od);
 
-    QList<Data> m_dataList;
+    QVector<Data> m_dataList;
 //    int m_age;
     float m_imageHeight;
     QImage m_image;

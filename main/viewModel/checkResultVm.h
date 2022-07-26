@@ -22,7 +22,7 @@ class CheckResultVm: public QObject
 public:
     Q_INVOKABLE explicit CheckResultVm(const QVariantList &);
     Q_INVOKABLE virtual ~CheckResultVm();
-    Q_INVOKABLE void insertCheckResult();
+    Q_INVOKABLE void insert();
     int getID(){return m_id;}void setID(int value){m_id=value;}
     int getType(){return m_type;}void setType(int value){m_type=value;}
     int getOS_OD(){return m_OS_OD;}void setOS_OD(int value){m_OS_OD=value;}

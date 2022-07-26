@@ -206,12 +206,12 @@ Item {id:root; width: 1366;height: 691
                                     if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
                                     if(currentProgram.type===0||currentProgram.type===1)
                                     {
-                                        if(queryStrategy.report!=3) currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[3]);
-                                        else currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[5]);
+                                        if(queryStrategy.report!=3) currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[1]);
+                                        else currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[2]);
                                     }
                                     else
                                     {
-                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[6]);
+                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[3]);
                                     }
 
 //                                    console.log(checkControl.checkState);
@@ -294,14 +294,7 @@ Item {id:root; width: 1366;height: 691
                                 case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
                                 case 3:case 4:case 5:case 6:case7:diagramWidth=root.height*14/15*0.92*0.8;break;
                                 }
-
-//                                IcUiQmlApi.appCtrl.AnalysisSvc.drawDiagram(0,0,params.Range[0],params.Range[1],currentProgram.dots,currentCheckResult.resultData.checkData);
                                 var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(queryStrategy.report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
-//                                if(queryStrategy.report==0){reportPage="singleAnalysis";}
-//                                else if(queryStrategy.report==1){reportPage="three-in-one";}
-//                                else if(queryStrategy.report==2){reportPage="overview";}
-//                                else if(queryStrategy.report==3){reportPage="screening";}
-
 
                                 changePage("analysis",{pageFrom:"check",report:queryStrategy.report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
                             }

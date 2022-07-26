@@ -20,11 +20,17 @@ CheckResultVm::CheckResultVm(const QVariantList & args)
     else
     {
         int checkResult_id=args[0].toInt();
-        qx_query query("select * from CheckResult where checkResult_id=:checkResult_id");
-        query.bind(":checkResult_id",checkResult_id);
-        CheckResult_List checkResult_List;
-        QSqlError daoError = qx::dao::execute_query(query, checkResult_List);
-        CheckResult_ptr checkResult_ptr=checkResult_List.first();
+//        qx_query query("select * from CheckResult where checkResult_id=:checkResult_id");
+//        query.bind(":checkResult_id",checkResult_id);
+//        CheckResult_List checkResult_List;
+//        QSqlError daoError = qx::dao::execute_query(query, checkResult_List);
+//        CheckResult_ptr checkResult_ptr=checkResult_List.first();
+        CheckResult_ptr checkResult_ptr(new CheckResult());
+        checkResult_ptr->m_id=checkResult_id;
+        qx::dao::fetch_by_id(checkResult_ptr);
+        qDebug()<<checkResult_ptr->m_id;
+        qDebug()<<checkResult_ptr->m_OS_OD;
+        qDebug()<<checkResult_ptr->m_type;
         Type type=static_cast<Type>(checkResult_ptr->m_type);
         if(type!=Type::Dynamic)
         {
@@ -62,10 +68,10 @@ CheckResultVm::~CheckResultVm()
     delete m_resultData;
 }
 
-void CheckResultVm::insertCheckResult()
+void CheckResultVm::insert()
 {
-//     auto cp=getCheckResultData();
-//     QSqlError error=qx::dao::insert(cp);
+     auto cp=getCheckResultData();
+     QSqlError error=qx::dao::insert(cp);
 }
 
 

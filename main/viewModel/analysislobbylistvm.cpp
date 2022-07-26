@@ -8,6 +8,7 @@
 namespace Perimeter{
 class SimpleCheckResultList:public QAbstractListModel
 {
+    friend class AnalysisLobbyListVm;
     enum SimpleCheckResultListRoles
     {
         checkResultId=Qt::UserRole+1,
@@ -719,6 +720,40 @@ AnalysisLobbyListVm::~AnalysisLobbyListVm()
             if(temp!=nullptr) delete temp;
         }
     }
+}
+
+void AnalysisLobbyListVm::deleteCheckResult(int id)
+{
+
+    for(int i=0;i<m_dataList.size();i++)
+    {
+
+        auto simpleCheckResultList=static_cast<SimpleCheckResultList*>(m_dataList[i].simpleCheckResult);
+        auto& dataList=simpleCheckResultList->m_dataList;
+        for(int j=0;j<simpleCheckResultList->m_dataList.size();j++)
+        {
+            if(simpleCheckResultList->m_dataList[j].checkResultId==id)
+            {
+                simpleCheckResultList->beginResetModel();
+                dataList.remove(j);
+                simpleCheckResultList->endResetModel();
+                if(dataList.size()==0)
+                {
+                    delete m_dataList[i].simpleCheckResult;
+                    beginResetModel();
+                        m_dataList.remove(i);
+                    endResetModel();
+                }
+                goto Exit;
+            }
+        }
+    }
+    Exit:
+        CheckResult_ptr checkResult_ptr(new CheckResult());
+        checkResult_ptr->m_id=id;
+        qx::dao::delete_by_id(checkResult_ptr);
+
+
 }
 
 void AnalysisLobbyListVm::refreshData()

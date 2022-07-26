@@ -115,9 +115,6 @@ private:
     void staticAnalysis();
 //    void dynamicAnalysis();               //动态没有分析
 
-
-
-
     QPoint convertDegLocToPixLoc(QPointF DegLoc);
     void DrawDiagram();
     void DrawReportDiagram();

@@ -17,6 +17,7 @@ Column {
     signal changePage(var pageName,var params);
     signal refresh()
 
+
     onRefresh: {
         if(analysisLobbyListVm!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::AnalysisLobbyListVm",analysisLobbyListVm);
         analysisLobbyListVm=IcUiQmlApi.appCtrl.objMgr.
@@ -37,16 +38,12 @@ Column {
                             CusText{width:parent.width;height: parent.height*0.27;text: year ;horizontalAlignment: Text.AlignHCenter}
                             CusText{width:parent.width;height:parent.height*0.35;text:monthDay ;horizontalAlignment: Text.AlignHCenter}
                         }
-
                         ListView{
                             height: parent.height*0.9;anchors.verticalCenter: parent.verticalCenter;clip: true;orientation: ListView.Horizontal;
                             spacing: height*0.15;width:parent.width*0.93;model:simpleCheckResult;
                             delegate: checkImgDelegate
-                            Component
-                            {
-                                id:checkImgDelegate
-                                Item{
-                                    property bool selected: false;height: Math.floor(parent.height);width: Math.floor((parent.height-4)*0.8)+4;
+                            Component{id:checkImgDelegate
+                                Item{property bool selected: false;height: Math.floor(parent.height);width: Math.floor((parent.height-4)*0.8)+4;
                                     Image {
                                         id:image;height:parent.height-4;anchors.verticalCenter: parent.verticalCenter;anchors.horizontalCenter: parent.horizontalCenter;fillMode: Image.PreserveAspectFit
                                         source:"file:///" + applicationDirPath +picName;smooth: false;cache: false;
@@ -63,27 +60,15 @@ Column {
                                             if(currentProgram!==null)
                                             {
                                                 if(currentProgram.type!==2)
-                                                {
                                                     IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);
-
-                                                }
                                                 else
-                                                {
                                                     IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicProgramVM", currentProgram);
-                                                }
                                             }
                                             if(currentCheckResult.type!==2)
-                                            {
                                                 currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[currentCheckResult.program_id]);
-                                            }
                                             else
-                                            {
                                                 currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicProgramVM", false,[currentCheckResult.program_id]);
-                                            }
-
-
                                         }
-
                                     }
                                     Rectangle{anchors.fill: parent;color: "blue";opacity: parent.selected?1:0;z:-1;}
                                     Component.onCompleted:
@@ -113,21 +98,9 @@ Column {
                     }
                 }
 
-            Item{
-                height: parent.height;width:parent.width*0.4;
-                Item{
-                    anchors.fill: parent
-                    anchors.margins:parent.height*0.15;
-                    Flow{
-                        height: parent.height;spacing: height*0.8
-                        anchors.horizontalCenter: parent.horizontalCenter
-//                        CusComboBox{
-//                            id:queryStrategy;height: parent.height;width: parent.height*3.5;
-//                            borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
-//                            imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-//                            model: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线" ]
-//                        }
-
+            Item{height: parent.height;width:parent.width*0.4;
+                Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
+                    Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
                         CusComboBox{
                             id:queryStrategy;height: parent.height;width: parent.height*3.5;
                             property var listModel:ListModel {}
@@ -139,15 +112,12 @@ Column {
                             popDirectionDown: false;
                             complexType: true;
 
-
                             Component.onCompleted: {
                                 root.currentProgramChanged.connect(function()
                                 {
-                                    console.log(currentProgram.name);
                                     listModel.clear();
                                     var report=currentProgram.report;
                                     report.forEach(function(item){
-                                        console.log(item);
                                         listModel.append({name:reportNames[item],report:item});
                                     })
                                     currentIndex=0;
@@ -167,7 +137,13 @@ Column {
                     id: item2
                     anchors.fill: parent
                     anchors.margins:parent.height*0.15;
-                    CusButton{text:"删除"; anchors.horizontalCenter: parent.horizontalCenter;onClicked: console.log(currentPatient.name);}
+                    CusButton{text:"删除"; anchors.horizontalCenter: parent.horizontalCenter;
+                        onClicked:{
+                            analysisLobbyListVm.deleteCheckResult(currentCheckResult.id);
+//                            content.model=null;
+//                            content.model=analysisLobbyListVm;
+                        }
+                    }
                 }
                 }
 
@@ -182,7 +158,16 @@ Column {
                         text:"分析"; anchors.right: parent.right;
                         onClicked:
                         {
-                            changePage("analysis",{pageFrom:"check",report:queryStrategy.report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
+                            var diagramWidth;
+                            switch (queryStrategy.report)
+                            {
+                            case 0:diagramWidth=root.height*14/15*0.92*0.97/3*1.25*0.8;break;
+                            case 1:diagramWidth=root.height*14/15*0.92*0.47*0.8;break;
+                            case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
+                            case 3:case 4:case 5:case 6:case7:diagramWidth=root.height*14/15*0.92*0.8;break;
+                            }
+                            var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(queryStrategy.report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
+                            changePage("analysis",{pageFrom:"analysisLobby",report:queryStrategy.report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
                         }
                     }
                 }

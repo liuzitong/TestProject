@@ -69,6 +69,10 @@ QObject* AnalysisSvc::runProcess(int report,PatientVm *patient, CheckResultVm *c
         m_range=range[1];
     }
     m_os_od=checkResult->getOS_OD();
+    auto birthDate=QDate::fromString(m_patient->getBirthDate(),"yyyy-MM-dd");
+    auto currentDate=QDate::currentDate();
+    m_patientAge = currentDate.year() - birthDate.year();
+    if (currentDate.month() < birthDate.month() || (currentDate.month() == birthDate.month() && currentDate.day() < birthDate.day())) { m_patientAge--;}
 
     if(m_programType!=2)
     {
@@ -150,18 +154,19 @@ void AnalysisSvc::showReport(int report)
     }
     DrawReportDiagram();
     if(m_reportEngine==nullptr){m_reportEngine = new LimeReport::ReportEngine();}
-//    auto m_reportEngine = new LimeReport::ReportEngine();
 
     QString filePath;
+
     switch (report)
     {
     case 0:filePath="./reports/Single.lrxml";break;
     case 1:filePath="./reports/ThreeInOne.lrxml";break;
     case 2:filePath="./reports/OverView.lrxml";break;
     case 3:filePath="./reports/Screening.lrxml";break;
+    default:filePath="./reports/Dynamic.lrxml";break;
     }
-    m_reportEngine->loadFromFile(filePath);
 
+    m_reportEngine->loadFromFile(filePath);
     auto manager=m_reportEngine->dataManager();
     manager->clearUserVariables();
     manager->setReportVariable("ProgramName",m_program->property("name").toString());
@@ -176,37 +181,50 @@ void AnalysisSvc::showReport(int report)
     manager->setReportVariable("sex", m_patient->getSex()==0?"male":"female");
 
 
-    auto commomParams=static_cast<StaticParamsVM*>(m_checkResult->getParams())->getCommonParams();
-    QString fixationMonitor;switch (commomParams->getFixationMonitor()) {case 0:fixationMonitor="No Alarm"; break;case 1:fixationMonitor="Only Alarm";break;case 2:fixationMonitor="Pause And Alarm";break;}
-    QString fixationTarget;switch (commomParams->getFixationTarget()){case 0:fixationTarget="Center Point";break;case 1:fixationTarget="Small Diamond";break;case 2:fixationTarget="Big Diamond";break;case 3:fixationTarget="Bottom Point";break;}
-    manager->setReportVariable("fixationMonitor","Fixation Monitor: "+fixationMonitor);
-    manager->setReportVariable("fixationTarget","Fixation Target: "+fixationTarget);
-    auto resultData=m_checkResult->getResultData();
-    manager->setReportVariable("fixationLosses","Fixation Losses: "+QString::number(resultData->getFixationLostCount())+"/"+QString::number(resultData->getFixationLostTestCount()));
-    manager->setReportVariable("falsePositiveRate","False POS Errors: "+QString::number(qRound(float(resultData->getFalsePositiveCount())/resultData->getFalsePositiveTestCount()*100))+"%");
-    manager->setReportVariable("falseNegativeRate","False NEG Errors: "+QString::number(qRound(float(resultData->getFalseNegativeCount())/resultData->getFalseNegativeTestCount()*100))+"%");
-    QTime time;time.setHMS(0,0,0);time=time.addSecs(resultData->getTestTimespan());
-    manager->setReportVariable("testTime","Test Duration: "+time.toString("mm:ss"));
-    manager->setReportVariable("centerDotCheck",QString("Fovea: ")+(commomParams->getCenterDotCheck()?"ON":"OFF"));
+    if(report<=3)
+    {
+        auto commomParams=static_cast<StaticParamsVM*>(m_checkResult->getParams())->getCommonParams();
+        QString fixationMonitor;switch (commomParams->getFixationMonitor()) {case 0:fixationMonitor="No Alarm"; break;case 1:fixationMonitor="Only Alarm";break;case 2:fixationMonitor="Pause And Alarm";break;}
+        QString fixationTarget;switch (commomParams->getFixationTarget()){case 0:fixationTarget="Center Point";break;case 1:fixationTarget="Small Diamond";break;case 2:fixationTarget="Big Diamond";break;case 3:fixationTarget="Bottom Point";break;}
+        manager->setReportVariable("fixationMonitor","Fixation Monitor: "+fixationMonitor);
+        manager->setReportVariable("fixationTarget","Fixation Target: "+fixationTarget);
+        auto resultData=m_checkResult->getResultData();
+        manager->setReportVariable("fixationLosses","Fixation Losses: "+QString::number(resultData->getFixationLostCount())+"/"+QString::number(resultData->getFixationLostTestCount()));
+        manager->setReportVariable("falsePositiveRate","False POS Errors: "+QString::number(qRound(float(resultData->getFalsePositiveCount())/resultData->getFalsePositiveTestCount()*100))+"%");
+        manager->setReportVariable("falseNegativeRate","False NEG Errors: "+QString::number(qRound(float(resultData->getFalseNegativeCount())/resultData->getFalseNegativeTestCount()*100))+"%");
+        QTime time;time.setHMS(0,0,0);time=time.addSecs(resultData->getTestTimespan());
+        manager->setReportVariable("testTime","Test Duration: "+time.toString("mm:ss"));
+        manager->setReportVariable("centerDotCheck",QString("Fovea: ")+(commomParams->getCenterDotCheck()?"ON":"OFF"));
+        QString cursorSize;switch(commomParams->getCursorSize()){case 0:cursorSize="I";break;case 1:cursorSize="II";break;case 2:cursorSize="III";break;case 3:cursorSize="IV";break;case 4:cursorSize="V";break;}
+        QString cursorColor;switch(commomParams->getCursorColor()){case 0:cursorColor="White";break;case 1:cursorColor="Red";break;case 2:cursorColor="Blue";break;}
+        manager->setReportVariable("stimCursor","Stimulus: "+cursorSize+","+cursorColor);
+        manager->setReportVariable("backgroundColor","Background: "+QString(commomParams->getBackGroundColor()==0?"31.5":"315")+" ASB");
+        QString strategy;switch(commomParams->getStrategy()){case 0:strategy="fullThreshold";break;case 1:strategy="smartInteractive";break;case 2:strategy="fastInteractive";break;case 3:strategy="oneStage";break;case 4:strategy="twoStages";break;case 5:strategy="quantifyDefects";break;case 6:strategy="singleStimulation";break;}
+        qDebug()<<strategy;
+        manager->setReportVariable("Strategy","Strategy: "+strategy);
 
-    QString cursorSize;switch(commomParams->getCursorSize()){case 0:cursorSize="I";break;case 1:cursorSize="II";break;case 2:cursorSize="III";break;case 3:cursorSize="IV";break;case 4:cursorSize="V";break;}
-    QString cursorColor;switch(commomParams->getCursorColor()){case 0:cursorColor="White";break;case 1:cursorColor="Red";break;case 2:cursorColor="Blue";break;}
-    manager->setReportVariable("stimCursor","Stimulus: "+cursorSize+","+cursorColor);
-    manager->setReportVariable("backgroundColor","Background: "+QString(commomParams->getBackGroundColor()==0?"31.5":"315")+" ASB");
-    QString strategy;switch(commomParams->getStrategy()){case 0:strategy="fullThreshold";break;case 1:strategy="smartInteractive";break;case 2:strategy="fastInteractive";break;case 3:strategy="oneStage";break;case 4:strategy="twoStages";break;case 5:strategy="quantifyDefects";break;case 6:strategy="singleStimulation";break;}
-    manager->setReportVariable("Strategy","Strategy: "+strategy);
+        manager->setReportVariable("VFI","VFI: "+QString::number(qRound(m_VFI*100))+"%");
+        QString GHT;switch (m_GHT){case 0:GHT="Out of limits";break;case 1:GHT="Low sensitivity";break;case 2:GHT="Border of limits";break;case 3:GHT="Within normal limits";break;}
+        manager->setReportVariable("GHT","GHT: "+GHT);
+        manager->setReportVariable("MD",QString("MD: ")+QString::number(m_md,'f',2)+" (P<"+QString::number(m_p_md)+"%)");
+        manager->setReportVariable("PSD",QString("PSD: ")+QString::number(m_psd,'f',2)+" (P<"+QString::number(m_p_psd)+"%)");
+    }
+    else
+    {
+        auto resultData=m_checkResult->getResultData();
+        QTime time;time.setHMS(0,0,0);time=time.addSecs(resultData->getTestTimespan());
+        auto params=static_cast<DynamicParamsVM*>(m_checkResult->getParams());
+        QString cursorSize;switch(params->getCursorSize()){case 0:cursorSize="I";break;case 1:cursorSize="II";break;case 2:cursorSize="III";break;case 3:cursorSize="IV";break;case 4:cursorSize="V";break;}
+        QString cursorColor;switch(params->getCursorColor()){case 0:cursorColor="White";break;case 1:cursorColor="Red";break;case 2:cursorColor="Blue";break;}
+        QString cursorSpeed=QString::number(params->getSpeed());
+        QString cursorBrightness=QString::number(params->getBrightness());
 
+        manager->setReportVariable("stimCursor","Stimulus: "+cursorSize+","+cursorColor+","+cursorSpeed+","+cursorBrightness);
+        manager->setReportVariable("testTime","Test Duration: "+time.toString("mm:ss"));
+    }
     manager->setReportVariable("pupilDiameter","Pupil Diameter: ");
     manager->setReportVariable("visualAcuity","Visual Acuity: ");
     manager->setReportVariable("Rx_Ry",QString("Rx: ")+"Ry: ");
-
-
-
-    manager->setReportVariable("VFI","VFI: "+QString::number(qRound(m_VFI*100))+"%");
-    QString GHT;switch (m_GHT){case 0:GHT="Out of limits";break;case 1:GHT="Low sensitivity";break;case 2:GHT="Border of limits";break;case 3:GHT="Within normal limits";break;}
-    manager->setReportVariable("GHT","GHT: "+GHT);
-    manager->setReportVariable("MD",QString("MD: ")+QString::number(m_md,'f',2)+" (P<"+QString::number(m_p_md)+"%)");
-    manager->setReportVariable("PSD",QString("PSD: ")+QString::number(m_psd,'f',2)+" (P<"+QString::number(m_p_psd)+"%)");
 
     switch (report)
     {
@@ -236,30 +254,21 @@ void AnalysisSvc::showReport(int report)
         manager->setReportVariable("WeakSeen",QString("Weak Seen:")+QString::number(m_dotWeakSeen)+"/"+QString::number(m_dotList.length()));
         manager->setReportVariable("Unseen",QString("Unseen:")+QString::number(m_dotUnseen)+"/"+QString::number(m_dotList.length()));
         break;
+    default:
+        manager->setReportVariable("DynamicImagePath","./reportImage/Dynamic.bmp");
     }
     manager->setReportVariable("FixationDeviationImagePath","./reportImage/FixationDeviation.bmp");
     manager->setReportVariable("DoctorSign","DoctorSign: ");
-
-
     manager->setReportVariable("comment", "Comment: ");
     manager->setReportVariable("deviceInfo","Device Info: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
     manager->setReportVariable("version", "Version: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
 
 
-
-
 //     report->previewReport();
 //     delete report;
      m_reportEngine->setShowProgressDialog(true);
-
-//     report->setSettings()
-
      m_reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,50);
      m_reportEngine->previewReport(/*LimeReport::PreviewHint::ShowAllPreviewBars*/);
-
-     qDebug()<<"deleted";
-
-
 }
 
 
@@ -305,7 +314,7 @@ void AnalysisSvc::drawRoundCrossPixScale()
     painter.setRenderHint(QPainter::RenderHint::Antialiasing);
     for(int i=1;i<=segmentCount;i++)
     {
-        int radius=float(m_image.width())/2/segmentCount*i+scale/2;
+        int radius=float(m_image.width())/2/segmentCount*i-scale/2;
         painter.drawEllipse({m_image.height()/2,m_image.width()/2},radius,radius);
     }
 
@@ -318,20 +327,6 @@ void AnalysisSvc::drawRoundCrossPixScale()
             painter.drawLine(QLine{m_image.width()/2,m_image.height()/2,int(m_image.width()/2+radius*qSin(angle)),int(m_image.height()/2+radius*qCos(angle))});
         }
     }
-
-
-    painter.setRenderHint(QPainter::RenderHint::Antialiasing,false);
-    painter.setPen({Qt::black,float(scale)});
-    for(int i=0;i<=segmentCount*2;i++)
-    {
-        if(i!=segmentCount)
-        {
-            painter.drawLine(QLine((float(m_image.width()-scale))/(segmentCount*2)*i+scale/2,m_image.height()/2-4*scale,(float(m_image.width()-scale))/(segmentCount*2)*i+scale/2,m_image.height()/2+4*scale));
-            painter.drawLine(QLine(m_image.width()/2-4*scale,(float(m_image.height()-scale))/(segmentCount*2)*i+scale/2,m_image.width()/2+4*scale,(float(m_image.height()-scale))/(segmentCount*2)*i+scale/2));
-        }
-    }
-
-
 }
 
 
@@ -449,7 +444,6 @@ void AnalysisSvc::DrawReportDiagram()
         drawPatternDeviation();
         drawTotalPE();
         drawPatternPE();
-
         drawFixationDeviation();
     }
     if(m_report==1)
@@ -459,6 +453,7 @@ void AnalysisSvc::DrawReportDiagram()
         drawGrayDiagram();
         drawDefectDepthDiagram();
         drawDBDiagram();
+        drawFixationDeviation();
     }
 
     if(m_report==2)
@@ -469,6 +464,7 @@ void AnalysisSvc::DrawReportDiagram()
         drawGrayDiagram();
         drawTotalPE();
         drawPatternPE();
+        drawFixationDeviation();
     }
 
     if(m_report==3)
@@ -476,6 +472,14 @@ void AnalysisSvc::DrawReportDiagram()
         QSize imageSize={1100,1100};
         m_image=QImage(imageSize, QImage::Format_RGB32);
         drawScreening();
+        drawFixationDeviation();
+    }
+    if(m_report>3)
+    {
+        QSize imageSize={1100,1100};
+        m_image=QImage(imageSize, QImage::Format_RGB32);
+        drawDynamic();
+        drawFixationDeviation();
     }
 }
 
@@ -792,12 +796,6 @@ void AnalysisSvc::staticAnalysis()
 
     m_md=0;
     m_psd=0;
-
-    auto birthDate=QDate::fromString(m_patient->getBirthDate(),"yyyy-MM-dd");
-    auto currentDate=QDate::currentDate();
-
-    m_patientAge = currentDate.year() - birthDate.year();
-    if (currentDate.month() < birthDate.month() || (currentDate.month() == birthDate.month() && currentDate.day() < birthDate.day())) { m_patientAge--;}
 
 
     if(m_patientAge<=35){m_age_correction=0;}

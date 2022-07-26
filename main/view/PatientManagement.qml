@@ -22,8 +22,6 @@ Item{
     anchors.fill:parent;
     Component.onCompleted: createNewPatient();
 
-
-
     function createNewPatient(){
         if(currentPatient!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientVm", currentPatient);
         patientReviseButton.enabled=false;patientReviseButton.buttonColor="#787878"
@@ -36,27 +34,18 @@ Item{
         newBirthDate.text="";
     }
 
-    Item{
-        width: parent.width;
-        height: parent.height*14/15
-        anchors.top: parent.top
-        id:content;
+    Item{id:content;width: parent.width;height: parent.height*14/15;anchors.top: parent.top;
         property int layoutGroupMargin: 0.03*height
         CusCalendar{id: calendar;width: parent.width;height: parent.height;}
         Row{
             anchors.fill: parent;anchors.margins: content.layoutGroupMargin;spacing:content.layoutGroupMargin
-            Rectangle{
-                width: (parent.width-content.layoutGroupMargin)*0.6;height: parent.height;
+            Rectangle{width: (parent.width-content.layoutGroupMargin)*0.6;height: parent.height;
                 border.color: backGroundBorderColor;color: backGroundColor;radius: commonRadius
-                Item{
-                    anchors.fill: parent;anchors.margins: content.layoutGroupMargin
-                    Column{
-                        id:patientInfo;anchors.fill: parent;spacing: rowHight
+                Item{anchors.fill: parent;anchors.margins: content.layoutGroupMargin
+                    Column{id:patientInfo;anchors.fill: parent;spacing: rowHight
                         property int rowHight: height*0.06
-
                         Row{
-                            id:dateSelection; width: parent.width;opacity: 1;
-                            height: patientInfo.rowHight;spacing: height*0.4;
+                            id:dateSelection; width: parent.width;opacity: 1;height: patientInfo.rowHight;spacing: height*0.4;
                             CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5;}
                             LineEdit{property string name: "dateFrom";id:dateFrom;radius: height/6;width: height*3.1;}
                             CusButton{id:dateFromButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateFrom;calendar.open();}}
@@ -87,9 +76,7 @@ Item{
                                     case 4:birthDateGroup.visible=true;dateSelection.opacity=0;break;
                                     }
                                 }
-                                Component.onCompleted: {
-                                     root.doubleNameChanged.connect(currentIndexChanged);
-                                }
+                                Component.onCompleted: root.doubleNameChanged.connect(currentIndexChanged);
                             }
 
                             LineEdit{id:patientID;radius:height/6;width: height*4}
@@ -438,22 +425,13 @@ Item{
             }
         }
     }
-    Rectangle{
-        id:bottomRibbon;width: parent.width;height: parent.height*1/15;color: "#333e44";
-        anchors.bottom: parent.bottom
-        Row{
-            anchors.fill: parent;anchors.margins:parent.height*0.15;
-            Item{
-                height: parent.height;width:parent.width*0.6;
+    Rectangle{id:bottomRibbon;width: parent.width;height: parent.height*1/15;color: "#333e44";anchors.bottom: parent.bottom
+        Row{anchors.fill: parent;anchors.margins:parent.height*0.15;
+            Item{height: parent.height;width:parent.width*0.6;
                 CusButton{text:"关闭";onClicked:Qt.quit()}
-                Flow{
-                    height: parent.height;spacing: height*0.8
-                    anchors.horizontalCenter: parent.horizontalCenter
+                Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter
                     CusButton{text:"复查"}
-                    CusButton{
-                        id:patientReviseButton;
-                        enabled: false;
-                        text:"修改";
+                    CusButton{id:patientReviseButton;enabled: false;text:"修改";
                         onClicked:
                         {
                             var Name;
@@ -468,9 +446,7 @@ Item{
                             query.startQuery();
                         }
                     }
-                    CusButton
-                    {
-                        text:"删除";
+                    CusButton{text:"删除";
                         onClicked: {
                             var pl=patientInfoListView.seletedPatient;
                             for(var i=0;i<pl.length;i++){
@@ -479,17 +455,13 @@ Item{
                             }
                             query.startQuery();
                         }
-
                     }
-                    CusButton{text:"查看报告";/*enabled:currentPatient!==null;*/onClicked: {root.changePage("analysisLobby",null);}}
+                    CusButton{text:"查看报告";enabled:currentPatient!==null;onClicked: {root.changePage("analysisLobby","patientManagement");}}
                 }
             }
-            Flow{
-                height:parent.height; layoutDirection: Qt.RightToLeft;width:parent.width*0.4;spacing: height*0.8;
-                CusButton{text:"进入检测";/*enabled:!(currentPatient===null);*/onClicked: {root.changePage("check",currentPatient);}}
-                CusButton{
-                    id:patientSaveButton;text:"保存";
-                    enabled: false;
+            Flow{height:parent.height; layoutDirection: Qt.RightToLeft;width:parent.width*0.4;spacing: height*0.8;
+                CusButton{text:"进入检测";enabled:!(currentPatient===null);onClicked: {root.changePage("check",currentPatient);}}
+                CusButton{id:patientSaveButton;text:"保存";enabled: false;
                     onClicked:{
                         var name="";
                         if(!doubleName){ name=newChineseName.text; }
@@ -506,11 +478,8 @@ Item{
                     }
                 }
                 CusButton{
-                    id:newPatientButton;
-                    text:"新建";
-                    onClicked: {
-                        root.createNewPatient()
-                    }
+                    id:newPatientButton;text:"新建";
+                    onClicked: root.createNewPatient()
                 }
             }
         }
