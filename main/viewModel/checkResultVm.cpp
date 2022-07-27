@@ -86,7 +86,7 @@ CheckResult_ptr CheckResultVm::getCheckResultData()
         checkResultModel->m_pic=m_pic;
         checkResultModel->m_time=m_time;
         checkResultModel->m_params.commonParams=static_cast<StaticParamsVM*>(m_params)->getCommonParams()->getData();
-        checkResultModel->m_params.commonParams=static_cast<StaticParamsVM*>(m_params)->getCommonParams()->getData();
+        checkResultModel->m_params.fixedParams=static_cast<StaticParamsVM*>(m_params)->getFixedParams()->getData();
         checkResultModel->m_data=m_resultData->getThresholdData();
         checkResultModel->m_patient_id=m_patient_id;
         checkResultModel->m_program_id=m_program_id;
