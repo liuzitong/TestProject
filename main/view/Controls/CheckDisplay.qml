@@ -122,7 +122,7 @@ Item{
             var angle=rad*(180/Math.PI);
             if(dot.x<0)
             {
-                if(dot.y>0){angle=90+(90-angle)}
+                if(dot.y>=0){angle=90+(90-angle)}
                 if(dot.y<0){angle=-90-(90+angle)}
             }
             if(angle<0) angle+=360;

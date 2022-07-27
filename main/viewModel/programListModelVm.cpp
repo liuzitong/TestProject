@@ -1,4 +1,4 @@
-﻿#include "programListModelVm.h"
+#include "programListModelVm.h"
 #include <perimeter/main/model/programModel.h>
 
 namespace Perimeter{

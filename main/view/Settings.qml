@@ -68,6 +68,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                 CusText{text:"医院名称";width: parent.width*0.25}
                                 LineEdit{id:hospitalName;height: column.rowHeight;width:parent.width*0.60;text:IcUiQmlApi.appCtrl.settings.hospitalName}
                             }
+
                             Flow{
                                 height: column.rowHeight;width: parent.width*0.7; anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
                                 CusText{text:"双姓名输入";width: parent.width*0.25}

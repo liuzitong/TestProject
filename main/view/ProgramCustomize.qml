@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -12,6 +12,7 @@ import perimeter.main.view.Utils 1.0
 Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
     property var currentProgram: null;
     property var content;
+    property bool locked: true;
 //    onCurrentProgramChanged: {
 //        if(currentProgram.type!==2){staticParamsSetting.currentProgram=currentProgram;}else{dynamicParamsSetting.currentProgram=currentProgram;}}
 
@@ -56,7 +57,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
         StaticParamsSetting
         {
             id:staticParamsSetting;
-            isCustomProg:false;
+            isCustomProg:true;
             anchors.fill: parent;
         }
 
@@ -287,11 +288,11 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                 }
                                 CusButton{text:"取消";height: parent.width*0.3;width: parent.width;}
                                 CusButton{
-                                    text:"保存";height: parent.width*0.3;width: parent.width;enabled: currentProgram.category===4;
-                                    onClicked: {currentProgram.dots.forEach(function(item){console.log("x:"+item.x+" y:"+item.y);});currentProgram.updateProgram();}
+                                    text:"保存";height: parent.width*0.3;width: parent.width;enabled: currentProgram.category===4||!locked;
+                                    onClicked: {/*currentProgram.dots.forEach(function(item){console.log("x:"+item.x+" y:"+item.y);});*/currentProgram.updateProgram();}
                                 }
 
-                                CusButton{text:"删除";height: parent.width*0.3;width: parent.width;enabled:currentProgram.category===4; onClicked:{ currentProgram.deleteProgram();paramsSetting.enabled=false;programLists.refreshData();}}
+                                CusButton{text:"删除";height: parent.width*0.3;width: parent.width;enabled:currentProgram.category===4||!locked; onClicked:{ currentProgram.deleteProgram();paramsSetting.enabled=false;programLists.refreshData();}}
                                 CusButton{
                                     text:"复制";height: parent.width*0.3;width: parent.width;
                                     onClicked: saveToAnotherProgram.open();
@@ -318,13 +319,13 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
     Rectangle{id:bottomRibbon;width: parent.width;height: parent.height*1/15;color: "#333e44";
         anchors.bottom: parent.bottom
         visible: true
-        Row{anchors.fill: parent;
-            Item{height: parent.height;width:parent.width*0.235;
+        Item{ id: item1;anchors.fill: parent;
+            Item{height: parent.height; anchors.left: parent.left; anchors.leftMargin: 0;width:parent.width*0.235;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     CusButton{text:"返回";onClicked:root.changePage("patientManagement",null);}
                     }
                 }
-            Item{height: parent.height;width:parent.width*0.648;
+            Item{height: parent.height; anchors.horizontalCenter: parent.horizontalCenter;width:parent.width*0.5;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter
                         CusButton{id:paramsSetting;text:"参数设置";enabled:false;onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { dynamicParamsSetting.open();}}
@@ -333,11 +334,27 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                         }
                     }
                 }
-            Item{height: parent.height;width:parent.width*0.117;
+            Item{height: parent.height; anchors.right: parent.right; width:parent.width*0.117;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:"解锁"; anchors.horizontalCenter: parent.horizontalCenter}
+                    CusButton{
+                        id:unlock;text:"解锁"; anchors.horizontalCenter: parent.horizontalCenter;
+                        onClicked: {unlock.visible=false;unlockPwd.visible=true;}
+                    }
+                    CusText{
+                        anchors.fill: parent;
+                        text:"已解锁";color: "white";visible: !locked}
                 }
             }
+            Item{height: parent.height; anchors.right: parent.right; width:parent.width*0.25;visible:false;
+                id:unlockPwd
+                Row{
+                    layoutDirection: Qt.RightToLeft;anchors.fill: parent;anchors.margins:parent.height*0.15;spacing:0.5*height
+                    CusButton{text:"确定";onClicked:{if(pwd.text===IcUiQmlApi.appCtrl.settings.programUnlockPwd) {locked=false;unlockPwd.visible=false;}else{pwdText.text="输入密码错误"}}}
+                    LineEdit{id:pwd;width: parent.height*3;textInput.echoMode: TextInput.Password;}
+                    CusText{id:pwdText;text:"输入解锁密码:";color: "white";}
+                }
+            }
+
         }
     }
 }

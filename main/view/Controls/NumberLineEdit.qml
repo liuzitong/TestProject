@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+import QtQuick 2.0
 
 import QtQuick.Controls 2.0
 
@@ -7,12 +7,12 @@ Item{
 //    height: 30;width: 100;
     property int radius:height/6;
     property int step;
-    property alias text:textfeild.text;
-    property alias verticalAlignment: textfeild.verticalAlignment;
-    property alias horizontalAlignment: textfeild.horizontalAlignment;
-    property alias readOnly: textfeild.readOnly;
+    property alias text:textInput.text;
+    property alias verticalAlignment: textInput.verticalAlignment;
+    property alias horizontalAlignment: textInput.horizontalAlignment;
+    property alias readOnly: textInput.readOnly;
     property alias backgroundColor: recbackground.color;
-    property alias textfeild: textfeild;
+    property alias textInput: textInput;
     property int value;
     property int max;
     property int min;
@@ -24,7 +24,7 @@ Item{
     clip: true
     signal enterPressed();
     TextField{
-        id:textfeild;
+        id:textInput;
         anchors.fill: parent;
         text:value;
         horizontalAlignment: Text.AlignLeft
@@ -37,8 +37,8 @@ Item{
         background: Rectangle {id:recbackground;border.width: 1;radius: root.radius;color:readOnly? "#e4e6e8":"white" ;border.color: "#bdc0c6"}
         Keys.onPressed: { switch (event.key){/*EnterKey*/ case 16777220:console.log("qqq");root.enterPressed();inputFinished();break;}}
         validator: RegExpValidator { regExp: /[0-9]+/ }
-//        onTextChanged: {}
         onFocusChanged: if(!focus) inputFinished();
+        onTextChanged: value=text;
         function inputFinished(){console.log(value);console.log(text);if(text==""){text=0;} value=text;if (value>max){value=max;}else if(value<min){value=min;} /*text=value;*/}
         Canvas{
             height: parent.height
@@ -74,7 +74,7 @@ Item{
                 repeat: true
                 interval: 30;
                 running:false;
-                onTriggered: {value+=step;if(value>max) value=max; /*textfeild.text=value;*/}
+                onTriggered: {value+=step;if(value>max) value=max; /*textInput.text=value;*/}
             }
 
             Timer{
@@ -83,7 +83,7 @@ Item{
                 repeat: true
                 interval: 30;
                 running:false;
-                onTriggered: {value-=step;if(value<min) value=min;/*textfeild.text=value;*/}
+                onTriggered: {value-=step;if(value<min) value=min;/*textInput.text=value;*/}
             }
 
 
@@ -92,7 +92,7 @@ Item{
                 width: parent.width;
                 anchors.top:parent.top;
                 anchors.right: parent.right;
-                onClicked:{value+=step;if(value>max) value=max;/*textfeild.text=value;*/}
+                onClicked:{value+=step;if(value>max) value=max;/*textInput.text=value;*/}
                 onPressAndHold: timerUp.start();
                 onReleased: timerUp.stop();
 
@@ -102,7 +102,7 @@ Item{
                 width: parent.width;
                 anchors.bottom: parent.bottom;
                 anchors.right: parent.right;
-                onClicked:{value-=step;if(value<min) value=min;/*textfeild.text=value;*/}
+                onClicked:{value-=step;if(value<min) value=min;/*textInput.text=value;*/}
                 onPressAndHold: timerDown.start();
                 onReleased: timerDown.stop();
             }

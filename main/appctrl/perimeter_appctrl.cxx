@@ -31,8 +31,8 @@ private:
     // add other sub modules here
     Main        m_main_mod;
     //Custom Code
-    QString     m_language="Chinese";
-    bool        m_doubleName=false;
+//    QString     m_language="Chinese";
+//    bool        m_doubleName=false;
     QObject*    m_databaseSvc;
     QObject*    m_testClass;
     QObject*    m_analysisSvc;
@@ -54,10 +54,10 @@ public :
     QObject*    getAnalysisSvc() const              {return m_analysisSvc;}
     QObject*    getCheckSvc() const                 {return m_checkSvc;}
     QObject*    getSettings()                       {return m_settings;}
-    QString     getLanguage()                       {return m_language;}
-    void        setLanguage(QString value)          {m_language=value;}
-    bool        getDoubleName()                     {return m_doubleName;}
-    void        setDoubleName(bool value)           {m_doubleName=value;}
+//    QString     getLanguage()                       {return m_language;}
+//    void        setLanguage(QString value)          {m_language=value;}
+//    bool        getDoubleName()                     {return m_doubleName;}
+//    void        setDoubleName(bool value)           {m_doubleName=value;}
 
 //    QObject*    getCurrentPatient()                 {return m_currentPatient;}
 //    void        setCurrentPatient(QObject *value)   {m_currentPatient=value;}

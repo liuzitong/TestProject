@@ -87,12 +87,7 @@ Column {
                         height: parent.height; layoutDirection: Qt.RightToLeft;spacing: height*0.8;width: parent.width
                         anchors.horizontalCenter: parent.horizontalCenter
 //                        CusButton{text:"打印";onClicked: {console.log(currentPatient.name);console.log(currentProgram.params.commonParams.Range[1]);console.log(analysisResult.GHT)}}
-                        CusButton{
-                            text:"打印";onClicked:
-                            {
-                                IcUiQmlApi.appCtrl.analysisSvc.showReport(queryStrategy.report);
-                            }
-                        }
+                        CusButton{text:"打印";onClicked:IcUiQmlApi.appCtrl.analysisSvc.showReport(queryStrategy.report);}
                         CusComboBox{
                             property var listModel:ListModel {}
                             property int report;

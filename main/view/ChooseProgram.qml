@@ -123,17 +123,43 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                     }
                 }
                 Item {
+                    id: item1
                     width: parent.width;
-                    height: parent.height*0.15
+                    height: parent.height*0.144
+
+                    CusButton{
+                        enabled: programSelection.selectedProgram!==null;
+                        width: height*3;
+                        height: parent.height*0.4 ;
+                        anchors.left: parent.left
+                        anchors.leftMargin: height*1.2;
+                        anchors.verticalCenter: parent.verticalCenter
+                        text:"设置为默认程序"
+                        onClicked: {
+                            console.log(program_id);
+                            console.log(program_type);
+                            IcUiQmlApi.appCtrl.settings.defaultProgramId=program_id;
+                            IcUiQmlApi.appCtrl.settings.defaultProgramType=program_type;
+                            IcUiQmlApi.appCtrl.settings.save();
+                        }
+                    }
+
+
+
                     Flow{
-                        anchors.top: parent.top
-                        anchors.topMargin: parent.height*0.34;
+//                        anchors.top: parent.top
+//                        anchors.topMargin: parent.height*0.34;
+//                        anchors.right: parent.right
+//                        anchors.margins: parent.height*0.40;
+                        height: parent.height*0.4 ;
                         anchors.right: parent.right
-                        anchors.margins: parent.height*0.40;
+                        anchors.rightMargin: height*1.2;
+                        anchors.verticalCenter: parent.verticalCenter
                         spacing: height;
                         layoutDirection: Qt.RightToLeft
-                        anchors.verticalCenter: parent.verticalCenter
                         CusButton{text:"取消";onClicked: idPopup.close();}
+
+
                         CusButton
                         {
                             text:"确定";onClicked:
@@ -161,8 +187,3 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
         }
     }
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

@@ -44,7 +44,7 @@ Rectangle {
                                 Flow{
                                     height: parent.height;
                                     CusText{text:"姓名:  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
-                                    CusText{id:name;text:currentPatient.name; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: if(IcUiQmlApi.appCtrl.language!=="Chinese")  return text.length*4.7;}
+                                    CusText{id:name;text:currentPatient.name; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;}
                                 }
                                 Flow{
                                     height: parent.height;
@@ -157,7 +157,8 @@ Rectangle {
                         break;
                     case "check":
                         checkPage.visible=true;
-                        checkPage.rePaintCanvas();
+//                        checkPage.rePaintCanvas();
+                        checkPage.enterPage();
                         patientContentButton.image.source=patientContentButton.imageSrc;
                         checkContentButton.image.source=checkContentButton.pressImageSrc;
                         seperator1.opacity=0;
@@ -167,7 +168,6 @@ Rectangle {
                         break;
                     case "programCustomize":
                         programPage.visible=true;
-                        programPage.rePaintCanvas();
                         seperator1.opacity=0;
                         seperator2.opacity=0;
                         seperator3.opacity=0;

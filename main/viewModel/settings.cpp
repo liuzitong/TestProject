@@ -21,6 +21,10 @@ Settings::Settings()
         m_version=jo["version"].toString();
         m_deviceInfo=jo["deviceInfo"].toString();
         m_doubleName=jo["doubleName"].toBool();
+        m_programUnlockPwd=jo["programUnlockPwd"].toString();
+        m_defaultProgramId=jo["defaultProgramId"].toInt();
+        m_defaultProgramType=jo["defaultProgramType"].toInt();
+
         jsonFile.close();
     }
 }
@@ -34,7 +38,10 @@ void Settings::save()
         {"language",m_language},
         {"version",m_version},
         {"deviceInfo",m_deviceInfo},
-        {"doubleName",m_doubleName}
+        {"doubleName",m_doubleName},
+        {"programUnlockPwd",m_programUnlockPwd},
+        {"defaultProgramId",m_defaultProgramId},
+        {"defaultProgramType",m_defaultProgramType}
     };
     QJsonDocument jsonDoc;
     jsonDoc.setObject(jo);

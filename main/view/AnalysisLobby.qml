@@ -24,7 +24,7 @@ Column {
         attachObj("Perimeter::AnalysisLobbyListVm", false,[currentPatient.id,((content.height-10)/4*0.9-4)]);}
 
     ListView{
-        id:content;width: parent.width;height: parent.height*14/15;snapMode: ListView.SnapOneItem;spacing: -2;clip:true;model:analysisLobbyListVm;
+        id:content;width: parent.width;height: parent.height*14/15;/*snapMode: ListView.SnapOneItem;*/spacing: -2;clip:true;model:analysisLobbyListVm;
         delegate: checkRowDelegate
         signal cancelSelected();
 //        signal setIndex();
@@ -84,16 +84,10 @@ Column {
             }
         }
     }
-    Rectangle
-    {
-        id:bottomRibbon;width: parent.width;height: parent.height*1/15;color: "#333e44";
-        Row{
-            anchors.fill: parent;
-            Item{
-                height: parent.height;width:parent.width*0.20;
-                Item{
-                    anchors.fill: parent
-                    anchors.margins:parent.height*0.15;
+    Rectangle{id:bottomRibbon;width: parent.width;height: parent.height*1/15;color: "#333e44";
+        Row{anchors.fill: parent;
+            Item{height: parent.height;width:parent.width*0.20;
+                Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     CusButton{text:"返回";onClicked:root.changePage("patientManagement",null);}
                     }
                 }
@@ -111,7 +105,6 @@ Column {
                             model: listModel;
                             popDirectionDown: false;
                             complexType: true;
-
                             Component.onCompleted: {
                                 root.currentProgramChanged.connect(function()
                                 {
@@ -131,31 +124,17 @@ Column {
                     }
                 }
 
-            Item{
-                height: parent.height;width:parent.width*0.25;
-                Item{
-                    id: item2
-                    anchors.fill: parent
-                    anchors.margins:parent.height*0.15;
+            Item{height: parent.height;width:parent.width*0.25;
+                Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     CusButton{text:"删除"; anchors.horizontalCenter: parent.horizontalCenter;
-                        onClicked:{
-                            analysisLobbyListVm.deleteCheckResult(currentCheckResult.id);
-//                            content.model=null;
-//                            content.model=analysisLobbyListVm;
-                        }
+                        onClicked:analysisLobbyListVm.deleteCheckResult(currentCheckResult.id);
                     }
                 }
-                }
+            }
 
-
-            Item{
-                height: parent.height;width:parent.width*0.15;
-                Item{
-                    id: item1
-                    anchors.fill: parent
-                    anchors.margins:parent.height*0.15;
-                    CusButton{
-                        text:"分析"; anchors.right: parent.right;
+            Item{height: parent.height;width:parent.width*0.15;
+                Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
+                    CusButton{text:"分析"; anchors.right: parent.right;
                         onClicked:
                         {
                             var diagramWidth;

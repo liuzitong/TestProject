@@ -1,4 +1,4 @@
-﻿import QtQuick 2.7
+import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
@@ -18,10 +18,9 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
     signal ok();
     signal dataRefreshed();
     signal cancel();
-    property bool isCustomProg;
+    property bool isCustomProg:false;
 
     property var currentProgram;
-
 
 
 
@@ -244,7 +243,10 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                         CusText{text:"刺激时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
                                         NumberLineEdit{
                                             width: parent.width*0.6; anchors.right: parent.right;step:10;max:500;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.stimulationTime;
-                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.stimulationTime=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.stimulationTime;});}) }
+                                            Component.onCompleted:
+                                            {
+                                                idPopup.ok.connect(function(){currentProgram.params.fixedParams.stimulationTime=value;
+                                                idPopup.currentProgramChanged.connect(function(){if(currentProgram!==null);value=currentProgram.params.fixedParams.stimulationTime;});}) }
                                         }
                                     }
                                     Item{

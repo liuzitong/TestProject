@@ -17,8 +17,31 @@ Item {id:root; width: 1366;height: 691
     property var currentProgram: null;
     property var currentPatient: null;
     property var currentCheckResult: null;
+    signal enterPage();
 
-    Component.onCompleted: {IcUiQmlApi.appCtrl.checkSvc.checkResultChanged.connect(currentCheckResultChanged);}
+    onEnterPage: {
+        var program_id=IcUiQmlApi.appCtrl.settings.defaultProgramId;
+        var program_type=IcUiQmlApi.appCtrl.settings.defaultProgramType;
+        console.log(program_id);
+        console.log(program_type);
+        if (currentProgram!==null)
+        {
+            if(currentProgram.type!==2)
+            {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
+            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicProgramVM", currentProgram);}
+        }
+        if(program_type!==2)
+        {
+            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[program_id]);
+        }
+        else{
+            currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicProgramVM", false,[program_id]);
+        }
+    }
+
+    Component.onCompleted: {
+        IcUiQmlApi.appCtrl.checkSvc.checkResultChanged.connect(currentCheckResultChanged);
+    }
 
     Column{anchors.fill: parent;
         Rectangle{width: parent.width; height: parent.height*14/15; id:content;
@@ -36,14 +59,14 @@ Item {id:root; width: 1366;height: 691
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
                                                 CusText{text:"程序名"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 LineEdit {
-                                                    text:""; width: parent.width*0.70;textfeild.readOnly: true; textfeild.font.pointSize:if(IcUiQmlApi.appCtrl.settings.language!=="Chinese") return checkDisplay.height*0.29; else return parent.height/3;
+                                                    text:""; width: parent.width*0.70;textInput.readOnly: true; textInput.font.pointSize:if(IcUiQmlApi.appCtrl.settings.language!=="Chinese") return checkDisplay.height*0.29; else return parent.height/3;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){text=currentProgram.name});}
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
                                                 CusText{text:"光标"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 LineEdit{
-                                                    text:"";width: parent.width*0.70;textfeild.readOnly: true;
+                                                    text:"";width: parent.width*0.70;textInput.readOnly: true;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){
                                                         text="";
                                                         var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
@@ -56,7 +79,7 @@ Item {id:root; width: 1366;height: 691
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
                                                 CusText{text:"策略"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 LineEdit{
-                                                    text:"";width: parent.width*0.7;textfeild.readOnly: true;
+                                                    text:"";width: parent.width*0.7;textInput.readOnly: true;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){
                                                         text="";
                                                         var params=(currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params);
@@ -79,7 +102,7 @@ Item {id:root; width: 1366;height: 691
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.falsePositiveCount;
                                                     property var totalDots: currentCheckResult===null?0:currentCheckResult.resultData.falsePositiveTestCount;
-                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.7;textfeild.readOnly: true;
+                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.7;textInput.readOnly: true;
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
@@ -87,7 +110,7 @@ Item {id:root; width: 1366;height: 691
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.falseNegativeCount;
                                                     property var totalDots: currentCheckResult===null?0:currentCheckResult.resultData.falseNegativeTestCount;
-                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.7;textfeild.readOnly: true;
+                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.7;textInput.readOnly: true;
                                                 }
                                             }
                                             Row{ width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
@@ -95,7 +118,7 @@ Item {id:root; width: 1366;height: 691
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.fixationLostCount;
                                                     property var totalDots: currentCheckResult===null?0:currentCheckResult.resultData.fixationLostTestCount;
-                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.7;textfeild.readOnly: true;
+                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.7;textInput.readOnly: true;
                                                 }
                                             }
                                         }
@@ -109,14 +132,14 @@ Item {id:root; width: 1366;height: 691
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.checkData.length;
                                                     property var totalDots: currentProgram===null?0:currentProgram.dots.length;
-                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.7;textfeild.readOnly: true;
+                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.7;textInput.readOnly: true;
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*1/3;spacing: width*0.05;
                                                 CusText{text:"测试时间"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 LineEdit{
                                                     property int timeSpan: currentCheckResult===null?0:currentCheckResult.resultData.testTimespan;
-                                                    text:Math.floor(timeSpan/60)+":"+timeSpan%60;width: parent.width*0.7;textfeild.readOnly: true;}
+                                                    text:Math.floor(timeSpan/60)+":"+timeSpan%60;width: parent.width*0.7;textInput.readOnly: true;}
                                             }
                                         }
                                     }
@@ -146,7 +169,7 @@ Item {id:root; width: 1366;height: 691
                                             Row{width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{}
                                                 CusText{text:"瞳孔尺寸"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
-                                                LineEdit{text:"0.0";width: parent.width*0.5;textfeild.readOnly: true;}
+                                                LineEdit{text:"0.0";width: parent.width*0.5;textInput.readOnly: true;}
                                             }
                                             Row{id: row;width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{enabled: false;}
