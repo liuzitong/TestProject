@@ -1,4 +1,4 @@
-﻿#ifndef CHECK_RESULT_H
+#ifndef CHECK_RESULT_H
 #define CHECK_RESULT_H
 #include "precompiled.h"
 #include <QxOrm_Impl.h>
@@ -19,6 +19,7 @@ public:
     QString m_params;
     QString m_data;
     QVector<QVector<QByteArray>> m_pic;                   //一个点有几张照片,一共有很多个点
+    QString m_diagnosis;
     QDateTime m_time;
     Patient_ptr m_patient;
     Program_ptr m_program;

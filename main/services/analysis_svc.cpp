@@ -259,7 +259,7 @@ void AnalysisSvc::showReport(int report)
     }
     manager->setReportVariable("FixationDeviationImagePath","./reportImage/FixationDeviation.bmp");
     manager->setReportVariable("DoctorSign","DoctorSign: ");
-    manager->setReportVariable("comment", "Comment: ");
+    manager->setReportVariable("DiagnosisContent", m_checkResult->getComment());
     manager->setReportVariable("deviceInfo","Device Info: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
     manager->setReportVariable("version", "Version: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
 

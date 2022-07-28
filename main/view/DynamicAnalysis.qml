@@ -40,7 +40,7 @@ Item
         anchors.fill: parent;
         Rectangle{width:parent.width*0.75;height: parent.height;color:"white";
             Row{ id: row;anchors.fill: parent;anchors.leftMargin: parent.width*0.06;anchors.topMargin: parent.height*0.04;anchors.bottomMargin: parent.height*0.04;spacing: width*0.10;
-                Column{ id: column;width: parent.width*0.25;height: parent.height;spacing:parent.height*0.05
+                Column{ id: column;width: parent.width*0.25;height: parent.height;spacing:parent.height*0.01
                     CusText{text:currentProgram.name; font.bold: true; horizontalAlignment: Text.AlignLeft;height:parent.height*0.10;}
                     Column{width:parent.width;height: parent.height*0.15;spacing: textHeight*-0.36;
                         Repeater{
@@ -78,7 +78,33 @@ Item
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
-                    Item{ id: item2;width:parent.width;height: parent.height*0.20; anchors.left: parent.left;
+
+                    Column{width:parent.width;height: parent.height*0.25;spacing: textHeight*-0.18;
+                        CusText{text:"诊断:"; horizontalAlignment: Text.AlignLeft;width:parent.width;height: parent.height*0.24;}
+                        Rectangle{ id: rectangle;width:parent.width;height: parent.height*0.73;radius: 5;border.color: "black";smooth: false;
+                            TextInput
+                            {
+                                id:diagnosis;anchors.fill: parent;anchors.margins: 3;
+                                width:parent.width*1.0;height: parent.height*0.70;
+                                text:currentCheckResult==null?"":currentCheckResult.diagnosis;
+                                selectionColor: "blue";selectByMouse: true;
+                                font.pointSize: textHeight*0.3;font.family: "Consolas";
+                                wrapMode: Text.WrapAnywhere;renderType: Text.NativeRendering;
+                            }
+
+                            CusButton{ id: cusButton;height: parent.height*0.25;width: height*2;
+                                text:"保存";anchors.right: parent.right;anchors.bottom: parent.bottom;
+                                anchors.rightMargin: 5;anchors.bottomMargin: 5;
+                                onClicked:
+                                {
+                                    currentCheckResult.diagnosis=diagnosis.text;
+                                    currentCheckResult.update();
+                                }
+                            }
+                        }
+                    }
+
+                    Item{ id: item2;width:parent.width;height: parent.height*0.12; anchors.left: parent.left;
                         FixationDeviation{ anchors.bottom: parent.bottom; dots:if(currentCheckResult!==null) currentCheckResult.resultData.fixationDeviation; }
                     }
 

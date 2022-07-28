@@ -15,6 +15,7 @@ class CheckResultVm: public QObject
     Q_PROPERTY(int OS_OD READ getOS_OD WRITE setOS_OD)
     Q_PROPERTY(QObject* params READ getParams WRITE setParams )
     Q_PROPERTY(ResultDataVm* resultData READ getResultData)
+    Q_PROPERTY(QString diagnosis READ getComment WRITE setComment NOTIFY diagnosisChanged)
     Q_PROPERTY(QDateTime time READ getTime WRITE setTime)
     Q_PROPERTY(int patient_id READ getPatient_id WRITE setPatient_id)
     Q_PROPERTY(int program_id READ getProgram_id WRITE setProgram_id)
@@ -23,6 +24,7 @@ public:
     Q_INVOKABLE explicit CheckResultVm(const QVariantList &);
     Q_INVOKABLE virtual ~CheckResultVm();
     Q_INVOKABLE void insert();
+    Q_INVOKABLE void update();
     int getID(){return m_id;}void setID(int value){m_id=value;}
     int getType(){return m_type;}void setType(int value){m_type=value;}
     int getOS_OD(){return m_OS_OD;}void setOS_OD(int value){m_OS_OD=value;}
@@ -40,6 +42,7 @@ public:
         }
     }
     ResultDataVm* getResultData(){return m_resultData;}
+    QString getComment(){return m_diagnosis;}void setComment(QString value){m_diagnosis=value;emit diagnosisChanged(value);}Q_SIGNAL void diagnosisChanged(QString value);
     QDateTime getTime(){return m_time;}void setTime(QDateTime value){m_time=value;}
     int getPatient_id(){return m_patient_id;}void setPatient_id(int value){m_patient_id=value;}
     int getProgram_id(){return m_program_id;}void setProgram_id(int value){m_program_id=value;}
@@ -51,9 +54,10 @@ private:
     int m_type;
     int m_OS_OD;
     QVector<QVector<QByteArray>> m_pic;      //算了 图片还是用方法调用
-    QDateTime m_time;
     QObject* m_params;
     ResultDataVm* m_resultData;
+    QString m_diagnosis;
+    QDateTime m_time;
     int m_patient_id;
     int m_program_id;
 };

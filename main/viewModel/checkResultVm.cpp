@@ -39,6 +39,7 @@ CheckResultVm::CheckResultVm(const QVariantList & args)
             m_type=int(checkResultModel->m_type);
             m_OS_OD=checkResultModel->m_OS_OD;
             m_pic=checkResultModel->m_pic;
+            m_diagnosis=checkResultModel->m_diagnosis;
             m_time=checkResultModel->m_time;
             m_params=new StaticParamsVM(checkResultModel->m_params);
             m_resultData=new ResultDataVm(checkResultModel->m_data);
@@ -52,6 +53,7 @@ CheckResultVm::CheckResultVm(const QVariantList & args)
             m_type=int(checkResultModel->m_type);
             m_OS_OD=checkResultModel->m_OS_OD;
             m_pic=checkResultModel->m_pic;
+            m_diagnosis=checkResultModel->m_diagnosis;
             m_time=checkResultModel->m_time;
             m_params=new DynamicParamsVM(checkResultModel->m_params);
             m_resultData=new ResultDataVm(checkResultModel->m_data);
@@ -74,6 +76,12 @@ void CheckResultVm::insert()
      QSqlError error=qx::dao::insert(cp);
 }
 
+void CheckResultVm::update()
+{
+    auto cp=getCheckResultData();
+    QSqlError error=qx::dao::update(cp);
+}
+
 
 CheckResult_ptr CheckResultVm::getCheckResultData()
 {
@@ -84,6 +92,7 @@ CheckResult_ptr CheckResultVm::getCheckResultData()
         checkResultModel->m_type=Type(m_type);
         checkResultModel->m_OS_OD=m_OS_OD;
         checkResultModel->m_pic=m_pic;
+        checkResultModel->m_diagnosis=m_diagnosis;
         checkResultModel->m_time=m_time;
         checkResultModel->m_params.commonParams=static_cast<StaticParamsVM*>(m_params)->getCommonParams()->getData();
         checkResultModel->m_params.fixedParams=static_cast<StaticParamsVM*>(m_params)->getFixedParams()->getData();
@@ -99,6 +108,7 @@ CheckResult_ptr CheckResultVm::getCheckResultData()
         checkResultModel->m_type=Type(m_type);
         checkResultModel->m_OS_OD=m_OS_OD;
         checkResultModel->m_pic=m_pic;
+        checkResultModel->m_diagnosis=m_diagnosis;
         checkResultModel->m_time=m_time;
         checkResultModel->m_params=static_cast<DynamicParamsVM*>(m_params)->getData();
         checkResultModel->m_data=m_resultData->getDynamicData();
@@ -162,6 +172,7 @@ ResultData<Type::ThreshHold> ResultDataVm::getThresholdData()
     resultData.stimulusCount=m_stimulusCount;
     resultData.thresholdCount=m_thresholdCount;
     resultData.ambientLight=m_ambientLight;
+    resultData.testTimespan=m_testTimespan;
     resultData.E_Light_pv=m_E_Light_pv;
     resultData.T_Light_pv=m_T_Light_pv;
     for(auto &i:m_fixationDeviation){resultData.fixationDeviation.push_back(i.toInt());}
@@ -182,6 +193,7 @@ ResultData<Type::Dynamic> ResultDataVm::getDynamicData()
     resultData.stimulusCount=m_stimulusCount;
     resultData.thresholdCount=m_thresholdCount;
     resultData.ambientLight=m_ambientLight;
+    resultData.testTimespan=m_testTimespan;
     resultData.E_Light_pv=m_E_Light_pv;
     resultData.T_Light_pv=m_T_Light_pv;
     for(auto &i:m_fixationDeviation){resultData.fixationDeviation.push_back(i.toInt());}

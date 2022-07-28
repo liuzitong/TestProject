@@ -27,7 +27,7 @@ Item{
             font.pointSize: parent.height*0.30
             font.family:"Microsoft YaHei"
             selectByMouse: true
-            selectionColor: "yellow"
+            selectionColor: "blue"
             Keys.onPressed: { switch (event.key){/*EnterKey*/ case 16777220:root.enterPressed();break;};
             }
         }

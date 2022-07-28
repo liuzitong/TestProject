@@ -74,6 +74,7 @@ struct CheckResultModel
     typename ParamTraits<type>::params m_params;
     ResultData<type> m_data;
     QVector<QVector<QByteArray>> m_pic;
+    QString m_diagnosis;
     QDateTime m_time;
     int m_patient_id;
     int m_program_id;
@@ -88,6 +89,7 @@ struct CheckResultModel
         m_OS_OD=checkResult_ptr->m_OS_OD;
         m_params=Utility::QStringToEntity<ParamTraits<type>::params>(checkResult_ptr->m_params);
         m_data=Utility::QStringToEntity<ResultData<type>>(checkResult_ptr->m_data);
+        m_diagnosis=checkResult_ptr->m_diagnosis;
         m_time=checkResult_ptr->m_time;
         m_patient_id=checkResult_ptr->m_patient->m_id;
         m_program_id=checkResult_ptr->m_program->m_id;
@@ -104,6 +106,7 @@ struct CheckResultModel
         checkResult_ptr->m_params=Utility::entityToQString(m_params);
         checkResult_ptr->m_data=Utility::entityToQString(m_data);
         checkResult_ptr->m_time=m_time;
+        checkResult_ptr->m_diagnosis=m_diagnosis;
         checkResult_ptr->m_patient->m_id=m_patient_id;
         checkResult_ptr->m_program->m_id=m_program_id;
         return checkResult_ptr;
