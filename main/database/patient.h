@@ -1,4 +1,4 @@
-﻿#ifndef Patient_H
+#ifndef Patient_H
 #define Patient_H
 #include "precompiled.h"
 #include <QxOrm_Impl.h>
@@ -31,11 +31,12 @@ public:
     QString m_name;
     sex m_sex;
     QDate m_birthDate;
+    QString m_rx;
     QDateTime m_lastUpdate;
     CheckResult_List m_checkResultX;
     Patient() = default;
-    Patient(QString patientId,QString name,sex sex,QDate date,QDateTime lastUpdate=QDateTime::currentDateTime()):m_patientId(patientId),m_name(name),m_sex(sex),m_birthDate(date),m_lastUpdate(lastUpdate){}
-    Patient(long id,QString patientId,QString name,sex sex,QDate date,QDateTime lastUpdate=QDateTime::currentDateTime()):m_id(id),m_patientId(patientId),m_name(name),m_sex(sex),m_birthDate(date),m_lastUpdate(lastUpdate){}
+    Patient(QString patientId,QString name,sex sex,QDate date,QString rx,QDateTime lastUpdate=QDateTime::currentDateTime()):m_patientId(patientId),m_name(name),m_sex(sex),m_birthDate(date),m_rx(rx),m_lastUpdate(lastUpdate){}
+    Patient(long id,QString patientId,QString name,sex sex,QDate date,QString rx,QDateTime lastUpdate=QDateTime::currentDateTime()):m_id(id),m_patientId(patientId),m_name(name),m_sex(sex),m_birthDate(date),m_rx(rx),m_lastUpdate(lastUpdate){}
     virtual ~Patient(){}
 
 //    long getID(){return m_id;}                      void setID(long value){m_id=value;}

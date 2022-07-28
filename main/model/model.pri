@@ -9,8 +9,9 @@ HEADERS += \
     $$PWD/utility.h \
     $$PWD/checkResultModel.h \
     $$PWD/programModel.h \
-    $$PWD/Point.h
+    $$PWD/Point.h \
+    $$PWD/rx.h
 
 
-SOURCES += \
+SOURCES +=
 

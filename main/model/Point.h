@@ -1,5 +1,7 @@
 #ifndef POINT_H
 #define POINT_H
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/archive/xml_iarchive.hpp>
 
 
 struct Point                         //标准动态程序的测试点的室 x表示长度,y表示角度

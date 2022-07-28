@@ -393,9 +393,9 @@ Item{
                                    CusText{text:"右眼";width:parent.width*0.20}
                                    Row{
                                        height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
-                                       LineEdit{ width: 2*height}
-                                       LineEdit{ width: 2*height}
-                                       LineEdit{ width: 2*height}
+                                       LineEdit{ id:rx1_r;width: 2*height;text:currentPatient==null?0:currentPatient.rx.rx1_r;}
+                                       LineEdit{ id:rx2_r;width: 2*height;text:currentPatient==null?0:currentPatient.rx.rx2_r;}
+                                       LineEdit{ id:rx3_r;width: 2*height;text:currentPatient==null?0:currentPatient.rx.rx2_r;}
                                    }
                                }
                                Row{
@@ -403,9 +403,9 @@ Item{
                                    CusText{text:"左眼";width:parent.width*0.20}
                                    Row{
                                        height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
-                                       LineEdit{ width: 2*height}
-                                       LineEdit{ width: 2*height}
-                                       LineEdit{ width: 2*height}
+                                       LineEdit{ id:rx1_l;width: 2*height;text:currentPatient==null?0:currentPatient.rx.rx1_r;}
+                                       LineEdit{ id:rx2_l;width: 2*height;text:currentPatient==null?0:currentPatient.rx.rx2_r;}
+                                       LineEdit{ id:rx3_l;width: 2*height;text:currentPatient==null?0:currentPatient.rx.rx2_r;}
                                    }
                                }
                                Row{
@@ -414,7 +414,29 @@ Item{
                                    Row{
                                        height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
                                        Item{ height:parent.height;width: 2*height}
-                                       CusButton{text:"计算"; width: 2*height}
+                                       CusButton{text:"计算"; width: 2*height;
+                                           function getRx1(rx1,rx2,age)
+                                           {
+                                               var y;
+                                               if(age>=60) y=3.25;
+                                               else if(age>=55) y=3;
+                                               else if(age>=50) y=2.5;
+                                               else if(age>=45) y=2;
+                                               else if(age>=40) y=1.5;
+                                               else if(age>=30) y=1;
+                                               else y=0;
+
+                                               return parseFloat(rx1)+y+parseFloat(rx2)/2;
+                                           }
+
+                                           onClicked:
+                                           {
+//                                               var Rx1_r=getRx1(rx1_r.text,rx2_r.text,newPatientage.text)
+//                                               console.log(Rx1_r);
+//                                               rx1_r.text=Rx1_r;
+                                               console.log(currentPatient.rx.rx1_r);
+                                           }
+                                       }
                                        Item{ height:parent.height;width: 2*height}
                                    }
                                }

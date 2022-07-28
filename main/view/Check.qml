@@ -171,12 +171,12 @@ Item {id:root; width: 1366;height: 691
                                                 LineEdit{text:"0.0";width: parent.width*0.5;textInput.readOnly: true;}
                                             }
                                             Row{id: row;width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
-                                                CusCheckBox{enabled: false;}
+                                                CusCheckBox{enabled: false;checked:currentProgram.type!==2?currentProgram.params.commonParams.fixationMonitor>0:currentProgram.params.fixationMonitor>0;}
                                                 CusText{text:"眼动警报"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 Image {source: "qrc:/Pics/capture-svg/btn_alarm.svg";height:parent.height*0.6; anchors.verticalCenter: parent.verticalCenter;width: height; }
                                             }
                                             Row{width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
-                                                CusCheckBox{}
+                                                CusCheckBox{id:deviationCheckBox;checked:true;}
                                                 CusText{text:"固视偏移"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                             }
                                         }
@@ -184,7 +184,7 @@ Item {id:root; width: 1366;height: 691
                                 }
                                 Item{
                                     width: parent.width*0.83;height: parent.height*0.07;anchors.horizontalCenter: parent.horizontalCenter;
-                                    FixationDeviation{ anchors.horizontalCenter: parent.horizontalCenter;dots:if(currentCheckResult!==null) currentCheckResult.resultData.fixationDeviation;}
+                                    FixationDeviation{ visible:deviationCheckBox.checked;anchors.horizontalCenter: parent.horizontalCenter;dots:if(currentCheckResult!==null) currentCheckResult.resultData.fixationDeviation;}
                                 }
                             }
                         }
@@ -310,7 +310,6 @@ Item {id:root; width: 1366;height: 691
                                 case 3:case 4:case 5:case 6:case7:diagramWidth=root.height*14/15*0.92*0.8;break;
                                 }
                                 var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(queryStrategy.report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
-
                                 changePage("analysis",{pageFrom:"check",report:queryStrategy.report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
                             }
                         }

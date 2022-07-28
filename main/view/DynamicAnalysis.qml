@@ -18,23 +18,8 @@ Item
     property var analysisResult: null;
     property var report:null;                           //4:常规,5:三合一,6:总览,7:筛选
     property int range: currentProgram.params.Range[1];
-//    width: 1366;
-//    height: 660;
-    onRefresh:
-    {
-//        switch(report)
-//        {
-//        case 0:content.source="StaticAnalysisReportSingle.qml";
-//            break;
-//        case 1:content.source="StaticAnalysisReportThreeInOne.qml";
-//            break;
-//        case 2:content.source="StaticAnalysisReportOverView.qml";
-//            break;
-//        case 3:content.source="StaticAnalysisReportScreening.qml";
-//            break;
-//        }
-//        content.item.refresh();
-    }
+
+    onRefresh:{}
 
     Row{
         anchors.fill: parent;
@@ -107,9 +92,7 @@ Item
                     Item{ id: item2;width:parent.width;height: parent.height*0.12; anchors.left: parent.left;
                         FixationDeviation{ anchors.bottom: parent.bottom; dots:if(currentCheckResult!==null) currentCheckResult.resultData.fixationDeviation; }
                     }
-
                 }
-
 
                 Item
                 {
@@ -123,8 +106,6 @@ Item
                         Component.onCompleted: {root.refresh.connect(refresh);}
                     }
                 }
-
-
             }
         }
         Rectangle{width:parent.width*0.25;height: parent.height;color:"white";}
