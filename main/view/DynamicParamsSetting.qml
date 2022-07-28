@@ -19,7 +19,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
     signal dataRefreshed();
     signal cancel();
 
-    property var currentProgram;
+    property var currentProgram:null;
 
    contentItem:
    Rectangle{

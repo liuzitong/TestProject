@@ -20,7 +20,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
     signal cancel();
     property bool isCustomProg:false;
 
-    property var currentProgram;
+    property var currentProgram:null;
 
 
 

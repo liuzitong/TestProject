@@ -28,9 +28,9 @@ Item{
     signal clicked()
     signal entered()
     signal exited()
-    onEnabledChanged: {
-        enabled?buttonColor="#dcdee0":buttonColor="#989898";
-    }
+//    onEnabledChanged: {
+//        enabled?buttonColor="#dcdee0":buttonColor="#989898";
+//    }
 
     MouseArea{
         property string tempColor;

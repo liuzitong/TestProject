@@ -27,16 +27,15 @@ Item {id:root; width: 1366;height: 691
         if (currentProgram!==null)
         {
             if(currentProgram.type!==2)
-            {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);}
-            else{IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicProgramVM", currentProgram);}
+                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);
+            else
+                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicProgramVM", currentProgram);
         }
         if(program_type!==2)
-        {
             currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[program_id]);
-        }
-        else{
+        else
             currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicProgramVM", false,[program_id]);
-        }
+        program_type!==2?staticParamsSetting.currentProgram=currentProgram:dynamicParamsSetting.currentProgram=currentProgram;
     }
 
     Component.onCompleted: {
@@ -240,7 +239,6 @@ Item {id:root; width: 1366;height: 691
 //                                    console.log(checkControl.checkState);
 //                                    if(checkControl.checkState>=3)
 //                                    {
-
 //                                        if(currentCheckResult!=null)
 //                                        {
 //                                            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
@@ -273,9 +271,7 @@ Item {id:root; width: 1366;height: 691
 
                                 }
                             }
-                            CusButton{text:"停止测试";onClicked: {
-                                    IcUiQmlApi.appCtrl.checkSvc.stop();
-                                }}
+                            CusButton{text:"停止测试";onClicked: {IcUiQmlApi.appCtrl.checkSvc.stop();}}
                             CusButton{text:"切换眼别";onClicked:os_od.value=(os_od.value+1)%2;}
                             CusComboBox{
                                 id:queryStrategy;height: parent.height;width: parent.height*3.5;
@@ -284,12 +280,7 @@ Item {id:root; width: 1366;height: 691
                                 property int report;
                                 borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                                 imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-//                                model:ListModel {ListElement { text: "常规分析" } ListElement { text: "三合一图" } ListElement { text: "总览图" }ListElement { text: "筛选" }}
-                                model: listModel;
-                                popDirectionDown: false;
-                                complexType: true;
-
-
+                                model: listModel;popDirectionDown: false;complexType: true;
 
                                 Component.onCompleted: {
                                     root.currentProgramChanged.connect(function()
@@ -305,10 +296,11 @@ Item {id:root; width: 1366;height: 691
                                 onCurrentIndexChanged:report=listModel.get(currentIndex).report;
                             }
                         }
-                        CusButton{text:"分析"; anchors.right: parent.right;
+
+                        CusButton{
+                            text:"分析"; anchors.right: parent.right; enabled:currentCheckResult!==null;hoverEnabled: false;
                             onClicked:
                             {
-//                                var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
                                 var diagramWidth;
                                 switch (queryStrategy.report)
                                 {
