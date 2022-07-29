@@ -439,7 +439,6 @@ Item{
                                            {
                                                currentPatient.rx.rx1_r=getRx1(rx1_r.text,rx2_r.text,newPatientage.text).toFixed(2);
                                                currentPatient.rx.rx1_l=getRx1(rx1_l.text,rx2_l.text,newPatientage.text).toFixed(2);
-                                               currentPatientChanged();
                                            }
                                        }
                                    }

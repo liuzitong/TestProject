@@ -39,15 +39,15 @@ public:
     {
         return Rx{m_rx1_l,m_rx2_l,m_rx3_l,m_visual_l,m_rx1_r,m_rx2_r,m_rx3_r,m_visual_r};
     }
-    float rx1_l(){return m_rx1_l;}void setRx1_l(float value){m_rx1_l=value;}Q_SIGNAL void rx1_lChanged(float value);
-    float rx2_l(){return m_rx2_l;}void setRx2_l(float value){m_rx2_l=value;}Q_SIGNAL void rx2_lChanged(float value);
-    float rx3_l(){return m_rx3_l;}void setRx3_l(float value){m_rx3_l=value;}Q_SIGNAL void rx3_lChanged(float value);
-    float visual_l(){return m_visual_l;}void setVisual_l(float value){m_visual_l=value;}Q_SIGNAL void visual_lChanged(float value);
+    float rx1_l(){return m_rx1_l;}void setRx1_l(float value){m_rx1_l=value;emit rx1_lChanged(value);}Q_SIGNAL void rx1_lChanged(float value);
+    float rx2_l(){return m_rx2_l;}void setRx2_l(float value){m_rx2_l=value;emit rx2_lChanged(value);}Q_SIGNAL void rx2_lChanged(float value);
+    float rx3_l(){return m_rx3_l;}void setRx3_l(float value){m_rx3_l=value;emit rx3_lChanged(value);}Q_SIGNAL void rx3_lChanged(float value);
+    float visual_l(){return m_visual_l;}void setVisual_l(float value){m_visual_l=value;emit visual_lChanged(value);}Q_SIGNAL void visual_lChanged(float value);
 
-    float rx1_r(){return m_rx1_r;}void setRx1_r(float value){m_rx1_r=value;}Q_SIGNAL void rx1_rChanged(float value);
-    float rx2_r(){return m_rx2_r;}void setRx2_r(float value){m_rx2_r=value;}Q_SIGNAL void rx2_rChanged(float value);
-    float rx3_r(){return m_rx3_r;}void setRx3_r(float value){m_rx3_r=value;}Q_SIGNAL void rx3_rChanged(float value);
-    float visual_r(){return m_visual_r;}void setVisual_r(float value){m_visual_r=value;}Q_SIGNAL void visual_rChanged(float value);
+    float rx1_r(){return m_rx1_r;}void setRx1_r(float value){m_rx1_r=value;emit rx1_rChanged(value);}Q_SIGNAL void rx1_rChanged(float value);
+    float rx2_r(){return m_rx2_r;}void setRx2_r(float value){m_rx2_r=value;emit rx2_rChanged(value);}Q_SIGNAL void rx2_rChanged(float value);
+    float rx3_r(){return m_rx3_r;}void setRx3_r(float value){m_rx3_r=value;emit rx3_rChanged(value);}Q_SIGNAL void rx3_rChanged(float value);
+    float visual_r(){return m_visual_r;}void setVisual_r(float value){m_visual_r=value;emit visual_rChanged(value);}Q_SIGNAL void visual_rChanged(float value);
 
 
 
