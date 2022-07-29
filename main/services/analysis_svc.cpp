@@ -224,7 +224,24 @@ void AnalysisSvc::showReport(int report)
     }
     manager->setReportVariable("pupilDiameter","Pupil Diameter: ");
     manager->setReportVariable("visualAcuity","Visual Acuity: ");
-    manager->setReportVariable("Rx_Ry",QString("Rx: ")+"Ry: ");
+    auto rx=m_patient->getRx();
+    if(m_os_od)
+    {
+        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx->property("rx1_l").toDouble(),'f',2)+"DS "
+                                   +QString::number(rx->property("rx2_l").toDouble(),'f',2)+"DC "
+                                   +QString::number(rx->property("rx3_l").toDouble(),'f',2)+"X");
+        manager->setReportVariable("visualAcuity","visualAcuity:"+QString::number(rx->property("visual_l").toDouble(),'f',2));
+
+    }
+    else
+    {
+        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx->property("rx1_r").toDouble(),'f',2)+"DS "
+                                   +QString::number(rx->property("rx2_r").toDouble(),'f',2)+"DC "
+                                   +QString::number(rx->property("rx3_r").toDouble(),'f',2)+"X");
+        manager->setReportVariable("visualAcuity","visualAcuity:"+QString::number(rx->property("visual_r").toDouble(),'f',2));
+    }
+
+
 
     switch (report)
     {

@@ -88,7 +88,16 @@ Column {
         Row{anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:"返回";onClicked:root.changePage("patientManagement",null);}
+                    CusButton{text:"返回";
+                        onClicked:{
+                            root.changePage("patientManagement",null);
+                            if(currentCheckResult!==null)
+                            {
+                                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm", currentCheckResult);
+                                currentCheckResult=null;
+                            }
+                        }}
+
                     }
                 }
 
@@ -134,7 +143,9 @@ Column {
 
             Item{height: parent.height;width:parent.width*0.15;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:"分析"; anchors.right: parent.right;
+                    CusButton{
+                        text:"分析"; anchors.right: parent.right;
+                        enabled: currentCheckResult!==null;
                         onClicked:
                         {
                             var diagramWidth;

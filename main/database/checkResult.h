@@ -15,7 +15,7 @@ public:
 
     long m_id;
     int m_type;
-    int m_OS_OD;
+    int m_OS_OD;                       //0左眼 OS,1右眼 OD
     QString m_params;
     QString m_data;
     QVector<QVector<QByteArray>> m_pic;                   //一个点有几张照片,一共有很多个点

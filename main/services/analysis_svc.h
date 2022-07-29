@@ -33,7 +33,7 @@ private:
 //    QSize m_imageSizeLarge=QSize(720,720);
 //    QImage m_imageLarge=QImage(m_imageSize, QImage::Format_RGB32);
     int m_report;   //0,30-2
-    int m_os_od;
+    int m_os_od;     //0 os,1 od;   0左眼 1右眼
     int m_range;
     int m_innerRange;
     int m_selectedDotIndex;

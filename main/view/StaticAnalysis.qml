@@ -17,6 +17,7 @@ Item
     property var currentCheckResult: null;
     property var analysisResult: null;
     property var report:null;                           //0:常规,1:三合一,2:总览,3:筛选
+    property string rx:"";
 //    width: 1366;
 //    height: 660;
     onRefresh:
@@ -33,6 +34,11 @@ Item
             break;
         }
         content.item.refresh();
+
+        if(currentPatient.os_od===0)  //左
+            rx=currentPatient.rx.rx1_l.toFixed(2)+"DS "+currentPatient.rx.rx2_l.toFixed(2)+"DC "+currentPatient.rx.rx3_l.toFixed(2)+"X";
+        else
+            rx=currentPatient.rx.rx1_r.toFixed(2)+"DS "+currentPatient.rx.rx2_r.toFixed(2)+"DC "+currentPatient.rx.rx3_r.toFixed(2)+"X";
     }
 
     Row{
@@ -79,8 +85,8 @@ Item
                         Repeater{
                             model: [
                                 {name:"瞳孔直径",param:"2mm"},
-                                {name:"视力",param:"0.8"},
-                                {name:"屈光度",param:"DS   DC X"}]
+                                {name:"视力",param:!currentCheckResult.OS_OD?currentPatient.rx.visual_l:currentPatient.rx.visual_r.toFixed(2)},
+                                {name:"屈光度",param:"Rx:"+rx}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }

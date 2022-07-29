@@ -27,7 +27,7 @@ void TestClass::test()
 //    qx::dao::insert(ptr);
 
     auto pp=new Patient;
-    Rx rx={0.2,0.3,0.4,0.5,0.6,0.7};
+    Rx rx={0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9};
     pp->m_rx=Utility::entityToQString(rx);
     Patient_ptr ppp(pp);
     qx::dao::insert(ppp);

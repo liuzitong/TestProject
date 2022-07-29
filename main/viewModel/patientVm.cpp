@@ -11,12 +11,14 @@ namespace Perimeter {
 class RxVm:public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(float rx1_r READ rx1_r WRITE setRx1_r NOTIFY rx1_rChanged)
-    Q_PROPERTY(float rx2_r READ rx2_r WRITE setRx2_r NOTIFY rx2_rChanged)
-    Q_PROPERTY(float rx3_r READ rx3_r WRITE setRx3_r NOTIFY rx3_rChanged)
     Q_PROPERTY(float rx1_l READ rx1_l WRITE setRx1_l NOTIFY rx1_lChanged)
     Q_PROPERTY(float rx2_l READ rx2_l WRITE setRx2_l NOTIFY rx2_lChanged)
     Q_PROPERTY(float rx3_l READ rx3_l WRITE setRx3_l NOTIFY rx3_lChanged)
+    Q_PROPERTY(float visual_l READ visual_l WRITE setVisual_l NOTIFY visual_lChanged)
+    Q_PROPERTY(float rx1_r READ rx1_r WRITE setRx1_r NOTIFY rx1_rChanged)
+    Q_PROPERTY(float rx2_r READ rx2_r WRITE setRx2_r NOTIFY rx2_rChanged)
+    Q_PROPERTY(float rx3_r READ rx3_r WRITE setRx3_r NOTIFY rx3_rChanged)
+    Q_PROPERTY(float visual_r READ visual_r WRITE setVisual_r NOTIFY visual_rChanged)
 
 public:
     Q_INVOKABLE explicit RxVm(Rx rx)
@@ -24,28 +26,33 @@ public:
         m_rx1_l=rx.rx1_l;
         m_rx2_l=rx.rx2_l;
         m_rx3_l=rx.rx3_l;
+        m_visual_l=rx.visual_l;
 
         m_rx1_r=rx.rx1_r;
         m_rx2_r=rx.rx2_r;
         m_rx3_r=rx.rx3_r;
+        m_visual_r=rx.visual_r;
     }
 
     Q_INVOKABLE virtual ~RxVm() Q_DECL_OVERRIDE=default;
     Rx getData()
     {
-        return Rx{m_rx1_l,m_rx2_l,m_rx3_l,m_rx1_r,m_rx2_r,m_rx3_r};
+        return Rx{m_rx1_l,m_rx2_l,m_rx3_l,m_visual_l,m_rx1_r,m_rx2_r,m_rx3_r,m_visual_r};
     }
+    float rx1_l(){return m_rx1_l;}void setRx1_l(float value){m_rx1_l=value;}Q_SIGNAL void rx1_lChanged(float value);
+    float rx2_l(){return m_rx2_l;}void setRx2_l(float value){m_rx2_l=value;}Q_SIGNAL void rx2_lChanged(float value);
+    float rx3_l(){return m_rx3_l;}void setRx3_l(float value){m_rx3_l=value;}Q_SIGNAL void rx3_lChanged(float value);
+    float visual_l(){return m_visual_l;}void setVisual_l(float value){m_visual_l=value;}Q_SIGNAL void visual_lChanged(float value);
 
     float rx1_r(){return m_rx1_r;}void setRx1_r(float value){m_rx1_r=value;}Q_SIGNAL void rx1_rChanged(float value);
     float rx2_r(){return m_rx2_r;}void setRx2_r(float value){m_rx2_r=value;}Q_SIGNAL void rx2_rChanged(float value);
     float rx3_r(){return m_rx3_r;}void setRx3_r(float value){m_rx3_r=value;}Q_SIGNAL void rx3_rChanged(float value);
+    float visual_r(){return m_visual_r;}void setVisual_r(float value){m_visual_r=value;}Q_SIGNAL void visual_rChanged(float value);
 
-    float rx1_l(){return m_rx1_l;}void setRx1_l(float value){m_rx1_l=value;}Q_SIGNAL void rx1_lChanged(float value);
-    float rx2_l(){return m_rx2_l;}void setRx2_l(float value){m_rx2_l=value;}Q_SIGNAL void rx2_lChanged(float value);
-    float rx3_l(){return m_rx3_l;}void setRx3_l(float value){m_rx3_l=value;}Q_SIGNAL void rx3_lChanged(float value);
+
 
 private:
-    float m_rx1_r,m_rx2_r,m_rx3_r,m_rx1_l,m_rx2_l,m_rx3_l;
+    float m_rx1_l,m_rx2_l,m_rx3_l,m_visual_l,m_rx1_r,m_rx2_r,m_rx3_r,m_visual_r;
 };
 
 
