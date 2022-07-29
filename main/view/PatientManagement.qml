@@ -152,6 +152,7 @@ Item{
                                 }
                                 ListView{
                                     id:patientInfoListView
+                                    property int seletedPatientLength:0;
                                     property var seletedPatient:[];
                                     property var patientListModelVm:null;
                                     width: parent.width;height:patientInfoCol.height-patientInfo.rowHight +1; interactive: false; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
@@ -179,6 +180,7 @@ Item{
                                                     {
                                                         if(!patientInfoRow.isSelected){patientInfoRow.isSelected=true;imageSrc="qrc:/Pics/base-svg/btn_select_click.svg";patientInfoListView.seletedPatient.push(model.Id);}
                                                         else{patientInfoRow.isSelected=false;imageSrc="qrc:/Pics/base-svg/btn_select_normal.svg";patientInfoListView.seletedPatient.pop(model.Id);}
+                                                        patientInfoListView.seletedPatientLength=patientInfoListView.seletedPatient.length;
                                                     }
                                                 }
                                                 Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
@@ -393,9 +395,9 @@ Item{
                                    CusText{text:"右眼";width:parent.width*0.20}
                                    Row{
                                        height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
-                                       LineEdit{ id:rx1_r;width: 2*height;text:currentPatient==null?0:currentPatient.rx.rx1_r;}
-                                       LineEdit{ id:rx2_r;width: 2*height;text:currentPatient==null?0:currentPatient.rx.rx2_r;}
-                                       LineEdit{ id:rx3_r;width: 2*height;text:currentPatient==null?0:currentPatient.rx.rx2_r;}
+                                       LineEdit{ id:rx1_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.rx1_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
+                                       LineEdit{ id:rx2_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.rx2_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
+                                       LineEdit{ id:rx3_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.rx3_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
                                    }
                                }
                                Row{
@@ -403,9 +405,9 @@ Item{
                                    CusText{text:"左眼";width:parent.width*0.20}
                                    Row{
                                        height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
-                                       LineEdit{ id:rx1_l;width: 2*height;text:currentPatient==null?0:currentPatient.rx.rx1_r;}
-                                       LineEdit{ id:rx2_l;width: 2*height;text:currentPatient==null?0:currentPatient.rx.rx2_r;}
-                                       LineEdit{ id:rx3_l;width: 2*height;text:currentPatient==null?0:currentPatient.rx.rx2_r;}
+                                       LineEdit{ id:rx1_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.rx1_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
+                                       LineEdit{ id:rx2_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.rx2_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
+                                       LineEdit{ id:rx3_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.rx3_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
                                    }
                                }
                                Row{
@@ -417,7 +419,11 @@ Item{
                                        CusButton{text:"计算"; width: 2*height;
                                            function getRx1(rx1,rx2,age)
                                            {
-                                               var y;
+                                               var x,y;
+                                               x=parseFloat(rx2);
+                                               if(x<0.5||x>1.25) x=0;
+                                               else x=x/2;
+
                                                if(age>=60) y=3.25;
                                                else if(age>=55) y=3;
                                                else if(age>=50) y=2.5;
@@ -426,15 +432,15 @@ Item{
                                                else if(age>=30) y=1;
                                                else y=0;
 
-                                               return parseFloat(rx1)+y+parseFloat(rx2)/2;
+
+                                               return parseFloat(rx1)+x+y;
                                            }
 
                                            onClicked:
                                            {
-//                                               var Rx1_r=getRx1(rx1_r.text,rx2_r.text,newPatientage.text)
-//                                               console.log(Rx1_r);
-//                                               rx1_r.text=Rx1_r;
-                                               console.log(currentPatient.rx.rx1_r);
+                                               currentPatient.rx.rx1_r=getRx1(rx1_r.text,rx2_r.text,newPatientage.text).toFixed(2);
+                                               currentPatient.rx.rx1_l=getRx1(rx1_l.text,rx2_l.text,newPatientage.text).toFixed(2);
+                                               currentPatientChanged();
                                            }
                                        }
                                        Item{ height:parent.height;width: 2*height}
@@ -464,11 +470,18 @@ Item{
                             currentPatient.sex=genderSelect.gender;
                             console.log(newBirthDate.text);
                             currentPatient.birthDate=newBirthDate.text;
+                            currentPatient.rx.rx1_l=parseFloat(rx1_l.text);
+                            currentPatient.rx.rx2_l=parseFloat(rx2_l.text);
+                            currentPatient.rx.rx3_l=parseFloat(rx3_l.text);
+                            currentPatient.rx.rx1_r=parseFloat(rx1_r.text);
+                            currentPatient.rx.rx2_r=parseFloat(rx2_r.text);
+                            currentPatient.rx.rx3_r=parseFloat(rx3_r.text);
                             currentPatient.update();
                             query.startQuery();
                         }
                     }
                     CusButton{text:"删除";
+                        enabled: !(patientInfoListView.seletedPatientLength===0);
                         onClicked: {
                             var pl=patientInfoListView.seletedPatient;
                             for(var i=0;i<pl.length;i++){
@@ -494,6 +507,12 @@ Item{
                         currentPatient.name=name;
                         currentPatient.sex=genderSelect.gender;
                         currentPatient.birthDate=newBirthDate.text;
+                        currentPatient.rx.rx1_l=parseFloat(rx1_l.text);
+                        currentPatient.rx.rx2_l=parseFloat(rx2_l.text);
+                        currentPatient.rx.rx3_l=parseFloat(rx3_l.text);
+                        currentPatient.rx.rx1_r=parseFloat(rx1_r.text);
+                        currentPatient.rx.rx2_r=parseFloat(rx2_r.text);
+                        currentPatient.rx.rx3_r=parseFloat(rx3_r.text);
                         currentPatient.insert();
                         root.currentPatientChanged();
                         query.startQuery();
