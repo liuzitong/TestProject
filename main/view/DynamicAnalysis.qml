@@ -63,8 +63,8 @@ Item
                     Column{width:parent.width;height: parent.height*0.15;spacing: textHeight*-0.36;
                         Repeater{
                             model: [
-                                {name:"瞳孔直径",param:"2mm"},
-                                {name:"视力",param:"0.8"},
+                                {name:"瞳孔直径",param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
+                                {name:"视力",param:!currentCheckResult.OS_OD?currentPatient.rx.visual_l.toFixed(2):currentPatient.rx.visual_r.toFixed(2)},
                                 {name:"屈光度",param:"Rx:"+rx}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }

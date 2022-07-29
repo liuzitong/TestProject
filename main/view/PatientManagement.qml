@@ -378,8 +378,8 @@ Item{
                        Column{
                            anchors.fill: parent;
                            Row{
-                               width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                               Item{height:parent.height;width:parent.width*0.20}
+                               width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.05
+                               Item{height:parent.height;width:parent.width*0.15}
                                Row{
                                    height:parent.height;spacing:(width-8*height)/3;width:newPatient.width*0.7
                                    CusText{ text:"球面";width: 2*height}
@@ -389,33 +389,31 @@ Item{
                                }
                            }
                            Column{
-                               id:eyeBallCalc
-                               width: parent.width;height: parent.height-patientInfo.rowHight;spacing: patientInfo.rowHight;
-                               Row{
-                                   width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                   CusText{text:"右眼";width:parent.width*0.20}
+                               id:eyeBallCalc;width: parent.width;height: parent.height-patientInfo.rowHight;spacing: patientInfo.rowHight*0.8;
+                               Row{width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.05
+                                   CusText{text:"右眼"; horizontalAlignment: Text.AlignRight;width:parent.width*0.15}
                                    Row{
                                        height:parent.height;spacing:(width-8*height)/3;width:newPatient.width*0.7
-                                       LineEdit{ id:rx1_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.rx1_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
-                                       LineEdit{ id:rx2_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.rx2_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
-                                       LineEdit{ id:rx3_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.rx3_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
-                                       LineEdit{ id:visual_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.visual_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
+                                       LineEdit{ id:rx1_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?"":currentPatient.rx.rx1_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
+                                       LineEdit{ id:rx2_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?"":currentPatient.rx.rx2_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
+                                       LineEdit{ id:rx3_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?"":currentPatient.rx.rx3_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
+                                       LineEdit{ id:visual_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?"":currentPatient.rx.visual_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
                                    }
                                }
                                Row{
-                                   width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                   CusText{text:"左眼";width:parent.width*0.20}
+                                   width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.05
+                                   CusText{text:"左眼"; horizontalAlignment: Text.AlignRight;width:parent.width*0.15}
                                    Row{
                                        height:parent.height;spacing:(width-8*height)/3;width:newPatient.width*0.7
-                                       LineEdit{ id:rx1_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.rx1_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
-                                       LineEdit{ id:rx2_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.rx2_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
-                                       LineEdit{ id:rx3_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.rx3_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
-                                       LineEdit{ id:visual_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?0:currentPatient.rx.visual_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
+                                       LineEdit{ id:rx1_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?"":currentPatient.rx.rx1_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
+                                       LineEdit{ id:rx2_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?"":currentPatient.rx.rx2_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
+                                       LineEdit{ id:rx3_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?"":currentPatient.rx.rx3_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
+                                       LineEdit{ id:visual_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?"":currentPatient.rx.visual_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
                                    }
                                }
                                Row{
-                                   width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                   Item{height:parent.height;width:parent.width*0.20}
+                                   width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.05
+                                   Item{height:parent.height;width:parent.width*0.15}
                                    Item{height:parent.height;width:newPatient.width*0.7
                                        CusButton{text:"计算"; anchors.horizontalCenter: parent.horizontalCenter; width: 2*height;
                                            function getRx1(rx1,rx2,age)
@@ -444,7 +442,6 @@ Item{
                                                currentPatientChanged();
                                            }
                                        }
-                                       Item{ height:parent.height;width: 2*height}
                                    }
                                }
                            }
@@ -474,11 +471,11 @@ Item{
                             currentPatient.rx.rx1_l=parseFloat(rx1_l.text);
                             currentPatient.rx.rx2_l=parseFloat(rx2_l.text);
                             currentPatient.rx.rx3_l=parseFloat(rx3_l.text);
+                            currentPatient.rx.visual_l=parseFloat(visual_l.text);
                             currentPatient.rx.rx1_r=parseFloat(rx1_r.text);
                             currentPatient.rx.rx2_r=parseFloat(rx2_r.text);
                             currentPatient.rx.rx3_r=parseFloat(rx3_r.text);
-                            currentPatient.rx.visual_r=parseFloat(rx2_r.text);
-                            currentPatient.rx.visual_l=parseFloat(rx3_r.text);
+                            currentPatient.rx.visual_r=parseFloat(visual_r.text);
                             currentPatient.update();
                             query.startQuery();
                         }
@@ -513,11 +510,11 @@ Item{
                         currentPatient.rx.rx1_l=parseFloat(rx1_l.text);
                         currentPatient.rx.rx2_l=parseFloat(rx2_l.text);
                         currentPatient.rx.rx3_l=parseFloat(rx3_l.text);
+                        currentPatient.rx.visual_l=parseFloat(visual_l.text);
                         currentPatient.rx.rx1_r=parseFloat(rx1_r.text);
                         currentPatient.rx.rx2_r=parseFloat(rx2_r.text);
                         currentPatient.rx.rx3_r=parseFloat(rx3_r.text);
-                        currentPatient.rx.visual_r=parseFloat(rx2_r.text);
-                        currentPatient.rx.visual_l=parseFloat(rx3_r.text);
+                        currentPatient.rx.visual_r=parseFloat(visual_r.text);
                         currentPatient.insert();
                         root.currentPatientChanged();
                         query.startQuery();

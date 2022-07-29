@@ -136,8 +136,6 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         anchors.verticalCenter: parent.verticalCenter
                         text:"设置为默认程序"
                         onClicked: {
-                            console.log(program_id);
-                            console.log(program_type);
                             IcUiQmlApi.appCtrl.settings.defaultProgramId=program_id;
                             IcUiQmlApi.appCtrl.settings.defaultProgramType=program_type;
                             IcUiQmlApi.appCtrl.settings.save();
@@ -162,7 +160,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                         CusButton
                         {
-                            text:"确定";onClicked:
+                            enabled: programSelection.selectedProgram!==null;text:"确定";
+                            onClicked:
                             {
                                 if (currentProgram!==null)
                                 {

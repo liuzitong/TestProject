@@ -123,6 +123,7 @@ CheckResult_ptr CheckResultVm::getCheckResultData()
 ResultDataVm::ResultDataVm(ResultData<Type::ThreshHold> resultData)
 {
     m_alarm=resultData.alarm;
+    m_pupilDiameter=resultData.pupilDiameter;
     m_falseNegativeCount=resultData.falseNegativeCount;
     m_falseNegativeTestCount=resultData.falseNegativeTestCount;
     m_falsePositiveCount=resultData.falsePositiveCount;
@@ -142,6 +143,7 @@ ResultDataVm::ResultDataVm(ResultData<Type::ThreshHold> resultData)
 ResultDataVm::ResultDataVm(ResultData<Type::Dynamic> resultData)
 {
     m_alarm=resultData.alarm;
+    m_pupilDiameter=resultData.pupilDiameter;
     m_falsePositiveCount=resultData.falsePositiveCount;
     m_falsePositiveTestCount=resultData.falsePositiveTestCount;
     m_falseNegativeCount=resultData.falseNegativeCount;
@@ -163,6 +165,7 @@ ResultData<Type::ThreshHold> ResultDataVm::getThresholdData()
 {
     ResultData<Type::ThreshHold> resultData;
     resultData.alarm=m_alarm;
+    resultData.pupilDiameter=m_pupilDiameter;
     resultData.falsePositiveCount=m_falsePositiveCount;
     resultData.falsePositiveTestCount=m_falsePositiveTestCount;
     resultData.falseNegativeCount=m_falseNegativeCount;
@@ -184,6 +187,7 @@ ResultData<Type::Dynamic> ResultDataVm::getDynamicData()
 {
     ResultData<Type::Dynamic> resultData;
     resultData.alarm=m_alarm;
+    resultData.pupilDiameter=m_pupilDiameter;
     resultData.falsePositiveCount=m_falsePositiveCount;
     resultData.falsePositiveTestCount=m_falsePositiveTestCount;
     resultData.falseNegativeCount=m_falseNegativeCount;

@@ -58,7 +58,7 @@ Item {id:root; width: 1366;height: 691
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
                                                 CusText{text:"程序名"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                                 LineEdit {
-                                                    text:""; width: parent.width*0.70;textInput.readOnly: true; textInput.font.pointSize:if(IcUiQmlApi.appCtrl.settings.language!=="Chinese") return checkDisplay.height*0.29; else return parent.height/3;
+                                                    text:currentProgram==null?"":currentProgram.name; width: parent.width*0.70;textInput.readOnly: true;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){text=currentProgram.name});}
                                                 }
                                             }

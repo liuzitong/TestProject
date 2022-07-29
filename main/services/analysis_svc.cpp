@@ -240,6 +240,7 @@ void AnalysisSvc::showReport(int report)
                                    +QString::number(rx->property("rx3_r").toDouble(),'f',2)+"X");
         manager->setReportVariable("visualAcuity","visualAcuity:"+QString::number(rx->property("visual_r").toDouble(),'f',2));
     }
+    manager->setReportVariable("pupilDiameter","pupilDiameter:"+QString::number(m_checkResult->getResultData()->getPupilDiameter(),'f',2));
 
 
 

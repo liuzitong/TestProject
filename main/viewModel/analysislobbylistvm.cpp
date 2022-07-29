@@ -251,7 +251,7 @@ void AnalysisLobbyListVm::generateModelListData(CheckResult_List checkResult_lis
 
 QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
 {
-    QString os_od=checkResult_ptr->m_OS_OD?"OS":"OD";
+    QString os_od=checkResult_ptr->m_OS_OD==0?"OS":"OD";
     QString checkTime=checkResult_ptr->m_time.time().toString("HH:mm:ss");
     Program_ptr program_ptr(new Program());
     program_ptr->m_id=checkResult_ptr->m_program->m_id;

@@ -66,6 +66,7 @@ class ResultDataVm:public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int alarm READ getAlarm WRITE setAlarm)
+    Q_PROPERTY(float pupilDiameter READ getPupilDiameter WRITE setPupilDiameter)
     Q_PROPERTY(int falsePositiveCount READ getFalsePositiveCount WRITE setFalsePositiveCount)
     Q_PROPERTY(int falsePositiveTestCount READ getFalsePositiveTestCount WRITE setFalsePositiveTestCount)
     Q_PROPERTY(int falseNegativeCount READ getFalseNegativeCount WRITE setFalseNegativeCount)
@@ -88,6 +89,7 @@ public:
     explicit ResultDataVm(ResultData<Type::Dynamic> resultData);
     Q_INVOKABLE virtual ~ResultDataVm()=default;
     int getAlarm(){return m_alarm;}void setAlarm(int value){m_alarm=value;}
+    float getPupilDiameter(){return m_pupilDiameter;}void setPupilDiameter(float value){m_pupilDiameter=value;}
     int getFalsePositiveCount(){return m_falsePositiveCount;}void setFalsePositiveCount(int value){m_falsePositiveCount=value;}
     int getFalsePositiveTestCount(){return m_falsePositiveTestCount;}void setFalsePositiveTestCount(int value){m_falsePositiveTestCount=value;}
     int getFalseNegativeCount(){return m_falseNegativeCount;}void setFalseNegativeCount(int value){m_falseNegativeCount=value;}
@@ -106,6 +108,7 @@ public:
     ResultData<Type::Dynamic> getDynamicData();
 private:
     int m_alarm;
+    float m_pupilDiameter;
     int m_falsePositiveCount;
     int m_falsePositiveTestCount;
     int m_falseNegativeCount;
