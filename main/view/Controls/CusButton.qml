@@ -7,7 +7,7 @@ Item{
     property string pressBorderColor: "#006486"
     property string commonBorderColor: "#bdc0c6"
     property string borderColor:commonBorderColor
-    property bool hoverEnabled: true
+    property bool hoverEnabled: true;
     property string text
     property int fontSize:height*0.3
     property int radius:height/6
@@ -39,10 +39,25 @@ Item{
         onClicked:{ if(isAnime) anime.start();else root.clicked();}
         onPressed:{if(pressImageSrc!="") image.source=pressImageSrc;}
         onEntered:{
-            if(root.hoverEnabled) {
-                tempColor=rec.color;
-                rec.color=root.hoverColor;if(hoverImageSrc!="") image.source=hoverImageSrc;root.entered();}}
-        onExited:{if(root.hoverEnabled) {rec.color=tempColor;if(hoverImageSrc!="") image.source=imageSrc;root.exited();}}
+            if(root.hoverEnabled)
+            {
+                tempColor=buttonColor;
+                buttonColor=hoverColor;
+                if(hoverImageSrc!="")
+                    image.source=hoverImageSrc;
+                root.entered();
+            }
+        }
+        onExited:
+        {
+            if(root.hoverEnabled)
+            {
+                buttonColor=tempColor;
+                if(hoverImageSrc!="")
+                    image.source=imageSrc;
+                root.exited();
+            }
+        }
         onReleased: {if(root.type=="click"){image.source=imageSrc;}}
     }
     Item{

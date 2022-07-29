@@ -298,7 +298,7 @@ Item {id:root; width: 1366;height: 691
                         }
 
                         CusButton{
-                            text:"分析"; anchors.right: parent.right; enabled:currentCheckResult!==null;hoverEnabled: false;
+                            text:"分析"; anchors.right: parent.right; enabled:currentCheckResult!==null;
                             onClicked:
                             {
                                 var diagramWidth;
