@@ -97,6 +97,7 @@ Column {
                             model: listModel;
                             property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
                             complexType: true;
+                            popDirectionDown: false;
                             Component.onCompleted: {
                                 root.refresh.connect(function()
                                 {

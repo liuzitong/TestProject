@@ -85,7 +85,7 @@ void CheckResultVm::update()
 
 CheckResult_ptr CheckResultVm::getCheckResultData()
 {
-    if(m_type==int(Type::ThreshHold))
+    if((m_type==int(Type::ThreshHold))||(m_type==int(Type::Screening)))
     {
         QSharedPointer<CheckResultModel<Type::ThreshHold>> checkResultModel=QSharedPointer<CheckResultModel<Type::ThreshHold>>(new CheckResultModel<Type::ThreshHold>());
         checkResultModel->m_id=m_id;

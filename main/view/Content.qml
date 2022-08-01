@@ -119,7 +119,7 @@ Rectangle {
             ProgramCustomize{id:programPage;anchors.fill: parent;visible: false;onChangePage: contentPage.changePage(pageName,params);}
             AnalysisLobby{id:analysisLobbypage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
             Analysis{id:analysisPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
-
+            ProgressAnalysis{id:progressAnalysisPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
 //            Component.onCompleted: {
 //                IcUiQmlApi.appCtrl.changePage.connect(changePage);
 //                patientPage.changePage.connect(contentPage.changePage);
@@ -132,7 +132,12 @@ Rectangle {
             function changePage(pageName,params)
             {
                 console.log("change to page "+pageName);
-                patientPage.visible=false;checkPage.visible=false;programPage.visible=false;analysisLobbypage.visible=false;analysisPage.visible=false;
+                patientPage.visible=false;
+                checkPage.visible=false;
+                progressAnalysisPage.visible=false;
+                programPage.visible=false;
+                analysisLobbypage.visible=false;
+                analysisPage.visible=false;
                 switch(pageName)
                 {
                     case "patientManagement":
@@ -154,6 +159,9 @@ Rectangle {
                         patientInfo.visible=true;
                         if(params==="patientManagement")
                             analysisLobbypage.refresh();
+                        break;
+                    case "progressAnalysis":
+                        progressAnalysisPage.visible=true;
                         break;
                     case "check":
                         checkPage.visible=true;

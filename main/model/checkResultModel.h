@@ -108,7 +108,9 @@ struct CheckResultModel
         checkResult_ptr->m_id=m_id;
         checkResult_ptr->m_type=static_cast<int>(m_type);
         checkResult_ptr->m_params=Utility::entityToQString(m_params);
+        qDebug()<<checkResult_ptr->m_params;
         checkResult_ptr->m_data=Utility::entityToQString(m_data);
+        qDebug()<<checkResult_ptr->m_data;
         checkResult_ptr->m_time=m_time;
         checkResult_ptr->m_diagnosis=m_diagnosis;
         checkResult_ptr->m_patient->m_id=m_patient_id;

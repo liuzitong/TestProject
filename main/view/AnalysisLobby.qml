@@ -70,7 +70,7 @@ Column {
                                                 currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicProgramVM", false,[currentCheckResult.program_id]);
                                         }
                                     }
-                                    Rectangle{anchors.fill: parent;color: "blue";opacity: parent.selected?1:0;z:-1;}
+                                    Rectangle{anchors.fill: parent;color: "steelblue";opacity: parent.selected?1:0;z:-1;}
                                     Component.onCompleted:
                                     {
                                         content.cancelSelected.connect(function(){selected=false;})
@@ -101,50 +101,28 @@ Column {
                     }
                 }
 
-            Item{height: parent.height;width:parent.width*0.4;
+            Item{height: parent.height;width:parent.width*0.3;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
-                        CusComboBox{
-                            id:queryStrategy;height: parent.height;width: parent.height*3.5;
-                            property var listModel:ListModel {}
-                            property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
-                            property int report;
-                            borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
-                            imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                            model: listModel;
-                            popDirectionDown: false;
-                            complexType: true;
-                            Component.onCompleted: {
-                                root.currentProgramChanged.connect(function()
-                                {
-                                    listModel.clear();
-                                    var report=currentProgram.report;
-                                    report.forEach(function(item){
-                                        listModel.append({name:reportNames[item],report:item});
-                                    })
-                                    currentIndex=0;
-                                })
-                            }
-                            onCurrentIndexChanged:report=listModel.get(currentIndex).report;
-                        }
-                        CusButton{text:"进展分析";onClicked:{console.log("gogog");/*content.positionViewAtBeginning();*/}}
+                        CusButton{text:"进展分析";onClicked:{changePage("progressAnalysis",null)}}
                         CusButton{text:"视岛图";onClicked:{console.log((content.height-10)/4*0.9-4);/*content.setIndex()*/}}
                         }
                     }
                 }
 
-            Item{height: parent.height;width:parent.width*0.25;
+            Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:"删除"; anchors.horizontalCenter: parent.horizontalCenter;
+                    CusButton{text:"删除"; enabled: currentCheckResult!==null;anchors.horizontalCenter: parent.horizontalCenter;
                         onClicked:analysisLobbyListVm.deleteCheckResult(currentCheckResult.id);
                     }
                 }
             }
 
-            Item{height: parent.height;width:parent.width*0.15;
-                Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
+            Item{height: parent.height;width:parent.width*0.30;
+                Flow{ layoutDirection: Qt.RightToLeft;anchors.fill: parent;anchors.margins:parent.height*0.15;spacing: height*0.8;
+
                     CusButton{
-                        text:"分析"; anchors.right: parent.right;
+                        text:"分析";
                         enabled: currentCheckResult!==null;
                         onClicked:
                         {
@@ -160,6 +138,30 @@ Column {
                             changePage("analysis",{pageFrom:"analysisLobby",report:queryStrategy.report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
                         }
                     }
+                    CusComboBox{
+                        id:queryStrategy;height: parent.height;width: parent.height*3.5;
+                        property var listModel:ListModel {}
+                        property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
+                        property int report;
+                        borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
+                        imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
+                        model: listModel;
+                        popDirectionDown: false;
+                        complexType: true;
+                        Component.onCompleted: {
+                            root.currentProgramChanged.connect(function()
+                            {
+                                listModel.clear();
+                                var report=currentProgram.report;
+                                report.forEach(function(item){
+                                    listModel.append({name:reportNames[item],report:item});
+                                })
+                                currentIndex=0;
+                            })
+                        }
+                        onCurrentIndexChanged:report=listModel.get(currentIndex).report;
+                    }
+
                 }
             }
         }
