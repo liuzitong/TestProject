@@ -104,7 +104,21 @@ Column {
             Item{height: parent.height;width:parent.width*0.3;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
-                        CusButton{text:"进展分析";onClicked:{changePage("progressAnalysis",null)}}
+//                        CusButton{text:"进展分析";onClicked:{changePage("progressAnalysis",null)}}
+                        CusComboBoxButton{
+                            height: parent.height;width: height*3.5;
+                            property var listModel:["左眼分析","右眼分析"]
+                            comboBox.model: listModel;popDirectionDown: false;complexType: false;
+                            button.text: "进展分析";
+                            button.onClicked:
+                            {
+                                changePage("progressAnalysis",0)
+                            }
+                            comboBox.onActivated:
+                            {
+                                changePage("progressAnalysis",index)
+                            }
+                        }
                         CusButton{text:"视岛图";onClicked:{console.log((content.height-10)/4*0.9-4);/*content.setIndex()*/}}
                         }
                     }
@@ -120,34 +134,38 @@ Column {
 
             Item{height: parent.height;width:parent.width*0.30;
                 Flow{ layoutDirection: Qt.RightToLeft;anchors.fill: parent;anchors.margins:parent.height*0.15;spacing: height*0.8;
-
-                    CusButton{
-                        text:"分析";
+                    CusComboBoxButton{
+                        id:queryStrategy;
+                        height: parent.height;width: height*3.5;
                         enabled: currentCheckResult!==null;
-                        onClicked:
+                        property var listModel:ListModel {}
+                        property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
+                        comboBox.model: listModel;popDirectionDown: false;complexType: true;
+                        button.text: "分析";
+                        button.onClicked:
+                        {
+                            var report=listModel.get(0).report;
+                            analysis(report);
+                        }
+                        comboBox.onActivated:
+                        {
+                            var report=listModel.get(index).report;
+                            analysis(report);
+                        }
+                        function analysis(report)
                         {
                             var diagramWidth;
-                            switch (queryStrategy.report)
+                            switch (report)
                             {
                             case 0:diagramWidth=root.height*14/15*0.92*0.97/3*1.25*0.8;break;
                             case 1:diagramWidth=root.height*14/15*0.92*0.47*0.8;break;
                             case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
                             case 3:case 4:case 5:case 6:case7:diagramWidth=root.height*14/15*0.92*0.8;break;
                             }
-                            var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(queryStrategy.report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
-                            changePage("analysis",{pageFrom:"analysisLobby",report:queryStrategy.report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
+                            var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
+                            changePage("analysis",{pageFrom:"analysisLobby",report:report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
                         }
-                    }
-                    CusComboBox{
-                        id:queryStrategy;height: parent.height;width: parent.height*3.5;
-                        property var listModel:ListModel {}
-                        property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
-                        property int report;
-                        borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
-                        imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                        model: listModel;
-                        popDirectionDown: false;
-                        complexType: true;
+
                         Component.onCompleted: {
                             root.currentProgramChanged.connect(function()
                             {
@@ -156,10 +174,9 @@ Column {
                                 report.forEach(function(item){
                                     listModel.append({name:reportNames[item],report:item});
                                 })
-                                currentIndex=0;
+                                comboBox.currentIndex=0;
                             })
                         }
-                        onCurrentIndexChanged:report=listModel.get(currentIndex).report;
                     }
 
                 }

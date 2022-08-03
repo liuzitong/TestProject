@@ -7,6 +7,9 @@ CONFIG += console thread
 CONFIG += c++11  qml_debug
 CONFIG -= app_bundle
 DEFINES += QT_DEPRECATED_WARNINGS QT_MESSAGELOGCONTEXT _QX_NO_PRECOMPILED_HEADER
+QMAKE_CFLAGS += /utf-8
+QMAKE_CXXFLAGS += /utf-8
+
 
 INCLUDEPATH *= $$PWD/../../../
 # ///////////////////////////////////////////////////////////////////////////

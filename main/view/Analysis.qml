@@ -86,18 +86,24 @@ Column {
                     {
                         height: parent.height; layoutDirection: Qt.RightToLeft;spacing: height*0.8;width: parent.width
                         anchors.horizontalCenter: parent.horizontalCenter
-//                        CusButton{text:"打印";onClicked: {console.log(currentPatient.name);console.log(currentProgram.params.commonParams.Range[1]);console.log(analysisResult.GHT)}}
-                        CusButton{text:"打印";onClicked:IcUiQmlApi.appCtrl.analysisSvc.showReport(queryStrategy.report);}
-                        CusComboBox{
+                        CusComboBoxButton{
+                            id:queryStrategy;
+                            height: parent.height;width: height*3.5;
+                            enabled: currentCheckResult!==null;
                             property var listModel:ListModel {}
-                            property int report;
-                            id:queryStrategy;height: parent.height;width: parent.height*3.5;
-                            borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
-                            imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                            model: listModel;
                             property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
-                            complexType: true;
-                            popDirectionDown: false;
+                            comboBox.model: listModel;popDirectionDown: false;complexType: true;
+                            button.text: "打印";
+                            button.onClicked:
+                            {
+                                var report=listModel.get(0).report;
+                                IcUiQmlApi.appCtrl.analysisSvc.showReport(report)
+                            }
+                            comboBox.onActivated:
+                            {
+                                var report=listModel.get(index).report;
+                                IcUiQmlApi.appCtrl.analysisSvc.showReport(report)
+                            }
                             Component.onCompleted: {
                                 root.refresh.connect(function()
                                 {
@@ -106,18 +112,8 @@ Column {
                                     report.forEach(function(item){
                                         listModel.append({name:reportNames[item],report:item});
                                     })
-
-                                    for(var i=0;i<listModel.count;i++)
-                                    {
-                                        if(root.report===listModel.get(i).report)
-                                        {
-                                            currentIndex=i;
-                                            break;
-                                        }
-                                    }
                                 })
                             }
-                            onCurrentIndexChanged:report=listModel.get(currentIndex).report;
                         }
                     }
                 }

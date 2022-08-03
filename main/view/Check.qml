@@ -227,10 +227,13 @@ Item {id:root; width: 1366;height: 691
                                 {if(checkControl.checkState>=3) return "开始测试";if(checkControl.checkState==2) return "恢复检查";if(checkControl.checkState==1) return "暂停检查"}
                                 onClicked:{
                                     if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
-                                    if(currentProgram.type===0||currentProgram.type===1)
+                                    if(currentProgram.type===0)
                                     {
-                                        if(queryStrategy.report!=3) currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[1]);
-                                        else currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[2]);
+                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[1]);
+                                    }
+                                    else if(currentProgram.type===1)
+                                    {
+                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[2]);
                                     }
                                     else
                                     {
@@ -274,50 +277,55 @@ Item {id:root; width: 1366;height: 691
                             }
                             CusButton{text:"停止测试";onClicked: {IcUiQmlApi.appCtrl.checkSvc.stop();}}
                             CusButton{text:"切换眼别";onClicked:os_od.value=(os_od.value+1)%2;}
-                            CusComboBox{
-                                id:queryStrategy;height: parent.height;width: parent.height*3.5;
-                                property var listModel:ListModel {}
-                                property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
-                                property int report;
-                                borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
-                                imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                                model: listModel;popDirectionDown: false;complexType: true;
-
-                                Component.onCompleted: {
-                                    root.currentProgramChanged.connect(function()
-                                    {
-                                        listModel.clear();
-                                        var report=currentProgram.report;
-                                        report.forEach(function(item){
-                                            listModel.append({name:reportNames[item],report:item});
-                                        })
-                                        currentIndex=0;
-                                    })
-                                }
-                                onCurrentIndexChanged:report=listModel.get(currentIndex).report;
-                            }
                         }
 
-                        CusButton{
-                            text:"分析"; anchors.right: parent.right; enabled:currentCheckResult!==null;
-                            onClicked:
+                        CusComboBoxButton{
+                            id:queryStrategy;anchors.right: parent.right;
+                            height: parent.height;width: height*3.5;
+                            enabled: currentCheckResult!==null;
+                            property var listModel:ListModel {}
+                            property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
+                            comboBox.model: listModel;popDirectionDown: false;complexType: true;
+                            button.text: "分析";
+                            button.onClicked:
+                            {
+                                var report=listModel.get(0).report;
+                                analysis(report);
+                            }
+                            comboBox.onActivated:
+                            {
+                                var report=listModel.get(index).report;
+                                analysis(report);
+                            }
+                            function analysis(report)
                             {
                                 var diagramWidth;
-                                switch (queryStrategy.report)
+                                switch (report)
                                 {
                                 case 0:diagramWidth=root.height*14/15*0.92*0.97/3*1.25*0.8;break;
                                 case 1:diagramWidth=root.height*14/15*0.92*0.47*0.8;break;
                                 case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
                                 case 3:case 4:case 5:case 6:case7:diagramWidth=root.height*14/15*0.92*0.8;break;
                                 }
-                                var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(queryStrategy.report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
-                                changePage("analysis",{pageFrom:"check",report:queryStrategy.report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
+                                var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
+                                changePage("analysis",{pageFrom:"check",report:report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
+                            }
+
+                            Component.onCompleted: {
+                                root.currentProgramChanged.connect(function()
+                                {
+                                    listModel.clear();
+                                    var report=currentProgram.report;
+                                    report.forEach(function(item){
+                                        listModel.append({name:reportNames[item],report:item});
+                                    })
+                                    comboBox.currentIndex=0;
+                                })
                             }
                         }
                     }
                 }
             }
+        }
     }
-}
-
 }

@@ -9,6 +9,7 @@
 #include "perimeter/main/viewModel/settings.h"
 #include "perimeter/main/Model/Rx.h"
 #include "perimeter/main/Model/utility.h"
+#include "perimeter/main/viewModel/progressAnalysislistVm.h"
 namespace Perimeter {
 void TestClass::test()
 {
@@ -26,11 +27,14 @@ void TestClass::test()
 
 //    qx::dao::insert(ptr);
 
-    auto pp=new Patient;
-    Rx rx={0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9};
-    pp->m_rx=Utility::entityToQString(rx);
-    Patient_ptr ppp(pp);
-    qx::dao::insert(ppp);
+//    auto pp=new Patient;
+//    Rx rx={0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9};
+//    pp->m_rx=Utility::entityToQString(rx);
+//    Patient_ptr ppp(pp);
+//    qx::dao::insert(ppp);
+
+    auto tt=new ProgressAnalysisListVm(QVariantList{1});
+    delete tt;
 
 
 }

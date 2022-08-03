@@ -9,7 +9,7 @@
 #include <perimeter/main/viewModel/programVm.h>
 #include <perimeter/main/viewModel/checkResultVm.h>
 #include <perimeter/main/viewModel/analysislobbylistvm.h>
-
+#include <perimeter/main/viewModel/progressAnalysislistVm.h>
 // services list
 
 namespace Perimeter {
@@ -58,6 +58,7 @@ void  Main :: registerTypes( QxPack::IcAppCtrlBase *app_base )
     obj_mgr->registerType<Perimeter::DynamicProgramVM>(QStringLiteral("Perimeter::DynamicProgramVM"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::CheckResultVm>(QStringLiteral("Perimeter::CheckResultVm"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::AnalysisLobbyListVm>(QStringLiteral("Perimeter::AnalysisLobbyListVm"), Q_NULLPTR);
+    obj_mgr->registerType<Perimeter::ProgressAnalysisListVm>(QStringLiteral("Perimeter::ProgressAnalysisListVm"), Q_NULLPTR);
 
 
 }

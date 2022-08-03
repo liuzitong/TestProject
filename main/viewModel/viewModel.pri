@@ -14,7 +14,7 @@ HEADERS += \
     $$PWD/settings.h \
     $$PWD/staticAnalysisResult.h \
     $$PWD/analysislobbylistvm.h \
-    $$PWD/progressanalysislistvm.h
+    $$PWD/progressAnalysislistVm.h
 
 SOURCES += \
     $$PWD/checkResultVm.cpp \
@@ -26,6 +26,6 @@ SOURCES += \
     $$PWD/settings.cpp \
     $$PWD/staticAnalysisResult.cpp \
     $$PWD/analysislobbylistvm.cpp \
-    $$PWD/progressanalysislistvm.cpp
+    $$PWD/progressAnalysislistVm.cpp
 
 

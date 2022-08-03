@@ -13,6 +13,7 @@
         <file>FixationDeviation.qml</file>
         <file>VisionDiagram.qml</file>
         <file>AnalysisDiagram.qml</file>
+        <file>CusComboBoxButton.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

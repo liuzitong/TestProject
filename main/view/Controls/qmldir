@@ -2,6 +2,7 @@ module perimeter.main.view.Controls
 CusButton 1.0       CusButton.qml
 LineEdit 1.0        LineEdit.qml
 CusComboBox 1.0     CusComboBox.qml
+CusComboBoxButton 1.0     CusComboBoxButton.qml
 CusText 1.0         CusText.qml
 CusCalendar 1.0     CusCalendar.qml
 CusCheckBox 1.0     CusCheckBox.qml

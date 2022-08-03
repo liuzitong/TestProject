@@ -161,6 +161,8 @@ Rectangle {
                         break;
                     case "progressAnalysis":
                         progressAnalysisPage.visible=true;
+                        progressAnalysisPage.os_od=params;
+                        progressAnalysisPage.refresh();
                         break;
                     case "check":
                         checkPage.visible=true;

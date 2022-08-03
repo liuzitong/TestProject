@@ -12,16 +12,18 @@ Column {
     property var currentPatient: null;
     property string backGroundColor: CommonSettings.backGroundColor;
     property var currentCheckResult:null;
-    property var progressAnalysisVm: null;
+    property var progressAnalysisListVm: null;
     property var currentProgram: null;
     property int pageSize: 20;
+    property int os_od;
     signal changePage(var pageName,var params);
     signal refresh()
 
 
     onRefresh: {
-        if(progressAnalysisVm!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgressAnalysisVm",progressAnalysisVm);
-        progressAnalysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgressAnalysisVm", false,[currentPatient.id]);}
+        console.log("refresh");
+        if(progressAnalysisListVm!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::ProgressAnalysisListVm",progressAnalysisListVm);
+        progressAnalysisListVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::ProgressAnalysisListVm", false,[currentPatient.id,os_od]);}
 
     Item{
         width: parent.width;height: parent.height*14/15
@@ -50,12 +52,13 @@ Column {
                 delegate: patientInfoDelegate
 //                model:patientListModelVm;
 
-                model:[
-                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:true},
-                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:true},
-                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:false},
-                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:false},
-                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:false}]
+                model:root.progressAnalysisListVm;
+//                model:[
+//                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:true},
+//                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:true},
+//                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:false},
+//                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:false},
+//                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:false}]
                 Component.onCompleted: {
 //                    progressAnalysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::GPACheckResultListVm", [currentCheckResult.]);
 
@@ -66,8 +69,8 @@ Column {
                     Item{
                         id:rootItem
                         property bool isSelected: false;
-                        property string rowBackGroundColor:isSelected?"steelblue":modelData.baseline?"grey":"white";
-                        property string rowForeGroundColor:(isSelected||modelData.baseline)?"white":"black";
+                        property string rowBackGroundColor:isSelected?"steelblue":baseLine?"grey":"white";
+                        property string rowForeGroundColor:(isSelected||baseLine)?"white":"black";
                         width: patientInfoListView.width;height: (patientInfoCol.height)/(pageSize+1);
                         MouseArea{
                             anchors.fill: parent;
@@ -100,16 +103,23 @@ Column {
 //                                Rectangle{width: modelData.width;height: parent.height;color:parent.isSelected?"blue":"white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:modelData.text}}
 //                            }
 
-                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.time}}
-                            Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.programName}}
-                            Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.strategy}}
-                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.md}}
-                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.psd}}
-                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.fixationLossRate}}
-                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.falsePosRate}}
-                            Rectangle{width: parent.width*1/10;  height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.falseNegRate}}
+//                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.time}}
+//                            Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.program}}
+//                            Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.strategy}}
+//                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.md}}
+//                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.psd}}
+//                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.fixationLossRate}}
+//                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.falseNegativeRate}}
+//                            Rectangle{width: parent.width*1/10;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:modelData.falsePositiveRate}}
 
-
+                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:dateTime}}
+                            Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:program}}
+                            Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:strategy}}
+                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:md.toFixed(2)}}
+                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:psd.toFixed(2)}}
+                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:fixationLossRate.toFixed(2)}}
+                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:falseNegativeRate.toFixed(2)}}
+                            Rectangle{width: parent.width*1/10;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:falsePositiveRate.toFixed(2)}}
 
                         }
                         Component.onCompleted: {
