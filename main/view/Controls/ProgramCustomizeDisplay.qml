@@ -8,6 +8,7 @@ Item{
     property var dotList:[];
     property int type;
     property int category;
+    property bool locked;
 
 
     signal painted();
@@ -40,7 +41,7 @@ Item{
             property var newDotList:[];
             onClicked:
             {
-                if(category!==4)
+                if(category!==4&&locked==true)
                     return;
                 newDotList=[];
                 var dot = displayCanvas.pixCoordToDot(mouseX,mouseY)

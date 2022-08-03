@@ -1,4 +1,4 @@
-﻿import QtQuick 2.6
+import QtQuick 2.6
 import QtQuick.Controls 2.2
 
 ComboBox {
@@ -7,12 +7,15 @@ ComboBox {
     property string borderColor:"#bdc0c6"
     property string borderColorPressed:"Brown"
     property string imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-    property string backgroundColor:"#dcdee0"
+    property string backgroundColor:enabled?"#dcdee0":"#a0a0a0"
     font.family:"Microsoft YaHei"
     font.pointSize:height*0.30;
     height: parent.height;
     property bool complexType: false;
     property bool popDirectionDown: true;
+    property string text: "";
+
+
     //    currentIndex: 0
 
 
@@ -45,7 +48,7 @@ ComboBox {
     contentItem: Text {
         leftPadding: control.height*0.5
         rightPadding: control.indicator.width + control.spacing
-        text: complexType?model.get(currentIndex).name:displayText;
+        text: control.text!==""?control.text:complexType?model.get(currentIndex).name:displayText;
         font: control.font
 //        color: control.pressed ? "#17a81a" : "#21be2b"
         horizontalAlignment: Text.AlignLeft

@@ -215,6 +215,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                     Rectangle{anchors.fill: parent;color:"#cbced0";
                         ProgramCustomizeDisplay{
                             id:display;
+                            locked: root.locked;
                             function currentProgramChanged()
                             {
 

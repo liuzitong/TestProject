@@ -7,6 +7,7 @@ import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0
 import QtMultimedia 5.8
 import perimeter.main.view.Utils 1.0
+import QtQuick.Extras 1.4
 
 Item {id:root; width: 1366;height: 691
     signal changePage(var pageName,var params);

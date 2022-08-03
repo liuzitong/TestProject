@@ -49,9 +49,16 @@ Column {
                 width: parent.width;height:(patientInfoCol.height)/(pageSize+1)*pageSize ; interactive: false; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
                 delegate: patientInfoDelegate
 //                model:patientListModelVm;
-                model:[{time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5},{time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5}]
+
+                model:[
+                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:true},
+                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:true},
+                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:false},
+                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:false},
+                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:false}]
                 Component.onCompleted: {
 //                    progressAnalysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::GPACheckResultListVm", [currentCheckResult.]);
+
                 }
 //                Component.onDestruction: {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientListModelVm",progressAnalysisVm);}
                 Component{
@@ -59,8 +66,8 @@ Column {
                     Item{
                         id:rootItem
                         property bool isSelected: false;
-                        property string rowBackGroundColor: isSelected?"steelblue":"white";
-                        property string rowForeGroundColor: isSelected?"white":"black";
+                        property string rowBackGroundColor:isSelected?"steelblue":modelData.baseline?"grey":"white";
+                        property string rowForeGroundColor:(isSelected||modelData.baseline)?"white":"black";
                         width: patientInfoListView.width;height: (patientInfoCol.height)/(pageSize+1);
                         MouseArea{
                             anchors.fill: parent;

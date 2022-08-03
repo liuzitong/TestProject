@@ -69,11 +69,11 @@ QObject* AnalysisSvc::runProcess(int report,PatientVm *patient, CheckResultVm *c
         m_range=range[1];
     }
     m_os_od=checkResult->getOS_OD();
-    auto birthDate=QDate::fromString(m_patient->getBirthDate(),"yyyy-MM-dd");
-    auto currentDate=QDate::currentDate();
-    m_patientAge = currentDate.year() - birthDate.year();
-    if (currentDate.month() < birthDate.month() || (currentDate.month() == birthDate.month() && currentDate.day() < birthDate.day())) { m_patientAge--;}
-
+//    auto birthDate=QDate::fromString(m_patient->getBirthDate(),"yyyy-MM-dd");
+//    auto currentDate=QDate::currentDate();
+//    m_patientAge = currentDate.year() - birthDate.year();
+//    if (currentDate.month() < birthDate.month() || (currentDate.month() == birthDate.month() && currentDate.day() < birthDate.day())) { m_patientAge--;}
+    m_patientAge = m_patient->getAge();
     if(m_programType!=2)
     {
         auto values=checkResult->getResultData()->getCheckData();

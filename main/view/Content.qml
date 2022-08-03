@@ -157,8 +157,7 @@ Rectangle {
                         seperator2.opacity=1;
                         seperator3.opacity=0;
                         patientInfo.visible=true;
-                        if(params==="patientManagement")
-                            analysisLobbypage.refresh();
+                        if(params==="patientManagement") analysisLobbypage.refresh();
                         break;
                     case "progressAnalysis":
                         progressAnalysisPage.visible=true;
@@ -166,7 +165,7 @@ Rectangle {
                     case "check":
                         checkPage.visible=true;
 //                        checkPage.rePaintCanvas();
-                        checkPage.enterPage();
+                        if(params==="patientManagement") checkPage.enterPage();
                         patientContentButton.image.source=patientContentButton.imageSrc;
                         checkContentButton.image.source=checkContentButton.pressImageSrc;
                         seperator1.opacity=0;
