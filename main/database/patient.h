@@ -9,6 +9,7 @@
 #include <QDateTime>
 
 class CheckResult;
+enum class sex { male, female, unknown };
 class QX_DLL_EXPORT_API Patient/*:public QObject*/
 {
 
@@ -21,7 +22,7 @@ class QX_DLL_EXPORT_API Patient/*:public QObject*/
 //    Q_PROPERTY(QDateTime lastUpdate READ getLastUpdate WRITE setLastUpdate)
 
 public:
-    enum class sex { male, female, unknown };
+
 // -- typedef
     typedef std::shared_ptr<CheckResult> CheckResult_ptr;
     typedef std::vector<CheckResult_ptr> CheckResult_List;

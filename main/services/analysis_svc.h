@@ -27,8 +27,34 @@ public:
     Q_INVOKABLE int getSelectedDotIndex(){return m_selectedDotIndex;};
     Q_INVOKABLE void showReport(int report);
 
+    Q_INVOKABLE QObject* previewReport(int report,int resultId);
+    Q_INVOKABLE QObject* showReport(int report,int resultId);
+
+    QObject* ThresholdAnalysis(QVector<int>& dev,QVector<int>& mDev,QVector<int>& peDev,QVector<int>& peMDev);
+    QObject* ScreeningAnalysis(QVector<int>& dotSeen,QVector<int>& dotWeakSeen,QVector<int>& dotUnseen);
+
 
 private:
+
+    LimeReport::ReportEngine* m_reportEngine=nullptr;
+
+
+    QJsonArray m_jsonArray;
+
+    QVector<QPoint> m_pointLoc_30d;
+    QVector<QPoint> m_pointLoc_60d;
+
+    QVector<QVector<QVector<int>>> m_value_30d_cursorSize_ageCorrectionOrCursorColor;     //cursorSize!=2 ,it's CursorColor
+    QVector<int> m_value_60d;
+
+
+    QVector<int> m_pe_v5[2];
+    QVector<int> m_pe_v2[2];
+    QVector<int> m_pe_v1[2];
+    QVector<int> m_pe_v05[2];
+
+
+    //--------------------------------------------------
     QImage m_image;
 //    QSize m_imageSizeLarge=QSize(720,720);
 //    QImage m_imageLarge=QImage(m_imageSize, QImage::Format_RGB32);
@@ -39,7 +65,6 @@ private:
     int m_selectedDotIndex;
     int m_programType;
 
-    LimeReport::ReportEngine* m_reportEngine=nullptr;
 
     QVector<QPointF> m_dotList;
     QVector<int> m_staticValues;
@@ -48,12 +73,8 @@ private:
     PatientVm* m_patient=nullptr;
     QObject* m_program=nullptr;
 
-    QJsonArray m_jsonArray;
 
-    QVector<QPoint> m_pointLoc_30d;
-    QVector<QPoint> m_pointLoc_60d;
     QVector<int> m_value_30d;
-    QVector<int> m_value_60d;
     int m_age_correction;
 
     QVector<int> m_v5;
@@ -113,6 +134,15 @@ private:
     void drawFixationDeviation();
 
     void staticAnalysis();
+
+    void ThresholdAnalysis(int checkResultId);
+
+
+
+
+
+
+
 //    void dynamicAnalysis();               //动态没有分析
 
     QPoint convertDegLocToPixLoc(QPointF DegLoc);

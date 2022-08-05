@@ -30,7 +30,6 @@ public:
     Q_INVOKABLE virtual ~PatientVm() Q_DECL_OVERRIDE;
     Q_INVOKABLE void update();
     Q_INVOKABLE void insert();
-    Q_INVOKABLE void hello();
 //    Q_INVOKABLE int age();
 //    PatientVm& operator=(const PatientVm& other);
     long getID();void setID(long value);
@@ -40,9 +39,10 @@ public:
     QString getBirthDate();void setBirthDate(QString value);
     QObject* getRx(){return m_rx;}void setRx(QObject* value){m_rx=value;emit rxChanged(value);}Q_SIGNAL void rxChanged(QObject* value);
     QDateTime getLastUpdate();void setLastUpdate(QDateTime lastUpdate);
-    int getAge() const;
+    int getAge(){return m_age;}
 
 private:
+    Patient_ptr getPatientData();
     long m_id;
     QString m_patientID;
     QString m_name;
@@ -50,6 +50,7 @@ private:
     QObject* m_rx=nullptr;
     QDate m_birthDate;
     QDateTime m_lastUpdate;
+    int m_age;
 
 };
 }

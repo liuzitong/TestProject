@@ -10,7 +10,8 @@ HEADERS += \
     $$PWD/checkResultModel.h \
     $$PWD/programModel.h \
     $$PWD/Point.h \
-    $$PWD/rx.h
+    $$PWD/rx.h \
+    $$PWD/patientModel.h
 
 
 SOURCES +=

@@ -2,7 +2,7 @@
 #include "perimeter/main/database/patient.h"
 #include "perimeter/base/common/perimeter_def.h"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
-#include "perimeter/main/model/rx.h"
+#include "perimeter/main/model/patientmodel.h"
 #include "perimeter/main/model/utility.h"
 #include <QDate>
 #define T_PrivPtr( o )  perimeter_objcast( Patient*, o )
@@ -56,14 +56,6 @@ private:
 };
 
 
-void PatientVm::hello()
-{
-    qDebug()<<"patient says hello.";
-}
-
-
-
-
 PatientVm::PatientVm(const QVariantList & args)
 {
     qDebug()<<"constructor";
@@ -105,48 +97,16 @@ PatientVm::~PatientVm()
 
 void PatientVm::update()
 {
-    m_lastUpdate=QDateTime::currentDateTime();
-    QString rx=Utility::entityToQString(((RxVm*)m_rx)->getData());
-    auto patient_ptr=QSharedPointer<Patient>(new Patient(m_id,m_patientID,m_name,Patient::sex(m_sex),m_birthDate,rx,m_lastUpdate));
+    auto patient_ptr=getPatientData();
     qx::dao::update(patient_ptr);
 }
 
 void PatientVm::insert()
 {
-    m_lastUpdate=QDateTime::currentDateTime();
-    QString rx=Utility::entityToQString(((RxVm*)m_rx)->getData());
-    m_lastUpdate=QDateTime::currentDateTime();
-    auto patient_ptr=QSharedPointer<Patient>(new Patient(m_patientID,m_name,Patient::sex(m_sex),m_birthDate,rx,m_lastUpdate));
+    auto patient_ptr=getPatientData();
     qx::dao::insert(patient_ptr);
 }
 
-
-
-
-
-
-//PatientVm &PatientVm::operator=(const PatientVm &other)
-//{
-//    this->m_patient=other.m_patient;
-//    return *this;
-//}
-
-//PatientVm::PatientVm(PatientVm &&other)
-//{
-//    this->m_patient=other.m_patient;
-//    other.m_patient=nullptr;
-//}
-
-//PatientVm::PatientVm(const PatientVm &other)
-//{
-//    this->m_patient=other.m_patient;
-//}
-
-//PatientVm::~PatientVm()
-//{
-//    if(m_patient!=nullptr)
-//        perimeter_delete(m_patient,Patient);
-//}
 
 long PatientVm::getID()
 {
@@ -215,15 +175,42 @@ void Perimeter::PatientVm::setLastUpdate(QDateTime value)
     m_lastUpdate=value;
 }
 
-int PatientVm::getAge() const
+Patient_ptr PatientVm::getPatientData()
 {
-    int age;
-    auto currentDate=QDateTime::currentDateTime().date();
-    age = currentDate.year()- m_birthDate.year();
-    if (currentDate.month() < m_birthDate.month() || (currentDate.month() == m_birthDate.month() && currentDate.day() < m_birthDate.day())) { age--;}
-    return age;
+    m_lastUpdate=QDateTime::currentDateTime();
+    PatientModel patientModel;
+    patientModel.m_id=m_id;
+    patientModel.m_name=m_name;
+    patientModel.m_patientId=m_patientID;
+    patientModel.m_birthDate=m_birthDate;
+    patientModel.m_lastUpdate=m_lastUpdate;
+    patientModel.m_rx=static_cast<RxVm*>(m_rx)->getData();
+    patientModel.m_sex=sex(m_sex);
+    return patientModel.ModelToDB();
 }
 
+//PatientVm &PatientVm::operator=(const PatientVm &other)
+//{
+//    this->m_patient=other.m_patient;
+//    return *this;
+//}
+
+//PatientVm::PatientVm(PatientVm &&other)
+//{
+//    this->m_patient=other.m_patient;
+//    other.m_patient=nullptr;
+//}
+
+//PatientVm::PatientVm(const PatientVm &other)
+//{
+//    this->m_patient=other.m_patient;
+//}
+
+//PatientVm::~PatientVm()
+//{
+//    if(m_patient!=nullptr)
+//        perimeter_delete(m_patient,Patient);
+//}
 }
 
 #include "patientVm.moc"
