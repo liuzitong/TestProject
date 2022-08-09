@@ -16,6 +16,8 @@ Row{
     signal refresh;
     signal clearDot;
     signal clicked;
+    property var dot: null;
+    property alias canvas: canvas;
     width: parent.height;height:parent.height;
     property int fontSize:width<=400?width/30:width/60;
 //    anchors.horizontalCenter: parent.horizontalCenter;
@@ -24,7 +26,8 @@ Row{
         CusText{text:root.textTop; anchors.horizontalCenter: parent.horizontalCenter;height:parent.height*0.1;font.pointSize: height*0.35;width: parent.width;}
         Canvas
         {
-            property var dot: null;
+            id:canvas;
+//            property var dot: null;
             width:height;height:parent.height*0.8;
 
             Component.onCompleted:
@@ -36,7 +39,7 @@ Row{
                 })
             }
 
-            function drawDot()
+            function drawCircle()
             {
                 if(dot==null) return;
                 var pix=IcUiQmlApi.appCtrl.analysisSvc.getPixFromPoint(dot,width,height);
@@ -54,7 +57,7 @@ Row{
             {
                 var ctx = getContext("2d")
                 ctx.clearRect(0, 0, width, height);
-                drawDot();
+                drawCircle();
             }
 
             MouseArea

@@ -15,6 +15,7 @@ Column {
     property var currentProgram: null;
     property var currentCheckResult: null;
     property var analysisResult: null;
+    property var analysisVm: null;
     property int report;
 //    property int textHeight: height*0.05;
 
@@ -27,6 +28,7 @@ Column {
         if(type!==2)
         {
             content.source="StaticAnalysis.qml";
+            content.item.analysisResult=analysisResult;
         }
         else
         {
@@ -37,7 +39,8 @@ Column {
         content.item.currentPatient=currentPatient;
         content.item.currentProgram=currentProgram;
         content.item.currentCheckResult=currentCheckResult;
-        content.item.analysisResult=analysisResult;
+
+        content.item.analysisVm=analysisVm;
         content.item.report=report;
         content.item.refresh();
 //        queryStrategy.currentIndex=report;
@@ -97,12 +100,14 @@ Column {
                             button.onClicked:
                             {
                                 var report=listModel.get(0).report;
-                                IcUiQmlApi.appCtrl.analysisSvc.showReport(report)
+//                                IcUiQmlApi.appCtrl.analysisSvc.showReport(report);
+                                analysisVm.showReport(report);
                             }
                             comboBox.onActivated:
                             {
                                 var report=listModel.get(index).report;
-                                IcUiQmlApi.appCtrl.analysisSvc.showReport(report)
+//                                IcUiQmlApi.appCtrl.analysisSvc.showReport(report);
+                                analysisVm.showReport(report);
                             }
                             Component.onCompleted: {
                                 root.refresh.connect(function()

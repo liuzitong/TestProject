@@ -16,6 +16,7 @@ Item
     property var currentProgram: null;
     property var currentCheckResult: null;
     property var analysisResult: null;
+    property var analysisVm: null;
     property var report:null;                           //0:常规,1:三合一,2:总览,3:筛选
     property string rx:"";
 //    width: 1366;

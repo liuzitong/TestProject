@@ -18,6 +18,7 @@ Item {id:root; width: 1366;height: 691
     property var currentProgram: null;
     property var currentPatient: null;
     property var currentCheckResult: null;
+    property var analysisVm: null;
     signal enterPage();
 
     onEnterPage: {
@@ -307,8 +308,25 @@ Item {id:root; width: 1366;height: 691
                                 case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
                                 case 3:case 4:case 5:case 6:case7:diagramWidth=root.height*14/15*0.92*0.8;break;
                                 }
-                                var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
-                                changePage("analysis",{pageFrom:"check",report:report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
+//                                var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
+//                                changePage("analysis",{pageFrom:"check",report:report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
+                                var analysisResult;
+                                if(analysisVm!=null)
+                                {
+                                    if(analysisVm.type!==2){ IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticAnalysisVm",analysisVm);}
+                                        else{ IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicAnalysisVm",analysisVm);}
+                                }
+                                if(analysisVm.type!==2)
+                                {
+                                    analysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticAnalysisVm", false,[currentCheckResult.id,diagramWidth,report]);
+                                    analysisResult=analysisVm.getResult();
+                                }
+                                else
+                                {
+                                    analysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicAnalysisVm", false,[currentCheckResult.id,diagramWidth,report]);
+                                }
+
+                                changePage("analysis",{pageFrom:"check",report:report,analysisVm:analysisVm,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
                             }
 
                             Component.onCompleted: {

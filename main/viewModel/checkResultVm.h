@@ -15,7 +15,7 @@ class CheckResultVm: public QObject
     Q_PROPERTY(int OS_OD READ getOS_OD WRITE setOS_OD)
     Q_PROPERTY(QObject* params READ getParams WRITE setParams )
     Q_PROPERTY(ResultDataVm* resultData READ getResultData)
-    Q_PROPERTY(QString diagnosis READ getComment WRITE setComment NOTIFY diagnosisChanged)
+    Q_PROPERTY(QString diagnosis READ getDiagnosis WRITE setDiagnosis NOTIFY diagnosisChanged)
     Q_PROPERTY(QDateTime time READ getTime WRITE setTime)
     Q_PROPERTY(int patient_id READ getPatient_id WRITE setPatient_id)
     Q_PROPERTY(int program_id READ getProgram_id WRITE setProgram_id)
@@ -42,7 +42,7 @@ public:
         }
     }
     ResultDataVm* getResultData(){return m_resultData;}
-    QString getComment(){return m_diagnosis;}void setComment(QString value){m_diagnosis=value;emit diagnosisChanged(value);}Q_SIGNAL void diagnosisChanged(QString value);
+    QString getDiagnosis(){return m_diagnosis;}void setDiagnosis(QString value){m_diagnosis=value;emit diagnosisChanged(value);}Q_SIGNAL void diagnosisChanged(QString value);
     QDateTime getTime(){return m_time;}void setTime(QDateTime value){m_time=value;}
     int getPatient_id(){return m_patient_id;}void setPatient_id(int value){m_patient_id=value;}
     int getProgram_id(){return m_program_id;}void setProgram_id(int value){m_program_id=value;}

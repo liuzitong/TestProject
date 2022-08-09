@@ -15,7 +15,6 @@ Item
     property var currentPatient: null;
     property var currentProgram: null;
     property var currentCheckResult: null;
-    property var analysisResult: null;
     property var report:null;                           //4:常规,5:三合一,6:总览,7:筛选
     property int range: currentProgram.params.Range[1];
     property string rx:"";

@@ -27,11 +27,6 @@ public:
     Q_INVOKABLE int getSelectedDotIndex(){return m_selectedDotIndex;};
     Q_INVOKABLE void showReport(int report);
 
-    Q_INVOKABLE QObject* previewReport(int report,int resultId);
-    Q_INVOKABLE QObject* showReport(int report,int resultId);
-
-    QObject* ThresholdAnalysis(QVector<int>& dev,QVector<int>& mDev,QVector<int>& peDev,QVector<int>& peMDev);
-    QObject* ScreeningAnalysis(QVector<int>& dotSeen,QVector<int>& dotWeakSeen,QVector<int>& dotUnseen);
 
 
 private:
@@ -134,9 +129,6 @@ private:
     void drawFixationDeviation();
 
     void staticAnalysis();
-
-    void ThresholdAnalysis(int checkResultId);
-
 
 
 

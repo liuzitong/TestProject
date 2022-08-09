@@ -23,7 +23,12 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/dbDiagram.bmp";
                 range:root.range;
-                onClicked:root.clearDot();
+                onClicked:
+                {
+                    root.clearDot();
+//                    dot=IcUiQmlApi.appCtrl.analysisSvc.getClickDot(mouseX,mouseY,width,height);
+//                    canvas.requestPaint();
+                }
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }
             Item{width: parent.width*0.1;height: parent.height;}
