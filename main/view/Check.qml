@@ -316,7 +316,7 @@ Item {id:root; width: 1366;height: 691
                                     if(analysisVm.type!==2){ IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticAnalysisVm",analysisVm);}
                                         else{ IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicAnalysisVm",analysisVm);}
                                 }
-                                if(analysisVm.type!==2)
+                                if(currentProgram.type!==2)
                                 {
                                     analysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticAnalysisVm", false,[currentCheckResult.id,diagramWidth,report]);
                                     analysisResult=analysisVm.getResult();

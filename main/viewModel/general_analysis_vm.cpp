@@ -6,19 +6,19 @@
 #include "perimeter/main/appctrl/perimeter_appctrl.hxx"
 #include "perimeter/third-part/qxpack/indcom/ui_qml_base/qxpack_ic_ui_qml_api.hxx"
 namespace Perimeter {
-StaticAnalysisVm::StaticAnalysisVm(const QVariantList &checkResultId)
+StaticAnalysisVm::StaticAnalysisVm(const QVariantList &args)
 {
 
-    int resultId=checkResultId[0].toInt();
-    int imageSize=checkResultId[1].toInt();
-    int report=checkResultId[2].toInt();
-    CheckResult_ptr checkResult_ptr;
+    int resultId=args[0].toInt();
+    int imageSize=args[1].toInt();
+    int report=args[2].toInt();
+    CheckResult_ptr checkResult_ptr(new CheckResult());
     checkResult_ptr->m_id=resultId;
     qx::dao::fetch_by_id(checkResult_ptr);
-    Program_ptr program_ptr;
+    Program_ptr program_ptr(new Program());
     program_ptr->m_id=checkResult_ptr->m_program->m_id;
     qx::dao::fetch_by_id(program_ptr);
-    Patient_ptr patient_ptr;
+    Patient_ptr patient_ptr(new Patient());
     patient_ptr->m_id=checkResult_ptr->m_patient->m_id;
     qx::dao::fetch_by_id(patient_ptr);
 
@@ -60,7 +60,7 @@ StaticAnalysisVm::StaticAnalysisVm(const QVariantList &checkResultId)
             analysisMethodSvc->drawText(m_mDev,m_locs,m_range,imageSize,m_OS_OD,m_previewFolder+"PatternDeviation.bmp");
 
             analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,imageSize,m_previewFolder+"TotalPE.bmp");
-            analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,imageSize,m_previewFolder+"PatternDeviation.bmp");
+            analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,imageSize,m_previewFolder+"PatternPE.bmp");
 
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,imageSize,m_previewFolder+"gray.bmp");
             analysisMethodSvc->drawDefectDepth(m_dev,m_locs,m_range,imageSize,m_previewFolder+"defectDepth.bmp");
@@ -76,7 +76,7 @@ StaticAnalysisVm::StaticAnalysisVm(const QVariantList &checkResultId)
             analysisMethodSvc->drawText(m_values,m_locs,m_range,imageSize,m_OS_OD,m_previewFolder+"dBDiagram.bmp");
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,imageSize,m_previewFolder+"gray.bmp");
             analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,imageSize,m_previewFolder+"TotalPE.bmp");
-            analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,imageSize,m_previewFolder+"PatternDeviation.bmp");
+            analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,imageSize,m_previewFolder+"PatternPE.bmp");
         }
     }
     else if(report==3)
@@ -138,7 +138,7 @@ void StaticAnalysisVm::showReport(int report)
             analysisMethodSvc->drawText(m_mDev,m_locs,m_range,500,m_OS_OD,m_reportFolder+"PatternDeviation.bmp");
 
             analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,500,m_reportFolder+"TotalPE.bmp");
-            analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,500,m_reportFolder+"PatternDeviation.bmp");
+            analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,500,m_reportFolder+"PatternPE.bmp");
 
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,550,m_reportFolder+"gray.bmp");
             analysisMethodSvc->drawDefectDepth(m_dev,m_locs,m_range,500,m_reportFolder+"defectDepth.bmp");
@@ -155,7 +155,7 @@ void StaticAnalysisVm::showReport(int report)
             analysisMethodSvc->drawText(m_values,m_locs,m_range,550,m_OS_OD,m_reportFolder+"dBDiagram.bmp");
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,550,m_reportFolder+"gray.bmp");
             analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,550,m_reportFolder+"TotalPE.bmp");
-            analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,550,m_reportFolder+"PatternDeviation.bmp");
+            analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,550,m_reportFolder+"PatternPE.bmp");
         }
     }
     else if(report==3)
@@ -174,7 +174,9 @@ void StaticAnalysisVm::showReport(int report)
         case 3:filePath="./reports/Screening.lrxml";break;
         default:filePath="./reports/Dynamic.lrxml";break;
     }
-    auto manager=AnalysisMethodSvc::reportEngine->dataManager();
+    auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
+    reportEngine->loadFromFile(filePath);
+    auto manager=reportEngine->dataManager();
     manager->clearUserVariables();
     manager->setReportVariable("ProgramName",m_program.m_name);
     manager->setReportVariable("OS_OD",m_checkResult.m_OS_OD==0?"OS":"OD");
@@ -186,8 +188,6 @@ void StaticAnalysisVm::showReport(int report)
     manager->setReportVariable("age", m_patient.m_age);
     manager->setReportVariable("checkTime", m_checkResult.m_time.time().toString("H:mm:ss"));
     manager->setReportVariable("sex", int(m_patient.m_sex)==0?"male":"female");
-    manager->setReportVariable("pupilDiameter","Pupil Diameter: ");
-    manager->setReportVariable("visualAcuity","Visual Acuity: ");
     auto rx=m_patient.m_rx;
     if(m_OS_OD)
     {
@@ -231,7 +231,7 @@ void StaticAnalysisVm::showReport(int report)
         manager->setReportVariable("DBImagePath","./reportImage/dBDiagram.bmp");
         manager->setReportVariable("GrayImagePath","./reportImage/gray.bmp");
         manager->setReportVariable("TotalDeviationImagePath","./reportImage/TotalDeviation.bmp");
-        manager->setReportVariable("PatternDeviationImagePath","./reportImage/PatterDeviation.bmp");
+        manager->setReportVariable("PatternDeviationImagePath","./reportImage/PatternDeviation.bmp");
         manager->setReportVariable("TotalPEImagePath","./reportImage/TotalPE.bmp");
         manager->setReportVariable("PatternPEImagePath","./reportImage/PatternPE.bmp");
         break;
@@ -254,19 +254,19 @@ void StaticAnalysisVm::showReport(int report)
         manager->setReportVariable("DynamicImagePath","./reportImage/Dynamic.bmp");
     }
 
+    manager->setReportVariable("Seen",QString("Seen:")+QString::number(m_dotSeen)+"/"+QString::number(m_values.length()));
+    manager->setReportVariable("WeakSeen",QString("Weak Seen:")+QString::number(m_dotWeakSeen)+"/"+QString::number(m_values.length()));
+    manager->setReportVariable("Unseen",QString("Unseen:")+QString::number(m_dotUnseen)+"/"+QString::number(m_values.length()));
+
     manager->setReportVariable("FixationDeviationImagePath","./reportImage/FixationDeviation.bmp");
     manager->setReportVariable("DoctorSign","DoctorSign: ");
     manager->setReportVariable("DiagnosisContent", m_checkResult.m_diagnosis);
     manager->setReportVariable("deviceInfo","Device Info: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
     manager->setReportVariable("version", "Version: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
 
-    manager->setReportVariable("Seen",QString("Seen:")+QString::number(m_dotSeen)+"/"+QString::number(m_values.length()));
-    manager->setReportVariable("WeakSeen",QString("Weak Seen:")+QString::number(m_dotWeakSeen)+"/"+QString::number(m_values.length()));
-    manager->setReportVariable("Unseen",QString("Unseen:")+QString::number(m_dotUnseen)+"/"+QString::number(m_values.length()));
-
-    AnalysisMethodSvc::reportEngine->setShowProgressDialog(true);
-    AnalysisMethodSvc::reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,50);
-    AnalysisMethodSvc::reportEngine->previewReport(/*LimeReport::PreviewHint::ShowAllPreviewBars*/);
+    reportEngine->setShowProgressDialog(true);
+    reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,50);
+    reportEngine->previewReport(/*LimeReport::PreviewHint::ShowAllPreviewBars*/);
 }
 
 QObject *StaticAnalysisVm::getResult()
@@ -278,17 +278,19 @@ QObject *StaticAnalysisVm::getResult()
 }
 
 
-DynamicAnalysisVm::DynamicAnalysisVm(const QVariantList &checkResultId)
+
+
+DynamicAnalysisVm::DynamicAnalysisVm(const QVariantList &args)
 {
-    int resultId=checkResultId[0].toInt();
-    int imageSize=checkResultId[1].toInt();
-    CheckResult_ptr checkResult_ptr;
+    int resultId=args[0].toInt();
+    int imageSize=args[1].toInt();
+    CheckResult_ptr checkResult_ptr(new CheckResult());
     checkResult_ptr->m_id=resultId;
     qx::dao::fetch_by_id(checkResult_ptr);
-    Program_ptr program_ptr;
+    Program_ptr program_ptr(new Program());
     program_ptr->m_id=checkResult_ptr->m_program->m_id;
     qx::dao::fetch_by_id(program_ptr);
-    Patient_ptr patient_ptr;
+    Patient_ptr patient_ptr(new Patient());
     patient_ptr->m_id=checkResult_ptr->m_patient->m_id;
     qx::dao::fetch_by_id(patient_ptr);
 
@@ -324,8 +326,9 @@ void DynamicAnalysisVm::showReport(int report)
     analysisMethodSvc->drawDynamic(m_values,1100,m_range,m_previewFolder+"Dynamic.bmp");
     analysisMethodSvc->drawFixationDeviation(m_fixationValues,m_reportFolder+"FixationDeviation.bmp");
 
-
-    auto manager=AnalysisMethodSvc::reportEngine->dataManager();
+    auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
+    reportEngine->loadFromFile("./reports/Dynamic.lrxml");
+    auto manager=reportEngine->dataManager();
     manager->clearUserVariables();
     manager->setReportVariable("ProgramName",m_program.m_name);
     manager->setReportVariable("OS_OD",m_checkResult.m_OS_OD==0?"OS":"OD");
@@ -337,8 +340,6 @@ void DynamicAnalysisVm::showReport(int report)
     manager->setReportVariable("age", m_patient.m_age);
     manager->setReportVariable("checkTime", m_checkResult.m_time.time().toString("H:mm:ss"));
     manager->setReportVariable("sex", int(m_patient.m_sex)==0?"male":"female");
-    manager->setReportVariable("pupilDiameter","Pupil Diameter: ");
-    manager->setReportVariable("visualAcuity","Visual Acuity: ");
     auto rx=m_patient.m_rx;
     if(m_checkResult.m_OS_OD)
     {
@@ -362,9 +363,19 @@ void DynamicAnalysisVm::showReport(int report)
     manager->setReportVariable("stimCursor","Stimulus: "+cursorSize+","+cursorColor+","+cursorSpeed+","+cursorBrightness);
     manager->setReportVariable("testTime","Test Duration: "+time.toString("mm:ss"));
 
-    AnalysisMethodSvc::reportEngine->setShowProgressDialog(true);
-    AnalysisMethodSvc::reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,50);
-    AnalysisMethodSvc::reportEngine->previewReport(/*LimeReport::PreviewHint::ShowAllPreviewBars*/);
+    manager->setReportVariable("DynamicImagePath","./reportImage/Dynamic.bmp");
+
+    manager->setReportVariable("FixationDeviationImagePath","./reportImage/FixationDeviation.bmp");
+    manager->setReportVariable("DoctorSign","DoctorSign: ");
+    manager->setReportVariable("DiagnosisContent", m_checkResult.m_diagnosis);
+    manager->setReportVariable("deviceInfo","Device Info: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
+    manager->setReportVariable("version", "Version: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
+
+    reportEngine->setShowProgressDialog(true);
+    reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,50);
+    reportEngine->previewReport(/*LimeReport::PreviewHint::ShowAllPreviewBars*/);
 }
+
+
 
 }

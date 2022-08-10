@@ -24,7 +24,6 @@
 namespace Perimeter {
 
 AnalysisMethodSvc* AnalysisMethodSvc::singleton=nullptr;
-LimeReport::ReportEngine* AnalysisMethodSvc::reportEngine=new LimeReport::ReportEngine();
 
 AnalysisMethodSvc::AnalysisMethodSvc()
 {
@@ -111,13 +110,13 @@ AnalysisMethodSvc::~AnalysisMethodSvc()
 
 void AnalysisMethodSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>& mDev,QVector<int>& peDev,QVector<int>& peMDev,float& md,float& psd,float& VFI,int& GHT, float& p_md,float& p_psd)
 {
-    CheckResult_ptr checkResult_ptr;
+    CheckResult_ptr checkResult_ptr(new CheckResult());
     checkResult_ptr->m_id=resultId;
     qx::dao::fetch_by_id(checkResult_ptr);
-    Program_ptr program_ptr;
+    Program_ptr program_ptr(new Program());
     program_ptr->m_id=checkResult_ptr->m_program->m_id;
     qx::dao::fetch_by_id(program_ptr);
-    Patient_ptr patient_ptr;
+    Patient_ptr patient_ptr(new Patient());
     patient_ptr->m_id=checkResult_ptr->m_patient->m_id;
     qx::dao::fetch_by_id(patient_ptr);
 
@@ -180,6 +179,11 @@ void AnalysisMethodSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector
 
     auto dotList=program.m_data.dots;
     QVector<int> sv(dotList.size(),0);
+    dev.fill(0,dotList.size());
+    mDev.fill(0,dotList.size());
+    peDev.fill(0,dotList.size());
+    peMDev.fill(0,dotList.size());
+
     QVector<int> vfiRingStandard(5,0);
     QVector<int> vfiRingTest(5,0);
 
@@ -388,10 +392,10 @@ void AnalysisMethodSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector
 
 void AnalysisMethodSvc::ScreeningAnalysis(int resultId,int& dotSeen,int& dotWeakSeen,int& dotUnseen)
 {
-    CheckResult_ptr checkResult_ptr;
+    CheckResult_ptr checkResult_ptr(new CheckResult());
     checkResult_ptr->m_id=resultId;
     qx::dao::fetch_by_id(checkResult_ptr);
-    Program_ptr program_ptr;
+    Program_ptr program_ptr(new Program());
     program_ptr->m_id=checkResult_ptr->m_program->m_id;
     qx::dao::fetch_by_id(program_ptr);
 
@@ -423,9 +427,10 @@ AnalysisMethodSvc *AnalysisMethodSvc::getSingleton()
     return singleton;
 }
 
+
 void AnalysisMethodSvc::drawPixScale(int range, QImage &img)
 {
-    int scale=img.width()>400?1:2;
+    int scale=img.width()<400?1:2;
     QPainter painter(&img);
     painter.setBrush(QBrush(QColor("black")));
     painter.setPen({Qt::black,float(scale)});
@@ -482,6 +487,7 @@ void AnalysisMethodSvc::drawRoundCrossPixScale(int range, QImage &img)
 void AnalysisMethodSvc::drawText(QVector<int> values,QVector<QPointF> locs,int range,int imageSize,int OS_OD,QString filePath)
 {
     QImage img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
+    img.fill(qRgb(255, 255, 255));
     drawPixScale(range,img);
     QPainter painter(&img);
     int fontPixSize=img.width()/18;
@@ -500,6 +506,7 @@ void AnalysisMethodSvc::drawText(QVector<int> values,QVector<QPointF> locs,int r
 
     for(int i=0;i<locs.length()&&i<values.length();i++)             //画DB图
     {
+        if(values[i]==-99) continue;
         auto pixLoc=convertDegLocToPixLoc(locs[i],range,img);
         const QRect rectangle = QRect(pixLoc.x()-fontPixSize*1.6*0.4, pixLoc.y()-fontPixSize*0.8/2, fontPixSize*1.6,fontPixSize*0.8);
         painter.drawText(rectangle,Qt::AlignCenter,QString::number(values[i]));
@@ -604,8 +611,8 @@ void AnalysisMethodSvc::drawPE(QVector<int> values, QVector<QPointF> locs, int r
 {
     QImage img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
     img.fill(qRgb(255, 255, 255));
-    QPainter painter(&img);
     drawPixScale(range,img);
+    QPainter painter(&img);
     float scale;
     if(imageSize<400)
     {
@@ -622,6 +629,7 @@ void AnalysisMethodSvc::drawPE(QVector<int> values, QVector<QPointF> locs, int r
         QPoint tempPixLoc={pixLoc.x()-scaledImage.width()/2,pixLoc.y()-scaledImage.height()/2};
         painter.drawImage(tempPixLoc,scaledImage);
     }
+    img.save(filePath);
 }
 
 void AnalysisMethodSvc::drawDefectDepth(QVector<int> values, QVector<QPointF> locs, int range, int imageSize, QString filePath)

@@ -48,9 +48,10 @@ public:
 
     QPoint convertDegLocToPixLoc(QPointF DegLoc,int range,QImage img);
 
-    static LimeReport::ReportEngine* reportEngine;
 private:
     static AnalysisMethodSvc* singleton;
+
+    LimeReport::ReportEngine* m_reportEngine;
 
     QJsonArray m_jsonArray;
 

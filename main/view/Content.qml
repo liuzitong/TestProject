@@ -192,6 +192,7 @@ Rectangle {
                         analysisPage.visible=true;
                         analysisPage.lastPage=params.pageFrom;
                         analysisPage.report=params.report;
+                        analysisPage.analysisVm=params.analysisVm;
                         analysisPage.refresh();
                         break;
                 }

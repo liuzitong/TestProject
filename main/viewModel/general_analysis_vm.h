@@ -6,6 +6,7 @@
 #include <perimeter/main/model/checkResultModel.h>
 #include <perimeter/main/model/patientmodel.h>
 #include <perimeter/main/viewModel/staticAnalysisResult.h>
+#include "perimeter/third-part/LimeReport/limereport/LimeReport"
 namespace Perimeter {
 
 
@@ -14,7 +15,7 @@ class StaticAnalysisVm: public QObject
     Q_OBJECT
     Q_PROPERTY(int type READ getType)
 public:
-    Q_INVOKABLE explicit StaticAnalysisVm(const QVariantList & checkResultId);
+    Q_INVOKABLE explicit StaticAnalysisVm(const QVariantList & );
     Q_INVOKABLE virtual ~StaticAnalysisVm();
     Q_INVOKABLE QPointF getClickDot(float MouseX,float MouseY,float width,float height);
     Q_INVOKABLE QPointF getPixFromPoint(QPointF point,float width,float height);
@@ -22,7 +23,7 @@ public:
     Q_INVOKABLE void showReport(int report);
     Q_INVOKABLE QObject* getResult();
 
-    int getType();
+    int getType(){return m_type;}
 private:
 
     QVector<int> m_values,m_fixationValues,m_dev,m_mDev,m_peDev,m_peMDev;
@@ -43,13 +44,13 @@ class DynamicAnalysisVm: public QObject
     Q_OBJECT
     Q_PROPERTY(int type READ getType)
 public:
-    Q_INVOKABLE explicit DynamicAnalysisVm(const QVariantList & checkResultId);
+    Q_INVOKABLE explicit DynamicAnalysisVm(const QVariantList & );
     Q_INVOKABLE virtual ~DynamicAnalysisVm();
     Q_INVOKABLE void showReport(int report);
 
-    int getType();
+    int getType(){return m_type;}
 private:
-
+    LimeReport::ReportEngine* m_reportEngine=nullptr;
     QString m_previewFolder="./previewImage/";
     QString m_reportFolder="./reportImage/";
     QVector<QPointF> m_values;

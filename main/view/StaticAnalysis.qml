@@ -34,6 +34,8 @@ Item
         case 3:content.source="StaticAnalysisReportScreening.qml";
             break;
         }
+        content.item.analysisResult=analysisResult;
+        content.item.analysisVm=analysisVm;
         content.item.refresh();
 
         if(currentPatient.os_od===0)  //左

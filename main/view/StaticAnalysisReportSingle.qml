@@ -10,6 +10,8 @@ import perimeter.main.view.Utils 1.0
 
 Item {
     id:root;
+    property var analysisResult: null;
+    property var analysisVm: null;
     signal refresh;
     signal clearDot;
     property int range: currentProgram.params.commonParams.Range[1];
@@ -23,12 +25,8 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/dbDiagram.bmp";
                 range:root.range;
-                onClicked:
-                {
-                    root.clearDot();
-//                    dot=IcUiQmlApi.appCtrl.analysisSvc.getClickDot(mouseX,mouseY,width,height);
-//                    canvas.requestPaint();
-                }
+                analysisVm: root.analysisVm;
+                onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }
             Item{width: parent.width*0.1;height: parent.height;}
@@ -37,6 +35,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/gray.bmp";
                 range:root.range;
+                analysisVm: root.analysisVm;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }
@@ -55,6 +54,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/TotalDeviation.bmp";
                 range:root.range;
+                analysisVm: root.analysisVm;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }
@@ -62,8 +62,9 @@ Item {
             AnalysisDiagram{
                 width: parent.height;height:parent.height*1.25;
                 anchors.verticalCenter: parent.verticalCenter
-                source:"/previewImage/PatterDeviation.bmp";
+                source:"/previewImage/PatternDeviation.bmp";
                 range:root.range;
+                analysisVm: root.analysisVm;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }
@@ -92,6 +93,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/TotalPE.bmp";
                 range:root.range;
+                analysisVm: root.analysisVm;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }
@@ -100,6 +102,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/PatternPE.bmp";
                 range:root.range;
+                analysisVm: root.analysisVm;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }

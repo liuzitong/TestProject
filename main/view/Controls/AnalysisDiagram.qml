@@ -13,6 +13,7 @@ Row{
     property string textTop: ""
     property string textBottom: ""
     property int range;
+    property var analysisVm: null;
     signal refresh;
     signal clearDot;
     signal clicked;
@@ -42,7 +43,7 @@ Row{
             function drawCircle()
             {
                 if(dot==null) return;
-                var pix=IcUiQmlApi.appCtrl.analysisSvc.getPixFromPoint(dot,width,height);
+                var pix=analysisVm.getPixFromPoint(dot,width,height);
                 console.log(pix.x+" "+pix.y);
                 var dotRadius=width/25;
                 var ctx = getContext("2d");
@@ -65,7 +66,7 @@ Row{
                 height:parent.height;width:parent.height;
                 onClicked: {
                     root.clicked();
-                    parent.dot=IcUiQmlApi.appCtrl.analysisSvc.getClickDot(mouseX,mouseY,width,height);
+                    root.dot=analysisVm.getClickDot(mouseX,mouseY,width,height);
                     parent.requestPaint();
                 }
 
