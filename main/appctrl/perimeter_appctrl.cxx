@@ -8,11 +8,9 @@
 #include "perimeter/base/common/perimeter_guns.hxx"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
 #include "perimeter/main/appctrl/testclass.h"
-#include "perimeter/main/services/analysis_svc.h"
 #include <QCoreApplication>
 #include "perimeter/main/viewModel/settings.h"
 #include "perimeter/main/viewModel/checkResultVm.h"
-// modules manager
 #include "perimeter/main/perimeter_main.hxx"
 #include "perimeter/main/services/check_svc.h"
 
@@ -35,7 +33,6 @@ private:
 //    bool        m_doubleName=false;
     QObject*    m_databaseSvc;
     QObject*    m_testClass;
-    QObject*    m_analysisSvc;
     QObject*    m_settings;
     QObject*    m_checkSvc;
 
@@ -51,7 +48,6 @@ public :
     //Custom Code
     QObject*    getDatabaseSvcObj() const           {return m_databaseSvc;}
     QObject*    getTestClass() const                {return m_testClass;}
-    QObject*    getAnalysisSvc() const              {return m_analysisSvc;}
     QObject*    getCheckSvc() const                 {return m_checkSvc;}
     QObject*    getSettings()                       {return m_settings;}
 //    QString     getLanguage()                       {return m_language;}
@@ -76,7 +72,6 @@ AppCtrlPriv :: AppCtrlPriv ( AppCtrl *pa )
 //    m_databaseSvc = static_cast<QObject*>(new databaseSvc());
     m_databaseSvc = perimeter_new(databaseSvc);
     m_testClass = perimeter_new(TestClass);
-    m_analysisSvc=perimeter_new(AnalysisSvc);
     m_checkSvc=perimeter_new(CheckSvc);
     m_settings=perimeter_new(Settings);
 //    m_currentPatient=perimeter_new(PatientVm);
@@ -93,7 +88,6 @@ AppCtrlPriv :: ~AppCtrlPriv ( )
     AppSettingsSvc::freeInstance();
 //    delete m_databaseSvc;
     perimeter_delete(m_databaseSvc,databaseSvc);
-    perimeter_delete(m_analysisSvc,AnalysisSvc);
     perimeter_delete(m_checkSvc,CheckSvc);
     perimeter_delete(m_testClass,TestClass);
     perimeter_delete(m_settings,Settings);
@@ -145,11 +139,6 @@ QObject*    AppCtrl::databaseSvcObj() const             {return T_PrivPtr( m_obj
 QObject *  AppCtrl::getTestClass() const
 {
     return T_PrivPtr( m_obj )-> getTestClass();
-}
-
-QObject *AppCtrl::getAnalysisSvc() const
-{
-    return T_PrivPtr( m_obj )-> getAnalysisSvc();
 }
 
 QObject *AppCtrl::getCheckSvc() const

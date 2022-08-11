@@ -14,6 +14,7 @@ Column {
     property var currentCheckResult:null;
     property var analysisLobbyListVm: null;
     property var currentProgram: null;
+    property var analysisVm: null;
     signal changePage(var pageName,var params);
     signal refresh()
 
@@ -162,8 +163,22 @@ Column {
                             case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
                             case 3:case 4:case 5:case 6:case7:diagramWidth=root.height*14/15*0.92*0.8;break;
                             }
-                            var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
-                            changePage("analysis",{pageFrom:"analysisLobby",report:report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
+                            var analysisResult=null;
+                            if(analysisVm!=null)
+                            {
+                                if(analysisVm.type!==2){ IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticAnalysisVm",analysisVm);}
+                                    else{ IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicAnalysisVm",analysisVm);}
+                            }
+                            if(currentProgram.type!==2)
+                            {
+                                analysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticAnalysisVm", false,[currentCheckResult.id,diagramWidth,report]);
+                                analysisResult=analysisVm.getResult();
+                            }
+                            else
+                            {
+                                analysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicAnalysisVm", false,[currentCheckResult.id,diagramWidth,report]);
+                            }
+                            changePage("analysis",{pageFrom:"analysisLobby",report:report,analysisVm:analysisVm,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
                         }
 
                         Component.onCompleted: {

@@ -65,11 +65,13 @@ Row{
             {
                 height:parent.height;width:parent.height;
                 onClicked: {
-                    root.clicked();
-                    root.dot=analysisVm.getClickDot(mouseX,mouseY,width,height);
-                    parent.requestPaint();
+                    if(analysisVm!==null)
+                    {
+                        root.clicked();
+                        root.dot=analysisVm.getClickDot(mouseX,mouseY,width,height);
+                        parent.requestPaint();
+                    }
                 }
-
             }
 
             Image{

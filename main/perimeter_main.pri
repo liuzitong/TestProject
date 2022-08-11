@@ -45,14 +45,12 @@
 SOURCES += \
     $$PWD/appctrl/testclass.cpp \
     $$PWD/services/check_svc.cpp \
-    $$PWD/services/analysis_svc.cpp \
-    $$PWD/services/analysis_method_svc.cpp
+    $$PWD/services/analysis_svc.cpp
 
 HEADERS += \
     $$PWD/appctrl/testclass.h \
     $$PWD/services/check_svc.h \
-    $$PWD/services/analysis_svc.h \
-    $$PWD/services/analysis_method_svc.h
+    $$PWD/services/analysis_svc.h
 
 RESOURCES += \
     $$PWD/view/utils/utils.qrc

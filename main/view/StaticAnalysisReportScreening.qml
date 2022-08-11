@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+import QtQuick 2.0
 import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
@@ -14,6 +14,8 @@ Item {
     signal clearDot;
     property int range: currentProgram.params.commonParams.Range[1];
     anchors.fill: parent;
+    property var analysisResult: null;
+    property var analysisVm: null;
 
     Row
     {
@@ -24,6 +26,7 @@ Item {
             source:"/previewImage/Screening.bmp";
             range:root.range;
             onClicked:root.clearDot();
+            analysisVm:root.analysisVm;
             Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
         }
     }

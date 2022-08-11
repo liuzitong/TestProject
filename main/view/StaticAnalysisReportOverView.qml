@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+import QtQuick 2.0
 import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
@@ -13,6 +13,8 @@ Item {
     signal refresh;
     signal clearDot;
     property int range: currentProgram.params.commonParams.Range[1];
+    property var analysisResult: null;
+    property var analysisVm: null;
 
     anchors.fill: parent;
     Column{anchors.fill: parent;spacing:height*0.2
@@ -24,6 +26,7 @@ Item {
                 source:"/previewImage/dbDiagram.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
+                analysisVm: root.analysisVm;
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }
             AnalysisDiagram{
@@ -33,6 +36,7 @@ Item {
                 source:"/previewImage/gray.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
+                analysisVm: root.analysisVm;
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }
 
@@ -62,6 +66,7 @@ Item {
                 source:"/previewImage/TotalPE.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
+                analysisVm: root.analysisVm;
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }
             AnalysisDiagram{
@@ -71,6 +76,7 @@ Item {
                 source:"/previewImage/PatternPE.bmp";
                 range:root.range;
                 onClicked:root.clearDot();
+                analysisVm: root.analysisVm;
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
             }
 

@@ -22,8 +22,6 @@ class PERIMETER_API  AppCtrl : public QxPack::IcAppCtrlBase {
     Q_PROPERTY( QObject*  databaseSvc READ  databaseSvcObj CONSTANT )
 //    Q_PROPERTY( QObject*  currentPatient READ  getCurrentPatient WRITE setCurrentPatient NOTIFY currentPatientChanged)
     Q_PROPERTY( QObject*  testClass READ  getTestClass CONSTANT )
-    Q_PROPERTY( QObject*  analysisSvc READ  getAnalysisSvc CONSTANT )
-
     Q_PROPERTY( QObject* checkSvc  READ getCheckSvc CONSTANT)
     Q_PROPERTY( QObject* settings READ getSettings CONSTANT)
 

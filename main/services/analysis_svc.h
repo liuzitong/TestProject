@@ -1,5 +1,5 @@
-#ifndef DIGRAM_PROVIDER_H
-#define DIGRAM_PROVIDER_H
+#ifndef ANALYSIS_SVC
+#define ANALYSIS_SVC
 
 #include <QObject>
 #include <QVariant>
@@ -14,25 +14,44 @@
 #include "perimeter/third-part/LimeReport/limereport/lrpreviewreportwindow.h"
 
 namespace Perimeter {
-class AnalysisSvc : public QObject
+class AnalysisSvc
 {
-    Q_OBJECT
-
 public:
-    explicit AnalysisSvc(QObject *parent = nullptr);
+    explicit AnalysisSvc();
     ~AnalysisSvc();
-    Q_INVOKABLE QObject* runProcess(int report,PatientVm* patient,CheckResultVm* checkResult,QObject* program,QVariant diagramWidth);
-    Q_INVOKABLE QPointF getClickDot(float MouseX,float MouseY,float width,float height);
-    Q_INVOKABLE QPointF getPixFromPoint(QPointF point,float width,float height);
-    Q_INVOKABLE int getSelectedDotIndex(){return m_selectedDotIndex;};
-    Q_INVOKABLE void showReport(int report);
 
+    void ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>& mDev,QVector<int>& peDev,QVector<int>& peMDev,float& md,float& psd,float& VFI,int& GHT, float& p_md,float& p_psd);
 
+    void ScreeningAnalysis(int resultId,int& dotSeen,int& dotWeakSeen,int& dotUnseen);
+//    void DrawThreshold(int resultId,int imageSize,QVector<int>& dev,QVector<int>& mDev,QVector<int>& peDev,QVector<int>& peMDev);
+//    void DrawScreening(int resultId,int imageSize);
+//    void DrawDynamic(int resultId,int imageSzie);
+    static AnalysisSvc* getSingleton();
+
+    void drawPixScale(int range,QImage& img);
+
+    void drawRoundCrossPixScale(int range,QImage& img);
+
+    void drawText(QVector<int> values,QVector<QPointF> locs,int range,int OS_OD,QImage& img);             //db,dev,mdev
+
+    void drawGray(QVector<int> values,QVector<QPointF> locs,int range,int innerRange,QImage& imgh);
+
+    void drawPE(QVector<int> values,QVector<QPointF> locs,int range,QImage& img);                                   //totalPe,patternPe
+
+    void drawDefectDepth(QVector<int> values,QVector<QPointF> locs,int range,QImage& img);
+
+    void drawScreening(QVector<int> values,QVector<QPointF> locs,int range,int OS_OD,QImage& img);
+
+    void drawDynamic(QVector<QPointF> values,int range,QImage& img);
+
+    void drawFixationDeviation(QVector<int> values,QImage& img);
+
+    QPoint convertDegLocToPixLoc(QPointF DegLoc,int range,QImage img);
 
 private:
+    static AnalysisSvc* singleton;
 
-    LimeReport::ReportEngine* m_reportEngine=nullptr;
-
+    LimeReport::ReportEngine* m_reportEngine;
 
     QJsonArray m_jsonArray;
 
@@ -42,107 +61,16 @@ private:
     QVector<QVector<QVector<int>>> m_value_30d_cursorSize_ageCorrectionOrCursorColor;     //cursorSize!=2 ,it's CursorColor
     QVector<int> m_value_60d;
 
-
     QVector<int> m_pe_v5[2];
     QVector<int> m_pe_v2[2];
     QVector<int> m_pe_v1[2];
     QVector<int> m_pe_v05[2];
-
-
-    //--------------------------------------------------
-    QImage m_image;
-//    QSize m_imageSizeLarge=QSize(720,720);
-//    QImage m_imageLarge=QImage(m_imageSize, QImage::Format_RGB32);
-    int m_report;   //0,30-2
-    int m_os_od;     //0 os,1 od;   0左眼 1右眼
-    int m_range;
-    int m_innerRange;
-    int m_selectedDotIndex;
-    int m_programType;
-
-
-    QVector<QPointF> m_dotList;
-    QVector<int> m_staticValues;
-    QVector<QPointF> m_dynamicValues;
-    CheckResultVm* m_checkResult=nullptr;
-    PatientVm* m_patient=nullptr;
-    QObject* m_program=nullptr;
-
-
-    QVector<int> m_value_30d;
-    int m_age_correction;
-
-    QVector<int> m_v5;
-    QVector<int> m_v2;
-    QVector<int> m_v1;
-    QVector<int> m_v05;
 
     QVector<QPoint> m_GHT1_RIGHT;
     QVector<QPoint> m_GHT2_RIGHT;
     QVector<QPoint> m_GHT3_RIGHT;
     QVector<QPoint> m_GHT4_RIGHT;
     QVector<QPoint> m_GHT5_RIGHT;
-
-    QVector<int> m_sv;
-    QVector<int> m_dev;
-    QVector<int> m_mDev;
-    QVector<int> m_peDev;
-    QVector<int> m_peMDev;
-
-    QVector<int> m_vfiRingStandard;
-    QVector<int> m_vfiRingTest;
-
-    float m_VFI_Weight[5]={3.29f,1.28f,0.79f,0.57f,0.43f};
-    float m_md,m_psd,m_VFI,m_p_md,m_p_psd;
-    int m_GHT;
-    int m_dotSeen,m_dotWeakSeen,m_dotUnseen;
-
-    int m_patientAge;
-
-    QString m_imageSavePath;
-    bool m_isPreview;
-    int m_previewDiagramWidth;
-
-
-
-
-
-private:
-    void drawPixScale();
-    void drawRoundCrossPixScale();
-
-    void drawDevDBText(QVector<int> values);
-    void drawTotalDeviation();
-    void drawPatternDeviation();
-
-    void drawPE(QVector<int> values);
-    void drawTotalPE();
-    void drawPatternPE();
-
-    void drawDBDiagram();
-    void drawGrayDiagram();
-    void drawDefectDepthDiagram();
-
-    void drawScreening();
-    void drawDynamic();
-
-    void drawFixationDeviation();
-
-    void staticAnalysis();
-
-
-
-
-
-
-//    void dynamicAnalysis();               //动态没有分析
-
-    QPoint convertDegLocToPixLoc(QPointF DegLoc);
-    void DrawDiagram();
-    void DrawReportDiagram();
-
-
-
 };
 }
 #endif // DIGRAM_PROVIDER_H

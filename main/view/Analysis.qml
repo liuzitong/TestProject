@@ -29,6 +29,7 @@ Column {
         {
             content.source="StaticAnalysis.qml";
             content.item.analysisResult=analysisResult;
+            content.item.analysisVm=analysisVm;
         }
         else
         {
@@ -40,7 +41,6 @@ Column {
         content.item.currentProgram=currentProgram;
         content.item.currentCheckResult=currentCheckResult;
 
-        content.item.analysisVm=analysisVm;
         content.item.report=report;
         content.item.refresh();
 //        queryStrategy.currentIndex=report;

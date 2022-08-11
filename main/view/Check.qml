@@ -234,11 +234,11 @@ Item {id:root; width: 1366;height: 691
                                     }
                                     else if(currentProgram.type===1)
                                     {
-                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[2]);
+                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[200]);
                                     }
                                     else
                                     {
-                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[3]);
+                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[300]);
                                     }
 
 //                                    console.log(checkControl.checkState);
@@ -310,7 +310,7 @@ Item {id:root; width: 1366;height: 691
                                 }
 //                                var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
 //                                changePage("analysis",{pageFrom:"check",report:report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
-                                var analysisResult;
+                                var analysisResult=null;
                                 if(analysisVm!=null)
                                 {
                                     if(analysisVm.type!==2){ IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticAnalysisVm",analysisVm);}

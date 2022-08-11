@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+import QtQuick 2.0
 import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
@@ -14,6 +14,8 @@ Item {
     signal clearDot;
     anchors.fill: parent;
     property int range: currentProgram.params.commonParams.Range[1];
+    property var analysisResult: null;
+    property var analysisVm: null;
 
 
     Column{anchors.fill: parent;spacing:height*0.06
@@ -26,6 +28,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 source:"/previewImage/gray.bmp";
                 textTop:"灰度图";
+                analysisVm: root.analysisVm;
                 range:root.range;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
@@ -42,6 +45,7 @@ Item {
                 source:"/previewImage/defectDepth.bmp";
                 textTop:"缺陷深度(db)";
                 textBottom:"□=4db的预期";
+                analysisVm: root.analysisVm;
                 range:root.range;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
@@ -54,6 +58,7 @@ Item {
                 anchors.rightMargin: parent.width*0.07
                 source:"/previewImage/dBDiagram.bmp";
                 textTop:"阈值(dB)";
+                analysisVm: root.analysisVm;
                 range:root.range;
                 onClicked:root.clearDot();
                 Component.onCompleted: {root.refresh.connect(refresh);root.clearDot.connect(clearDot);}
