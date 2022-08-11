@@ -144,7 +144,7 @@ Column {
 
             Item{height: parent.height; anchors.horizontalCenter: parent.horizontalCenter;width:parent.width*0.4;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
+                    Flow{height: parent.height;spacing: height*0.4;anchors.horizontalCenter: parent.horizontalCenter;
                         CusButton{text:"进展基线";onClicked:{console.log("gogog");/*content.positionViewAtBeginning();*/}}
                         CusButton{text:"最后三次进展";onClicked:{console.log("gogog");/*content.positionViewAtBeginning();*/}}
                         CusButton{text:"单次进展分析";onClicked:{console.log((content.height-10)/4*0.9-4);/*content.setIndex()*/}}
@@ -152,11 +152,12 @@ Column {
                 }
             }
 
-            Item{height: parent.height; anchors.right: parent.right;width:parent.width*0.25;
+            Item{height: parent.height; anchors.right: parent.right;width:parent.width*0.33;
                 Item{ id: item1;anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    Flow{height: parent.height; layoutDirection: Qt.RightToLeft; anchors.right: parent.right; spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
-                        CusButton{text:"复位";onClicked:{console.log("gogog");/*content.positionViewAtBeginning();*/}}
+                    Flow{height: parent.height; layoutDirection: Qt.RightToLeft; anchors.right: parent.right; spacing: height*0.4;anchors.horizontalCenter: parent.horizontalCenter;
                         CusButton{text:"去除";onClicked:{console.log("gogog");/*content.positionViewAtBeginning();*/}}
+                        CusButton{text:"复位";onClicked:{console.log("gogog");/*content.positionViewAtBeginning();*/}}
+                        CusButton{text:"切换眼别";onClicked:progressAnalysisListVm.switchEye();}
                     }
                 }
             }

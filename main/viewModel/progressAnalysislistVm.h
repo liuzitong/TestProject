@@ -42,20 +42,15 @@ class ProgressAnalysisListVm:public QAbstractListModel
 public:
     Q_INVOKABLE explicit ProgressAnalysisListVm(const QVariantList &args);
     Q_INVOKABLE virtual ~ProgressAnalysisListVm() Q_DECL_OVERRIDE;
-    Q_INVOKABLE void removeCheckResult(int checkResultId);
+    Q_INVOKABLE void removeCheckResult(int resultId);
+    Q_INVOKABLE void switchEye();
 private:
-    void initialize();
-    Data getProgressData(const CheckResultModel<Type::ThreshHold>& result,StaticProgramVM* program);
-
-    PatientVm* m_patient=nullptr;
+    void generateDataList();
+    Data getProgressData(CheckResult_ptr checkResult_ptr);
     int m_OS_OD;
-    int m_patientAge;
+    int m_patientId;
     QVector<Data> m_originalDataList;
     QVector<Data> m_currentDataList;
-    StaticProgramVM* m_program_30_2=nullptr;
-    StaticProgramVM* m_program_24_2=nullptr;
-    QVector<CheckResultModel<Type::ThreshHold>> m_checkResultList;
-    QJsonArray m_jsonArray;
 
 
 
