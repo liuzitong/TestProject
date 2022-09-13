@@ -22,7 +22,11 @@
         <file>StaticAnalysisReportThreeInOne.qml</file>
         <file>StaticAnalysisReportOverView.qml</file>
         <file>StaticAnalysisReportScreening.qml</file>
+        <file>ProgressAnalysisLobby.qml</file>
         <file>ProgressAnalysis.qml</file>
+        <file>ProgressAnalysisBaseLine.qml</file>
+        <file>progressThreeFollowUps.qml</file>
+        <file>ProgressAnalysisSingle.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

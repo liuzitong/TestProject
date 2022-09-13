@@ -25,14 +25,10 @@ Item
     {
         switch(report)
         {
-        case 0:content.source="StaticAnalysisReportSingle.qml";
-            break;
-        case 1:content.source="StaticAnalysisReportThreeInOne.qml";
-            break;
-        case 2:content.source="StaticAnalysisReportOverView.qml";
-            break;
-        case 3:content.source="StaticAnalysisReportScreening.qml";
-            break;
+        case 0:content.source="StaticAnalysisReportSingle.qml";break;
+        case 1:content.source="StaticAnalysisReportThreeInOne.qml";break;
+        case 2:content.source="StaticAnalysisReportOverView.qml";break;
+        case 3:content.source="StaticAnalysisReportScreening.qml";break;
         }
         content.item.analysisResult=analysisResult;
         content.item.analysisVm=analysisVm;
@@ -135,22 +131,6 @@ Item
         }
         Rectangle{width:parent.width*0.25;height: parent.height;color:"white";}
     }
-    states: [
-        State {
-            name: "State1"
-
-            PropertyChanges {
-                target: rectangle
-                smooth: false
-            }
-
-            PropertyChanges {
-                target: cusButton
-                anchors.rightMargin: 89
-                anchors.bottomMargin: 64
-            }
-        }
-    ]
 
 }
 

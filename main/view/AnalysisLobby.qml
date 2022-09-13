@@ -113,11 +113,11 @@ Column {
                             button.text: "进展分析";
                             button.onClicked:
                             {
-                                changePage("progressAnalysis",0)
+                                changePage("progressAnalysisLobby",0)
                             }
                             comboBox.onActivated:
                             {
-                                changePage("progressAnalysis",index)
+                                changePage("progressAnalysisLobby",index)
                             }
                         }
                         CusButton{text:"视岛图";onClicked:{console.log((content.height-10)/4*0.9-4);/*content.setIndex()*/}}

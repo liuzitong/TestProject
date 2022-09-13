@@ -5,7 +5,6 @@
 #include <QVector>
 #include <perimeter/main/model/checkResultModel.h>
 #include <perimeter/main/model/patientmodel.h>
-#include <perimeter/main/viewModel/staticAnalysisResult.h>
 #include "perimeter/third-part/LimeReport/limereport/LimeReport"
 namespace Perimeter {
 

@@ -119,7 +119,8 @@ Rectangle {
             ProgramCustomize{id:programPage;anchors.fill: parent;visible: false;onChangePage: contentPage.changePage(pageName,params);}
             AnalysisLobby{id:analysisLobbypage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
             Analysis{id:analysisPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
-            ProgressAnalysis{id:progressAnalysisPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
+            ProgressAnalysisLobby{id:progressAnalysisLobbyPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
+            ProgressAnalysis{id:progressAnalysisPage;anchors.fill: parent;visible: false;onChangePage: contentPage.changePage(pageName,params);}
 //            Component.onCompleted: {
 //                IcUiQmlApi.appCtrl.changePage.connect(changePage);
 //                patientPage.changePage.connect(contentPage.changePage);
@@ -134,6 +135,7 @@ Rectangle {
                 console.log("change to page "+pageName);
                 patientPage.visible=false;
                 checkPage.visible=false;
+                progressAnalysisLobbyPage.visible=false;
                 progressAnalysisPage.visible=false;
                 programPage.visible=false;
                 analysisLobbypage.visible=false;
@@ -159,15 +161,25 @@ Rectangle {
                         patientInfo.visible=true;
                         if(params==="patientManagement") analysisLobbypage.refresh();
                         break;
+                    case "progressAnalysisLobby":
+                        progressAnalysisLobbyPage.visible=true;
+                        if(params!==null){
+                            progressAnalysisLobbyPage.os_od=params;
+                            progressAnalysisLobbyPage.refresh();
+                        }
+                        break;
                     case "progressAnalysis":
                         progressAnalysisPage.visible=true;
-                        progressAnalysisPage.os_od=params;
+                        progressAnalysisPage.progressAnalysisListVm=params.progressAnalysisListVm;
+                        progressAnalysisPage.report=params.report;
+                        progressAnalysisPage.progressAnalysisResult=params.result;
+                        console.log(progressAnalysisPage.report);
                         progressAnalysisPage.refresh();
                         break;
                     case "check":
                         checkPage.visible=true;
 //                        checkPage.rePaintCanvas();
-                        if(params==="patientManagement") checkPage.enterPage();
+                        if(params.pageFrom==="patientManagement") checkPage.enterPage();          //区别是从其它页面返回
                         patientContentButton.image.source=patientContentButton.imageSrc;
                         checkContentButton.image.source=checkContentButton.pressImageSrc;
                         seperator1.opacity=0;

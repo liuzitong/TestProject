@@ -10,6 +10,8 @@
 #include "perimeter/main/Model/Rx.h"
 #include "perimeter/main/Model/utility.h"
 #include "perimeter/main/viewModel/progressAnalysislistVm.h"
+#include <perimeter/main/services/analysis_svc.h>
+
 namespace Perimeter {
 void TestClass::test()
 {
@@ -33,9 +35,38 @@ void TestClass::test()
 //    Patient_ptr ppp(pp);
 //    qx::dao::insert(ppp);
 
-    auto tt=new ProgressAnalysisListVm(QVariantList{1});
-    delete tt;
-
+//    auto tt=new ProgressAnalysisListVm(QVariantList{1});
+//    delete tt;
+    QImage img({600,300}, QImage::Format_RGB32);
+    auto analysisMethodSvc=AnalysisSvc::getSingleton();
+//    analysisMethodSvc->drawBaseLine({0,-1,-2,-4,-8,-7},80,{5,12,33,35,37,55},img);
+//    img.save("./previewImage/baseLineDiagram.bmp");
+    QVector<QPointF> locsbase1={{-9,27},{-3,21},{-3,3},{9,-9}};
+    QVector<QPointF> locsbase2={{-9,27},{-3,21},{-3,3},{9,-9}};
+    QVector<QPointF> locs2={{-9,27},{-3,21},{-3,3},{9,-9}};
+    QVector<QPointF> locs3={{-9,27},{-3,21},       {9,-9}};
+    QVector<QPointF> locs4={{-9,27},{-3,21},{-3,3},{9,-9}};
+    QVector<int> valuesbase1={28,23,30,27};
+    QVector<int> valuesbase2={28,23,30,27};
+    QVector<int> values2=    {19,15,28,23};
+    QVector<int> values3=    {10,10,   19};
+    QVector<int> values4=    {1,  5,24,20};
+    QVector<QVector<QPointF>> resultLocs;
+    QVector<QVector<int>> resultVal;
+    QVector<QVector<int>> resultPicVal;
+    analysisMethodSvc->ProgressAnalysis({valuesbase1,valuesbase2,values2,values3,values4},{locsbase1,locsbase2,locs2,locs3,locs4},0,resultLocs,resultVal,resultPicVal);
+    for(auto& i:resultLocs)
+    {
+        qDebug()<<i;
+    }
+    for(auto& i:resultVal)
+    {
+        qDebug()<<i;
+    }
+    for(auto& i:resultPicVal)
+    {
+        qDebug()<<i;
+    }
 
 }
 }

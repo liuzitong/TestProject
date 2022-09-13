@@ -23,6 +23,13 @@ public:
     void ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>& mDev,QVector<int>& peDev,QVector<int>& peMDev,float& md,float& psd,float& VFI,int& GHT, float& p_md,float& p_psd);
 
     void ScreeningAnalysis(int resultId,int& dotSeen,int& dotWeakSeen,int& dotUnseen);
+
+    void BaseLineAnalysis(const QVector<float>& mds,const QVector<int>& months,float& avgMd,float& progressSpeedBase,float& progressSpeedDeviation,int& slopeType);
+
+//    void ProgressAnalysis(const QVector<int> (&mDev)[4],const QVector<QPointF> (&locs)[4],int OS_OD,QVector<int>& resultVal);
+
+    void ProgressAnalysis(const QVector<QVector<int>>& mDev,const QVector<QVector<QPointF>>& locs,int OS_OD,QVector<QVector<QPointF> > &resultLocs,QVector<QVector<int>>& resultVal,QVector<QVector<int>>& resultPicVal);
+
 //    void DrawThreshold(int resultId,int imageSize,QVector<int>& dev,QVector<int>& mDev,QVector<int>& peDev,QVector<int>& peMDev);
 //    void DrawScreening(int resultId,int imageSize);
 //    void DrawDynamic(int resultId,int imageSzie);
@@ -34,9 +41,11 @@ public:
 
     void drawText(QVector<int> values,QVector<QPointF> locs,int range,int OS_OD,QImage& img);             //db,dev,mdev
 
-    void drawGray(QVector<int> values,QVector<QPointF> locs,int range,int innerRange,QImage& imgh);
+    void drawGray(QVector<int> values,QVector<QPointF> locs,int range,int innerRange,QImage& img);
 
     void drawPE(QVector<int> values,QVector<QPointF> locs,int range,QImage& img);                                   //totalPe,patternPe
+
+    void drawProgess(QVector<int> values,QVector<QPointF> locs,int range,QImage& img);
 
     void drawDefectDepth(QVector<int> values,QVector<QPointF> locs,int range,QImage& img);
 
@@ -48,7 +57,19 @@ public:
 
     QPoint convertDegLocToPixLoc(QPointF DegLoc,int range,QImage img);
 
+    void drawBaseLine(QVector<float> mds,int startYear,QVector<int> months,QImage& img);
+
+
+
 private:
+    int getIndex(const QPointF& dot,const QVector<QPointF>& pointLoc);
+
+    int getIndex(const QPointF& dot,const QVector<QPoint>& pointLoc,int OS_OD);
+
+    int getIndex(const QPointF& dot,const QVector<QPointF>& pointLoc,int OS_OD);
+
+    int getpeMDev(int MDev,QPointF loc,int OS_OD);
+
     static AnalysisSvc* singleton;
 
     LimeReport::ReportEngine* m_reportEngine;

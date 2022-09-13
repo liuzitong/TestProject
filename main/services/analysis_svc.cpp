@@ -12,7 +12,6 @@
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonObject>
-#include "perimeter/main/viewModel/staticAnalysisResult.h"
 #include "perimeter/main/appctrl/perimeter_appctrl.hxx"
 #include <QFileDialog>
 #include <QApplication>
@@ -22,7 +21,40 @@
 
 namespace Perimeter {
 
+template <typename T1,typename T2>
+class LeastSquare{
+private:
+    double k, b;
+public:
+    LeastSquare(const QVector<T1>& x, const QVector<T2>& y)
+    {
+        double t1=0, t2=0, t3=0, t4=0;
+        for(int i=0; i<x.size(); ++i)
+        {
+            t1 += double(x[i])*double(x[i]);
+            t2 += double(x[i]);
+            t3 += double(x[i])*double(y[i]);
+            t4 += double(y[i]);
+        }
+        k = (t3*x.size() - t2*t4) / (t1*x.size() - t2*t2);  // 求得β1
+        b = (t1*t4 - t2*t3) / (t1*x.size() - t2*t2);        // 求得β2
+    }
+
+
+
+    double getY(const T2 x) const
+    {
+        return k*x + b;
+    }
+
+    double getSlope() const
+    {
+        return k;
+    }
+};
+
 AnalysisSvc* AnalysisSvc::singleton=nullptr;
+
 
 AnalysisSvc::AnalysisSvc()
 {
@@ -109,6 +141,7 @@ AnalysisSvc::~AnalysisSvc()
 
 void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>& mDev,QVector<int>& peDev,QVector<int>& peMDev,float& md,float& psd,float& VFI,int& GHT, float& p_md,float& p_psd)
 {
+
     CheckResult_ptr checkResult_ptr(new CheckResult());
     checkResult_ptr->m_id=resultId;
     qx::dao::fetch_by_id(checkResult_ptr);
@@ -123,7 +156,6 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
     ProgramModel<Type::ThreshHold> program(program_ptr);
     PatientModel patient(patient_ptr);
 
-
     auto params=checkResult.m_params;
     int cursorSize=int(params.commonParams.cursorSize);
     int cursorColor=int(params.commonParams.cursorColor);
@@ -131,15 +163,18 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
 
     int value_30d_secondIndex;
     int age_correction;
-    int patientAge=patient.m_age;
+    auto testDate=checkResult.m_time.date();
+    auto birthDate=patient.m_birthDate;
+    int testAge= testDate.year()- birthDate.year();
+    if (testDate.month() < birthDate.month() || (testDate.month() == birthDate.month() && testDate.day() < birthDate.day())) { testAge--;}
 
     if(cursorSize==2)
     {
-        if(patientAge<=35){age_correction=1;}
-        else if(patientAge<=45){age_correction=2;}
-        else if(patientAge<=55){age_correction=3;}
-        else if(patientAge<=65){age_correction=4;}
-        else {age_correction=5;}
+        if(testAge<=35){age_correction=0;}
+        else if(testAge<=45){age_correction=1;}
+        else if(testAge<=55){age_correction=2;}
+        else if(testAge<=65){age_correction=3;}
+        else {age_correction=4;}
         value_30d_secondIndex=age_correction;
     }
     else
@@ -150,25 +185,25 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
     QVector<int> value_30d=m_value_30d_cursorSize_ageCorrectionOrCursorColor[cursorSize][value_30d_secondIndex];
 
 
-    auto getIndex=[&](QPointF&& dot,QVector<QPoint>& pointLoc)->int{
-        int distMin=10000;
-        int index=-1;
+//    auto getIndex=[&](QPointF&& dot,QVector<QPoint>& pointLoc)->int{
+//        int distMin=10000;
+//        int index=-1;
 
-        for(int i=0;i<pointLoc.length();i++)
-        {
-            int dist;
-            if(checkResult.m_OS_OD==0)
-            {
-                dist=pow(pointLoc[i].rx()-dot.x(),2)+pow(pointLoc[i].ry()-dot.y(),2);
-            }
-            else
-            {
-                dist=pow(pointLoc[i].rx()-(-dot.x()),2)+pow(pointLoc[i].ry()-dot.y(),2);
-            }
-            if(dist<distMin){distMin=dist;index=i;}
-        }
-        return index;
-    };
+//        for(int i=0;i<pointLoc.length();i++)
+//        {
+//            int dist;
+//            if(checkResult.m_OS_OD==0)
+//            {
+//                dist=pow(pointLoc[i].rx()-dot.x(),2)+pow(pointLoc[i].ry()-dot.y(),2);
+//            }
+//            else
+//            {
+//                dist=pow(pointLoc[i].rx()-(-dot.x()),2)+pow(pointLoc[i].ry()-dot.y(),2);
+//            }
+//            if(dist<distMin){distMin=dist;index=i;}
+//        }
+//        return index;
+//    };
 
     QVector<int> pe_v5,pe_v2,pe_v1,pe_v05;
     if(cursorColor==2&&backGroundColor==1&&cursorSize==4)
@@ -195,7 +230,8 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
         int index;
         if(radius<=30)
         {
-            index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_30d);
+            index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_30d,checkResult.m_OS_OD);
+            if(index==-1) continue;
             sv[i]=value_30d[index]/10;
             if(!(cursorSize==2&&cursorColor==0)){
                 if(cursorColor==2)
@@ -211,7 +247,8 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
         }
         else if(radius<=60)
         {
-            index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_60d);
+            index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_60d,checkResult.m_OS_OD);
+            if(index==-1) continue;
             sv[i]=m_value_60d[index]/10;
             if(sv[i]>0) sv[i]-=age_correction;else if(sv[i]<0) sv[i]+=age_correction;
         }
@@ -283,12 +320,14 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
     else if(psd>3.2) p_psd=2;
     else if(psd>2.5) p_psd=5;
     else if(psd>2.0) p_psd=10;
+    else psd=-1;
 
     if(md<-5.5)  p_md=0.5;
     else if(md<-3.5) p_md=1;
     else if(md<-2.6) p_md=2;
     else if(md<-2.0) p_md=5;
     else if(md<-1.5) p_md=10;
+    else p_md=-1;
 
 //    qDebug()<<m_psd;
 
@@ -307,7 +346,8 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
     for(int i=0;i<mDev.length();i++)
     {
 
-        auto index=getIndex(QPointF(dotList[i].x,dotList[i].y),m_pointLoc_30d);
+        auto index=getIndex(QPointF(dotList[i].x,dotList[i].y),m_pointLoc_30d,checkResult.m_OS_OD);
+        if(index==-1) continue;
         float radius=sqrt(pow(dotList[i].x,2)+pow(dotList[i].y,2));
         if(radius<30)
         {
@@ -414,6 +454,155 @@ void AnalysisSvc::ScreeningAnalysis(int resultId,int& dotSeen,int& dotWeakSeen,i
     }
 }
 
+void AnalysisSvc::BaseLineAnalysis(const QVector<float> &mds, const QVector<int> &months, float &avgMd, float &progressSpeedBase, float &progressSpeedDeviation, int &slopeType)
+{
+    double md_total=0;
+    for(auto i:mds){md_total+=i;}
+    avgMd=md_total/mds.length();
+
+    LeastSquare<int,float> ls(months,mds);
+    double matching_slope=ls.getSlope();
+    QVector<double> diff_slope_list;
+    for(int i=0;i<mds.length()-1;i++)
+    {
+        double diff_slope=double(mds[i]-mds[i+1])/(months[i]-months[i+1])-matching_slope;
+        diff_slope_list.append(diff_slope);
+    }
+
+    double diff_slope_squred_sum=0;
+    for(int i=0;i<diff_slope_list.length()-1;i++)
+    {
+        diff_slope_squred_sum+=pow(diff_slope_list[i],2)*(months[i+1]-months[i]);
+    }
+
+    double slope_deviation=sqrt(diff_slope_squred_sum/(months.last()-months.first()));
+
+    progressSpeedBase=matching_slope*12;
+    progressSpeedDeviation=slope_deviation*12;
+    progressSpeedBase<-2?slopeType=1:slopeType=0;   //1明显,0不能显.
+}
+
+
+//void AnalysisSvc::ProgressAnalysis(const QVector<int> (&mDev)[4], const QVector<QPointF> (&locs)[4], int OS_OD,QVector<int> &resultVal)         //第一个是最后近做的一个
+//{
+//    resultVal.fill(0,mDev[0].length());
+//    for(int dot_number=0;dot_number<mDev[0].length();dot_number++)
+//    {
+//        int val_A=mDev[0][dot_number];
+//        QPointF loc_0=locs[0][dot_number];
+////        qDebug()<<dot_number;
+////        qDebug()<<resultVal[dot_number];
+
+//        for(int i=0;i<3;i++)
+//        {
+
+//            int index=getIndex(loc_0,locs[i+1]);
+//            if(index!=-1)
+//            {
+//                int val_B=mDev[i+1][index];
+//                auto pe=getpeMDev((val_A-val_B)*1.5,loc_0,OS_OD);
+//                if(pe==0) {break;}
+//                else if(pe==1)
+//                {
+//                    resultVal[dot_number]++;
+//                    val_A=val_B;
+//                }
+//                else if(pe>1)
+//                {
+//                    resultVal[dot_number]=4;
+//                    break;
+//                }
+//                resultVal[dot_number];
+//            }
+//        }
+////        qDebug()<<resultVal[dot_number];
+//    }
+//}
+
+void AnalysisSvc::ProgressAnalysis(const QVector<QVector<int> > &mDev,const  QVector<QVector<QPointF> > &locs, int OS_OD,QVector<QVector<QPointF> > &resultLocs, QVector<QVector<int> > &resultVal, QVector<QVector<int> > &resultPicVal)
+{
+    auto _mDev=const_cast<QVector<QVector<int> >&>(mDev);
+    auto baseMDev1=_mDev.takeFirst();
+    auto baseMDev2=_mDev.takeFirst();
+
+    auto _locs=const_cast<QVector<QVector<QPointF> >&>(locs);
+    auto baseLocs1=_locs.takeFirst();
+    auto baseLocs2=_locs.takeFirst();
+
+    QVector<QPointF> baseLocs;
+    QVector<int> baseMDev;
+    for(int i=0;i<baseLocs1.length();i++)
+    {
+        auto loc=baseLocs1[i];
+        int j=getIndex(loc,baseLocs2);
+        if(j!=-1)
+        {
+            baseLocs.append(loc);
+            baseMDev.append(qRound(float(baseMDev1[i]+baseMDev2[j])/2));
+        }
+    }
+
+    _mDev.prepend(baseMDev);
+    _locs.prepend(baseLocs);
+
+
+
+    for(int i=0;i<_mDev.length()-1;i++)
+    {
+        QVector<int> Val;
+        QVector<QPointF> Loc;
+        for(int j=0;j<_mDev[i+1].length();j++)
+        {
+
+            for(int k=i;k>=0;k--)
+            {
+                int index=getIndex(_locs[i+1][j],_locs[k]);
+                if(index!=-1)
+                {
+                    int MDev_diff=_mDev[i+1][j]-_mDev[k][index];
+                    Loc.append(_locs[i+1][j]);
+                    Val.append(MDev_diff);
+                    break;
+                }
+            }
+        }
+        resultVal.append(Val);
+        resultLocs.append(Loc);
+    }
+
+    for(int i=0;i<resultVal.length();i++)
+    {
+        QVector<int> picVal;
+        for(int j=0;j<resultVal[i].length();j++)
+        {
+            auto pe=getpeMDev(resultVal[i][j],resultLocs[i][j],OS_OD);
+            if(i==0)
+            {
+                if(pe>0) picVal.append(1);
+                else picVal.append(0);
+            }
+            else
+            {
+                if(pe>0)
+                {
+                    for(int k=i;k>=0;k--)
+                    {
+                        int index=getIndex(resultLocs[i][j],resultLocs[k-1]);
+                        if(index!=-1)
+                        {
+                            picVal.append(resultPicVal[k-1][index]+1);
+                            break;
+                        }
+                    }
+                }
+                else picVal.append(0);
+            }
+        }
+        resultPicVal.append(picVal);
+    }
+}
+
+
 AnalysisSvc *AnalysisSvc::getSingleton()
 {
     if (singleton==nullptr)
@@ -485,7 +674,7 @@ void AnalysisSvc::drawText(QVector<int> values,QVector<QPointF> locs,int range,i
     img.fill(qRgb(255, 255, 255));
     drawPixScale(range,img);
     QPainter painter(&img);
-    int fontPixSize=img.width()/18;
+    int fontPixSize=img.width()/17;
     QFont font("consolas");
     font.setPixelSize(fontPixSize);
     painter.setFont(font);
@@ -495,7 +684,7 @@ void AnalysisSvc::drawText(QVector<int> values,QVector<QPointF> locs,int range,i
     QImage blindImage(":/grays/SE3.bmp");
     float scale;
     if(img.width()<=400){ scale=1;}
-    else scale=3;
+    else scale=2;
     blindImage=blindImage.scaled(blindImage.width()*scale,blindImage.height()*scale);
     painter.drawImage(QPoint{pixLoc.x()-blindImage.width()/2,pixLoc.y()-blindImage.height()/2},blindImage);
 
@@ -503,7 +692,7 @@ void AnalysisSvc::drawText(QVector<int> values,QVector<QPointF> locs,int range,i
     {
         if(values[i]==-99) continue;
         auto pixLoc=convertDegLocToPixLoc(locs[i],range,img);
-        const QRect rectangle = QRect(pixLoc.x()-fontPixSize*1.6*0.4, pixLoc.y()-fontPixSize*0.8/2, fontPixSize*1.6,fontPixSize*0.8);
+        const QRect rectangle = QRect(pixLoc.x()-fontPixSize*1.6*0.45, pixLoc.y()-fontPixSize*0.8/2, fontPixSize*1.6,fontPixSize*0.8);
         painter.drawText(rectangle,Qt::AlignCenter,QString::number(values[i]));
         img.setPixel(pixLoc.x(),pixLoc.y(),0xFFFF0000); //标个小红点
     }
@@ -604,13 +793,33 @@ void AnalysisSvc::drawPE(QVector<int> values, QVector<QPointF> locs, int range,Q
     drawPixScale(range,img);
     QPainter painter(&img);
     float scale;
-    if(img.width()<150) scale=1;
+    if(img.width()<=180) scale=1;
     else if(img.width()<300) scale=2;
     else scale=4;
     for(int i=0;i<locs.length()&&i<values.length();i++)             //画DB图
     {
         auto pixLoc=convertDegLocToPixLoc(locs[i],range,img);
         QString path=QString(":/grays/PE")+QString::number(values[i])+".bmp";
+        QImage image(path);
+        auto scaledImage=image.scaled(image.width()*scale,image.height()*scale);
+        QPoint tempPixLoc={pixLoc.x()-scaledImage.width()/2,pixLoc.y()-scaledImage.height()/2};
+        painter.drawImage(tempPixLoc,scaledImage);
+    }
+}
+
+void AnalysisSvc::drawProgess(QVector<int> values, QVector<QPointF> locs, int range, QImage &img)
+{
+    img.fill(qRgb(255, 255, 255));
+    drawPixScale(range,img);
+    QPainter painter(&img);
+    float scale;
+    if(img.width()<200) scale=1;
+    else if(img.width()<300) scale=2;
+    else scale=4;
+    for(int i=0;i<locs.length()&&i<values.length();i++)             //画DB图
+    {
+        auto pixLoc=convertDegLocToPixLoc(locs[i],range,img);
+        QString path=QString(":/grays/GPAPE")+QString::number(values[i])+".bmp";
         QImage image(path);
         auto scaledImage=image.scaled(image.width()*scale,image.height()*scale);
         QPoint tempPixLoc={pixLoc.x()-scaledImage.width()/2,pixLoc.y()-scaledImage.height()/2};
@@ -745,6 +954,150 @@ QPoint AnalysisSvc::convertDegLocToPixLoc(QPointF DegLoc,int range,QImage img)
     float pixPerDegH=float(img.height()/2)/range;
     return QPoint(img.width()/2+DegLoc.x()*pixPerDegW,img.height()/2-DegLoc.y()*pixPerDegH);
 }
+
+
+void AnalysisSvc::drawBaseLine(QVector<float> mds,int startYear,QVector<int> months, QImage &img)
+{
+    float scale;
+    if(img.width()<=600){ scale=1;}
+    else scale=2;
+    img.fill(qRgb(255, 255, 255));
+    QPainter painter(&img);
+    painter.setBackground(QBrush(QColor("white")));
+    painter.setBrush(QBrush(QColor("black")));
+    painter.setPen({Qt::black,float(scale)});
+    int fontPixSize=img.height()/20;
+//    int fontPixSize=3;
+    QFont font("consolas");
+    font.setPixelSize(fontPixSize);
+    painter.setFont(font);
+
+    painter.drawLine(QLine(QPoint(0.1*img.width(),0.05*img.height()),QPoint(0.9*img.width(),0.05*img.height())));  //600*0.8/24= 20year
+    painter.drawLine(QLine(QPoint(0.1*img.width(),0.05*img.height()),QPoint(0.1*img.width(),0.95*img.height())));
+
+    QRect rectangle = QRect(0.05*img.width()-fontPixSize*1.8*0.9, 0.5*img.height()-fontPixSize*0.5,fontPixSize*1.9, fontPixSize*0.8);
+    painter.drawText(rectangle,Qt::AlignCenter|Qt::AlignVCenter,"MD");
+    rectangle = QRect(0.05*img.width()-fontPixSize*1.8*0.9, 0.5*img.height()+fontPixSize*0.5,fontPixSize*1.9, fontPixSize*0.8);
+    painter.drawText(rectangle,Qt::AlignCenter|Qt::AlignVCenter,"(DB)");
+
+
+    int dbScale=1;
+    for(int i=1;i<=16;i++)
+    {
+        const QRect rectangle = QRect(0.05*img.width()+fontPixSize*1.6*0.1, 0.06*img.height()*i-fontPixSize*0.5,fontPixSize*1.6, fontPixSize*0.8);
+        painter.drawText(rectangle,Qt::AlignCenter|Qt::AlignVCenter,QString::number(dbScale));
+        dbScale--;
+    }
+
+
+    int yearScale=startYear;
+    for(int i=0;i<=20;i++)
+    {
+        const QRect rectangle = QRect(0.1*img.width()+i*24-fontPixSize*1.6*0.5, fontPixSize*0.2,fontPixSize*1.2, fontPixSize*0.8);
+        painter.drawText(rectangle,Qt::AlignCenter|Qt::AlignVCenter,QString::number(yearScale%100));
+        yearScale++;
+    }
+    rectangle = QRect(0.95*img.width()-fontPixSize*1.6*0.5, fontPixSize*0.2,fontPixSize*2.3, fontPixSize*0.8);
+//    painter.drawText(QPoint(0.93*img.width(),fontPixSize*0.35),"(YEAR)");
+    painter.drawText(rectangle,Qt::AlignCenter|Qt::AlignVCenter,"YEAR");
+
+    QPen pen;
+    pen.setDashPattern({float(3*scale),float(3*scale)});
+    pen.setWidth(scale);
+    pen.setColor(Qt::black);
+    painter.setPen(pen);
+    painter.setBrush(Qt::NoBrush);
+
+
+
+    auto getMDPixy=[&](float md)->int{return int((0.05+0.06*(1-md))*img.height());};
+
+    painter.drawLine(QLine(QPoint(0.1*img.width(),(0.05+0.06*(1-(-2)))*img.height()),QPoint(0.9*img.width(),(0.05+0.06*(1-(-2)))*img.height())));
+    painter.drawText(QPoint(0.93*img.width(),(0.05+0.06*(1-(-2)))*img.height()+fontPixSize*0.35),"P<%5");
+    painter.drawLine(QLine(QPoint(0.1*img.width(),(0.05+0.06*(1-(-3.5)))*img.height()),QPoint(0.9*img.width(),(0.05+0.06*(1-(-3.5)))*img.height())));
+    painter.drawText(QPoint(0.93*img.width(),(0.05+0.06*(1-(-3.5)))*img.height()+fontPixSize*0.35),"P<%1");
+
+
+    for(int i=0;i<mds.length();i++)
+    {
+        if(i!=mds.length()-1) painter.drawLine(QLine(QPoint{int(0.1*img.width()+months[i]*2),getMDPixy(mds[i])},QPoint{int(0.1*img.width()+months[i+1]*2),getMDPixy(mds[i+1])}));
+        float diameter=0.02*img.height();
+        QPoint center={int(0.1*img.width()+months[i]*2),getMDPixy(mds[i])};
+        painter.setBrush(QBrush(Qt::black));
+        QRectF rect(center.x()-diameter/2,center.y()-diameter/2,diameter,diameter);
+        painter.drawEllipse(rect);
+    }
+
+
+}
+
+int AnalysisSvc::getIndex(const QPointF &dot, const QVector<QPointF> &pointLoc)
+{
+    int index=-1;
+    for(int i=0;i<pointLoc.length();i++)
+    {
+        int dist=pow(pointLoc[i].x()-dot.x(),2)+pow(pointLoc[i].y()-dot.y(),2);
+        if(dist<FLT_EPSILON){index=i;break;}
+    }
+    return index;
+}
+
+
+int AnalysisSvc::getIndex(const QPointF& dot,const QVector<QPoint> &pointLoc, int OS_OD)
+{
+    int index=-1;
+
+    for(int i=0;i<pointLoc.length();i++)
+    {
+        int dist;
+        if(OS_OD==0)
+        {
+            dist=pow(pointLoc[i].x()-dot.x(),2)+pow(pointLoc[i].y()-dot.y(),2);
+        }
+        else
+        {
+            dist=pow(pointLoc[i].x()-(-dot.x()),2)+pow(pointLoc[i].y()-dot.y(),2);
+        }
+        if(dist<FLT_EPSILON){index=i;break;}
+    }
+    return index;
+}
+
+int AnalysisSvc::getIndex(const QPointF& dot,const QVector<QPointF> &pointLoc, int OS_OD)
+{
+    int index=-1;
+
+    for(int i=0;i<pointLoc.length();i++)
+    {
+        int dist;
+        if(OS_OD==0)
+        {
+            dist=pow(pointLoc[i].x()-dot.x(),2)+pow(pointLoc[i].y()-dot.y(),2);
+        }
+        else
+        {
+            dist=pow(pointLoc[i].x()-(-dot.x()),2)+pow(pointLoc[i].y()-dot.y(),2);
+        }
+        if(dist<FLT_EPSILON){index=i;break;}
+    }
+    return index;
+}
+
+int AnalysisSvc::getpeMDev(int MDev,QPointF loc,int OS_OD)
+{
+    auto index=getIndex(loc,m_pointLoc_30d,OS_OD);
+    int peMDev;
+
+    int v=-MDev;
+    if (v<=m_pe_v5[0][index]) peMDev=0;
+    else if(v<=m_pe_v2[0][index]) peMDev=1;
+    else if(v<=m_pe_v1[0][index]) peMDev=2;
+    else if(v<=m_pe_v05[0][index]) peMDev=3;
+    else peMDev=4;
+
+    return peMDev;
+}
+
 
 
 

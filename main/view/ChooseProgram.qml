@@ -45,7 +45,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"选择程序";}
+                    CusText{text:"选择程序"; anchors.left: parent.left; anchors.leftMargin: height*0.5}
                 }
                 Column{id: column;width: parent.width-2; height: parent.height*0.8;
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -186,3 +186,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
         }
     }
 }
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

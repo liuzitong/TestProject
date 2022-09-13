@@ -1,6 +1,8 @@
-﻿import qxpack.indcom.ui_qml_base 1.0
+import qxpack.indcom.ui_qml_base 1.0
 
 import QtQuick 2.0
+
+//已废弃
 Item{
     property var degLocs:[];
     property var values:[];
