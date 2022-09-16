@@ -120,7 +120,7 @@ Rectangle {
             AnalysisLobby{id:analysisLobbypage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
             Analysis{id:analysisPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
             ProgressAnalysisLobby{id:progressAnalysisLobbyPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
-            ProgressAnalysis{id:progressAnalysisPage;anchors.fill: parent;visible: false;onChangePage: contentPage.changePage(pageName,params);}
+            ProgressAnalysis{id:progressAnalysisPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
 //            Component.onCompleted: {
 //                IcUiQmlApi.appCtrl.changePage.connect(changePage);
 //                patientPage.changePage.connect(contentPage.changePage);
@@ -173,7 +173,11 @@ Rectangle {
                         progressAnalysisPage.progressAnalysisListVm=params.progressAnalysisListVm;
                         progressAnalysisPage.report=params.report;
                         progressAnalysisPage.progressAnalysisResult=params.result;
-                        console.log(progressAnalysisPage.report);
+                        console.log(params.result[2]);
+                        if(params.report===2)
+                        {
+                            progressAnalysisPage.staticAnalysisVm=params.staticAnalysisVm
+                        }
                         progressAnalysisPage.refresh();
                         break;
                     case "check":

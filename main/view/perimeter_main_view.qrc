@@ -25,7 +25,7 @@
         <file>ProgressAnalysisLobby.qml</file>
         <file>ProgressAnalysis.qml</file>
         <file>ProgressAnalysisBaseLine.qml</file>
-        <file>progressThreeFollowUps.qml</file>
+        <file>ProgressThreeFollowUps.qml</file>
         <file>ProgressAnalysisSingle.qml</file>
     </qresource>
     <qresource prefix="/"/>

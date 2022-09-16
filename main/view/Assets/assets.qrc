@@ -81,11 +81,6 @@
         <file>grays/2_Gray6.bmp</file>
         <file>grays/2_Gray7.bmp</file>
         <file>grays/DE0.bmp</file>
-        <file>grays/GPAPE0.bmp</file>
-        <file>grays/GPAPE1.bmp</file>
-        <file>grays/GPAPE2.bmp</file>
-        <file>grays/GPAPE3.bmp</file>
-        <file>grays/GPAPE4.bmp</file>
         <file>grays/Gray0.bmp</file>
         <file>grays/Gray1.bmp</file>
         <file>grays/Gray2.bmp</file>
@@ -107,5 +102,10 @@
         <file>grays/SE1.bmp</file>
         <file>grays/SE2.bmp</file>
         <file>grays/SE3.bmp</file>
+        <file>grays/GPA1.bmp</file>
+        <file>grays/GPA2.bmp</file>
+        <file>grays/GPA3.bmp</file>
+        <file>grays/GPA4.bmp</file>
+        <file>grays/GPA0.bmp</file>
     </qresource>
 </RCC>

@@ -12,6 +12,9 @@ Column {
     anchors.fill:parent;
     property var progressAnalysisListVm: null;
     property var progressAnalysisResult: null;
+    property var staticAnalysisVm: null;
+    property var currentPatient: null;
+
     property int report;
 
     signal refresh();
@@ -19,14 +22,21 @@ Column {
 
     onRefresh:
     {
+        console.log(progressAnalysisResult[2]);
         switch(report)
         {
         case 0:content.source="ProgressAnalysisBaseLine.qml";break;
-        case 1:content.source="ProgressAnalysisThressFollowUps.qml";break;
+        case 1:content.source="ProgressThreeFollowUps.qml";break;
         case 2:content.source="ProgressAnalysisSingle.qml";break;
         }
-        content.item.progressAnalysisResult=progressAnalysisResult;
         content.item.progressAnalysisListVm=progressAnalysisListVm;
+        content.item.progressAnalysisResult=progressAnalysisResult;
+        if(report==2)
+        {
+            content.item.staticAnalysisVm=staticAnalysisVm;
+            content.item.currentPatient=currentPatient;
+        }
+
         content.item.refresh();
     }
 

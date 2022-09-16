@@ -320,7 +320,7 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
     else if(psd>3.2) p_psd=2;
     else if(psd>2.5) p_psd=5;
     else if(psd>2.0) p_psd=10;
-    else psd=-1;
+    else p_psd=-1;
 
     if(md<-5.5)  p_md=0.5;
     else if(md<-3.5) p_md=1;
@@ -519,7 +519,7 @@ void AnalysisSvc::BaseLineAnalysis(const QVector<float> &mds, const QVector<int>
 //    }
 //}
 
-void AnalysisSvc::ProgressAnalysis(const QVector<QVector<int> > &mDev,const  QVector<QVector<QPointF> > &locs, int OS_OD,QVector<QVector<QPointF> > &resultLocs, QVector<QVector<int> > &resultVal, QVector<QVector<int> > &resultPicVal)
+void AnalysisSvc::ProgressAnalysis(const QVector<QVector<int> > &mDev,const  QVector<QVector<QPointF> > &locs, int OS_OD,QVector<QVector<QPointF> > &resultLocs, QVector<QVector<int> > &resultVal, QVector<QVector<int> > &resultPicVal,QVector<int>& progress)
 {
     auto _mDev=const_cast<QVector<QVector<int> >&>(mDev);
     auto baseMDev1=_mDev.takeFirst();
@@ -597,8 +597,23 @@ void AnalysisSvc::ProgressAnalysis(const QVector<QVector<int> > &mDev,const  QVe
                 }
                 else picVal.append(0);
             }
+
         }
         resultPicVal.append(picVal);
+    }
+
+
+    for(int i=0;i<resultPicVal.length();i++)
+    {
+        int K2_count=0,K3_count=0;
+        for(int j=0;j<resultPicVal[i].length();j++)
+        {
+            if(resultPicVal[i][j]==2) K2_count++;
+            if(resultPicVal[i][j]==3) K3_count++;
+        }
+        if(K3_count>=3) progress.append(2);
+        else if(K2_count>=3) progress.append(1);
+        else progress.append(0);
     }
 }
 
@@ -819,7 +834,8 @@ void AnalysisSvc::drawProgess(QVector<int> values, QVector<QPointF> locs, int ra
     for(int i=0;i<locs.length()&&i<values.length();i++)             //画DB图
     {
         auto pixLoc=convertDegLocToPixLoc(locs[i],range,img);
-        QString path=QString(":/grays/GPAPE")+QString::number(values[i])+".bmp";
+        QString path=QString(":/grays/GPA")+QString::number(values[i])+".bmp";
+//        QString path=QString(":/grays/GPA0.bmp");
         QImage image(path);
         auto scaledImage=image.scaled(image.width()*scale,image.height()*scale);
         QPoint tempPixLoc={pixLoc.x()-scaledImage.width()/2,pixLoc.y()-scaledImage.height()/2};

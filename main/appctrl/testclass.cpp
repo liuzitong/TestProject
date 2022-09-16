@@ -51,10 +51,11 @@ void TestClass::test()
     QVector<int> values2=    {19,15,28,23};
     QVector<int> values3=    {10,10,   19};
     QVector<int> values4=    {1,  5,24,20};
+    QVector<int> progress;
     QVector<QVector<QPointF>> resultLocs;
     QVector<QVector<int>> resultVal;
     QVector<QVector<int>> resultPicVal;
-    analysisMethodSvc->ProgressAnalysis({valuesbase1,valuesbase2,values2,values3,values4},{locsbase1,locsbase2,locs2,locs3,locs4},0,resultLocs,resultVal,resultPicVal);
+    analysisMethodSvc->ProgressAnalysis({valuesbase1,valuesbase2,values2,values3,values4},{locsbase1,locsbase2,locs2,locs3,locs4},0,resultLocs,resultVal,resultPicVal,progress);
     for(auto& i:resultLocs)
     {
         qDebug()<<i;

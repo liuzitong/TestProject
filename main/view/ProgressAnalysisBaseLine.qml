@@ -8,9 +8,10 @@ import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0
 import perimeter.main.view.Utils 1.0
 
-Item {
+Rectangle {
     id:root;
     anchors.fill: parent;
+    color: "white";
     property int textHeight:height*0.05;
     property var progressAnalysisListVm: null;
     property var progressAnalysisResult: null;
@@ -54,7 +55,7 @@ Item {
 
             }
             Repeater{
-                model:["/previewImage/baseLine_gray1.bmp","/previewImage/baseLine_dBDiagram1.bmp","/previewImage/baseLine_TotalPE1.bmp","/previewImage/baseLine_PatternPE1.bmp"];
+                model:["/previewImage/baseLine_gray0.bmp","/previewImage/baseLine_dBDiagram0.bmp","/previewImage/baseLine_TotalPE0.bmp","/previewImage/baseLine_PatternPE0.bmp"];
                 Image{
                    property string picSource: modelData;
                    height: sourceSize.height;width: sourceSize.width;
@@ -103,7 +104,7 @@ Item {
 
             }
             Repeater{
-                model:["/previewImage/baseLine_gray2.bmp","/previewImage/baseLine_dBDiagram2.bmp","/previewImage/baseLine_TotalPE2.bmp","/previewImage/baseLine_PatternPE2.bmp"];
+                model:["/previewImage/baseLine_gray1.bmp","/previewImage/baseLine_dBDiagram1.bmp","/previewImage/baseLine_TotalPE1.bmp","/previewImage/baseLine_PatternPE1.bmp"];
                 Image{
                    property string picSource: modelData;
                    height: sourceSize.height;width: sourceSize.width;

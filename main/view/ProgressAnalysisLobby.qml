@@ -10,7 +10,6 @@ Column {
     id:root
     anchors.fill:parent;
     property var currentPatient: null;
-    property var analysisVm: null;
     property string backGroundColor: CommonSettings.backGroundColor;
     property var progressAnalysisListVm: null;
     property int resultId;
@@ -144,6 +143,11 @@ Column {
 //                    }
                     CusComboBoxButton{
                         id:queryStrategy;
+                        property var baseLineAnalysisResult: null;  //对象
+                        property var threeFollowUpsAnalysisResult;  //值
+                        property var singleAnalysisResult;  //值
+                        property var staticAnalysisResult: null;    //对象
+                        property var staticAnalysisVm: null;
                         height: parent.height; anchors.right: parent.right; width: height*3.5;
                         property var listModel:ListModel {
                             ListElement{name:"进展基线";report:0}
@@ -165,26 +169,31 @@ Column {
                         function analysis(report)
                         {
                             var diagramWidth;
-                            var analysisResult=null;
                             switch (report)
                             {
                             case 0:
+                                if(baseLineAnalysisResult!==null) analysisResult1.destroy();
                                 diagramWidth=root.height*14/15*0.92*0.32;
-                                analysisResult=progressAnalysisListVm.getProgressBaseLine(diagramWidth);
-                                break;
-
-
+                                baseLineAnalysisResult=progressAnalysisListVm.getProgressBaseLine(diagramWidth,false);
+                                changePage("progressAnalysis",{progressAnalysisListVm:progressAnalysisListVm,report:report,result:baseLineAnalysisResult});
+                                return;
                             case 1:
-                                diagramWidth=root.height*14/15*0.92*0.47*0.8;
-//                                progressAnalysisListVm.getLastThreeProgress(progressAnalysisListVm.selectedResultId,diagramWidth);
-                                break;
+                                diagramWidth=root.height*14/15*0.92*0.96*0.32;
+                                threeFollowUpsAnalysisResult=progressAnalysisListVm.getThreeFollowUps(progressAnalysisListVm.selectedIndex,diagramWidth,false);
+                                changePage("progressAnalysis",{progressAnalysisListVm:progressAnalysisListVm,report:report,result:threeFollowUpsAnalysisResult});
+                                return;
                             case 2:
-                                diagramWidth=root.height*14/15*0.92*0.40*0.8;
-//                                analysisResult=progressAnalysisListVm.getSingleProgress(progressAnalysisListVm.selectedResultId,diagramWidth);
-                                break;
-
+                                diagramWidth=root.height*14/15*0.92*0.96/3;
+                                singleAnalysisResult=progressAnalysisListVm.getSingleProgress(progressAnalysisListVm.selectedIndex,diagramWidth,false);
+                                if(staticAnalysisVm!=null)
+                                {
+                                    IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticAnalysisVm",staticAnalysisVm);
+                                }
+                                staticAnalysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticAnalysisVm", false,[progressAnalysisListVm.selectedResultId,diagramWidth,0]);
+                                changePage("progressAnalysis",{progressAnalysisListVm:progressAnalysisListVm,report:report,result:singleAnalysisResult,staticAnalysisVm:staticAnalysisVm});
+                                return;
                             }
-                            changePage("progressAnalysis",{progressAnalysisListVm:progressAnalysisListVm,report:report,result:analysisResult});
+//                            changePage("progressAnalysis",{progressAnalysisListVm:progressAnalysisListVm,report:report,result:analysisResult});
 //                            changePage("analysis",{pageFrom:"analysisLobby",report:report,analysisVm:analysisVm,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
                         }
                         Component.onCompleted:

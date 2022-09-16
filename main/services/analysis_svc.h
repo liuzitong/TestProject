@@ -28,7 +28,7 @@ public:
 
 //    void ProgressAnalysis(const QVector<int> (&mDev)[4],const QVector<QPointF> (&locs)[4],int OS_OD,QVector<int>& resultVal);
 
-    void ProgressAnalysis(const QVector<QVector<int>>& mDev,const QVector<QVector<QPointF>>& locs,int OS_OD,QVector<QVector<QPointF> > &resultLocs,QVector<QVector<int>>& resultVal,QVector<QVector<int>>& resultPicVal);
+    void ProgressAnalysis(const QVector<QVector<int> > &mDev,const  QVector<QVector<QPointF> > &locs, int OS_OD,QVector<QVector<QPointF> > &resultLocs, QVector<QVector<int> > &resultVal, QVector<QVector<int> > &resultPicVal,QVector<int>& progress);
 
 //    void DrawThreshold(int resultId,int imageSize,QVector<int>& dev,QVector<int>& mDev,QVector<int>& peDev,QVector<int>& peMDev);
 //    void DrawScreening(int resultId,int imageSize);
