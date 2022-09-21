@@ -4,20 +4,25 @@ import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0     // [HINT] this is the pre-registered module name.
 import qxpack.indcom.ui_qml_control 1.0  // [HINT] ModalPopupDialog is in it
+import perimeter.main.view.Utils 1.0
 
 ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml_contro
     id:idPopup
     property alias color: idContent.color;
     reqEnterEventLoop:false;
-    width:1366; height: 720;
+//    width:1366; height: 720;
+    anchors.fill:parent;
 //    property alias contentWidth : idContent.implicitWidth;
 //    property alias contentHeight: idContent.implicitHeight;
+    property int fontPointSize: CommonSettings.fontPointSize;
     property alias type:typeComboBox.currentIndex;
     property int strategy;
     property alias range:rangeEdit.value;
     property alias programName:nameEdit.text;
     signal ok();
     signal cancel();
+
+
 
    contentItem:
    Rectangle{
@@ -44,14 +49,14 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"创建程序";}
+                    CusText{text:"创建程序";font.pointSize: fontPointSize;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;
                     Item{ anchors.topMargin: parent.height*0.08;anchors.bottomMargin:parent.height*0.08; anchors.leftMargin:parent.height*0.12; anchors.rightMargin:parent.height*0.12;anchors.fill: parent;
                         Column{anchors.fill: parent;spacing:parent.height*(1-0.12*5)/4;
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
-                                CusText{text:"名字:"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                CusText{text:"名字:";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                 LineEdit{
                                     id:nameEdit;
                                     width: parent.width*0.7;
@@ -60,7 +65,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             }
 
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
-                                CusText{text:"范围:"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                CusText{text:"范围:";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                 NumberLineEdit{
                                     id:rangeEdit;
                                     width: parent.width*0.7;
@@ -73,7 +78,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                 }
                             }
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
-                                CusText{text:"类别:"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                CusText{text:"类别:";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                 CusComboBox{
                                     id:typeComboBox;
                                     width: parent.width*0.7;
@@ -84,7 +89,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                 }
                             }
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
-                                CusText{text:"策略:"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                CusText{text:"策略:";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                 CusComboBox{
                                     id:stratComboBox
                                     property var strategies: [["全阈值","智能交互式","快速智能交互式"],["二区法","三区法","量化缺损","单刺激"],["标准动态","盲区动态","暗区动态","直线动态"]];

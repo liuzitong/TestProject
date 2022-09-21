@@ -6,6 +6,7 @@ import qxpack.indcom.ui_qml_base 1.0     // [HINT] this is the pre-registered mo
 import qxpack.indcom.ui_qml_control 1.0  // [HINT] ModalPopupDialog is in it
 import perimeter.main.view.Utils 1.0
 
+
 ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml_contro
     id:idPopup
     property alias color: idContent.color;
@@ -13,6 +14,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 //    width: 1366;height: 680;
 //    property alias contentWidth : idContent.implicitWidth;
 //    property alias contentHeight: idContent.implicitHeight;
+//    property int textHeight: height*0.02;
+    property int fontPointSize: CommonSettings.fontPointSize;
 
 
    contentItem:
@@ -43,7 +46,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"关于";width: height*1.4}
+                    CusText{text:"关于";width: height*1.4;font.pointSize:fontPointSize;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;
@@ -62,7 +65,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             anchors.fill: parent;
                             Item{
                                 height:parent.height*0.11;width: parent.width;CusText{width:parent.width;text:"电脑自动视野仪系统"; fontSizeMode: Text.VerticalFit;
-                                    anchors.horizontalCenter: parent.horizontalCenter;font.pointSize:height*0.5;
+                                    anchors.horizontalCenter: parent.horizontalCenter;font.pointSize:fontPointSize*2;
                                 }
                             }
                             Item{height:parent.height*0.06;width: parent.width; }

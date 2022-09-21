@@ -15,6 +15,8 @@ Item {
     signal refresh;
     signal clearDot;
     property int range: currentProgram.params.commonParams.Range[1];
+    property int fontPointSize: CommonSettings.fontPointSize;
+    property int textHeight:CommonSettings.textHeight;
 
     anchors.fill: parent;
     Column{anchors.fill: parent;/*spacing:height*0.035*/
@@ -70,21 +72,18 @@ Item {
             }
 
             Column {
-                height:parent.height;width:parent.width*0.9-parent.height*2
-                Item{width:parent.width;height:parent.height*0.2;}
-                CusText{width:parent.width;height:parent.height*0.12;text:"VFI:"+Math.round(analysisResult.VFI*100)+"%" ;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
-                Item{width:parent.width;height:parent.height*0.1;}
-                CusText{
-                property var ght: if(analysisResult.GHT===0){return "超出界限";} else if(analysisResult.GHT===1){return "普遍敏感度降低";}else if(analysisResult.GHT===2){return "边界";}else if(analysisResult.GHT===3){return "正常范围";}
-                width:parent.width;height:parent.height*0.12;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40;text:"青光眼半视野检查: "+ ght;}
-                Item{width:parent.width;height:parent.height*0.1;}
-                CusText{width:parent.width;height:parent.height*0.12;text:"平均缺损: "+analysisResult.md.toFixed(2)+(analysisResult.p_md>0?" (<"+analysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
-                CusText{width:parent.width;height:parent.height*0.12;text:"模式标准偏差: "+analysisResult.psd.toFixed(2)+(analysisResult.p_psd>0?" (<"+analysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
+                height:parent.height;width:parent.width*0.9-parent.height*2;spacing:textHeight*0.5;
+                Item{width: parent.width;height: textHeight;}
+                CusText{width:parent.width;height:textHeight;text:"VFI:"+Math.round(analysisResult.VFI*100)+"%" ;horizontalAlignment: Text.AlignLeft;}
+                CusText{property var ght: if(analysisResult.GHT===0){return "超出界限";} else if(analysisResult.GHT===1){return "普遍敏感度降低";}else if(analysisResult.GHT===2){return "边界";}else if(analysisResult.GHT===3){return "正常范围";}
+                width:parent.width;height:textHeight;horizontalAlignment: Text.AlignLeft;text:"青光眼半视野检查: "+ ght;}
+                CusText{width:parent.width;height:textHeight;text:"平均缺损: "+analysisResult.md.toFixed(2)+(analysisResult.p_md>0?" (<"+analysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;}
+                CusText{width:parent.width;height:textHeight;text:"模式标准偏差: "+analysisResult.psd.toFixed(2)+(analysisResult.p_psd>0?" (<"+analysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;}
             }
         }
         Row{width: parent.width;height:parent.height*0.03;spacing:width*0.05;
-            CusText{width:parent.parent.height*0.98/3;height: parent.height;text: "总体偏差"; verticalAlignment: Text.AlignVCenter; font.pointSize: height*0.50}
-            CusText{width:parent.parent.height*0.98/3;height: parent.height;text: "模式偏差";  verticalAlignment: Text.AlignVCenter;font.pointSize: height*0.50}
+            CusText{width:parent.parent.height*0.98/3;height:textHeight;text: "总体偏差"; verticalAlignment: Text.AlignVCenter; }
+            CusText{width:parent.parent.height*0.98/3;height:textHeight;text: "模式偏差";  verticalAlignment: Text.AlignVCenter;}
         }
         Row{
             width: parent.width;height:parent.height*0.97/3;spacing:width*0.05
@@ -114,9 +113,9 @@ Item {
                         anchors.fill: parent;
                         model: [{image:"qrc:/grays/PE1.bmp",pe:"<5%"},{image:"qrc:/grays/PE2.bmp",pe:"<2%"},{image:"qrc:/grays/PE3.bmp",pe:"<1%"},{image:"qrc:/grays/PE4.bmp",pe:"<0.5%"}]
                         Row{
-                            height: parent.height*0.14;width: parent.width;spacing: height*0.5
+                            height: textHeight;width: parent.width;spacing: height*0.5
                             Image {height: sourceSize.height*2; fillMode: Image.PreserveAspectFit; width:sourceSize.height*2;smooth: false;source: modelData.image}
-                            CusText{height: parent.height;text:modelData.pe; horizontalAlignment: Text.AlignLeft;anchors.verticalCenter: parent.verticalCenter;font.pointSize: height*0.70}
+                            CusText{height:textHeight;text:modelData.pe; horizontalAlignment: Text.AlignLeft;anchors.verticalCenter: parent.verticalCenter;}
                         }
                     }
                 }

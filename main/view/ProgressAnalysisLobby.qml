@@ -11,6 +11,8 @@ Column {
     anchors.fill:parent;
     property var currentPatient: null;
     property string backGroundColor: CommonSettings.backGroundColor;
+    property int fontPointSize: CommonSettings.fontPointSize;
+    property int textHeight:CommonSettings.textHeight;
     property var progressAnalysisListVm: null;
     property int resultId;
     property int os_od;
@@ -31,24 +33,24 @@ Column {
             Row{
                 id:header
                 width: parent.width; height:(infoCol.height)/(pageSize+1);spacing: -1;z:1;
-                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"日期"}}
-                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"选择程序"}}
-                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"策略"}}
-                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"平均缺损"}}
-                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"模式标准差"}}
-                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"固视丢失率"}}
-                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"假阳性率"}}
-                Rectangle{width: parent.width*1/10;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"假阴性率"}}
+                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"日期";}}
+                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"选择程序";}}
+                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"策略";}}
+                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"平均缺损";}}
+                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"模式标准差";}}
+                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"固视丢失率";}}
+                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"假阳性率";}}
+                Rectangle{width: parent.width*1/10;  height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"假阴性率";}}
             }
             ListView{
                 id:progressAnalysisListView
-                signal deSelectAll();
+//                signal deSelectAll();
                 property int seletedPatientLength:0;
                 property var seletedPatient:[];
                 width: parent.width;height:(infoCol.height)/(pageSize+1)*pageSize ; interactive: false; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
                 delegate: infoDelegate
                 model:progressAnalysisListVm;
-                currentIndex: progressAnalysisListVm.selectedIndex;
+//                currentIndex: progressAnalysisListVm.selectedIndex;
 //                currentIndex: count-1;
 //                model:[
 //                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:true},
@@ -64,31 +66,32 @@ Column {
                     Item{
                         id:rootItem
 //                        property bool isSelected: false;
-                        property string rowBackGroundColor:progressAnalysisListView.currentIndex==index?"steelblue":(index==0||index==1)?"grey":"white";
-                        property string rowForeGroundColor:(progressAnalysisListView.currentIndex==index||index==0||index==1)?"white":"black";
+                        property string rowBackGroundColor:progressAnalysisListVm.selectedIndex===index?"steelblue":(index==0||index==1)?"grey":"white";
+                        property string rowForeGroundColor:(progressAnalysisListVm.selectedIndex===index||index==0||index==1)?"white":"black";
 
                         width: progressAnalysisListView.width;height: (infoCol.height)/(pageSize+1);
                         MouseArea{
                             anchors.fill: parent;
                             onClicked:
                             {
-                                progressAnalysisListView.deSelectAll();
+//                                progressAnalysisListView.deSelectAll();
 //                                parent.isSelected=true;
                                 progressAnalysisListVm.selectedIndex=index;
+//                                progressAnalysisListView.currentIndex=index;
 
                             }
 
                         }
                         Row{
                             id:infoRow;anchors.fill: parent;spacing: -1;
-                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:dateTime}}
-                            Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:program}}
-                            Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:strategy}}
-                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:md.toFixed(2)}}
-                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:psd.toFixed(2)}}
-                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:fixationLossRate.toFixed(2)}}
-                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:falseNegativeRate.toFixed(2)}}
-                            Rectangle{width: parent.width*1/10;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;text:falsePositiveRate.toFixed(2)}}
+                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:Qt.formatDateTime(dateTime,"yyyy/MM/dd")}}
+                            Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:program}}
+                            Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:strategy}}
+                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:md.toFixed(2)}}
+                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:psd.toFixed(2)}}
+                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:fixationLossRate.toFixed(2)}}
+                            Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:falseNegativeRate.toFixed(2)}}
+                            Rectangle{width: parent.width*1/10;  height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:falsePositiveRate.toFixed(2)}}
                         }
                     }
                 }
@@ -107,14 +110,17 @@ Column {
             Item{height: parent.height; anchors.horizontalCenter: parent.horizontalCenter; width:parent.width*0.33;
                 Item{ id: item1;anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height; layoutDirection: Qt.RightToLeft; anchors.right: parent.right; spacing: height*0.4;anchors.horizontalCenter: parent.horizontalCenter;
-                        CusButton{text:"去除";enabled:progressAnalysisListVm==null?false:progressAnalysisListVm.rowCount()>=3;onClicked:
+                        CusButton{text:"去除";enabled:progressAnalysisListVm==null?false:progressAnalysisListVm.rowCount()>=3;
+                            onClicked:
                             {
                                 progressAnalysisListVm.removeCheckResult(progressAnalysisListView.currentIndex);
                                 if(progressAnalysisListVm.rowCount()-1<progressAnalysisListView.currentIndex)
                                 {
                                     progressAnalysisListView.currentIndex=progressAnalysisListVm.rowCount()-1;
                                 }
+                                progressAnalysisListVm.selectedIndex=progressAnalysisListView.currentIndex;
                                 progressAnalysisListVmChanged();
+
                             }
                         }
                         CusButton
@@ -142,24 +148,28 @@ Column {
 //                        CusButton{text:"单次进展分析";onClicked:{changePage("progressAnalysis",{data:progressAnalysisListVm,report:2})}}
 //                    }
                     CusComboBoxButton{
-                        id:queryStrategy;
+                        id:progressAnalyss;
                         property var baseLineAnalysisResult: null;  //对象
                         property var threeFollowUpsAnalysisResult;  //值
                         property var singleAnalysisResult;  //值
                         property var staticAnalysisResult: null;    //对象
                         property var staticAnalysisVm: null;
+
                         height: parent.height; anchors.right: parent.right; width: height*3.5;
                         property var listModel:ListModel {
                             ListElement{name:"进展基线";report:0}
-                            ListElement{name:"最后三次进展";report:1}
+                            ListElement{name:"进展分析";report:1}
                             ListElement{name:"单次进展分析";report:2}}
-//                        property var listModel;
-                        comboBox.model: listModel;popDirectionDown: false;complexType: true;
+                        property var listModel2:ListModel {
+                            ListElement{name:"进展基线";report:0}}
+                        button.enabled: progressAnalysisListVm.selectedIndex>1;
+                        enabled: progressAnalysisListVm.rowCount()>1;
+                        comboBox.model:progressAnalysisListVm.selectedIndex>1?listModel:listModel2;
+                        popDirectionDown: false;complexType: true;
                         button.text: "进展分析";
                         button.onClicked:
                         {
-                            var report=listModel.get(0).report;
-                            analysis(report);
+                            analysis(1);
                         }
                         comboBox.onActivated:
                         {
@@ -172,19 +182,20 @@ Column {
                             switch (report)
                             {
                             case 0:
-                                if(baseLineAnalysisResult!==null) analysisResult1.destroy();
+                                if(baseLineAnalysisResult!==null) baseLineAnalysisResult.destroy();
                                 diagramWidth=root.height*14/15*0.92*0.32;
-                                baseLineAnalysisResult=progressAnalysisListVm.getProgressBaseLine(diagramWidth,false);
+                                baseLineAnalysisResult=progressAnalysisListVm.getProgressBaseLinePreview(diagramWidth);
                                 changePage("progressAnalysis",{progressAnalysisListVm:progressAnalysisListVm,report:report,result:baseLineAnalysisResult});
                                 return;
                             case 1:
                                 diagramWidth=root.height*14/15*0.92*0.96*0.32;
-                                threeFollowUpsAnalysisResult=progressAnalysisListVm.getThreeFollowUps(progressAnalysisListVm.selectedIndex,diagramWidth,false);
+                                console.log(progressAnalysisListVm.selectedIndex);
+                                threeFollowUpsAnalysisResult=progressAnalysisListVm.getThreeFollowUpsPreview(progressAnalysisListVm.selectedIndex,diagramWidth);
                                 changePage("progressAnalysis",{progressAnalysisListVm:progressAnalysisListVm,report:report,result:threeFollowUpsAnalysisResult});
                                 return;
                             case 2:
                                 diagramWidth=root.height*14/15*0.92*0.96/3;
-                                singleAnalysisResult=progressAnalysisListVm.getSingleProgress(progressAnalysisListVm.selectedIndex,diagramWidth,false);
+                                singleAnalysisResult=progressAnalysisListVm.getSingleProgressPreview(progressAnalysisListVm.selectedIndex,diagramWidth);
                                 if(staticAnalysisVm!=null)
                                 {
                                     IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticAnalysisVm",staticAnalysisVm);
@@ -193,24 +204,10 @@ Column {
                                 changePage("progressAnalysis",{progressAnalysisListVm:progressAnalysisListVm,report:report,result:singleAnalysisResult,staticAnalysisVm:staticAnalysisVm});
                                 return;
                             }
-//                            changePage("progressAnalysis",{progressAnalysisListVm:progressAnalysisListVm,report:report,result:analysisResult});
-//                            changePage("analysis",{pageFrom:"analysisLobby",report:report,analysisVm:analysisVm,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
-                        }
-                        Component.onCompleted:
-                        {
-                            progressAnalysisListView.currentIndexChanged.connect(function()
-                            {
-                                if(progressAnalysisListView.currentIndex>=2) enabled=true; else enabled=false;
-
-                                console.log(progressAnalysisListView.currentIndex);
-                            });
-
                         }
                     }
-
                 }
             }
-
         }
     }
 }

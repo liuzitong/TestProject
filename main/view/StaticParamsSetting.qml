@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0     // [HINT] this is the pre-registered module name.
 import qxpack.indcom.ui_qml_control 1.0  // [HINT] ModalPopupDialog is in it
+import perimeter.main.view.Utils 1.0
 
 ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml_contro
     id:idPopup
@@ -19,8 +20,10 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
     signal dataRefreshed();
     signal cancel();
     property bool isCustomProg:false;
-
     property var currentProgram:null;
+
+    property int fontPointSize: CommonSettings.fontPointSize;
+
 
 
 
@@ -50,7 +53,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"参数设置"; anchors.right: parent.right; anchors.rightMargin: height*0.5}
+                    CusText{text:"参数设置"; anchors.right: parent.right; anchors.rightMargin: height*0.5;font.pointSize:fontPointSize;}
                 }
                 Column{
                     width: parent.width;height: parent.height-header.height;
@@ -91,18 +94,18 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.45;
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"测试范围"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"测试范围"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.params.commonParams.Range[1];}
 
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"测试点数"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"测试点数"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.dots.length;}
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"策略"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"策略"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
                                             property var threshold:["全阈值","智能交互式","快速智能交互式"];
                                             property var screening: ["二区法","三区法","量化缺损","单刺激"];
@@ -113,7 +116,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"策略模式"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"策略模式"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
                                             width: parent.width*0.6; anchors.right: parent.right;model:["年龄相关","阈值相关","单刺激"];
                                             currentIndex: currentProgram===null?0:currentProgram.params.commonParams.strategyMode;
@@ -122,7 +125,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"光标大小"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"光标大小"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
                                             width: parent.width*0.6; anchors.right: parent.right;model:["I","II","III","IV","V"];
                                             currentIndex: currentProgram===null?0:currentProgram.params.commonParams.cursorSize;
@@ -131,7 +134,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"光标颜色"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"光标颜色"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
                                             width: parent.width*0.6; anchors.right: parent.right;model:["白色","红色","蓝色"];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.cursorColor;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.cursorColor=currentIndex;})}
@@ -139,7 +142,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"背景光颜色"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"背景光颜色"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
                                             width: parent.width*0.6; anchors.right: parent.right;model:["白色","黄色"];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.backGroundColor;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.backGroundColor=currentIndex;})}
@@ -147,7 +150,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"兰·黄测试"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"兰·黄测试"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
                                             width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.cyanYellowTest;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.cyanYellowTest=currentIndex;})}
@@ -158,7 +161,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.45;
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"响应自适应"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"响应自适应"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
                                            width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.responseAutoAdapt;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.responseAutoAdapt=currentIndex;})}
@@ -167,7 +170,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"自适应时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"自适应时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
                                            width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;
                                            Component.onCompleted: {
@@ -179,7 +182,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"中心点监测"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"中心点监测"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
                                             width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.centerDotCheck;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.centerDotCheck=currentIndex;})}
@@ -187,7 +190,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"短期波动"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"短期波动"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
                                             width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.shortTermFluctuation;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.shortTermFluctuation=currentIndex;})}
@@ -195,7 +198,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"固视选择"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"固视选择"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
                                             width: parent.width*0.6; anchors.right: parent.right;model:["中心点","小菱形","大菱形","底点"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.fixationTarget;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.fixationTarget=currentIndex;})}
@@ -203,7 +206,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"眼动模式报警"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"眼动模式报警"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
                                            width: parent.width*0.6; anchors.right: parent.right;model:["不报警","只报警","报警并暂停"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.fixationMonitor;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.fixationMonitor=currentIndex;})}
@@ -211,7 +214,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"盲点测试"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"盲点测试"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
                                            width: parent.width*0.6; anchors.right: parent.right;model:["打开","关闭"];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.blindDotTest;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.blindDotTest=currentIndex;})}
@@ -240,7 +243,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.45;
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"刺激时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"刺激时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
                                             width: parent.width*0.6; anchors.right: parent.right;step:10;max:500;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.stimulationTime;
                                             Component.onCompleted:
@@ -251,7 +254,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"间隔时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"间隔时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
                                             width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.intervalTime;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.intervalTime=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.intervalTime;});}) }
@@ -259,7 +262,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"假阳性周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"假阳性周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
                                             width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.falsePositiveCycle;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.falsePositiveCycle=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.falsePositiveCycle;});}) }
@@ -267,7 +270,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"假阴性周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"假阴性周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
                                             width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.falseNegativeCycle;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.falseNegativeCycle=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.falseNegativeCycle;});}) }
@@ -275,7 +278,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"固视丢失率周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"固视丢失率周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
                                             width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.fixationViewLossCycle;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.fixationViewLossCycle=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.fixationViewLossCycle;});}) }
@@ -287,7 +290,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.45;
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"单刺激分贝"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"单刺激分贝"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.singleStimulationDB;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.singleStimulationDB=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.singleStimulationDB;});}) }
@@ -295,7 +298,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"盲点刺激分贝"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"盲点刺激分贝"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.blindDotStimulationDB;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.blindDotStimulationDB=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.blindDotStimulationDB;});}) }
@@ -303,7 +306,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"短期波动次数"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"短期波动次数"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:1;value:currentProgram===null?0:currentProgram.params.fixedParams.shortTermFluctuationCount;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.shortTermFluctuationCount=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.shortTermFluctuationCount;});}) }

@@ -6,6 +6,8 @@ import QtQuick.Controls.Styles 1.4
 import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0
 import perimeter.main.view.Controls 1.0
+import perimeter.main.view.Utils 1.0
+
 
 Window {
     id: window;visible: true;width: 1366;height: 768;title: qsTr("Hello World");
@@ -14,7 +16,9 @@ Window {
     Content{id:content;anchors.fill: parent;}
     Login{id:login;visible: false;anchors.fill: parent;}
 
-    Component.onCompleted: {idPriv.init();content.changePage.connect(changePage);login.changePage.connect(changePage);}
+    Component.onCompleted: {idPriv.init();content.changePage.connect(changePage);login.changePage.connect(changePage);CommonSettings.windowHeight=height;}
+
+    onHeightChanged: {CommonSettings.windowHeight=height;console.log(height);console.log(CommonSettings.textHeight);console.log(CommonSettings.fontPointSize);}
 
     function changePage(pageName)
     {

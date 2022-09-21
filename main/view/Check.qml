@@ -20,6 +20,7 @@ Item {id:root; width: 1366;height: 691
     property var currentCheckResult: null;
     property var analysisVm: null;
     signal enterPage();
+    property int fontPointSize: CommonSettings.fontPointSize;
 
     onEnterPage: {
         var program_id=IcUiQmlApi.appCtrl.settings.defaultProgramId;
@@ -58,14 +59,14 @@ Item {id:root; width: 1366;height: 691
                                     Item{anchors.fill: parent;anchors.margins: parent.height*0.1;
                                         Column{anchors.fill: parent;spacing: 0.175*height;
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:"程序名"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                                CusText{text:"程序名"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit {
                                                     text:currentProgram==null?"":currentProgram.name; width: parent.width*0.70;textInput.readOnly: true;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){text=currentProgram.name});}
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:"光标"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                                CusText{text:"光标"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     text:"";width: parent.width*0.70;textInput.readOnly: true;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){
@@ -78,7 +79,7 @@ Item {id:root; width: 1366;height: 691
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:"策略"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                                CusText{text:"策略"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     text:"";width: parent.width*0.7;textInput.readOnly: true;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){
@@ -99,7 +100,7 @@ Item {id:root; width: 1366;height: 691
                                     Item{ anchors.fill: parent;anchors.margins: parent.height*0.1;
                                         Column{anchors.fill: parent;spacing: 0.175*height;
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:"假阳性率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                                CusText{text:"假阳性率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.falsePositiveCount;
                                                     property var totalDots: currentCheckResult===null?0:currentCheckResult.resultData.falsePositiveTestCount;
@@ -107,7 +108,7 @@ Item {id:root; width: 1366;height: 691
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:"假阴形率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                                CusText{text:"假阴形率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.falseNegativeCount;
                                                     property var totalDots: currentCheckResult===null?0:currentCheckResult.resultData.falseNegativeTestCount;
@@ -115,7 +116,7 @@ Item {id:root; width: 1366;height: 691
                                                 }
                                             }
                                             Row{ width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:"固视丢失率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                                CusText{text:"固视丢失率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.fixationLostCount;
                                                     property var totalDots: currentCheckResult===null?0:currentCheckResult.resultData.fixationLostTestCount;
@@ -129,7 +130,7 @@ Item {id:root; width: 1366;height: 691
                                     Item{anchors.fill: parent;anchors.margins: parent.height*0.13;
                                         Column{anchors.fill: parent;spacing: 1/3*height;
                                             Row{width:parent.width;height: parent.height*1/3;spacing: width*0.05;
-                                                CusText{text:"测试点数"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                                CusText{text:"测试点数"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.checkData.length;
                                                     property var totalDots: currentProgram===null?0:currentProgram.dots.length;
@@ -137,7 +138,7 @@ Item {id:root; width: 1366;height: 691
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*1/3;spacing: width*0.05;
-                                                CusText{text:"测试时间"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                                CusText{text:"测试时间"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property int timeSpan: currentCheckResult===null?0:currentCheckResult.resultData.testTimespan;
                                                     text:Math.floor(timeSpan/60)+":"+timeSpan%60;width: parent.width*0.7;textInput.readOnly: true;}
@@ -150,7 +151,7 @@ Item {id:root; width: 1366;height: 691
                     }
                     Rectangle{ width: parent.width*0.25-2;height:parent.height;color: backGroundColor;
                         Item{anchors.fill: parent;anchors.margins: parent.height*0.02
-                            Column{id: column;anchors.fill: parent;spacing:/*(height-videoArea.height-controlPanel.height-eyeOptionsGroup.height)/2*/height*0.043;
+                            Column{id: column;anchors.fill: parent;spacing:/*(height-videoArea.height-controlPanel.height-eyeOptionsGroup.height)/2*/height*0.03;
                                 Item{id:videoArea; width: parent.width*0.83;height: width*3/4;anchors.horizontalCenter: parent.horizontalCenter;
                                     Rectangle{anchors.fill: parent;color:"black";}
                                     MediaPlayer{
@@ -169,23 +170,23 @@ Item {id:root; width: 1366;height: 691
                                         Column{anchors.fill: parent;spacing: 0.125*height;
                                             Row{width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{}
-                                                CusText{text:"瞳孔尺寸"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                                CusText{text:"瞳孔尺寸"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{text:"0.0";width: parent.width*0.5;textInput.readOnly: true;}
                                             }
                                             Row{id: row;width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{enabled: false;checked:currentProgram.type!==2?currentProgram.params.commonParams.fixationMonitor>0:currentProgram.params.fixationMonitor>0;}
-                                                CusText{text:"眼动警报"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                                CusText{text:"眼动警报"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 Image {source: "qrc:/Pics/capture-svg/btn_alarm.svg";height:parent.height*0.6; anchors.verticalCenter: parent.verticalCenter;width: height; }
                                             }
                                             Row{width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{id:deviationCheckBox;checked:true;}
-                                                CusText{text:"固视偏移"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                                CusText{text:"固视偏移"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                             }
                                         }
                                     }
                                 }
                                 Item{
-                                    width: parent.width*0.83;height: parent.height*0.07;anchors.horizontalCenter: parent.horizontalCenter;
+                                    width: parent.width*0.83;height: parent.height*0.08;anchors.horizontalCenter: parent.horizontalCenter;
                                     FixationDeviation{ visible:deviationCheckBox.checked;anchors.horizontalCenter: parent.horizontalCenter;dots:if(currentCheckResult!==null) currentCheckResult.resultData.fixationDeviation;}
                                 }
                             }
@@ -193,7 +194,7 @@ Item {id:root; width: 1366;height: 691
                     }
                     Rectangle{width: parent.width*0.5;height: parent.height;color:backGroundColorCheckPanel;
                         CusText{
-                            id:os_od;
+                            id:os_od;font.pointSize: fontPointSize*2;
                             property int value: 0;
                             text:value===0?"左眼":"右眼"; z: 1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;height: parent.height*0.05;}
                         CheckDisplay{id:checkDisplay; currentProgram:root.currentProgram;currentCheckResult:root.currentCheckResult}

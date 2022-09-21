@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0     // [HINT] this is the pre-registered module name.
 import qxpack.indcom.ui_qml_control 1.0  // [HINT] ModalPopupDialog is in it
+import perimeter.main.view.Utils 1.0
 
 ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml_contro
     id:idPopup
@@ -20,6 +21,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
     signal cancel();
 
     property var currentProgram:null;
+    property int fontPointSize: CommonSettings.fontPointSize;
 
    contentItem:
    Rectangle{
@@ -47,7 +49,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"参数设置";}
+                    CusText{text:"参数设置";font.pointSize: fontPointSize;}
                 }
                 Column{
                     width: parent.width;height: parent.height-header.height;
@@ -87,19 +89,19 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.8;
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"测试范围"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"测试范围"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                         LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.params.Range[1];}
 
 
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"测试点数"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"测试点数"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                         LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.dots.length;}
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"策略"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"策略"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                         LineEdit{
                                             property var strats:["标准动态","盲区动态","暗区动态","直线动态"];
                                             property int currentIndex:currentProgram===null?0:(currentProgram.type===2?currentProgram.params.strategy:0);
@@ -108,7 +110,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"光标颜色"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"光标颜色"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                         CusComboBox{
                                             width: parent.width*0.6; anchors.right: parent.right;model:["白色","红色","蓝色"];
                                             currentIndex:currentProgram===null?0:currentProgram.params.cursorColor;
@@ -117,7 +119,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"光标大小"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"光标大小"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                         CusComboBox{
                                             width: parent.width*0.6; anchors.right: parent.right;model:["I","II","III","IV","V"];
                                             currentIndex:currentProgram===null?0:currentProgram.params.cursorSize;
@@ -126,7 +128,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"背景光颜色"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                        CusText{text:"背景光颜色"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                         CusComboBox{
                                             width: parent.width*0.6; anchors.right: parent.right;model:["白色","黄色"];
                                             currentIndex:currentProgram===null?0:currentProgram.params.backGroundColor;
@@ -138,12 +140,12 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.8;
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"固视选择"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"固视选择"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                        LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:"中心点"}
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"移动速度"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"移动速度"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                        CusComboBox{
                                            width: parent.width*0.6; anchors.right: parent.right;model:["1°/秒","2°/秒","3°/秒","4°/秒","5°/秒","6°/秒","7°/秒","8°/秒","9°/秒"];
                                            currentIndex:currentProgram===null?0:(currentProgram.params.speed-1);
@@ -152,7 +154,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"移动亮度"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"移动亮度"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                        NumberLineEdit{
                                            width: parent.width*0.6; anchors.right: parent.right;readOnly: true;step:1;max:51;min:0;value:currentProgram===null?0:currentProgram.params.brightness;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.brightness=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.brightness;});}) }
@@ -160,7 +162,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"移动方式"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"移动方式"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                        CusComboBox{
                                            width: parent.width*0.6; anchors.right: parent.right;model:["4","6","8"];
                                            currentIndex:currentProgram===null?0:currentProgram.params.dynamicMethod;
@@ -169,7 +171,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"移动距离"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"移动距离"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                        CusComboBox{
                                            width: parent.width*0.6; anchors.right: parent.right;model:["5","10","15"];
                                            currentIndex:currentProgram===null?0:currentProgram.params.dynamicDistance;
@@ -178,7 +180,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"眼动模式报警"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;}
+                                       CusText{text:"眼动模式报警"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                        CusComboBox{
                                            width: parent.width*0.6; anchors.right: parent.right;model:["不报警","只报警","报警并暂停"];
                                            currentIndex:currentProgram===null?0:currentProgram.params.fixationMonitor;

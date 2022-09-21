@@ -31,6 +31,7 @@ private:
     int m_slopeType;
 };
 
+
 ProgressAnalysisListVm::ProgressAnalysisListVm(const QVariantList &args)
 {
     qDebug()<<"into constructor";
@@ -44,62 +45,30 @@ ProgressAnalysisListVm::~ProgressAnalysisListVm()
 
 }
 
-QObject *ProgressAnalysisListVm::getProgressBaseLine(int imageSize,bool isReport)
+QObject *ProgressAnalysisListVm::getProgressBaseLinePreview(int imageSize)
 {
     auto analysisSvc=AnalysisSvc::getSingleton();
     QVector<float> mdList;
+    float avgMd,progressSpeedBase,progressSpeedDeviation;int slopeType;
     for(int i=0;i<m_currentDataList.length();i++)
     {
         mdList.push_back(m_currentDataList[i].md);
     }
-//    float avgMd,progressSpeedBase,progressSpeedDeviation;int slopeType;
 
-    QImage img;
-    if(isReport)
-    {
-        img=QImage({400,400}, QImage::Format_RGB32);
-    }
-    else
-    {
-        img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
-    }
+    QImage img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
 
     auto drawProgressBaseLine=[&](int index)->void
     {
-
 
         QVector<int> values,peDev,peMDev;
         int innerRange=0,range=30,OS_OD;
         QVector<QPointF> locs;
 
-//        auto checkResult=CheckResultModel<Type::ThreshHold>(checkResult_ptr);
-//        auto program=ProgramModel<Type::ThreshHold>(program_ptr);
-//        values.resize(checkResult.m_data.checkdata.size());
-//        for(int i=0;i<int(checkResult.m_data.checkdata.size());i++)
-//        {
-//            values[i]=checkResult.m_data.checkdata[i];
-//        }
-//        locs.resize(program.m_data.dots.size());
-//        for(int i=0;i<int(program.m_data.dots.size());i++)
-//        {
-//            locs[i]={program.m_data.dots[i].x,program.m_data.dots[i].y};
-//        }
         values=m_currentDataList[index].values;
         locs=m_currentDataList[index].locs;
         peDev=m_currentDataList[index].peDev;
         peMDev=m_currentDataList[index].peMDev;
-//        innerRange=program.m_params.commonParams.Range[0];
-//        range=program.m_params.commonParams.Range[1];
-//        m_OS_OD=checkResult.m_OS_OD;
-//        fixationValues.resize(checkResult.m_data.fixationDeviation.size());
-//        for(int i=0;i<int(checkResult.m_data.fixationDeviation.size());i++)
-//        {
-//            fixationValues[i]=checkResult.m_data.fixationDeviation[i];
-//        }
 
-
-
-//        analysisSvc->ThresholdAnalysis(id,dev,mDev,peDev,peMDev,md,psd,VFI,GHT,p_md,p_psd);
         analysisSvc->drawGray(values,locs,range,innerRange,img);img.save(m_previewFolder+"baseLine_gray"+QString::number(index)+".bmp");
         analysisSvc->drawText(values,locs,range,OS_OD,img);img.save(m_previewFolder+"baseLine_dBDiagram"+QString::number(index)+".bmp");
         analysisSvc->drawPE(peDev,locs,range,img);img.save(m_previewFolder+"baseLine_TotalPE"+QString::number(index)+".bmp");
@@ -109,13 +78,131 @@ QObject *ProgressAnalysisListVm::getProgressBaseLine(int imageSize,bool isReport
     drawProgressBaseLine(0);
     drawProgressBaseLine(1);
 
-//    auto getMonth=[](QDateTime a,QDateTime b)->int
-//    {
-//        int months=(b.date().year()-a.date().year())*12+b.date().month()-a.date().month();
-//        if(b.date().day()<a.date().day()) months--;
-//        return months;
-//    };
+    auto getMonth=[](int a,QDateTime b)->int
+    {
+        int months=(b.date().year()-a)*12+b.date().month();
+        return months;
+    };
 
+    int startYear=m_currentDataList[0].dateTime.date().year();
+    QVector<int> months;
+    for(int i=0;i<m_currentDataList.length();i++)
+    {
+        int month=getMonth(startYear,m_currentDataList[i].dateTime);
+        months.push_back(month);
+    }
+
+    img=QImage({600,300}, QImage::Format_RGB32);
+    analysisSvc->drawBaseLine(mdList,startYear,months,img);img.save(m_previewFolder+"baseLine.bmp");
+    analysisSvc->BaseLineAnalysis(mdList,months,avgMd,progressSpeedBase,progressSpeedDeviation,slopeType);
+    return new BaseLineResult(avgMd,progressSpeedBase,progressSpeedDeviation,slopeType);
+}
+
+QVariantList ProgressAnalysisListVm::getThreeFollowUpsPreview(int index,int imageSize)
+{
+    auto analysisSvc=AnalysisSvc::getSingleton();
+
+
+    QVector<QVector<int>> val,mPE,mDev,progressVal,progressPicVal;
+    QVector<int> progress;
+    QVector<QVector<QPointF> > locs,progressLocs;
+    QVariantList progressList;
+    if(m_currentDataList.length()<3) return progressList;
+
+    mDev={m_currentDataList[0].mDev,m_currentDataList[1].mDev};
+    locs={m_currentDataList[0].locs,m_currentDataList[1].locs};
+
+    for(int i=qMax(index-2,2);i<=index;i++)
+    {
+        val.append(m_currentDataList[i].values);
+        mPE.append(m_currentDataList[i].peMDev);
+        mDev.append(m_currentDataList[i].mDev);
+        locs.append(m_currentDataList[i].locs);
+    }
+
+    analysisSvc->ProgressAnalysis(mDev,locs,m_OS_OD,progressLocs,progressVal,progressPicVal,progress);
+
+    QImage img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
+
+    for(int i=0;i<progressVal.length();i++)
+    {
+        analysisSvc->drawGray(val[i],locs[i],30,m_OS_OD,img);img.save(m_previewFolder+"threeFollowUps_grey"+QString::number(i)+".bmp");
+        analysisSvc->drawPE(mPE[i],locs[i],30,img);img.save(m_previewFolder+"threeFollowUps_PatternPE"+QString::number(i)+".bmp");
+        analysisSvc->drawText(progressVal[i],progressLocs[i],30,m_OS_OD,img);img.save(m_previewFolder+"threeFollowUps_progressVal"+QString::number(i)+".bmp");
+        analysisSvc->drawProgess(progressPicVal[i],progressLocs[i],30,img);img.save(m_previewFolder+"threeFollowUps_progressPic"+QString::number(i)+".bmp");
+    }
+
+    for(int i=0;i<progress.length();i++)
+    {
+        progressList.append(QVariant(progress[i]));
+    }
+    return progressList;
+}
+
+QVariant Perimeter::ProgressAnalysisListVm::getSingleProgressPreview(int index,int imageSize)
+{
+    auto analysisSvc=AnalysisSvc::getSingleton();
+
+
+    QVector<QVector<int>> val,mPE,mDev,progressVal,progressPicVal;
+    QVector<int> progress;
+    QVector<QVector<QPointF> > locs,progressLocs;
+    QVariantList progressList;
+    if(m_currentDataList.length()<3) return progressList;
+
+    mDev={m_currentDataList[0].mDev,m_currentDataList[1].mDev};
+    locs={m_currentDataList[0].locs,m_currentDataList[1].locs};
+
+    for(int i=qMax(index-2,2);i<=index;i++)
+    {
+        val.append(m_currentDataList[i].values);
+        mPE.append(m_currentDataList[i].peMDev);
+        mDev.append(m_currentDataList[i].mDev);
+        locs.append(m_currentDataList[i].locs);
+    }
+
+    analysisSvc->ProgressAnalysis(mDev,locs,m_OS_OD,progressLocs,progressVal,progressPicVal,progress);
+
+    QImage img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
+
+    analysisSvc->drawProgess(progressPicVal.last(),progressLocs.last(),30,img);img.save(m_previewFolder+"single_progressPic.bmp");
+
+    return QVariant(progress.last());
+}
+
+void ProgressAnalysisListVm::getProgressBaseLineReport()
+{
+    qDebug()<<"0";
+    auto analysisSvc=AnalysisSvc::getSingleton();
+    QVector<float> mdList;
+    float avgMd,progressSpeedBase,progressSpeedDeviation;int slopeType;
+    for(int i=0;i<m_currentDataList.length();i++)
+    {
+        mdList.push_back(m_currentDataList[i].md);
+    }
+
+    QImage img=QImage({400,400}, QImage::Format_RGB32);
+
+    auto drawProgressBaseLine=[&](int index)->void
+    {
+
+        QVector<int> values,peDev,peMDev;
+        int innerRange=0,range=30,OS_OD;
+        QVector<QPointF> locs;
+
+        values=m_currentDataList[index].values;
+        locs=m_currentDataList[index].locs;
+        peDev=m_currentDataList[index].peDev;
+        peMDev=m_currentDataList[index].peMDev;
+
+        analysisSvc->drawGray(values,locs,range,innerRange,img);img.save(m_reportFolder+"baseLine_gray"+QString::number(index)+".bmp");
+        analysisSvc->drawText(values,locs,range,OS_OD,img);img.save(m_reportFolder+"baseLine_dBDiagram"+QString::number(index)+".bmp");
+        analysisSvc->drawPE(peDev,locs,range,img);img.save(m_reportFolder+"baseLine_TotalPE"+QString::number(index)+".bmp");
+        analysisSvc->drawPE(peMDev,locs,range,img);img.save(m_reportFolder+"baseLine_PatternPE"+QString::number(index)+".bmp");
+    };
+
+    drawProgressBaseLine(0);
+    drawProgressBaseLine(1);
 
     auto getMonth=[](int a,QDateTime b)->int
     {
@@ -123,145 +210,33 @@ QObject *ProgressAnalysisListVm::getProgressBaseLine(int imageSize,bool isReport
         return months;
     };
 
-    int startYear=m_dateTimeList[0].date().year();
+    int startYear=m_currentDataList[0].dateTime.date().year();
     QVector<int> months;
-//    months.push_back(m_dateTimeList[0].date().month());
-    for(int i=0;i<m_dateTimeList.length();i++)
+    for(int i=0;i<m_currentDataList.length();i++)
     {
-        int month=getMonth(startYear,m_dateTimeList[i]);
+        int month=getMonth(startYear,m_currentDataList[i].dateTime);
         months.push_back(month);
     }
 
     img=QImage({600,300}, QImage::Format_RGB32);
-    analysisSvc->drawBaseLine(mdList,startYear,months,img);img.save(isReport?m_reportFolder:m_previewFolder+"baseLine.bmp");
-    analysisSvc->BaseLineAnalysis(mdList,months,m_avgMd,m_progressSpeedBase,m_progressSpeedDeviation,m_slopeType);
+    analysisSvc->drawBaseLine(mdList,startYear,months,img);img.save(m_reportFolder+"baseLine.bmp");
+    analysisSvc->BaseLineAnalysis(mdList,months,avgMd,progressSpeedBase,progressSpeedDeviation,slopeType);
 
 
-    if(!isReport)
-    {
-        return new BaseLineResult(m_avgMd,m_progressSpeedBase,m_progressSpeedDeviation,m_slopeType);
-    }
-    else
-    {
-        return nullptr;
-    }
+    auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
+    reportEngine->loadFromFile("./reports/baseLine.lrxml");
+    auto manager=reportEngine->dataManager();
+    manager->clearUserVariables();
 }
 
-QVariantList ProgressAnalysisListVm::getThreeFollowUps(int index,int imageSize,bool isReport)
+void Perimeter::ProgressAnalysisListVm::getThreeFollowUpsReport(int index)
 {
-    auto analysisSvc=AnalysisSvc::getSingleton();
-
-
-    QVector<QVector<int>> val,mPE,mDev,progressVal,progressPicVal;
-    QVector<int> progress;
-    QVector<QVector<QPointF> > locs,progressLocs;
-    QVariantList progressList;
-    if(m_currentDataList.length()<3) return progressList;
-
-    mDev={m_currentDataList[0].mDev,m_currentDataList[1].mDev};
-    locs={m_currentDataList[0].locs,m_currentDataList[1].locs};
-
-
-
-    for(int i=qMax(index-2,2);i<=index;i++)
-    {
-        val.append(m_currentDataList[i].values);
-        mPE.append(m_currentDataList[i].peMDev);
-        mDev.append(m_currentDataList[i].mDev);
-        locs.append(m_currentDataList[i].locs);
-    }
-
-    analysisSvc->ProgressAnalysis(mDev,locs,m_OS_OD,progressLocs,progressVal,progressPicVal,progress);
-
-    QImage img;
-    if(isReport)
-    {
-        img=QImage({400,400}, QImage::Format_RGB32);
-    }
-    else
-    {
-        img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
-    }
-
-//    auto img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
-
-
-//    qDebug()<<progressVal.length();
-
-    for(int i=0;i<progressVal.length();i++)
-    {
-        analysisSvc->drawGray(val[i],locs[i],30,m_OS_OD,img);img.save(isReport?m_reportFolder:m_previewFolder+"threeFollowUps_grey"+QString::number(i)+".bmp");
-        analysisSvc->drawPE(mPE[i],locs[i],30,img);img.save(isReport?m_reportFolder:m_previewFolder+"threeFollowUps_PatternPE"+QString::number(i)+".bmp");
-        analysisSvc->drawText(progressVal[i],progressLocs[i],30,m_OS_OD,img);img.save(isReport?m_reportFolder:m_previewFolder+"threeFollowUps_progressVal"+QString::number(i)+".bmp");
-        analysisSvc->drawProgess(progressPicVal[i],progressLocs[i],30,img);img.save(isReport?m_reportFolder:m_previewFolder+"threeFollowUps_progressPic"+QString::number(i)+".bmp");
-    }
-
-
-    if(isReport)
-    {
-
-        return QVariantList();
-    }
-
-    for(int i=0;i<progress.length();i++)
-    {
-        progressList.append(QVariant(progress[i]));
-    }
-    qDebug()<<progressList;
-    return progressList;
-
-//    analysisSvc->ProgressAnalysis({m_currentDataList[0].MDev},{m_currentDataList[0].locs},0,value,value);
-//    analysisSvc->ThreeFollowUpAnalysis({m_mDevList[index],m_mDevList[index-1],m_mDevList[index-2]},{m_locsList[index],m_locsList[index-1],m_locsList[index-2]},m_OS_OD,value);
+    qDebug()<<"1";
 }
 
-QVariant Perimeter::ProgressAnalysisListVm::getSingleProgress(int index,int imageSize,bool isReport)
+void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index)
 {
-    auto analysisSvc=AnalysisSvc::getSingleton();
-
-
-    QVector<QVector<int>> val,mPE,mDev,progressVal,progressPicVal;
-    QVector<int> progress;
-    QVector<QVector<QPointF> > locs,progressLocs;
-    QVariantList progressList;
-    if(m_currentDataList.length()<3) return progressList;
-
-    mDev={m_currentDataList[0].mDev,m_currentDataList[1].mDev};
-    locs={m_currentDataList[0].locs,m_currentDataList[1].locs};
-
-
-
-    for(int i=qMax(index-2,2);i<=index;i++)
-    {
-        val.append(m_currentDataList[i].values);
-        mPE.append(m_currentDataList[i].peMDev);
-        mDev.append(m_currentDataList[i].mDev);
-        locs.append(m_currentDataList[i].locs);
-    }
-
-    analysisSvc->ProgressAnalysis(mDev,locs,m_OS_OD,progressLocs,progressVal,progressPicVal,progress);
-
-    QImage img;
-    if(isReport)
-    {
-        img=QImage({400,400}, QImage::Format_RGB32);
-    }
-    else
-    {
-        img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
-    }
-
-    analysisSvc->drawProgess(progressPicVal.last(),progressLocs.last(),30,img);img.save(isReport?m_reportFolder:m_previewFolder+"single_progressPic.bmp");
-    if(isReport)
-    {
-
-
-        return QVariant();
-    }
-
-
-    return QVariant(progress.last());
-
-
+    qDebug()<<"2";
 }
 
 
@@ -269,6 +244,10 @@ void ProgressAnalysisListVm::removeCheckResult(int index)
 {
     beginResetModel();
     m_currentDataList.removeAt(index);
+//    if(m_selectedIndex>=index)
+//    {
+//        setSelectedIndex(--m_selectedIndex);
+//    }
     endResetModel();
 }
 
@@ -304,7 +283,7 @@ void ProgressAnalysisListVm::generateDataList()
     qx::dao::fetch_by_query(query,checkResult_List);
 //    m_mDevList.resize(checkResult_List.size());
 
-    m_dateTimeList.clear();
+
 
     for(int i=0;i<checkResult_List.size();i++)
     {
@@ -344,9 +323,8 @@ ProgressAnalysisListVm::Data ProgressAnalysisListVm::getProgressData(CheckResult
         values[i]=checkResult.m_data.checkdata[i];
     }
 
-    m_dateTimeList.append(checkResult.m_time);
 
-    QString time=checkResult.m_time.toString("yyyy/MM/dd HH:mm:ss");
+    auto time=checkResult.m_time;
     QString programName=program.m_name;
     auto strategy=checkResult.m_params.commonParams.strategy;
     QString strategyName=QVector<QString>{"全阈值","智能交互式","快速智能交互式","未知"}[int(strategy)<3?int(strategy):3];

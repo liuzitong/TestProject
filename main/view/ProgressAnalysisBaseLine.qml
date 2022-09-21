@@ -12,9 +12,10 @@ Rectangle {
     id:root;
     anchors.fill: parent;
     color: "white";
-    property int textHeight:height*0.05;
     property var progressAnalysisListVm: null;
     property var progressAnalysisResult: null;
+    property int fontPointSize: CommonSettings.fontPointSize;
+    property int textHeight:CommonSettings.textHeight;
     signal refresh();
     onRefresh: {
         console.log(progressAnalysisListVm.getData(0,"dateTime"));
@@ -26,21 +27,21 @@ Rectangle {
         Row{
             width: parent.width;height: parent.height*0.04;spacing: parent.width*0.03;
             Item{height: parent.height;width: parent.parent.height*0.32;}
-            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:"灰度图";font.pixelSize:height*0.6}}
-            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:"阈值(DB)";font.pixelSize:height*0.6}}
-            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:"总体偏差";font.pixelSize:height*0.6}}
-            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:"模式偏差";font.pixelSize:height*0.6}}
+            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:"灰度图";font.pointSize: fontPointSize;}}
+            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:"阈值(DB)";font.pointSize: fontPointSize;}}
+            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:"总体偏差";font.pointSize: fontPointSize;}}
+            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:"模式偏差";font.pointSize: fontPointSize;}}
         }
 
         Row{
             width: parent.width;height: parent.height*0.32;spacing: parent.width*0.03;
             Column{
-                width: height;height: parent.height;spacing: textHeight*-0.4;
+                width: height;height: parent.height;spacing: textHeight*0.5;
                 Repeater{
                     property var centerDotCheck: ["打开","关闭"];
                     property var ght: ["超出界限","普遍敏感度降低","边界","正常范围"];
                     model: [
-                        {name:"日期",param:progressAnalysisListVm.getData(0,"dateTime").split(' ')[0]},
+                        {name:"日期",param:Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd")},
                         {name:"选择程序",param:progressAnalysisListVm.getData(0,"program")},
                         {name:"青光眼半视野检查",param:ght[progressAnalysisListVm.getData(0,"GHT")]},
                         {name:"中心点",param:centerDotCheck[progressAnalysisListVm.getData(0,"centerDotCheck")?1:0]},
@@ -74,7 +75,7 @@ Rectangle {
                         Row{
                             height: parent.height*0.14;width: parent.width;spacing: height*0.5
                             Image {height: sourceSize.height*2; fillMode: Image.PreserveAspectFit; width:sourceSize.height*2;smooth: false;source: modelData.image}
-                            CusText{height: parent.height;text:modelData.pe; horizontalAlignment: Text.AlignLeft;anchors.verticalCenter: parent.verticalCenter;font.pointSize: height*0.70}
+                            CusText{height: parent.height;text:modelData.pe; horizontalAlignment: Text.AlignLeft;anchors.verticalCenter: parent.verticalCenter;}
                         }
                     }
                 }
@@ -84,12 +85,12 @@ Rectangle {
         Row{
             width: parent.width;height: parent.height*0.32;spacing: parent.width*0.03;
             Column{
-                width: height;height: parent.height;spacing: textHeight*-0.4;
+                width: height;height: parent.height;spacing: textHeight*0.5;
                 Repeater{
                     property var centerDotCheck: ["打开","关闭"];
                     property var ght: ["超出界限","普遍敏感度降低","边界","正常范围"];
                     model: [
-                        {name:"日期",param:progressAnalysisListVm.getData(1,"dateTime").split(' ')[0]},
+                        {name:"日期",param:Qt.formatDateTime(progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd")},
                         {name:"选择程序",param:progressAnalysisListVm.getData(1,"program")},
                         {name:"青光眼半视野检查",param:ght[progressAnalysisListVm.getData(1,"GHT")]},
                         {name:"中心点",param:centerDotCheck[progressAnalysisListVm.getData(1,"centerDotCheck")?1:0]},
@@ -118,7 +119,7 @@ Rectangle {
         Row{
             width: parent.width;height: parent.height*0.30;spacing: parent.width*0.03;
             Column{
-                width: height;height: parent.parent.height*0.32;spacing: textHeight*-0.4;
+                width: height;height: parent.parent.height*0.32;spacing: textHeight*0.5;
                 Repeater{
                     property var slopeType: ["斜率不明显","斜率明显"];
                     model: [

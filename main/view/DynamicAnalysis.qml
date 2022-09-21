@@ -11,13 +11,14 @@ Item
 {
     id:root;
     signal refresh();
-    property int textHeight:height*0.05;
     property var currentPatient: null;
     property var currentProgram: null;
     property var currentCheckResult: null;
     property var report:null;                           //4:常规,5:三合一,6:总览,7:筛选
     property int range: currentProgram.params.Range[1];
     property string rx:"";
+    property int fontPointSize: CommonSettings.fontPointSize;
+    property int textHeight:CommonSettings.textHeight;
 
     onRefresh:{
         if(currentPatient.os_od===0)  //左
@@ -31,8 +32,8 @@ Item
         Rectangle{width:parent.width;height: parent.height;color:"white";
             Row{ id: row;anchors.fill: parent;anchors.leftMargin: parent.width*0.06;anchors.topMargin: parent.height*0.04;anchors.bottomMargin: parent.height*0.04;spacing: width*0.10;
                 Column{ id: column;width: parent.width*0.18;height: parent.height;spacing:parent.height*0.01
-                    CusText{text:currentProgram.name; font.bold: true; horizontalAlignment: Text.AlignLeft;height:parent.height*0.10;}
-                    Column{width:parent.width;height: parent.height*0.15;spacing: textHeight*-0.36;
+                    CusText{text:currentProgram.name; font.bold: true; horizontalAlignment: Text.AlignLeft;height:parent.height*0.10;font.pointSize: fontPointSize*2;}
+                    Column{width:parent.width;height: parent.height*0.15;spacing: textHeight*0.5;
                         Repeater{
                             property var params: currentCheckResult.params;
                             property int timeSpan:currentCheckResult.resultData.testTimespan;
@@ -45,7 +46,7 @@ Item
                         }
     //                        CusText{text:"固视监测";  horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                     }
-                    Column{width:parent.width;height: parent.height*0.15;spacing: textHeight*-0.36;
+                    Column{width:parent.width;height: parent.height*0.15;spacing: textHeight*0.5;
                         Repeater{
                             property var params: currentCheckResult.params;
                             property var cursorSize: ["I","II","III","IV","V"];
@@ -59,7 +60,7 @@ Item
                             CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
-                    Column{width:parent.width;height: parent.height*0.15;spacing: textHeight*-0.36;
+                    Column{width:parent.width;height: parent.height*0.15;spacing: textHeight*0.5;
                         Repeater{
                             model: [
                                 {name:"瞳孔直径",param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
@@ -69,8 +70,8 @@ Item
                         }
                     }
 
-                    Column{width:parent.width;height: parent.height*0.25;spacing: textHeight*-0.18;
-                        CusText{text:"诊断:"; horizontalAlignment: Text.AlignLeft;width:parent.width;height: parent.height*0.24;}
+                    Column{width:parent.width;height: parent.height*0.25;spacing: textHeight*0.5;
+                        CusText{text:"诊断:"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
                         Rectangle{ id: rectangle;width:parent.width;height: parent.height*0.73;radius: 5;border.color: "black";smooth: false;
                             TextInput
                             {
@@ -78,7 +79,7 @@ Item
                                 width:parent.width*1.0;height: parent.height*0.70;
                                 text:currentCheckResult==null?"":currentCheckResult.diagnosis;
                                 selectionColor: "blue";selectByMouse: true;
-                                font.pointSize: textHeight*0.3;font.family: "Consolas";
+                                font.pointSize: textHeight;font.family: "Consolas";
                                 wrapMode: Text.WrapAnywhere;renderType: Text.NativeRendering;
                             }
 

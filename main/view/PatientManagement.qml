@@ -14,13 +14,15 @@ Item{
     property string backGroundColor:"#dcdee0"
     property string backGroundBorderColor:"#bdc0c6"
     property var currentPatient:null;
-    property int pageSize: 10
+    property int pageSize: 10;
+    property int fontPointSize: CommonSettings.fontPointSize;
     signal queryStarted;
     signal changePage(var pageName,var params);
     width: 1440
     height: 700
     anchors.fill:parent;
     Component.onCompleted: createNewPatient();
+
 
     function createNewPatient(){
         if(currentPatient!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientVm", currentPatient);
@@ -46,10 +48,10 @@ Item{
                         property int rowHight: height*0.06
                         Row{
                             id:dateSelection; width: parent.width;opacity: 1;height: patientInfo.rowHight;spacing: height*0.4;
-                            CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5;}
+                            CusText{text: "检查日期";horizontalAlignment: Text.AlignLeft;width: height*2.5;font.pointSize: fontPointSize;}
                             LineEdit{property string name: "dateFrom";id:dateFrom;radius: height/6;width: height*3.1;}
                             CusButton{id:dateFromButton;text:"选择";width:height*2;onClicked:{calendar.inputObj=dateFrom;calendar.open();}}
-                            CusText{text:"到";width: height*0.6;}
+                            CusText{text:"到";width: height*0.6;font.pointSize: fontPointSize;}
                             LineEdit{property string name: "dateTo";id:dateTo;radius: height/6;width: height*3.1;}
                             CusButton{id:dateToButton;text:"选择";width:height*2;
                                 onClicked:{
@@ -83,9 +85,9 @@ Item{
                             LineEdit{id:chineseName;radius:height/6;width: height*4;onEnterPressed:{query.startQuery();}}
                             Flow{
                                 id:englishNameGroup;height: parent.height;spacing: height*0.4;
-                                CusText{text:"名字:";width:height*2.5}
+                                CusText{text:"名字:";width:height*2.5;font.pointSize: fontPointSize;}
                                 LineEdit{id:firstName;radius:height/6;width: height*4}
-                                CusText{text:"姓氏:";width:height*2.5}
+                                CusText{text:"姓氏:";width:height*2.5;font.pointSize: fontPointSize;}
                                 LineEdit{id:lastName;radius:height/6;width: height*4}
                             }
                             CusComboBox{
@@ -144,11 +146,11 @@ Item{
                                             }
                                         }
                                     }
-                                    Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"患者ID"}}
-                                    Rectangle{width: parent.width*3/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"姓名"}}
-                                    Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"性别"}}
-                                    Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"出生日期"}}
-                                    Rectangle{width: parent.width*1/10;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"载入"}}
+                                    Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"患者ID";font.pointSize: fontPointSize;}}
+                                    Rectangle{width: parent.width*3/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"姓名";font.pointSize: fontPointSize;}}
+                                    Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"性别";font.pointSize: fontPointSize;}}
+                                    Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"出生日期";font.pointSize: fontPointSize;}}
+                                    Rectangle{width: parent.width*1/10;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:"载入";font.pointSize: fontPointSize;}}
                                 }
                                 ListView{
                                     id:patientInfoListView
@@ -183,10 +185,10 @@ Item{
                                                         patientInfoListView.seletedPatientLength=patientInfoListView.seletedPatient.length;
                                                     }
                                                 }
-                                                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.patientId}}
-                                                Rectangle{width: parent.width*3/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.name+" "+model.Id+" "+model.lastUpdate}}
-                                                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.sex}}
-                                                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;text:model.birthDate}}
+                                                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:model.patientId}}
+                                                Rectangle{width: parent.width*3/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:model.name+" "+model.Id+" "+model.lastUpdate}}
+                                                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:model.sex}}
+                                                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "white"; border.color: backGroundBorderColor;CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:model.birthDate}}
                                                 CusButton
                                                 {
                                                     width: parent.width*1/10;height: parent.height;buttonColor: "white"; radius:0;imageSrc:"qrc:/Pics/base-svg/btn_analysis_enter.svg"
@@ -213,7 +215,7 @@ Item{
                             Flow{
                                 id:pageIndex;
                                 property int currentPage: 1;property int totalPage:1;property int totalRecordCount: 0;anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;height:parent.height;
-                                CusText{id:currentPageNumberText;text:"第 "+pageIndex.currentPage+"/"+pageIndex.totalPage+" 页,共计 "+pageIndex.totalRecordCount+" 条纪录";width: height*6;height: parent.height*0.8}
+                                CusText{id:currentPageNumberText;text:"第 "+pageIndex.currentPage+"/"+pageIndex.totalPage+" 页,共计 "+pageIndex.totalRecordCount+" 条纪录";width: height*6;height: parent.height*0.8;font.pointSize: fontPointSize;}
                             }
                             Flow{
                                 anchors.right: parent.right;height:parent.height*1.0;anchors.verticalCenter: parent.verticalCenter;spacing:0.5*height;
@@ -300,33 +302,33 @@ Item{
 
                             Row{
                                 width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*患者ID "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                CusText{text:"*患者ID "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
                                 LineEdit{id:newPatientId;width: parent.width*0.6;}
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
                             Row{
                                 id:newChineseNameRow;visible:false;width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*姓名 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                CusText{text:"*姓名 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
                                 LineEdit{id:newChineseName;width: parent.width*0.6}
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
 
                             Row{
                                 id:newEnglishFirstNameRow;visible:false;width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*名字 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                CusText{text:"*名字 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
                                 LineEdit{id:newEnglishFirstName;width: parent.width*0.6}
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
 
                             Row{
                                 id:newEnglishLastNameRow;visible:false;width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*姓氏"; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                CusText{text:"*姓氏"; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
                                 LineEdit{id:newEnglishLastName;width: parent.width*0.6}
                             }
 
                             Row{
                                 width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*性别 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                CusText{text:"*性别 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
                                 Row{
                                     id:genderSelect;property int gender;
                                     height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
@@ -359,7 +361,7 @@ Item{
                             Row{
                                 id:newBirthDateRow
                                 width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*出生日期 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20}
+                                CusText{text:"*出生日期 "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
                                 Row{
                                     height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
                                     Item{height: parent.height;width: 2*height;LineEdit{id:newBirthDate;width: height*3.1;onTextChanged:{newPatientage.text=CusUtils.getAge(newBirthDate.text);}}}
@@ -382,16 +384,16 @@ Item{
                                Item{height:parent.height;width:parent.width*0.15}
                                Row{
                                    height:parent.height;spacing:(width-8*height)/3;width:newPatient.width*0.7
-                                   CusText{ text:"球面";width: 2*height}
-                                   CusText{ text:"柱面";width: 2*height}
-                                   CusText{ text:"轴向";width: 2*height}
-                                   CusText{ text:"视力";width: 2*height}
+                                   CusText{ text:"球面";width: 2*height;font.pointSize: fontPointSize;}
+                                   CusText{ text:"柱面";width: 2*height;font.pointSize: fontPointSize;}
+                                   CusText{ text:"轴向";width: 2*height;font.pointSize: fontPointSize;}
+                                   CusText{ text:"视力";width: 2*height;font.pointSize: fontPointSize;}
                                }
                            }
                            Column{
                                id:eyeBallCalc;width: parent.width;height: parent.height-patientInfo.rowHight;spacing: patientInfo.rowHight*0.8;
                                Row{width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.05
-                                   CusText{text:"右眼"; horizontalAlignment: Text.AlignRight;width:parent.width*0.15}
+                                   CusText{text:"右眼"; horizontalAlignment: Text.AlignRight;width:parent.width*0.15;font.pointSize: fontPointSize;}
                                    Row{
                                        height:parent.height;spacing:(width-8*height)/3;width:newPatient.width*0.7
                                        LineEdit{ id:rx1_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?"":currentPatient.rx.rx1_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
@@ -402,7 +404,7 @@ Item{
                                }
                                Row{
                                    width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.05
-                                   CusText{text:"左眼"; horizontalAlignment: Text.AlignRight;width:parent.width*0.15}
+                                   CusText{text:"左眼"; horizontalAlignment: Text.AlignRight;width:parent.width*0.15;font.pointSize: fontPointSize;}
                                    Row{
                                        height:parent.height;spacing:(width-8*height)/3;width:newPatient.width*0.7
                                        LineEdit{ id:rx1_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?"":currentPatient.rx.rx1_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}

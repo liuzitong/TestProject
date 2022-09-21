@@ -89,37 +89,38 @@ Column {
                     {
                         height: parent.height; layoutDirection: Qt.RightToLeft;spacing: height*0.8;width: parent.width
                         anchors.horizontalCenter: parent.horizontalCenter
-                        CusComboBoxButton{
-                            id:queryStrategy;
-                            height: parent.height;width: height*3.5;
-                            enabled: currentCheckResult!==null;
-                            property var listModel:ListModel {}
-                            property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
-                            comboBox.model: listModel;popDirectionDown: false;complexType: true;
-                            button.text: "打印";
-                            button.onClicked:
-                            {
-                                var report=listModel.get(0).report;
-//                                IcUiQmlApi.appCtrl.analysisSvc.showReport(report);
-                                analysisVm.showReport(report);
-                            }
-                            comboBox.onActivated:
-                            {
-                                var report=listModel.get(index).report;
-//                                IcUiQmlApi.appCtrl.analysisSvc.showReport(report);
-                                analysisVm.showReport(report);
-                            }
-                            Component.onCompleted: {
-                                root.refresh.connect(function()
-                                {
-                                    listModel.clear();
-                                    var report=currentProgram.report;
-                                    report.forEach(function(item){
-                                        listModel.append({name:reportNames[item],report:item});
-                                    })
-                                })
-                            }
-                        }
+                        CusButton{text:"打印";onClicked:analysisVm.showReport(report);}
+//                        CusComboBoxButton{
+//                            id:queryStrategy;
+//                            height: parent.height;width: height*3.5;
+//                            enabled: currentCheckResult!==null;
+//                            property var listModel:ListModel {}
+//                            property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
+//                            comboBox.model: listModel;popDirectionDown: false;complexType: true;
+//                            button.text: "打印";
+//                            button.onClicked:
+//                            {
+//                                var report=listModel.get(0).report;
+////                                IcUiQmlApi.appCtrl.analysisSvc.showReport(report);
+//                                analysisVm.showReport(report);
+//                            }
+//                            comboBox.onActivated:
+//                            {
+//                                var report=listModel.get(index).report;
+////                                IcUiQmlApi.appCtrl.analysisSvc.showReport(report);
+//                                analysisVm.showReport(report);
+//                            }
+//                            Component.onCompleted: {
+//                                root.refresh.connect(function()
+//                                {
+//                                    listModel.clear();
+//                                    var report=currentProgram.report;
+//                                    report.forEach(function(item){
+//                                        listModel.append({name:reportNames[item],report:item});
+//                                    })
+//                                })
+//                            }
+//                        }
                     }
                 }
             }

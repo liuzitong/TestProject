@@ -11,7 +11,10 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
    property alias color: idContent.color;
    reqEnterEventLoop:false;
    anchors.fill: parent;
-//   width: 1366;height: 640;
+   width: 1366;height: 640;
+
+   property int fontPointSize: CommonSettings.fontPointSize;
+
    contentItem:
    Rectangle{
         id: idContent; color: "#60606060";implicitWidth: idPopup.width; implicitHeight: idPopup.height;
@@ -40,7 +43,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         ctx.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"设置";width: height*1.4}
+                    CusText{text:"设置";width: height*1.4;font.pointSize: fontPointSize;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;
@@ -54,7 +57,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             Item{width: parent.width;height:column.rowHeight*0.1;}
                             Flow{
                                 height: column.rowHeight; width: parent.width*0.7;anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
-                                CusText{text:"语言选择";width:parent.width*0.25}
+                                CusText{text:"语言选择";width:parent.width*0.3;font.pointSize: fontPointSize;}
                                 CusComboBox{
                                     id:languageSelection;height: parent.height;width:parent.width*0.60;
                                     borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
@@ -65,13 +68,13 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             }
                             Flow{
                                 height: column.rowHeight;width: parent.width*0.7; anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
-                                CusText{text:"医院名称";width: parent.width*0.25}
+                                CusText{text:"医院名称";width: parent.width*0.3;font.pointSize: fontPointSize;}
                                 LineEdit{id:hospitalName;height: column.rowHeight;width:parent.width*0.60;text:IcUiQmlApi.appCtrl.settings.hospitalName}
                             }
 
                             Flow{
                                 height: column.rowHeight;width: parent.width*0.7; anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
-                                CusText{text:"双姓名输入";width: parent.width*0.25}
+                                CusText{text:"双姓名输入";width: parent.width*0.3;font.pointSize: fontPointSize;}
                                 CusCheckBox{id:doubleName;checked:IcUiQmlApi.appCtrl.settings.doubleName;}
                         }
                         }
@@ -103,3 +106,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
         }
     }
 }
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

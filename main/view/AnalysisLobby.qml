@@ -17,7 +17,7 @@ Column {
     property var analysisVm: null;
     signal changePage(var pageName,var params);
     signal refresh()
-
+    property int fontPointSize: CommonSettings.fontPointSize;
 
     onRefresh: {
         if(analysisLobbyListVm!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::AnalysisLobbyListVm",analysisLobbyListVm);
@@ -36,8 +36,8 @@ Column {
                     Row{id: row;anchors.fill: parent;
                         Column{height: parent.height*0.8;anchors.verticalCenter: parent.verticalCenter;width: parent.width*0.07;
                             Item {width:parent.width;height: parent.height*0.18;}
-                            CusText{width:parent.width;height: parent.height*0.27;text: year ;horizontalAlignment: Text.AlignHCenter}
-                            CusText{width:parent.width;height:parent.height*0.35;text:monthDay ;horizontalAlignment: Text.AlignHCenter}
+                            CusText{width:parent.width;height: parent.height*0.27;text: year ;horizontalAlignment: Text.AlignHCenter;font.pointSize:fontPointSize;}
+                            CusText{width:parent.width;height:parent.height*0.35;text:monthDay ;horizontalAlignment: Text.AlignHCenter;font.pointSize:fontPointSize*1.2;}
                         }
                         ListView{
                             height: parent.height*0.9;anchors.verticalCenter: parent.verticalCenter;clip: true;orientation: ListView.Horizontal;

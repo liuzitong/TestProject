@@ -13,6 +13,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
     property var currentProgram: null;
     property var content;
     property bool locked: true;
+    property int fontPointSize: CommonSettings.fontPointSize;
 //    onCurrentProgramChanged: {
 //        if(currentProgram.type!==2){staticParamsSetting.currentProgram=currentProgram;}else{dynamicParamsSetting.currentProgram=currentProgram;}}
 
@@ -73,7 +74,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                     TabButton {width: bar.width*0.20;height: parent.height;
                                         Rectangle{anchors.fill: parent;color:parent.checked? "#E3E5E8":"#D2D2D3";
                                             Rectangle{width: parent.width;height: 3;color: "#0064B6";visible: parent.parent.checked? true:false; }
-                                            CusText{text:modelData; anchors.fill: parent;color:parent.parent.checked?"#0064B6":"black";font.pointSize: height*0.3}
+                                            CusText{text:modelData; anchors.fill: parent;color:parent.parent.checked?"#0064B6":"black";font.pointSize:fontPointSize;}
                                         }
                                     }
                                 }
@@ -121,7 +122,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         }
                                         Component{id:delegateProg;
                                             Rectangle{height: (homeTab.height-1)*1/10+1;width: listView.width;color:"white";border.color: backGroundBorderColor;
-                                                CusText{width: parent.width;text:model.name}
+                                                CusText{width: parent.width;text:model.name;font.pointSize: fontPointSize;}
                                                 MouseArea{ anchors.fill: parent;
                                                     onClicked:
                                                     {
@@ -165,7 +166,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                     }
                     Column{width: parent.width;height: parent.height*0.4-2
                         Rectangle{width: parent.width;height: parent.height*0.11;color:"#D2D2D3";
-                            CusText{text:"策略"; horizontalAlignment: Text.AlignHCenter; anchors.fill: parent}
+                            CusText{text:"策略"; horizontalAlignment: Text.AlignHCenter; anchors.fill: parent;font.pointSize: fontPointSize;}
                         }
                         Rectangle{width: parent.width;height: parent.height*0.89;color:"#DCDEE0";
                             StackLayout {
@@ -287,7 +288,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 
                                     }
                                 }
-                                CusButton{text:"取消";height: parent.width*0.3;width: parent.width;}
+//                                CusButton{text:"取消";height: parent.width*0.3;width: parent.width;}
                                 CusButton{
                                     text:"保存";height: parent.width*0.3;width: parent.width;enabled: currentProgram.category===4||!locked;
                                     onClicked: {/*currentProgram.dots.forEach(function(item){console.log("x:"+item.x+" y:"+item.y);});*/currentProgram.updateProgram();}
@@ -343,7 +344,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                     }
                     CusText{
                         anchors.fill: parent;
-                        text:"已解锁";color: "white";visible: !locked}
+                        text:"已解锁";color: "white";visible: !locked;font.pointSize: fontPointSize;}
                 }
             }
             Item{height: parent.height; anchors.right: parent.right; width:parent.width*0.25;visible:false;
@@ -352,7 +353,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                     layoutDirection: Qt.RightToLeft;anchors.fill: parent;anchors.margins:parent.height*0.15;spacing:0.5*height
                     CusButton{text:"确定";onClicked:{if(pwd.text===IcUiQmlApi.appCtrl.settings.programUnlockPwd) {locked=false;unlockPwd.visible=false;}else{pwdText.text="输入密码错误"}}}
                     LineEdit{id:pwd;width: parent.height*3;textInput.echoMode: TextInput.Password;}
-                    CusText{id:pwdText;text:"输入解锁密码:";color: "white";}
+                    CusText{id:pwdText;text:"输入解锁密码:";color: "white";font.pointSize: fontPointSize;}
                 }
             }
 

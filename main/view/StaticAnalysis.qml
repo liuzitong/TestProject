@@ -11,7 +11,6 @@ Item
 {
     id:root;
     signal refresh();
-    property int textHeight:height*0.05;
     property var currentPatient: null;
     property var currentProgram: null;
     property var currentCheckResult: null;
@@ -19,8 +18,10 @@ Item
     property var analysisVm: null;
     property var report:null;                           //0:常规,1:三合一,2:总览,3:筛选
     property string rx:"";
-//    width: 1366;
-//    height: 660;
+    width: 1366;
+    height: 660;
+    property int fontPointSize: CommonSettings.fontPointSize;
+    property int textHeight:CommonSettings.textHeight;
     onRefresh:
     {
         switch(report)
@@ -45,8 +46,8 @@ Item
         Rectangle{width:parent.width*0.75;height: parent.height;color:"white";
             Row{anchors.fill: parent;anchors.leftMargin: parent.width*0.06;anchors.topMargin: parent.height*0.04;anchors.bottomMargin: parent.height*0.04;spacing: width*0.10;
                 Column{ id: column;width: parent.width*0.25;height: parent.height;spacing:parent.height*0.02
-                    CusText{text:currentProgram.name; font.bold: true; horizontalAlignment: Text.AlignLeft;height:parent.height*0.10;}
-                    Column{id:ttt;width:parent.width;height: parent.height*0.25;spacing: textHeight*-0.36;
+                    CusText{text:currentProgram.name; font.bold: true; horizontalAlignment: Text.AlignLeft;height:parent.height*0.10;font.pointSize: fontPointSize*2;}
+                    Column{id:ttt;width:parent.width;height: parent.height*0.25;spacing: textHeight*0.5;
                         Repeater{
                             property var params: currentCheckResult.params.commonParams;
                             property int timeSpan:currentCheckResult.resultData.testTimespan;
@@ -66,7 +67,7 @@ Item
                         }
     //                        CusText{text:"固视监测";  horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                     }
-                    Column{width:parent.width;height: parent.height*0.12;spacing: textHeight*-0.36;
+                    Column{width:parent.width;height: parent.height*0.12;spacing: textHeight*0.5;
                         Repeater{
                             property var params: currentCheckResult.params.commonParams;
                             property var cursorSize: ["I","II","III","IV","V"];
@@ -80,7 +81,7 @@ Item
                             CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
-                    Column{width:parent.width;height: parent.height*0.12;spacing: textHeight*-0.36;
+                    Column{width:parent.width;height: parent.height*0.12;spacing: textHeight*0.5;
                         Repeater{
                             model: [
                                 {name:"瞳孔直径",param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
@@ -90,20 +91,20 @@ Item
                         }
                     }
 
-                    Column{width:parent.width;height: parent.height*0.25;spacing: textHeight*-0.18;
-                        CusText{text:"诊断:"; horizontalAlignment: Text.AlignLeft;width:parent.width;height: parent.height*0.24;}
-                        Rectangle{ id: rectangle;width:parent.width;height: parent.height*0.73;radius: 5;border.color: "black";smooth: false;
+                    Column{width:parent.width;height: parent.height*0.20;spacing: textHeight*0.3;
+                        CusText{text:"诊断:"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
+                        Rectangle{ id: rectangle;width:parent.width;height: parent.height-1.3*textHeight;radius: 5;border.color: "black";smooth: false;
                             TextInput
                             {
                                 id:diagnosis;anchors.fill: parent;anchors.margins: 3;
                                 width:parent.width*1.0;height: parent.height*0.70;
                                 text:currentCheckResult==null?"":currentCheckResult.diagnosis;
                                 selectionColor: "blue";selectByMouse: true;
-                                font.pointSize: textHeight*0.3;font.family: "Consolas";
+                                font.pointSize: fontPointSize;font.family: "Consolas";
                                 wrapMode: Text.WrapAnywhere;renderType: Text.NativeRendering;
                             }
 
-                            CusButton{ id: cusButton;height: parent.height*0.25;width: height*2;
+                            CusButton{ id: cusButton;height: parent.height*0.28;width: height*2;
                                 text:"保存";anchors.right: parent.right;anchors.bottom: parent.bottom;
                                 anchors.rightMargin: 5;anchors.bottomMargin: 5;
                                 onClicked:
@@ -116,7 +117,7 @@ Item
                     }
 
 
-                    Item{ id: item2;width:parent.width;height: parent.height*0.10;anchors.left: parent.left;
+                    Item{width:parent.width;height: parent.height*0.08;
                         FixationDeviation{ dots:if(currentCheckResult!==null) currentCheckResult.resultData.fixationDeviation; }
                     }
                 }
@@ -133,13 +134,3 @@ Item
     }
 
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

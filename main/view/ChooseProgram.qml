@@ -18,6 +18,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
     property int program_type;
     signal ok();
     signal cancel();
+    property int fontPointSize: CommonSettings.fontPointSize;
 
    contentItem:
    Rectangle{
@@ -45,7 +46,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"选择程序"; anchors.left: parent.left; anchors.leftMargin: height*0.5}
+                    CusText{text:"选择程序"; anchors.left: parent.left; anchors.leftMargin: height*0.5;font.pointSize: fontPointSize;}
                 }
                 Column{id: column;width: parent.width-2; height: parent.height*0.8;
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -56,7 +57,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                 TabButton {width: bar.width*0.20;height: parent.height;
                                     Rectangle{anchors.fill: parent;color:parent.checked? "#E3E5E8":"#D2D2D3";
                                         Rectangle{width: parent.width;height: 3;color: "#0064B6";visible: parent.parent.checked? true:false; }
-                                        CusText{text:modelData; anchors.fill: parent;color:parent.parent.checked?"#0064B6":"black";font.pointSize: height*0.3}
+                                        CusText{text:modelData; anchors.fill: parent;color:parent.parent.checked?"#0064B6":"black";font.pointSize: fontPointSize;}
                                     }
                                 }
                             }
@@ -104,7 +105,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Component{id:delegateProg;
                                         Rectangle{height: (homeTab.height-1)*1/12+1;width: listView.width;color:"white";border.color: backGroundBorderColor;
-                                            CusText{width: parent.width;text:model.name}
+                                            CusText{width: parent.width;text:model.name;font.pointSize: fontPointSize;}
                                             MouseArea{ anchors.fill: parent;
                                                 onClicked:
                                                 {

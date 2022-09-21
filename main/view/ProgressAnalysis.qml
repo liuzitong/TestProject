@@ -22,7 +22,8 @@ Column {
 
     onRefresh:
     {
-        console.log(progressAnalysisResult[2]);
+//        console.log(progressAnalysisResult[2]);
+        content.active=true;
         switch(report)
         {
         case 0:content.source="ProgressAnalysisBaseLine.qml";break;
@@ -43,6 +44,7 @@ Column {
 
     Loader{
         id:content;
+        active: false;
         width: parent.width;height: parent.height*14/15;
     }
 
@@ -66,7 +68,7 @@ Column {
         Row{anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:"返回";onClicked:{root.changePage("progressAnalysisLobby",null);}}}
+                    CusButton{text:"返回";onClicked:{root.changePage("progressAnalysisLobby",null);content.active=false;}}}
                 }
             Item{height: parent.height;width:parent.width*0.52;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
@@ -83,35 +85,49 @@ Column {
                     {
                         height: parent.height; layoutDirection: Qt.RightToLeft;spacing: height*0.8;width: parent.width
                         anchors.horizontalCenter: parent.horizontalCenter
-                        CusComboBoxButton{
-                            id:queryStrategy;
-                            height: parent.height;width: height*3.5;
-                            property var listModel:ListModel{ListElement{name:"进展基线";report:0}ListElement{name:"最后三次进展";report:1}ListElement{name:"单次进展分析";report:2}}
-                            comboBox.model: listModel
-                            popDirectionDown: false;complexType: true;
-                            button.text: "打印";
-                            button.onClicked:
+                        CusButton{text:"打印";onClicked:
                             {
-                                var report=listModel.get(0).report;
-//                                progressAnalysisListVm.showReport(report);
+                                switch (report)
+                                {
+                                case 0:progressAnalysisListVm.getProgressBaseLineReport();return;
+                                case 1:progressAnalysisListVm.getThreeFollowUpsReport(progressAnalysisListVm.selectedIndex);return;
+                                case 2:progressAnalysisListVm.getSingleProgressReport(progressAnalysisListVm.selectedIndex);return;
+                                }
                             }
-                            comboBox.onActivated:
-                            {
-                                var report=listModel.get(index).report;
-                                console.log(report);
-//                                progressAnalysisListVm.showReport(report);
-                            }
-//                            Component.onCompleted: {
-//                                root.refresh.connect(function()
-//                                {
-//                                    listModel.clear();
-//                                    var report=currentProgram.report;
-//                                    report.forEach(function(item){
-//                                        listModel.append({name:reportNames[item],report:item});
-//                                    })
-//                                })
-//                            }
                         }
+//                        CusComboBoxButton{
+//                            id:queryStrategy;
+//                            height: parent.height;width: height*3.5;
+//                            property var listModel:ListModel{ListElement{name:"进展基线";report:0}ListElement{name:"最后三次进展";report:1}ListElement{name:"单次进展分析";report:2}}
+//                            comboBox.model: listModel
+//                            popDirectionDown: false;complexType: true;
+//                            button.text: "打印";
+//                            button.onClicked:
+//                            {
+//                                var report=listModel.get(0).report;
+//                                analysis(report);
+//                            }
+//                            comboBox.onActivated:
+//                            {
+//                                var report=listModel.get(index).report;
+//                                analysis(report);
+//                            }
+//                            function analysis(report)
+//                            {
+//                                switch (report)
+//                                {
+//                                case 0:
+//                                    progressAnalysisListVm.getProgressBaseLine(0,true);
+//                                    return;
+//                                case 1:
+//                                    progressAnalysisListVm.getThreeFollowUps(progressAnalysisListVm.selectedIndex,0,true);
+//                                    return;
+//                                case 2:
+//                                    progressAnalysisListVm.getSingleProgress(progressAnalysisListVm.selectedIndex,0,true);
+//                                    return;
+//                                }
+//                            }
+//                        }
                     }
                 }
             }

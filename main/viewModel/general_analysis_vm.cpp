@@ -362,7 +362,7 @@ DynamicAnalysisVm::DynamicAnalysisVm(const QVariantList &args)
         m_fixationValues[i]=m_checkResult.m_data.fixationDeviation[i];
     }
     QImage img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
-    analysisMethodSvc->drawDynamic(m_values,m_range,img);img.save(m_reportFolder+"Dynamic.bmp");
+    analysisMethodSvc->drawDynamic(m_values,m_range,img);img.save(m_previewFolder+"Dynamic.bmp");
 
 }
 

@@ -4,8 +4,9 @@ import qxpack.indcom.ui_qml_base 1.0
 Text {
     height: parent.height
     text: qsTr("中文")
-    width: IcUiQmlApi.appCtrl.settings.language==="Chinese"?(text.length*0.4+0.4)*height:(text.length*0.2+0.4)*height;
-    font.pointSize: height*0.30
+    wrapMode: Text.NoWrap
+    width: IcUiQmlApi.appCtrl.settings.language==="Chinese"?(text.length*0.9)*height:(text.length*0.4)*height;
+    font.pointSize: height*0.8
     fontSizeMode: Text.Fit
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignHCenter
