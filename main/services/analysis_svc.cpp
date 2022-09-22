@@ -320,14 +320,12 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
     else if(psd>3.2) p_psd=2;
     else if(psd>2.5) p_psd=5;
     else if(psd>2.0) p_psd=10;
-    else p_psd=-1;
 
     if(md<-5.5)  p_md=0.5;
     else if(md<-3.5) p_md=1;
     else if(md<-2.6) p_md=2;
     else if(md<-2.0) p_md=5;
     else if(md<-1.5) p_md=10;
-    else p_md=-1;
 
 //    qDebug()<<m_psd;
 
@@ -630,7 +628,7 @@ AnalysisSvc *AnalysisSvc::getSingleton()
 
 void AnalysisSvc::drawPixScale(int range, QImage &img)
 {
-    int scale=img.width()<500?1:2;
+    int scale=img.width()<400?1:2;
     QPainter painter(&img);
     painter.setBrush(QBrush(QColor("black")));
     painter.setPen({Qt::black,float(scale)});
@@ -794,7 +792,7 @@ void AnalysisSvc::drawGray(QVector<int> values, QVector<QPointF> locs, int range
        QString path=QString(":/grays/Gray")+QString::number(grayVal)+".bmp";
        QImage image(path);
        float scale;
-       if(img.width()<=400){scale=1;}
+       if(img.width()<400){scale=1;}
        else scale=2;
        auto scaledImage=image.scaled(image.width()*scale,image.height()*scale);
        QPoint tempPixLoc={pixLoc.x()-scaledImage.width()/2,pixLoc.y()-scaledImage.height()/2};
@@ -1009,7 +1007,7 @@ void AnalysisSvc::drawBaseLine(QVector<float> mds,int startYear,QVector<int> mon
     int yearScale=startYear;
     for(int i=0;i<=20;i++)
     {
-        const QRect rectangle = QRect(0.1*img.width()+i*24-fontPixSize*1.6*0.5, fontPixSize*0.2,fontPixSize*1.2, fontPixSize*0.8);
+        const QRect rectangle = QRect(0.1*img.width()+0.8*img.width()/20*i-fontPixSize*1.6*0.5, fontPixSize*0.2,fontPixSize*1.2, fontPixSize*0.8);
         painter.drawText(rectangle,Qt::AlignCenter|Qt::AlignVCenter,QString::number(yearScale%100));
         yearScale++;
     }
@@ -1036,9 +1034,9 @@ void AnalysisSvc::drawBaseLine(QVector<float> mds,int startYear,QVector<int> mon
 
     for(int i=0;i<mds.length();i++)
     {
-        if(i!=mds.length()-1) painter.drawLine(QLine(QPoint{int(0.1*img.width()+months[i]*2),getMDPixy(mds[i])},QPoint{int(0.1*img.width()+months[i+1]*2),getMDPixy(mds[i+1])}));
+        if(i!=mds.length()-1) painter.drawLine(QLine(QPoint{int(0.1*img.width()+months[i]*0.8*img.width()/240),getMDPixy(mds[i])},QPoint{int(0.1*img.width()+months[i+1]*0.8*img.width()/240),getMDPixy(mds[i+1])}));
         float diameter=0.02*img.height();
-        QPoint center={int(0.1*img.width()+months[i]*2),getMDPixy(mds[i])};
+        QPoint center={int(0.1*img.width()+months[i]*0.8*img.width()/240),getMDPixy(mds[i])};
         painter.setBrush(QBrush(Qt::black));
         QRectF rect(center.x()-diameter/2,center.y()-diameter/2,diameter,diameter);
         painter.drawEllipse(rect);

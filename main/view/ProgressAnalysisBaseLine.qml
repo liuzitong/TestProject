@@ -47,7 +47,7 @@ Rectangle {
                         {name:"中心点",param:centerDotCheck[progressAnalysisListVm.getData(0,"centerDotCheck")?1:0]},
                         {name:"平均缺损",param:progressAnalysisListVm.getData(0,"md").toFixed(2)+(progressAnalysisListVm.getData(0,"p_md")>0?(" (<"+progressAnalysisListVm.getData(0,"p_md")+"%)"):"")},
                         {name:"平均标准差",param:progressAnalysisListVm.getData(0,"psd").toFixed(2)+(progressAnalysisListVm.getData(0,"p_psd")>0?(" (<"+progressAnalysisListVm.getData(0,"p_psd")+"%)"):"")},
-                        {name:"固视丢失率",param:Math.round((progressAnalysisListVm.getData(0,"fixationLossRate")*100))+"%"},
+                        {name:"固视丢失率",param:progressAnalysisListVm.getData(0,"fixationLostCount")+"/"+progressAnalysisListVm.getData(0,"fixationLostTestCount")},
                         {name:"假阴性率",param:Math.round((progressAnalysisListVm.getData(0,"falseNegativeRate")*100))+"%"},
                         {name:"假阳性率",param:Math.round((progressAnalysisListVm.getData(0,"falsePositiveRate")*100))+"%"},
                     ]
@@ -96,7 +96,7 @@ Rectangle {
                         {name:"中心点",param:centerDotCheck[progressAnalysisListVm.getData(1,"centerDotCheck")?1:0]},
                         {name:"平均缺损",param:progressAnalysisListVm.getData(1,"md").toFixed(2)+(progressAnalysisListVm.getData(1,"p_md")>0?(" (<"+progressAnalysisListVm.getData(0,"p_md")+"%)"):"")},
                         {name:"平均标准差",param:progressAnalysisListVm.getData(1,"psd").toFixed(2)+(progressAnalysisListVm.getData(1,"p_psd")>0?(" (<"+progressAnalysisListVm.getData(0,"p_psd")+"%)"):"")},
-                        {name:"固视丢失率",param:Math.round((progressAnalysisListVm.getData(1,"fixationLossRate")*100))+"%"},
+                        {name:"固视丢失率",param:progressAnalysisListVm.getData(1,"fixationLostCount")+"/"+progressAnalysisListVm.getData(1,"fixationLostTestCount")},
                         {name:"假阴性率",param:Math.round((progressAnalysisListVm.getData(1,"falseNegativeRate")*100))+"%"},
                         {name:"假阳性率",param:Math.round((progressAnalysisListVm.getData(1,"falsePositiveRate")*100))+"%"},
                     ]

@@ -59,7 +59,7 @@ Rectangle {
                                     {name:"中心点",param:centerDotCheck[progressAnalysisListVm.getData(index+modelData.index_list,"centerDotCheck")?1:0]},
                                     {name:"平均缺损",param:progressAnalysisListVm.getData(index+modelData.index_list,"md").toFixed(2)+(progressAnalysisListVm.getData(index+modelData.index_list,"p_md")>0?(" (<"+progressAnalysisListVm.getData(index+modelData.index_list,"p_md")+"%)"):"")},
                                     {name:"平均标准差",param:progressAnalysisListVm.getData(index+modelData.index_list,"psd").toFixed(2)+(progressAnalysisListVm.getData(index+modelData.index_list,"p_psd")>0?(" (<"+progressAnalysisListVm.getData(index+modelData.index_list,"p_psd")+"%)"):"")},
-                                    {name:"固视丢失率",param:Math.round((progressAnalysisListVm.getData(index+modelData.index_list,"fixationLossRate")*100))+"%"},
+                                    {name:"固视丢失率",param:progressAnalysisListVm.getData(index+modelData.index_list,"fixationLostCount")+"/"+progressAnalysisListVm.getData(index+modelData.index_list,"fixationLostTestCount")},
                                     {name:"假阴性率",param:Math.round((progressAnalysisListVm.getData(index+modelData.index_list,"falseNegativeRate")*100))+"%"},
                                     {name:"假阳性率",param:Math.round((progressAnalysisListVm.getData(index+modelData.index_list,"falsePositiveRate")*100))+"%"},
                                     {name:"进展",param:progress[progressAnalysisResult[modelData.index_progress]]},

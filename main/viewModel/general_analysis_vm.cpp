@@ -103,14 +103,14 @@ StaticAnalysisVm::StaticAnalysisVm(const QVariantList &args)
         if(report==0)
         {
             analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img);img.save(m_previewFolder+"dBDiagram.bmp");
+            analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img);img.save(m_previewFolder+"gray.bmp");
+
             analysisMethodSvc->drawText(m_dev,m_locs,m_range,m_OS_OD,img);img.save(m_previewFolder+"TotalDeviation.bmp");
             analysisMethodSvc->drawText(m_mDev,m_locs,m_range,m_OS_OD,img);img.save(m_previewFolder+"PatternDeviation.bmp");
 
             analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,img);img.save(m_previewFolder+"TotalPE.bmp");
             analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,img);img.save(m_previewFolder+"PatternPE.bmp");
 
-            analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img);img.save(m_previewFolder+"gray.bmp");
-            analysisMethodSvc->drawDefectDepth(m_dev,m_locs,m_range,img);img.save(m_previewFolder+"defectDepth.bmp");
         }
         else if(report==1)
         {
@@ -274,8 +274,8 @@ void StaticAnalysisVm::showReport(int report)
     manager->setReportVariable("VFI","VFI: "+QString::number(qRound(m_VFI*100))+"%");
     QString GHT;switch (m_GHT){case 0:GHT="Out of limits";break;case 1:GHT="Low sensitivity";break;case 2:GHT="Border of limits";break;case 3:GHT="Within normal limits";break;}
     manager->setReportVariable("GHT","GHT: "+GHT);
-    manager->setReportVariable("MD",QString("MD: ")+QString::number(m_md,'f',2)+" (P<"+QString::number(m_p_md)+"%)");
-    manager->setReportVariable("PSD",QString("PSD: ")+QString::number(m_psd,'f',2)+" (P<"+QString::number(m_p_psd)+"%)");
+    manager->setReportVariable("MD",QString("MD: ")+QString::number(m_md,'f',2)+(m_p_md-5<=FLT_EPSILON?" (P<"+QString::number(m_p_md)+"%)":""));
+    manager->setReportVariable("PSD",QString("PSD: ")+QString::number(m_psd,'f',2)+(m_p_psd-5<=FLT_EPSILON?" (P<"+QString::number(m_p_psd)+"%)":""));
 
     switch (report)
     {

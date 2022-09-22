@@ -5,6 +5,7 @@
 #include <perimeter/main/viewModel/patientVm.h>
 #include <perimeter/main/viewModel/programVm.h>
 #include <perimeter/main/model/checkResultModel.h>
+#include <perimeter/main/model/patientmodel.h>
 
 namespace Perimeter{
 
@@ -22,6 +23,8 @@ class ProgressAnalysisListVm:public QAbstractListModel
         psd,
         p_psd,
         GHT,
+        fixationLostCount,
+        fixationLostTestCount,
         fixationLossRate,
         falsePositiveRate,
         falseNegativeRate
@@ -40,6 +43,8 @@ class ProgressAnalysisListVm:public QAbstractListModel
         float psd;
         float p_psd;
         int GHT;
+        int fixationLostCount;
+        int fixationLostTestCount;
         float fixationLossRate;
         float falsePositiveRate;
         float falseNegativeRate;
@@ -80,7 +85,8 @@ private:
     int m_OS_OD;
     int m_selectedResultId=0;
     int m_selectedIndex=0;
-    int m_patientId;
+    PatientModel m_patient;
+
 //    QVector<QVector<int>> m_mDevList;
 //    QVector<QVector<QPointF>> m_locsList;
     QVector<Data> m_originalDataList;
