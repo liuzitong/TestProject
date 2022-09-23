@@ -121,6 +121,7 @@ Rectangle {
             Analysis{id:analysisPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
             ProgressAnalysisLobby{id:progressAnalysisLobbyPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
             ProgressAnalysis{id:progressAnalysisPage;anchors.fill: parent;visible: false;currentPatient: root.currentPatient;onChangePage: contentPage.changePage(pageName,params);}
+            VisionFieldIsland{id:visionFieldIslandPage;anchors.fill: parent;visible: false;}
 //            Component.onCompleted: {
 //                IcUiQmlApi.appCtrl.changePage.connect(changePage);
 //                patientPage.changePage.connect(contentPage.changePage);
@@ -140,6 +141,7 @@ Rectangle {
                 programPage.visible=false;
                 analysisLobbypage.visible=false;
                 analysisPage.visible=false;
+                f
                 switch(pageName)
                 {
                     case "patientManagement":

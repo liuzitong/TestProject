@@ -6,7 +6,6 @@
         <file>Check.qml</file>
         <file>ProgramCustomize.qml</file>
         <file>Content.qml</file>
-        <file>qmldir</file>
         <file>AnalysisLobby.qml</file>
         <file>NewProgram.qml</file>
         <file>About.qml</file>
@@ -27,6 +26,7 @@
         <file>ProgressAnalysisBaseLine.qml</file>
         <file>ProgressThreeFollowUps.qml</file>
         <file>ProgressAnalysisSingle.qml</file>
+        <file>VisionFieldIsland.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

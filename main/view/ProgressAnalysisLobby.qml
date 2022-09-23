@@ -162,14 +162,13 @@ Column {
                             ListElement{name:"单次进展分析";report:2}}
                         property var listModel2:ListModel {
                             ListElement{name:"进展基线";report:0}}
-                        button.enabled: progressAnalysisListVm.selectedIndex>1;
                         enabled: progressAnalysisListVm.rowCount()>1;
                         comboBox.model:progressAnalysisListVm.selectedIndex>1?listModel:listModel2;
                         popDirectionDown: false;complexType: true;
                         button.text: "进展分析";
                         button.onClicked:
                         {
-                            analysis(1);
+                            progressAnalysisListVm.selectedIndex>1?analysis(1):analysis(0);
                         }
                         comboBox.onActivated:
                         {
