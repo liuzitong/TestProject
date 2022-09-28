@@ -141,7 +141,7 @@ Rectangle {
                 programPage.visible=false;
                 analysisLobbypage.visible=false;
                 analysisPage.visible=false;
-                f
+                visionFieldIslandPage.visible=false;
                 switch(pageName)
                 {
                     case "patientManagement":
@@ -212,6 +212,10 @@ Rectangle {
                         analysisPage.report=params.report;
                         analysisPage.analysisVm=params.analysisVm;
                         analysisPage.refresh();
+                        break;
+                    case "visionFieldIsland":
+                        visionFieldIslandPage.visible=true;
+                        visionFieldIslandPage.refresh();
                         break;
                 }
             }

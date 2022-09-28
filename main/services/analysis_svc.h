@@ -53,6 +53,8 @@ public:
 
     void drawDynamic(QVector<QPointF> values,int range,QImage& img);
 
+    void drawVisionFieldIsland(QVector<int> values,QVector<QPointF> locs,int range,int innerRange,QImage& img);
+
     void drawFixationDeviation(QVector<int> values,QImage& img);
 
     QPoint convertDegLocToPixLoc(QPointF DegLoc,int range,QImage img);

@@ -716,58 +716,96 @@ void AnalysisSvc::drawGray(QVector<int> values, QVector<QPointF> locs, int range
     img.fill(qRgb(255, 255, 255));
     drawPixScale(range,img);
     QPainter painter(&img);
-    int gap= range/15;
-    int left_x_axis=0,right_x_axis=0,up_y_axis=0,down_y_axis=0;
+
+
+
+
+    float gap= float(range)/15;
+    int min_dist_index;
+    int dotGap;
+    {
+        float min_dist=FLT_MAX;
+        {
+            QPointF tempLoc=locs[0];
+            for(int i=1;i<locs.length();i++)
+            {
+                float dist=pow(tempLoc.rx()-locs[i].rx(),2)+pow(tempLoc.y()-locs[i].y(),2);
+                if(dist<min_dist)
+                {
+                    min_dist=dist;
+                    min_dist_index=i;
+                }
+            }
+        }
+    }
+    dotGap=qMax(qAbs(locs[0].rx()-locs[min_dist_index].rx()),qAbs(locs[0].ry()-locs[min_dist_index].ry()));
+
+    float left_x_axis=0,right_x_axis=0,up_y_axis=0,down_y_axis=0;
     for(auto &i:locs)
     {
         auto x=i.x();auto y=i.y();
         if(x<left_x_axis) left_x_axis=x;
+
         if(x>right_x_axis) right_x_axis=x;
         if(y>up_y_axis) up_y_axis=y;
         if(y<down_y_axis) down_y_axis=y;
     }
-    int rangeX=qMax(qAbs(left_x_axis),right_x_axis)+1.5*gap;;int rangeY=qMax(qAbs(down_y_axis),up_y_axis)+1.5*gap;
 
-    QVector<QPoint> paintLocs;
-    for(int i=up_y_axis;i>=down_y_axis;i-=gap)
+//    long double a=3;
+//    long double b=2;
+//    int x;
+//    auto c=fmod(3,2);
+    float rangeX=qMax(qAbs(left_x_axis),right_x_axis)+dotGap/2;;float rangeY=qMax(qAbs(down_y_axis),up_y_axis)+dotGap/2;
+
+    QVector<QPointF> paintLocs;
+    for(float i=up_y_axis+(dotGap/2)/*-fmod(up_y_axis+(dotGap/2),gap)*/-1.5*gap;i>=down_y_axis-(dotGap/2)/*-fmod(down_y_axis-(dotGap/2),gap)*/+1.5*gap-FLT_MIN;i-=gap)
     {
-        for(int j=left_x_axis;j<=right_x_axis;j+=gap)
+        for(float j=left_x_axis-(dotGap/2)/*-fmod(left_x_axis-(dotGap/2),gap)*/+1.5*gap;j<=right_x_axis+(dotGap/2)/*-fmod(right_x_axis+(dotGap/2),gap)*/-1.5*gap+FLT_MIN;j+=gap)
         {
-            float answerOutter=float(qPow(qAbs(i)+2,2))/(rangeX*rangeX)+float(qPow(qAbs(j)+2,2))/(rangeY*rangeY);
+            float answerOutter=float(qPow(qAbs(i)+gap,2))/(rangeY*rangeY)+float(qPow(qAbs(j)+gap,2))/(rangeX*rangeX);
             float answerInner=1.0;
-            if(innerRange!=0){answerInner=(float(qPow(qAbs(i)+2,2))+float(qPow(qAbs(j)+2,2)))/(innerRange*innerRange);}
+            if(innerRange!=0){answerInner=(float(qPow(qAbs(i)+gap,2))+float(qPow(qAbs(j)+gap,2)))/(innerRange*innerRange);}
             if((answerOutter<=1.0)&&(answerInner>=1.0))
-                paintLocs.append(QPoint(j,i));
+                paintLocs.append(QPointF(j,i));
         }
     }
 
+
+//    for(auto&i:paintLocs)
+//    {
+//        if(i.ry())
+//    }
+    qDebug()<<paintLocs;
+
+
     for(int i=0;i<paintLocs.length();i++)
     {
-        QVector<QPair<int,int>> distIndexList;
+        QVector<QPair<int,float>> distIndexList;
         for(int j=0;j<locs.length();j++)
         {
             auto dot=locs[j].toPoint();
-            int dist=qPow(paintLocs[i].x()-dot.x(),2)+qPow(paintLocs[i].y()-dot.y(),2);
-            distIndexList.append(QPair<int,int>(j,dist));
+            float dist=qPow(paintLocs[i].x()-dot.x(),2)+qPow(paintLocs[i].y()-dot.y(),2);
+            distIndexList.append(QPair<int,float>(j,dist));
         }
 
-        std::sort(distIndexList.begin(),distIndexList.end(),[](QPair<int,int> a,QPair<int,int> b){return a.second<b.second;});
-        QVector<QPair<int,int>> interpolationDots;
-        for(int j=0;j<4;j++)
+        std::sort(distIndexList.begin(),distIndexList.end(),[](QPair<int,float> a,QPair<int,float> b){return a.second<b.second;});   //所有测试点按顺序和待画图点按距离从小到大排序.
+        QVector<QPair<int,float>> interpolationDots;
+        for(int j=0;j<4;j++)                                            //最近4个添加进差值点,且距离不得大于3*gap
         {
-            if(j<2)
-            {
-                interpolationDots.append(distIndexList[j]);
-            }
-            else
-            {
-                if(distIndexList[j].second<=2*qPow(3*gap,2))
-                    interpolationDots.append(distIndexList[j]);
-            }
+//            if(j<2)
+//            {
+//                interpolationDots.append(distIndexList[j]);
+//            }
+//            else
+//            {
+//                if(distIndexList[j].second<=2*qPow(3*gap,2))
+//                    interpolationDots.append(distIndexList[j]);
+//            }
+            interpolationDots.append(distIndexList[j]);
         }
 
         float totalValue=0,totalDist=0;
-        for(int j=0;j<interpolationDots.length();j++)
+        for(int j=0;j<interpolationDots.length();j++)                               //根据插值点算出插值
         {
             int index=interpolationDots[j].first;
             if(interpolationDots[j].second==0)
@@ -780,15 +818,16 @@ void AnalysisSvc::drawGray(QVector<int> values, QVector<QPointF> locs, int range
             totalDist+=1.0f/qSqrt(interpolationDots[j].second);
         }
         float interpolVal=totalValue/totalDist;
-        int grayVal=qCeil(interpolVal/5);
+        int grayVal=qCeil(interpolVal/5);                                           //根据插值算出灰度值
         if(grayVal>9) grayVal=9;
 
 
 
-       QPoint tempPoint;
-       if(paintLocs[i].x()>0) tempPoint.setX(paintLocs[i].x()+2); else tempPoint.setX(paintLocs[i].x()-2);
-       if(paintLocs[i].y()>0) tempPoint.setY(paintLocs[i].y()+2); else tempPoint.setY(paintLocs[i].y()-2);
+       QPointF tempPoint;
+       if(paintLocs[i].x()>FLT_MIN) tempPoint.setX(paintLocs[i].x()+gap); else tempPoint.setX(paintLocs[i].x()-gap);   //偏移一个gap.呈现中间空白的效果
+       if(paintLocs[i].y()>FLT_MIN) tempPoint.setY(paintLocs[i].y()+gap); else tempPoint.setY(paintLocs[i].y()-gap);
        auto pixLoc=convertDegLocToPixLoc(tempPoint,range,img);
+       qDebug()<<pixLoc;
        QString path=QString(":/grays/Gray")+QString::number(grayVal)+".bmp";
        QImage image(path);
        float scale;
@@ -936,6 +975,11 @@ void AnalysisSvc::drawDynamic(QVector<QPointF> values, int range, QImage& img)
         painter.drawLine(QLine(begin.x(),begin.y(),end.x(),end.y()));
         painter.drawEllipse(begin,3*scale,3*scale);
     }
+}
+
+void AnalysisSvc::drawVisionFieldIsland(QVector<int> values, QVector<QPointF> locs, int range, int innerRange, QImage &img)
+{
+
 }
 
 void AnalysisSvc::drawFixationDeviation(QVector<int> values, QImage& img)

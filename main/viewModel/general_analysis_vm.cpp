@@ -187,14 +187,13 @@ void StaticAnalysisVm::showReport(int report)
         {
 //            analysisMethodSvc->DrawThreshold(resultId)
             analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550);img550.save(m_reportFolder+"dBDiagram.bmp");
+            analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img550);img550.save(m_reportFolder+"gray.bmp");
+
             analysisMethodSvc->drawText(m_dev,m_locs,m_range,m_OS_OD,img500);img500.save(m_reportFolder+"TotalDeviation.bmp");
             analysisMethodSvc->drawText(m_mDev,m_locs,m_range,m_OS_OD,img500);img500.save(m_reportFolder+"PatternDeviation.bmp");
 
             analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,img500);img500.save(m_reportFolder+"TotalPE.bmp");
             analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,img500);img500.save(m_reportFolder+"PatternPE.bmp");
-
-            analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img550);img550.save(m_reportFolder+"gray.bmp");
-            analysisMethodSvc->drawDefectDepth(m_dev,m_locs,m_range,img500);img500.save(m_reportFolder+"defectDepth.bmp");
         }
         else if(report==1)
         {

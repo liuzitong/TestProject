@@ -76,7 +76,6 @@ AnalysisLobbyListVm::AnalysisLobbyListVm(const QVariantList &args)
     query.where("patient_id").isEqualTo(id);
     CheckResult_List checkResult_list;
     qx::dao::fetch_by_query(query, checkResult_list);              //不能用execute_query
-    qDebug()<<checkResult_list.size();
     generateModelListData(checkResult_list);
 }
 
@@ -84,14 +83,11 @@ AnalysisLobbyListVm::AnalysisLobbyListVm(const QVariantList &args)
 void AnalysisLobbyListVm::generateModelListData(CheckResult_List checkResult_list)
 {
     QVector<QDate> dateList;
-    qDebug()<<checkResult_list.size();
     for(auto &i:checkResult_list)
     {
         if(!dateList.contains(i->m_time.date()))
         {dateList.append(i->m_time.date());}
     }
-    qDebug()<<dateList.length();
-
 
     std::sort(dateList.begin(),dateList.end(),[](const QDate& d1,const QDate& d2){
         return  !(d1<d2);
@@ -101,15 +97,10 @@ void AnalysisLobbyListVm::generateModelListData(CheckResult_List checkResult_lis
     {
         Data data;
         data.year=QString::number(dateList[i].year());
-//        data.monthDay=QString::number(dateList[i].month())+"/"+QString::number(dateList[i].day());
         data.monthDay=dateList[i].toString("MM/dd");
-        qDebug()<<data.year;
-        qDebug()<<data.monthDay;
         SimpleCheckResultList* simpleCheckResultList=new SimpleCheckResultList();
         for(int j=0;j<checkResult_list.length();j++)
         {
-            qDebug()<<checkResult_list[j]->m_time.date();
-            qDebug()<<dateList[i];
             if(checkResult_list[j]->m_time.date()==dateList[i])
             {
                 auto imageFileName=drawImage(checkResult_list[j]);

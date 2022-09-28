@@ -120,7 +120,7 @@ Column {
                                 changePage("progressAnalysisLobby",index)
                             }
                         }
-                        CusButton{text:"视岛图";onClicked:{console.log((content.height-10)/4*0.9-4);/*content.setIndex()*/}}
+                        CusButton{text:"视岛图";onClicked:changePage("visionFieldIsland",null);}
                         }
                     }
                 }

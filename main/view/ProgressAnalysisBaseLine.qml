@@ -138,7 +138,8 @@ Rectangle {
                     property string picSource: "/previewImage/baseLine.bmp"
                     height: sourceSize.height;width: sourceSize.width;
                     smooth: false; cache: false;
-                    Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + picSource;})}
+//                    Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + picSource;})}
+                    source: "file:///D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png";
                 }
             }
         }

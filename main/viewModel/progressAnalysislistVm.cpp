@@ -7,6 +7,7 @@
 #include "perimeter/main/appctrl/perimeter_appctrl.hxx"
 #include "perimeter/third-part/qxpack/indcom/ui_qml_base/qxpack_ic_ui_qml_api.hxx"
 
+
 namespace Perimeter {
 
 class BaseLineResult:public QObject
@@ -24,7 +25,7 @@ class BaseLineResult:public QObject
 public:
     Q_INVOKABLE explicit BaseLineResult(float avgMD,float progressSpeedBase,float progressSpeedDeviation, int slopeType,QObject *parent=nullptr):
         QObject(parent),m_avgMD(avgMD),m_progressSpeedBase(progressSpeedBase),m_progressSpeedDeviation(progressSpeedDeviation),m_slopeType(slopeType){};
-    Q_INVOKABLE virtual ~BaseLineResult(){qDebug()<<"delete";};
+    Q_INVOKABLE virtual ~BaseLineResult()=default;
     Q_INVOKABLE void destroy(){this->~BaseLineResult();}
 private:
     float m_avgMD;
@@ -36,7 +37,6 @@ private:
 
 ProgressAnalysisListVm::ProgressAnalysisListVm(const QVariantList &args)
 {
-    qDebug()<<"into constructor";
     Patient_ptr patient_ptr(new Patient());
     patient_ptr->m_id= args[0].toInt();
     qx::dao::fetch_by_id(patient_ptr);
@@ -177,7 +177,6 @@ QVariant Perimeter::ProgressAnalysisListVm::getSingleProgressPreview(int index,i
 
 void ProgressAnalysisListVm::getProgressBaseLineReport()
 {
-    qDebug()<<"0";
     auto analysisSvc=AnalysisSvc::getSingleton();
     QVector<float> mdList;
     float avgMd,progressSpeedBase,progressSpeedDeviation;int slopeType;
@@ -337,7 +336,7 @@ void Perimeter::ProgressAnalysisListVm::getThreeFollowUpsReport(int index)
         manager->setReportVariable("GHT"+QString::number(i),"GHT:"+GHTstr[data.GHT]);
         manager->setReportVariable("centerDotCheck"+QString::number(i),QString("Fovea: ")+(data.centerDotCheck?"ON":"OFF"));
         manager->setReportVariable("MD"+QString::number(i),QString("MD: ")+QString::number(data.md,'f',2)+(data.p_md-5<=FLT_EPSILON?" (P<"+QString::number(data.p_md)+"%)":""));
-        manager->setReportVariable("MD"+QString::number(i),QString("MD: ")+QString::number(data.md,'f',2)+(data.p_md-5<=FLT_EPSILON?" (P<"+QString::number(data.p_md)+"%)":""));
+        manager->setReportVariable("PSD"+QString::number(i),QString("PSD: ")+QString::number(data.psd,'f',2)+(data.p_psd-5<=FLT_EPSILON?" (P<"+QString::number(data.p_psd)+"%)":""));
         QString progressStr[]={"no progress","possible progress","very possible progress"};
         manager->setReportVariable("progress"+QString::number(i),QString("progress: ")+progressStr[progress[i]]);
         manager->setReportVariable("fixationLosses"+QString::number(i),"FixationLossRate: "+QString::number(data.fixationLostCount)+"/"+QString::number(data.fixationLostTestCount));
@@ -368,16 +367,14 @@ void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index)
     CheckResult_ptr checkResult_ptr(new CheckResult());
     checkResult_ptr->m_id=m_selectedResultId;
     qx::dao::fetch_by_id(checkResult_ptr);
-
     auto checkResult=CheckResultModel<Type::ThreshHold>(checkResult_ptr);
+
+
     QVector<int> single_dev,single_mDev,single_peDev,single_peMDev;
     float md,psd,VFI,p_md,p_psd;
     int GHT;
-
-
     auto analysisSvc=AnalysisSvc::getSingleton();
     analysisSvc->ThresholdAnalysis(m_selectedResultId,single_dev,single_mDev,single_peDev,single_peMDev,md,psd,VFI,GHT,p_md,p_psd);
-
 
     QVector<QVector<int>> val,mPE,mDev,progressVal,progressPicVal;
     QVector<int> progress;
@@ -408,6 +405,15 @@ void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index)
     analysisSvc->drawPE(m_currentDataList[index].peMDev,locs.last(),30,img);img.save(m_reportFolder+"singleProgress_PatternPE.bmp");
 
     analysisSvc->drawProgess(progressPicVal.last(),progressLocs.last(),30,img);img.save(m_reportFolder+"singleProgress.bmp");
+
+    QVector<int> fixationValues;
+    for(int i=0;i<int(checkResult.m_data.fixationDeviation.size());i++)
+    {
+        fixationValues.append(checkResult.m_data.fixationDeviation[i]);
+    }
+
+    QImage imgFixation=QImage({322*2,27*2}, QImage::Format_RGB32);
+    analysisSvc->drawFixationDeviation(fixationValues,imgFixation);imgFixation.save(m_reportFolder+"FixationDeviation.bmp");
 
 
     auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
@@ -468,6 +474,7 @@ void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index)
     manager->setReportVariable("TotalPEImagePath",m_reportFolder+"singleProgress_TotalPE.bmp");
     manager->setReportVariable("PatternPEImagePath",m_reportFolder+"singleProgress_PatternPE.bmp");
     manager->setReportVariable("singleProgressPath",m_reportFolder+"singleProgress.bmp");
+    manager->setReportVariable("FixationDeviationImagePath",m_reportFolder+"FixationDeviation.bmp");
     QString progressStr[]={"no progress","possible progress","very possible progress"};
     manager->setReportVariable("progress",QString("progress: ")+progressStr[progress.last()]);
 

@@ -2,6 +2,7 @@ QT += core gui
 QT+=widgets
 QT+= printsupport
 QT += xml
+QT += datavisualization
 #QT += sql
 CONFIG += console thread
 CONFIG += c++11  qml_debug

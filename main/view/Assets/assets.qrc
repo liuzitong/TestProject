@@ -107,5 +107,8 @@
         <file>grays/GPA3.bmp</file>
         <file>grays/GPA4.bmp</file>
         <file>grays/GPA0.bmp</file>
+        <file>layers/layer_1.png</file>
+        <file>layers/layer_2.png</file>
+        <file>layers/layer_3.png</file>
     </qresource>
 </RCC>
