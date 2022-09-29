@@ -9,6 +9,7 @@
 namespace Perimeter {
 
 
+
 class StaticAnalysisVm: public QObject
 {
     Q_OBJECT

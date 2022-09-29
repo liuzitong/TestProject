@@ -34,43 +34,31 @@ import QtQuick.Controls.Styles 1.0
 import QtDataVisualization 1.0
 import perimeter.main.view.Controls 1.0
 import qxpack.indcom.ui_qml_base 1.0
+import perimeter.main.view.Utils 1.0
 import "."
 
-Item {
-    id: mainview
-//    width: 1280
-//    height: 720
-
+Column {
+    id: root
     property real fontSize: 12
+    property var heightMapSurfaceDataProxy: null;
 
-    property var heightMapSurfaceDataProxy1: null;
-    property var heightMapSurfaceDataProxy2: null;
-    property var heightMapSurfaceDataProxy3: null;
-
-
+    signal changePage(var pageName,var params);
     signal refresh;
-//    Image {
-//        id: name
-//        source: "file:///" + applicationDirPath + "/visionFieldIsland/layer_1.png"
-//        height: sourceSize.height;width: sourceSize.width;
-//        anchors.left: parent.left;anchors.top: parent.top;
-//        z:1;
-//    }
-//    onRefresh: proxy1.heightMapFile=":/layers/layer_1.png";
-//    onRefresh: proxy1.heightMapFile="file:///" + applicationDirPath + "/visionFieldIsland/layer_1.png";
-//     onRefresh: proxy1.heightMapFile="file:///D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png";
+
     onRefresh: {
 //        if(heightMapSurfaceDataProxy1==null) {
 //            heightMapSurfaceDataProxy1=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::QHeightMapSurfaceDataProxyWrapper", false,["D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png"]);
 //        }
 //        heightMapSurfaceDataProxy1.heightMapFile=":/layers/layer_1.png";
 //        layerOneSeries.dataProxy=heightMapSurfaceDataProxy1;
+        layerOneSeries.dataProxy.setHeightMap("D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/visionField.png");
+//        layerOneSeries.baseGradient=layerOneGradient;
     }
 
     Component.onCompleted:
     {
-        heightMapSurfaceDataProxy1=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::QHeightMapSurfaceDataProxyWrapper", false,["D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png"]);
-        layerOneSeries.dataProxy=heightMapSurfaceDataProxy1;
+        heightMapSurfaceDataProxy=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::QHeightMapSurfaceDataProxyWrapper", false,["D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/visionField.png"]);
+        layerOneSeries.dataProxy=heightMapSurfaceDataProxy;
 //        heightMapSurfaceDataProxy2=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::QHeightMapSurfaceDataProxyWrapper", false,["D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png"]);
 //        heightMapSurfaceDataProxy3=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::QHeightMapSurfaceDataProxyWrapper", false,["D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png"]);
 //        heightMapSurfaceDataProxy1.heightMapFile=":/layers/layer_1.png";
@@ -88,31 +76,36 @@ Item {
 
     Item {
         id: surfaceView
-        width: mainview.width - buttonLayout.width
-        height: mainview.height
-        anchors.right: mainview.right;
-
+        width: parent.width
+        height: parent.height*14/15;
         //! [0]
         ColorGradient {
             id: layerOneGradient
-            ColorGradientStop { position: 0.0; color: "black" }
-            ColorGradientStop { position: 0.31; color: "tan" }
-            ColorGradientStop { position: 0.32; color: "green" }
-            ColorGradientStop { position: 0.40; color: "darkslategray" }
-            ColorGradientStop { position: 1.0; color: "white" }
+            ColorGradientStop { position: 0.00; color: "#ff0000" }
+            ColorGradientStop { position: 0.05; color: "#ff3200" }
+            ColorGradientStop { position: 0.10; color: "#ff6400" }
+            ColorGradientStop { position: 0.15; color: "#ff9600" }
+            ColorGradientStop { position: 0.20; color: "#ffC800" }
+            ColorGradientStop { position: 0.25; color: "#ffff00" }
+            ColorGradientStop { position: 0.30; color: "#C8ff00" }
+            ColorGradientStop { position: 0.35; color: "#96ff00" }
+            ColorGradientStop { position: 0.40; color: "#64ff00" }
+            ColorGradientStop { position: 0.45; color: "#32ff00" }
+            ColorGradientStop { position: 0.50; color: "#00ff00" }
+            ColorGradientStop { position: 0.55; color: "#00ff32" }
+            ColorGradientStop { position: 0.60; color: "#00ff64" }
+            ColorGradientStop { position: 0.65; color: "#00ff96" }
+            ColorGradientStop { position: 0.70; color: "#00ffC8" }
+            ColorGradientStop { position: 0.75; color: "#00ffff" }
+            ColorGradientStop { position: 0.80; color: "#00C8ff" }
+            ColorGradientStop { position: 0.85; color: "#0096ff" }
+            ColorGradientStop { position: 0.90; color: "#0064ff" }
+            ColorGradientStop { position: 0.95; color: "#0032ff" }
+            ColorGradientStop { position: 1.00; color: "#0000ff" }
+
+
         }
 
-        ColorGradient {
-            id: layerTwoGradient
-            ColorGradientStop { position: 0.315; color: "blue" }
-            ColorGradientStop { position: 0.33; color: "white" }
-        }
-
-        ColorGradient {
-            id: layerThreeGradient
-            ColorGradientStop { position: 0.0; color: "red" }
-            ColorGradientStop { position: 0.15; color: "black" }
-        }
         //! [0]
 
         Surface3D {
@@ -126,18 +119,18 @@ Item {
             }
             shadowQuality: AbstractGraph3D.ShadowQualityNone
             selectionMode: AbstractGraph3D.SelectionRow | AbstractGraph3D.SelectionSlice
-            scene.activeCamera.cameraPreset: Camera3D.CameraPresetIsometricLeft
-            axisY.min: 20
-            axisY.max: 200
-            axisX.segmentCount: 5
-            axisX.subSegmentCount: 2
-            axisX.labelFormat: "%i"
-            axisZ.segmentCount: 5
-            axisZ.subSegmentCount: 2
-            axisZ.labelFormat: "%i"
-            axisY.segmentCount: 5
-            axisY.subSegmentCount: 2
-            axisY.labelFormat: "%i"
+//            scene.activeCamera.cameraPreset: Camera3D.CameraPresetIsometricLeft
+//            axisY.min: 0
+//            axisY.max: 40;
+//            axisX.segmentCount: 5
+//            axisX.subSegmentCount: 2
+//            axisX.labelFormat: "%i"
+//            axisZ.segmentCount: 5
+//            axisZ.subSegmentCount: 2
+//            axisZ.labelFormat: "%i"
+//            axisY.segmentCount: 5
+//            axisY.subSegmentCount: 2
+//            axisY.labelFormat: "%i"
 
             //! [1]
             //! [2]
@@ -153,317 +146,80 @@ Item {
 //                dataProxy:HeightMapSurfaceDataProxy {
 //                    id:proxy1;
 //                    heightMapFile: ":/layers/layer_1.png"
-////                    heightMapFile: "file:///D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png";
+////                    heightMapFile: "file:///D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/visionField.png";
 
 //                }
                 flatShadingEnabled: false
                 drawMode: Surface3DSeries.DrawSurface
-                //! [4]
-                visible: layerOneToggle.checked // bind to checkbox state
-                //! [4]
+
             }
+        }
+//        Surface3D {
+//                 width: parent.width
+//                 height: parent.height
 
-//            Surface3DSeries {
-//                id: layerTwoSeries
-//                baseGradient: layerTwoGradient
-//                HeightMapSurfaceDataProxy {
-//                    heightMapFile: ":/layers/layer_2.png"
+//                 Surface3DSeries {
+//                     baseGradient: layerOneGradient
+//                     itemLabelFormat: "Pop density at (@xLabel N, @zLabel E): @yLabel"
+//                     ItemModelSurfaceDataProxy {
+//                         itemModel: dataModel
+//                         // Mapping model roles to surface series rows, columns, and values.
+//                         rowRole: "longitude"
+//                         columnRole: "latitude"
+//                         yPosRole: "pop_density"
+//                     }
+//                 }
+//             }
+//             ListModel {
+//                 id: dataModel
+//                 ListElement{ longitude: "20"; latitude: "10"; pop_density: "4.75"; }
+//                 ListElement{ longitude: "21"; latitude: "10"; pop_density: "3.00"; }
+//                 ListElement{ longitude: "22"; latitude: "10"; pop_density: "1.24"; }
+//                 ListElement{ longitude: "23"; latitude: "10"; pop_density: "2.53"; }
+//                 ListElement{ longitude: "20"; latitude: "11"; pop_density: "2.55"; }
+//                 ListElement{ longitude: "21"; latitude: "11"; pop_density: "2.03"; }
+//                 ListElement{ longitude: "22"; latitude: "11"; pop_density: "3.46"; }
+//                 ListElement{ longitude: "23"; latitude: "11"; pop_density: "5.12"; }
+//                 ListElement{ longitude: "20"; latitude: "12"; pop_density: "1.37"; }
+//                 ListElement{ longitude: "21"; latitude: "12"; pop_density: "2.98"; }
+//                 ListElement{ longitude: "22"; latitude: "12"; pop_density: "3.33"; }
+//                 ListElement{ longitude: "23"; latitude: "12"; pop_density: "3.23"; }
+//                 ListElement{ longitude: "20"; latitude: "13"; pop_density: "4.34"; }
+//                 ListElement{ longitude: "21"; latitude: "13"; pop_density: "3.54"; }
+//                 ListElement{ longitude: "22"; latitude: "13"; pop_density: "1.65"; }
+//                 ListElement{ longitude: "23"; latitude: "13"; pop_density: "2.67"; }
+//             }
+    }
+    Rectangle{id:bottomRibbon;width: parent.width;height: parent.height*1/15;color:CommonSettings.ribbonColor;
+        Row{anchors.fill: parent;
+            Item{height: parent.height;width:parent.width*0.50;
+                Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
+                    CusButton{text:"返回";onClicked:{root.changePage("analysisLobby",null);}}}
+                }
+//            Item{height: parent.height;width:parent.width*0.52;
+//                Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
+//                    Flow{height: parent.height;spacing: height*0.8;width: parent.width;anchors.horizontalCenter: parent.horizontalCenter
+//                        CusButton{text:"重测";onClicked:{root.changePage("check",null);}}
+//                        CusButton{text:"新建患者";onClicked:{;root.changePage("patientManagement","createNewPatient");}}
+//                    }
 //                }
-//                flatShadingEnabled: false
-//                drawMode: Surface3DSeries.DrawSurface
-//                visible: layerTwoToggle.checked // bind to checkbox state
 //            }
 
-//            Surface3DSeries {
-//                id: layerThreeSeries
-//                baseGradient: layerThreeGradient
-//                HeightMapSurfaceDataProxy {
-//                    heightMapFile: ":/layers/layer_3.png"
-//                }
-//                flatShadingEnabled: false
-//                drawMode: Surface3DSeries.DrawSurface
-//                visible: layerThreeToggle.checked // bind to checkbox state
-//            }
-            //! [1]
+            Item{height: parent.height;width:parent.width*0.50;
+                Item{id: item1;anchors.fill: parent;anchors.margins:parent.height*0.15;
+                    Row
+                    {
+                        height: parent.height; layoutDirection: Qt.RightToLeft;spacing: height*0.8;width: parent.width
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        CusButton{text:"复位";}
+                        CusButton{text:"缩小";}
+                        CusButton{text:"放大";}
+                    }
+                }
+            }
         }
     }
 
-    ColumnLayout {
-        id: buttonLayout
-        anchors.top: parent.top
-        anchors.left: parent.left
-        spacing: 0
-
-        //! [3]
-        GroupBox {
-            flat: true
-            Layout.fillWidth: true
-            Column {
-                spacing: 10
-
-                Label {
-                    font.pointSize: fontSize
-                    font.bold: true
-                    text: "Layer Selection"
-                }
-
-                CheckBox {
-                    id: layerOneToggle
-                    checked: true
-                    style: CheckBoxStyle {
-                        label: Label {
-                            font.pointSize: fontSize
-                            text: "Show Ground Layer"
-                        }
-                    }
-                }
-
-                CheckBox {
-                    id: layerTwoToggle
-                    checked: true
-                    style: CheckBoxStyle {
-                        label: Label {
-                            font.pointSize: fontSize
-                            text: "Show Sea Layer"
-                        }
-                    }
-                }
-
-                CheckBox {
-                    id: layerThreeToggle
-                    checked: true
-                    style: CheckBoxStyle {
-                        label: Label {
-                            font.pointSize: fontSize
-                            text: "Show Tectonic Layer"
-                        }
-                    }
-                }
-            }
-        }
-        //! [3]
-
-        //! [5]
-        GroupBox {
-            flat: true
-            Layout.fillWidth: true
-            Column {
-                spacing: 10
-
-                Label {
-                    font.pointSize: fontSize
-                    font.bold: true
-                    text: "Layer Style"
-                }
-
-                CheckBox {
-                    id: layerOneGrid
-                    style: CheckBoxStyle {
-                        label: Label {
-                            font.pointSize: fontSize
-                            text: "Show Ground as Grid"
-                        }
-                    }
-                    onCheckedChanged: {
-                        if (checked)
-                            layerOneSeries.drawMode = Surface3DSeries.DrawWireframe
-                        else
-                            layerOneSeries.drawMode = Surface3DSeries.DrawSurface
-                    }
-                }
-
-                CheckBox {
-                    id: layerTwoGrid
-                    style: CheckBoxStyle {
-                        label: Label {
-                            font.pointSize: fontSize
-                            text: "Show Sea as Grid"
-                        }
-                    }
-                    onCheckedChanged: {
-                        if (checked)
-                            layerTwoSeries.drawMode = Surface3DSeries.DrawWireframe
-                        else
-                            layerTwoSeries.drawMode = Surface3DSeries.DrawSurface
-                    }
-                }
-
-                CheckBox {
-                    id: layerThreeGrid
-                    style: CheckBoxStyle {
-                        label: Label {
-                            font.pointSize: fontSize
-                            text: "Show Tectonic as Grid"
-                        }
-                    }
-                    onCheckedChanged: {
-                        if (checked)
-                            layerThreeSeries.drawMode = Surface3DSeries.DrawWireframe
-                        else
-                            layerThreeSeries.drawMode = Surface3DSeries.DrawSurface
-                    }
-                }
-            }
-        }
-        //! [5]
-        CusButton {
-            text: "aa"
-            fontSize: fontSize
-            Layout.fillWidth: true
-            Layout.minimumHeight: 40
-            property int index: 0;
-            onClicked:
-            {
-
-//                  console.log("aa clicked");
-//                  heightMapSurfaceDataProxy1=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::QHeightMapSurfaceDataProxyWrapper", false,["D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png"]);
-
-//                layerOneSeries.dataProxy=heightMapSurfaceDataProxy1;
-//                if(index%3==0)
-//                {
-//                    console.log(0);
-//                    heightMapSurfaceDataProxy1=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::QHeightMapSurfaceDataProxyWrapper", false,["D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png"]);
-////                    heightMapSurfaceDataProxy1=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::QHeightMapSurfaceDataProxyWrapper", false,["D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png"]);
-////                    heightMapSurfaceDataProxy1.setHeightMap("D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png");
-//                    layerOneSeries.dataProxy=heightMapSurfaceDataProxy1;
-//                }
-
-
-//                if(index%3==1)
-//                {
-//                    console.log(1);
-//                    heightMapSurfaceDataProxy1=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::QHeightMapSurfaceDataProxyWrapper", false,["D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_2.png"]);
-////                    heightMapSurfaceDataProxy2=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::QHeightMapSurfaceDataProxyWrapper", false,["D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png"]);
-////                    heightMapSurfaceDataProxy2.setHeightMap("D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_2.png");
-//                    layerOneSeries.dataProxy=heightMapSurfaceDataProxy1;
-//                }
-//                if(index%3==2)
-//                {
-//                    console.log(2);
-//                    heightMapSurfaceDataProxy1=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::QHeightMapSurfaceDataProxyWrapper", false,["D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_3.png"]);
-////                    heightMapSurfaceDataProxy3.setHeightMap("D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_2.png");
-////                    layerOneSeries.dataProxy=heightMapSurfaceDataProxy3
-//                    layerOneSeries.dataProxy=heightMapSurfaceDataProxy1;
-//                }
-
-
-                if(index%3==0)
-                {
-                    console.log(0);
-                    layerOneSeries.dataProxy.setHeightMap("D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png");
-                    layerOneSeries.baseGradient=layerOneGradient;
-//                    layerOneSeries.dataProxy=heightMapSurfaceDataProxy1;
-                }
-
-
-                if(index%3==1)
-                {
-                    console.log(1);
-                    layerOneSeries.dataProxy.setHeightMap("D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_2.png");
-                    layerOneSeries.baseGradient=layerTwoGradient;
-//                    layerOneSeries.dataProxy=heightMapSurfaceDataProxy1;
-                }
-                if(index%3==2)
-                {
-                    console.log(2);
-                    layerOneSeries.dataProxy.setHeightMap("D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_3.png");
-                    layerOneSeries.baseGradient=layerThreeGradient;
-                }
-                index++;
-//                if(index%3==2)
-//                {
-//                    heightMapSurfaceDataProxy1.setHeightMap("D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_3.png");
-//                    layerOneSeries.dataProxy=heightMapSurfaceDataProxy1;
-//                }
-
-            }
-        }
-        //! [6]
-        CusButton {
-            id: sliceButton
-            text: "Slice All Layers"
-            fontSize: fontSize
-            Layout.fillWidth: true
-            Layout.minimumHeight: 40
-            onClicked: {
-                if (surfaceLayers.selectionMode & AbstractGraph3D.SelectionMultiSeries) {
-                    surfaceLayers.selectionMode = AbstractGraph3D.SelectionRow
-                            | AbstractGraph3D.SelectionSlice
-                    text = "Slice All Layers"
-                } else {
-                    surfaceLayers.selectionMode = AbstractGraph3D.SelectionRow
-                            | AbstractGraph3D.SelectionSlice
-                            | AbstractGraph3D.SelectionMultiSeries
-                    text = "Slice One Layer"
-                }
-            }
-        }
-        //! [6]
-
-        CusButton {
-            id: shadowButton
-            fontSize: fontSize
-            Layout.fillWidth: true
-            Layout.minimumHeight: 40
-            text: surfaceLayers.shadowsSupported ? "Show Shadows" : "Shadows not supported"
-            enabled: surfaceLayers.shadowsSupported
-            onClicked: {
-                if (surfaceLayers.shadowQuality === AbstractGraph3D.ShadowQualityNone) {
-                    surfaceLayers.shadowQuality = AbstractGraph3D.ShadowQualityLow
-                    text = "Hide Shadows"
-                } else {
-                    surfaceLayers.shadowQuality = AbstractGraph3D.ShadowQualityNone
-                    text = "Show Shadows"
-                }
-            }
-        }
-
-        CusButton {
-            id: renderModeButton
-            fontSize: fontSize
-            text: "Switch Render Mode"
-            Layout.fillWidth: true
-            Layout.minimumHeight: 40
-            onClicked: {
-                var modeText = "Indirect "
-                var aaText
-                if (surfaceLayers.renderingMode === AbstractGraph3D.RenderIndirect &&
-                        surfaceLayers.msaaSamples === 0) {
-                    surfaceLayers.renderingMode = AbstractGraph3D.RenderDirectToBackground
-                    modeText = "BackGround "
-                } else if (surfaceLayers.renderingMode === AbstractGraph3D.RenderIndirect &&
-                           surfaceLayers.msaaSamples === 4) {
-                    surfaceLayers.renderingMode = AbstractGraph3D.RenderIndirect
-                    surfaceLayers.msaaSamples = 0
-                } else if (surfaceLayers.renderingMode === AbstractGraph3D.RenderIndirect &&
-                           surfaceLayers.msaaSamples === 8) {
-                    surfaceLayers.renderingMode = AbstractGraph3D.RenderIndirect
-                    surfaceLayers.msaaSamples = 4
-                } else {
-                    surfaceLayers.renderingMode = AbstractGraph3D.RenderIndirect
-                    surfaceLayers.msaaSamples = 8
-                }
-
-                if (surfaceLayers.msaaSamples <= 0) {
-                    aaText = "No AA"
-                } else {
-                    aaText = surfaceLayers.msaaSamples + "xMSAA"
-                }
-
-                renderLabel.text = modeText + aaText
-            }
-        }
-
-        TextField {
-            id: renderLabel
-            font.pointSize: fontSize
-            Layout.fillWidth: true
-            Layout.minimumHeight: 40
-            enabled: false
-            horizontalAlignment: TextInput.AlignHCenter
-            text: "Indirect, " + surfaceLayers.msaaSamples + "xMSAA"
-        }
-    }
 }
 
 /*##^## Designer {

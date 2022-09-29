@@ -14,7 +14,8 @@ HEADERS += \
     $$PWD/settings.h \
     $$PWD/analysislobbylistvm.h \
     $$PWD/progressAnalysislistVm.h \
-    $$PWD/general_analysis_vm.h
+    $$PWD/general_analysis_vm.h \
+    $$PWD/visionFieldIslandVm.h
 
 SOURCES += \
     $$PWD/checkResultVm.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
     $$PWD/settings.cpp \
     $$PWD/analysislobbylistvm.cpp \
     $$PWD/progressAnalysislistVm.cpp \
-    $$PWD/general_analysis_vm.cpp
+    $$PWD/general_analysis_vm.cpp \
+    $$PWD/visionFieldIslandVm.cpp
 
 

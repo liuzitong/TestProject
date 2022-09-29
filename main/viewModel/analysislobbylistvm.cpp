@@ -156,17 +156,23 @@ QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
         }
         int resultId=checkResult.m_id;
 
-        analysisMethodSvc->ThresholdAnalysis(resultId,dev,mDev,peDev,peMDev,md,psd,VFI,GHT,p_md,p_psd);
 
-        if(checkReport(0)||checkReport(2))        //常规分析和总览显示概率图
+        if(checkResult_ptr->m_type==0)
         {
-            analysisMethodSvc->drawPE(peMDev,locs,range,img);
+
+            if(checkReport(0)||checkReport(2))        //常规分析和总览显示概率图
+            {
+                analysisMethodSvc->ThresholdAnalysis(resultId,dev,mDev,peDev,peMDev,md,psd,VFI,GHT,p_md,p_psd);
+                analysisMethodSvc->drawPE(peMDev,locs,range,img);
+            }
+            else if(checkReport(1))      //三合一显示量化缺损
+            {
+                analysisMethodSvc->ThreeInOneAnalysis(resultId,dev);
+                analysisMethodSvc->drawDefectDepth(dev,locs,range,img);
+            }
         }
-        else if(checkReport(1))      //三合一显示量化缺损
-        {
-            analysisMethodSvc->drawDefectDepth(dev,locs,range,img);
-        }
-        else if(checkReport(3))      //显示筛选
+
+        if(checkResult_ptr->m_type==1)//显示筛选
         {
             analysisMethodSvc->drawScreening(values,locs,range,OS_OD,img);
         }

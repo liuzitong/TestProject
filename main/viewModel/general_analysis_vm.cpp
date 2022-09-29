@@ -96,14 +96,17 @@ StaticAnalysisVm::StaticAnalysisVm(const QVariantList &args)
     }
 
     QImage img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
+
     auto analysisMethodSvc=AnalysisSvc::getSingleton();
-    if(report<=2)
+
+    if(m_type==0)
     {
-        analysisMethodSvc->ThresholdAnalysis(resultId,m_dev,m_mDev,m_peDev,m_peMDev,m_md,m_psd,m_VFI,m_GHT,m_p_md,m_p_psd);
         if(report==0)
         {
+            analysisMethodSvc->ThresholdAnalysis(resultId,m_dev,m_mDev,m_peDev,m_peMDev,m_md,m_psd,m_VFI,m_GHT,m_p_md,m_p_psd);
             analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img);img.save(m_previewFolder+"dBDiagram.bmp");
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img);img.save(m_previewFolder+"gray.bmp");
+
 
             analysisMethodSvc->drawText(m_dev,m_locs,m_range,m_OS_OD,img);img.save(m_previewFolder+"TotalDeviation.bmp");
             analysisMethodSvc->drawText(m_mDev,m_locs,m_range,m_OS_OD,img);img.save(m_previewFolder+"PatternDeviation.bmp");
@@ -114,22 +117,24 @@ StaticAnalysisVm::StaticAnalysisVm(const QVariantList &args)
         }
         else if(report==1)
         {
+            analysisMethodSvc->ThreeInOneAnalysis(resultId,m_dev);
             analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img);img.save(m_previewFolder+"dBDiagram.bmp");
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img);img.save(m_previewFolder+"gray.bmp");
             analysisMethodSvc->drawDefectDepth(m_dev,m_locs,m_range,img);img.save(m_previewFolder+"defectDepth.bmp");
         }
         else
         {
+            analysisMethodSvc->ThresholdAnalysis(resultId,m_dev,m_mDev,m_peDev,m_peMDev,m_md,m_psd,m_VFI,m_GHT,m_p_md,m_p_psd);
             analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img);img.save(m_previewFolder+"dBDiagram.bmp");
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img);img.save(m_previewFolder+"gray.bmp");
             analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,img);img.save(m_previewFolder+"TotalPE.bmp");
             analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,img);img.save(m_previewFolder+"PatternPE.bmp");
         }
     }
-    else if(report==3)
+    else
     {
         analysisMethodSvc->ScreeningAnalysis(resultId,m_dotSeen,m_dotWeakSeen,m_dotUnseen);
-        analysisMethodSvc->drawScreening(m_values,m_locs,m_range,m_OS_OD,img);img.save(m_previewFolder+"PatternPE.bmp");
+        analysisMethodSvc->drawScreening(m_values,m_locs,m_range,m_OS_OD,img);img.save(m_previewFolder+"Screening.bmp");
 
     }
 }
@@ -181,7 +186,7 @@ void StaticAnalysisVm::showReport(int report)
     QImage img1100=QImage({1100,1100}, QImage::Format_RGB32);
     QImage imgFixation=QImage({322*2,27*2}, QImage::Format_RGB32);
 
-    if(report<=2)
+    if(m_type==0)
     {
         if(report==0)
         {
@@ -201,30 +206,44 @@ void StaticAnalysisVm::showReport(int report)
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img550);img550.save(m_reportFolder+"gray.bmp");
             analysisMethodSvc->drawDefectDepth(m_dev,m_locs,m_range,img550);img550.save(m_reportFolder+"defectDepth.bmp");
         }
-        else
+        else if(report==2)
         {
             analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550);img550.save(m_reportFolder+"dBDiagram.bmp");
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img550);img550.save(m_reportFolder+"gray.bmp");
             analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,img550);img550.save(m_reportFolder+"TotalPE.bmp");
             analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,img550);img550.save(m_reportFolder+"PatternPE.bmp");
         }
+        else if(report==3)
+        {
+            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550);img550.save(m_reportFolder+"dBDiagram.bmp");
+            analysisMethodSvc->drawDefectDepth(m_dev,m_locs,m_range,img550);img550.save(m_reportFolder+"defectDepth.bmp");
+        }
+        else if(report==4)
+        {
+            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550);img550.save(m_reportFolder+"dBDiagram.bmp");
+        }
     }
-    else if(report==3)
+    else
     {
         analysisMethodSvc->drawScreening(m_values,m_locs,m_range,m_OS_OD,img1100);img1100.save(m_reportFolder+"Screening.bmp");
     }
     analysisMethodSvc->drawFixationDeviation(m_fixationValues,imgFixation);imgFixation.save(m_reportFolder+"FixationDeviation.bmp");
 
     QString filePath;
-
-    switch (report)
+    if(m_type==0)
     {
-        case 0:filePath="./reports/Single.lrxml";break;
-        case 1:filePath="./reports/ThreeInOne.lrxml";break;
-        case 2:filePath="./reports/OverView.lrxml";break;
-        case 3:filePath="./reports/Screening.lrxml";break;
-        default:filePath="./reports/Dynamic.lrxml";break;
+        switch (report)
+        {
+            case 0:filePath="./reports/Single.lrxml";break;
+            case 1:filePath="./reports/ThreeInOne.lrxml";break;
+            case 2:filePath="./reports/OverView.lrxml";break;
+        }
     }
+    else if(m_type==1)
+    {
+        filePath="./reports/Screening.lrxml";
+    }
+
     auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
     reportEngine->loadFromFile(filePath);
     auto manager=reportEngine->dataManager();
@@ -276,32 +295,37 @@ void StaticAnalysisVm::showReport(int report)
     manager->setReportVariable("MD",QString("MD: ")+QString::number(m_md,'f',2)+(m_p_md-5<=FLT_EPSILON?" (P<"+QString::number(m_p_md)+"%)":""));
     manager->setReportVariable("PSD",QString("PSD: ")+QString::number(m_psd,'f',2)+(m_p_psd-5<=FLT_EPSILON?" (P<"+QString::number(m_p_psd)+"%)":""));
 
-    switch (report)
+    if(m_type==0)
     {
-    case 0:
-        manager->setReportVariable("DBImagePath","./reportImage/dBDiagram.bmp");
-        manager->setReportVariable("GrayImagePath","./reportImage/gray.bmp");
-        manager->setReportVariable("TotalDeviationImagePath","./reportImage/TotalDeviation.bmp");
-        manager->setReportVariable("PatternDeviationImagePath","./reportImage/PatternDeviation.bmp");
-        manager->setReportVariable("TotalPEImagePath","./reportImage/TotalPE.bmp");
-        manager->setReportVariable("PatternPEImagePath","./reportImage/PatternPE.bmp");
-        break;
-    case 1:
-        manager->setReportVariable("GrayImagePath","./reportImage/gray.bmp");
-        manager->setReportVariable("DefectDepthImagePath","./reportImage/defectDepth.bmp");
-        manager->setReportVariable("DBImagePath","./reportImage/dBDiagram.bmp");
+        switch (report)
+        {
+        case 0:
+            manager->setReportVariable("DBImagePath","./reportImage/dBDiagram.bmp");
+            manager->setReportVariable("GrayImagePath","./reportImage/gray.bmp");
+            manager->setReportVariable("TotalDeviationImagePath","./reportImage/TotalDeviation.bmp");
+            manager->setReportVariable("PatternDeviationImagePath","./reportImage/PatternDeviation.bmp");
+            manager->setReportVariable("TotalPEImagePath","./reportImage/TotalPE.bmp");
+            manager->setReportVariable("PatternPEImagePath","./reportImage/PatternPE.bmp");
+            break;
+        case 1:
+            manager->setReportVariable("GrayImagePath","./reportImage/gray.bmp");
+            manager->setReportVariable("DefectDepthImagePath","./reportImage/defectDepth.bmp");
+            manager->setReportVariable("DBImagePath","./reportImage/dBDiagram.bmp");
 
-        break;
-    case 2:
-        manager->setReportVariable("DBImagePath","./reportImage/dBDiagram.bmp");
-        manager->setReportVariable("GrayImagePath","./reportImage/gray.bmp");
-        manager->setReportVariable("TotalPEImagePath","./reportImage/TotalPE.bmp");
-        manager->setReportVariable("PatternPEImagePath","./reportImage/PatternPE.bmp");
-        break;
-    case 3:
-        manager->setReportVariable("ScreeningImagePath","./reportImage/Screening.bmp");
-        break;
+            break;
+        case 2:
+            manager->setReportVariable("DBImagePath","./reportImage/dBDiagram.bmp");
+            manager->setReportVariable("GrayImagePath","./reportImage/gray.bmp");
+            manager->setReportVariable("TotalPEImagePath","./reportImage/TotalPE.bmp");
+            manager->setReportVariable("PatternPEImagePath","./reportImage/PatternPE.bmp");
+            break;
+        }
     }
+    else
+    {
+        manager->setReportVariable("ScreeningImagePath","./reportImage/Screening.bmp");
+    }
+
 
     manager->setReportVariable("Seen",QString("Seen:")+QString::number(m_dotSeen)+"/"+QString::number(m_values.length()));
     manager->setReportVariable("WeakSeen",QString("Weak Seen:")+QString::number(m_dotWeakSeen)+"/"+QString::number(m_values.length()));

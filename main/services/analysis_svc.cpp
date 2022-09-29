@@ -427,6 +427,93 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
     }
 }
 
+void AnalysisSvc::ThreeInOneAnalysis(int resultId, QVector<int> &dev)
+{
+        CheckResult_ptr checkResult_ptr(new CheckResult());
+        checkResult_ptr->m_id=resultId;
+        qx::dao::fetch_by_id(checkResult_ptr);
+        Program_ptr program_ptr(new Program());
+        program_ptr->m_id=checkResult_ptr->m_program->m_id;
+        qx::dao::fetch_by_id(program_ptr);
+        Patient_ptr patient_ptr(new Patient());
+        patient_ptr->m_id=checkResult_ptr->m_patient->m_id;
+        qx::dao::fetch_by_id(patient_ptr);
+
+        CheckResultModel<Type::ThreshHold> checkResult(checkResult_ptr);
+        ProgramModel<Type::ThreshHold> program(program_ptr);
+        PatientModel patient(patient_ptr);
+
+        auto params=checkResult.m_params;
+        int cursorSize=int(params.commonParams.cursorSize);
+        int cursorColor=int(params.commonParams.cursorColor);
+
+        int value_30d_secondIndex;
+        int age_correction;
+        auto testDate=checkResult.m_time.date();
+        auto birthDate=patient.m_birthDate;
+        int testAge= testDate.year()- birthDate.year();
+        if (testDate.month() < birthDate.month() || (testDate.month() == birthDate.month() && testDate.day() < birthDate.day())) { testAge--;}
+
+        if(cursorSize==2)
+        {
+            if(testAge<=35){age_correction=0;}
+            else if(testAge<=45){age_correction=1;}
+            else if(testAge<=55){age_correction=2;}
+            else if(testAge<=65){age_correction=3;}
+            else {age_correction=4;}
+            value_30d_secondIndex=age_correction;
+        }
+        else
+        {
+            value_30d_secondIndex=cursorColor;
+        }
+
+        QVector<int> value_30d=m_value_30d_cursorSize_ageCorrectionOrCursorColor[cursorSize][value_30d_secondIndex];
+
+
+        auto dotList=program.m_data.dots;
+        QVector<int> sv(dotList.size(),0);
+        dev.fill(0,dotList.size());
+
+
+        for(int i=0;i<int(dotList.size());i++)
+        {
+            auto dot=dotList[i];
+            float radius=sqrt(pow(dot.x,2)+pow(dot.y,2));
+            int index;
+            if(radius<=30)
+            {
+                index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_30d,checkResult.m_OS_OD);
+                if(index==-1) continue;
+                sv[i]=value_30d[index]/10;
+                if(!(cursorSize==2&&cursorColor==0)){
+                    if(cursorColor==2)
+                    {
+                        if(sv[i]>0){sv[i]-=2*(age_correction-1);} else if(sv[i]<0){sv[i]+=2*(age_correction-1);}
+                    }
+                    else
+                    {
+                        if(sv[i]>0){sv[i]-=(age_correction-1);} else if(sv[i]<0){sv[i]+=(age_correction-1);}
+                    }
+                }
+
+            }
+            else if(radius<=60)
+            {
+                index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_60d,checkResult.m_OS_OD);
+                if(index==-1) continue;
+                sv[i]=m_value_60d[index]/10;
+                if(sv[i]>0) sv[i]-=age_correction;else if(sv[i]<0) sv[i]+=age_correction;
+            }
+
+            if(sv[i]>0)  {dev[i]=checkResult.m_data.checkdata[i]-sv[i];}                                                   //dev 盲点
+            else{ dev[i]=-99; }
+
+        }
+
+
+}
+
 void AnalysisSvc::ScreeningAnalysis(int resultId,int& dotSeen,int& dotWeakSeen,int& dotUnseen)
 {
     CheckResult_ptr checkResult_ptr(new CheckResult());
@@ -758,6 +845,7 @@ void AnalysisSvc::drawGray(QVector<int> values, QVector<QPointF> locs, int range
     float rangeX=qMax(qAbs(left_x_axis),right_x_axis)+dotGap/2;;float rangeY=qMax(qAbs(down_y_axis),up_y_axis)+dotGap/2;
 
     QVector<QPointF> paintLocs;
+    //为了给中间留白-1GAP,又起始点要减去0.5GAP,故减去1.5GAP
     for(float i=up_y_axis+(dotGap/2)/*-fmod(up_y_axis+(dotGap/2),gap)*/-1.5*gap;i>=down_y_axis-(dotGap/2)/*-fmod(down_y_axis-(dotGap/2),gap)*/+1.5*gap-FLT_MIN;i-=gap)
     {
         for(float j=left_x_axis-(dotGap/2)/*-fmod(left_x_axis-(dotGap/2),gap)*/+1.5*gap;j<=right_x_axis+(dotGap/2)/*-fmod(right_x_axis+(dotGap/2),gap)*/-1.5*gap+FLT_MIN;j+=gap)
@@ -979,7 +1067,102 @@ void AnalysisSvc::drawDynamic(QVector<QPointF> values, int range, QImage& img)
 
 void AnalysisSvc::drawVisionFieldIsland(QVector<int> values, QVector<QPointF> locs, int range, int innerRange, QImage &img)
 {
+    img.fill(qRgb(0, 0, 0));
+    QPainter painter(&img);
 
+
+    float gap= 1;
+    int min_dist_index;
+    int dotGap;
+    {
+        float min_dist=FLT_MAX;
+        {
+            QPointF tempLoc=locs[0];
+            for(int i=1;i<locs.length();i++)
+            {
+                float dist=pow(tempLoc.rx()-locs[i].rx(),2)+pow(tempLoc.y()-locs[i].y(),2);
+                if(dist<min_dist)
+                {
+                    min_dist=dist;
+                    min_dist_index=i;
+                }
+            }
+        }
+    }
+    dotGap=qMax(qAbs(locs[0].rx()-locs[min_dist_index].rx()),qAbs(locs[0].ry()-locs[min_dist_index].ry()));
+
+    float left_x_axis=0,right_x_axis=0,up_y_axis=0,down_y_axis=0;
+    for(auto &i:locs)
+    {
+        auto x=i.x();auto y=i.y();
+        if(x<left_x_axis) left_x_axis=x;
+
+        if(x>right_x_axis) right_x_axis=x;
+        if(y>up_y_axis) up_y_axis=y;
+        if(y<down_y_axis) down_y_axis=y;
+    }
+
+
+    float rangeX=qMax(qAbs(left_x_axis),right_x_axis)+dotGap/2;;float rangeY=qMax(qAbs(down_y_axis),up_y_axis)+dotGap/2;
+
+    QVector<QPointF> paintLocs;
+    for(float i=qMin(int(ceil(up_y_axis+(dotGap/2))),range)-0.5*gap/*-fmod(up_y_axis+(dotGap/2),gap)*/;i>=qMax(int(floor(down_y_axis-(dotGap/2))),-range)+0.5*gap/*-fmod(down_y_axis-(dotGap/2),gap)*/;i-=gap)
+    {
+        for(float j=qMax(int(floor(left_x_axis-(dotGap/2))),-range)+0.5*gap/*-fmod(left_x_axis-(dotGap/2),gap)*/;j<=qMax(int(ceil(right_x_axis+(dotGap/2))),range)-0.5*gap;j+=gap)
+        {
+            float answerOutter=float(qPow(qAbs(i),2))/(rangeY*rangeY)+float(qPow(qAbs(j),2))/(rangeX*rangeX);
+            float answerInner=1.0;
+            if(innerRange!=0){answerInner=(float(qPow(qAbs(i),2))+float(qPow(qAbs(j),2)))/(innerRange*innerRange);}
+            if((answerOutter<=1.0)&&(answerInner>=1.0))
+                paintLocs.append(QPointF(j,i));
+        }
+    }
+
+
+//    for(auto&i:paintLocs)
+//    {
+//        if(i.ry())
+//    }
+    qDebug()<<paintLocs;
+
+
+    for(int i=0;i<paintLocs.length();i++)
+    {
+        QVector<QPair<int,float>> distIndexList;
+        for(int j=0;j<locs.length();j++)
+        {
+            auto dot=locs[j].toPoint();
+            float dist=qPow(paintLocs[i].x()-dot.x(),2)+qPow(paintLocs[i].y()-dot.y(),2);
+            distIndexList.append(QPair<int,float>(j,dist));
+        }
+
+        std::sort(distIndexList.begin(),distIndexList.end(),[](QPair<int,float> a,QPair<int,float> b){return a.second<b.second;});   //所有测试点按顺序和待画图点按距离从小到大排序.
+        QVector<QPair<int,float>> interpolationDots;
+        for(int j=0;j<4;j++)                                            //最近4个添加进差值点,且距离不得大于3*gap
+        {
+            interpolationDots.append(distIndexList[j]);
+        }
+
+        float totalValue=0,totalDist=0;
+        for(int j=0;j<interpolationDots.length();j++)                               //根据插值点算出插值
+        {
+            int index=interpolationDots[j].first;
+            if(interpolationDots[j].second==0)
+            {
+                totalValue=values[index];
+                totalDist=1;
+                break;
+            }
+            totalValue+=(float(values[index])/qSqrt(interpolationDots[j].second));
+            totalDist+=1.0f/qSqrt(interpolationDots[j].second);
+        }
+        int interpolVal=round(totalValue/totalDist);
+
+        int pixcel_x=floor(paintLocs[i].x()+range);
+        int pixcel_y=floor(range-paintLocs[i].y());
+
+        img.setPixel(pixcel_x,pixcel_y,qRgb(interpolVal,interpolVal,interpolVal));
+    }
 }
 
 void AnalysisSvc::drawFixationDeviation(QVector<int> values, QImage& img)

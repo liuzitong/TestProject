@@ -11,6 +11,7 @@
 #include <perimeter/main/viewModel/analysislobbylistvm.h>
 #include <perimeter/main/viewModel/progressanalysislistvm.h>
 #include <perimeter/main/viewModel/general_analysis_vm.h>
+#include <perimeter/main/viewModel/visionFieldIslandVm.h>
 #include <perimeter/main/object_wrapper.h>
 
 // services list
@@ -63,9 +64,9 @@ void  Main :: registerTypes( QxPack::IcAppCtrlBase *app_base )
     obj_mgr->registerType<Perimeter::AnalysisLobbyListVm>(QStringLiteral("Perimeter::AnalysisLobbyListVm"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::ProgressAnalysisListVm>(QStringLiteral("Perimeter::ProgressAnalysisListVm"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::StaticAnalysisVm>(QStringLiteral("Perimeter::StaticAnalysisVm"), Q_NULLPTR);
-    obj_mgr->registerType<Perimeter::DynamicAnalysisVm>(QStringLiteral("Perimeter::DynamicAnalysisVm"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::QHeightMapSurfaceDataProxyWrapper>(QStringLiteral("Perimeter::QHeightMapSurfaceDataProxyWrapper"), Q_NULLPTR);
-
+    obj_mgr->registerType<Perimeter::DynamicAnalysisVm>(QStringLiteral("Perimeter::DynamicAnalysisVm"), Q_NULLPTR);
+    obj_mgr->registerType<Perimeter::VisionFieldIslandVm>(QStringLiteral("Perimeter::VisionFieldIslandVm"), Q_NULLPTR);
 
 
 }

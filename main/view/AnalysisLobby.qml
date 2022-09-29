@@ -120,10 +120,19 @@ Column {
                                 changePage("progressAnalysisLobby",index)
                             }
                         }
-                        CusButton{text:"视岛图";onClicked:changePage("visionFieldIsland",null);}
+                        CusButton{
+                            text:"视岛图";
+                            enabled: currentProgram.type===0&&currentProgram.category!==4;
+                            onClicked:
+                            {
+                                var Vm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::VisionFieldIslandVm", false,[currentCheckResult.id]);
+                                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::VisionFieldIslandVm",Vm);
+                                changePage("visionFieldIsland",null);
+                            }
                         }
                     }
                 }
+            }
 
             Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
@@ -140,7 +149,7 @@ Column {
                         height: parent.height;width: height*3.5;
                         enabled: currentCheckResult!==null;
                         property var listModel:ListModel {}
-                        property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
+                        property var reportNames: [["常规分析","三合一图","总览图","三合一图","阈值图"],["筛选"],["动态"]]
                         comboBox.model: listModel;popDirectionDown: false;complexType: true;
                         button.text: "分析";
                         button.onClicked:
@@ -156,23 +165,38 @@ Column {
                         function analysis(report)
                         {
                             var diagramWidth;
-                            switch (report)
+                            switch (currentProgram.type)
                             {
-                            case 0:diagramWidth=root.height*14/15*0.92*0.97/3*1.25*0.8;break;
-                            case 1:diagramWidth=root.height*14/15*0.92*0.47*0.8;break;
-                            case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
-                            case 3:case 4:case 5:case 6:case7:diagramWidth=root.height*14/15*0.92*0.8;break;
+                            case 0:
+                                switch (report)
+                                {
+                                case 0:diagramWidth=root.height*14/15*0.92*0.97/3*1.25*0.8;break;
+                                case 1:diagramWidth=root.height*14/15*0.92*0.47*0.8;break;
+                                case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
+                                case 3:diagramWidth=root.height*14/15*0.92*0.8;break;                                                      //三合一
+                                case 4:diagramWidth=root.height*14/15*0.92*0.8;break;                                                      //阈值图
+                                }
+                                break;
+                            case 1:
+                                diagramWidth=root.height*14/15*0.92*0.8;break;
+                            case 2:
+                                diagramWidth=root.height*14/15*0.92*0.8;break;
                             }
+
+
                             var analysisResult=null;
                             if(analysisVm!=null)
                             {
                                 if(analysisVm.type!==2){ IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticAnalysisVm",analysisVm);}
                                     else{ IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicAnalysisVm",analysisVm);}
                             }
-                            if(currentProgram.type!==2)
+                            if(currentProgram.type!==2) //三合一不用获取结果
                             {
                                 analysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticAnalysisVm", false,[currentCheckResult.id,diagramWidth,report]);
-                                analysisResult=analysisVm.getResult();
+                                if(report===0||report===2)
+                                {
+                                    analysisResult=analysisVm.getResult();
+                                }
                             }
                             else
                             {
@@ -184,10 +208,13 @@ Column {
                         Component.onCompleted: {
                             root.currentProgramChanged.connect(function()
                             {
+                                console.log(currentProgram.type);
                                 listModel.clear();
                                 var report=currentProgram.report;
+                                console.log(report[0])
                                 report.forEach(function(item){
-                                    listModel.append({name:reportNames[item],report:item});
+                                    console.log(item);
+                                    listModel.append({name:reportNames[currentProgram.type][item],report:item});
                                 })
                                 comboBox.currentIndex=0;
                             })

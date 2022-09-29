@@ -24,13 +24,21 @@ Item
     property int textHeight:CommonSettings.textHeight;
     onRefresh:
     {
-        switch(report)
+        if(currentProgram.type===0)
         {
-        case 0:content.source="StaticAnalysisReportSingle.qml";break;
-        case 1:content.source="StaticAnalysisReportThreeInOne.qml";break;
-        case 2:content.source="StaticAnalysisReportOverView.qml";break;
-        case 3:content.source="StaticAnalysisReportScreening.qml";break;
+            switch(report)
+            {
+            case 0:content.source="StaticAnalysisReportSingle.qml";break;
+            case 1:content.source="StaticAnalysisReportThreeInOne.qml";break;
+            case 2:content.source="StaticAnalysisReportOverView.qml";break;
+            }
         }
+        else
+        {
+             content.source="StaticAnalysisReportScreening.qml"
+        }
+
+
         content.item.analysisResult=analysisResult;
         content.item.analysisVm=analysisVm;
         content.item.refresh();

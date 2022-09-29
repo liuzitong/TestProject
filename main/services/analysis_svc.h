@@ -22,6 +22,8 @@ public:
 
     void ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>& mDev,QVector<int>& peDev,QVector<int>& peMDev,float& md,float& psd,float& VFI,int& GHT, float& p_md,float& p_psd);
 
+    void ThreeInOneAnalysis(int resultId,QVector<int>& dev);
+
     void ScreeningAnalysis(int resultId,int& dotSeen,int& dotWeakSeen,int& dotUnseen);
 
     void BaseLineAnalysis(const QVector<float>& mds,const QVector<int>& months,float& avgMd,float& progressSpeedBase,float& progressSpeedDeviation,int& slopeType);
@@ -60,6 +62,7 @@ public:
     QPoint convertDegLocToPixLoc(QPointF DegLoc,int range,QImage img);
 
     void drawBaseLine(QVector<float> mds,int startYear,QVector<int> months,QImage& img);
+
 
 
 
