@@ -11,7 +11,9 @@ public:
     ~TestClass()=default;
     Q_INVOKABLE void test();
     void createPatientData();
+    void createCheckResultData();
 
+    void createDynamicCheckResultData();
 };
 }
 

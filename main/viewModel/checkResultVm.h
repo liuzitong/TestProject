@@ -53,7 +53,8 @@ private:
     long m_id;
     int m_type;
     int m_OS_OD;
-    QVector<QVector<QByteArray>> m_pic;      //算了 图片还是用方法调用
+    std::vector<std::vector<std::vector<std::string>>> m_pic;      //算了 图片还是用方法调用
+
     QObject* m_params;
     ResultDataVm* m_resultData;
     QString m_diagnosis;
@@ -61,6 +62,7 @@ private:
     int m_patient_id;
     int m_program_id;
 };
+
 
 class ResultDataVm:public QObject
 {

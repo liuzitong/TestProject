@@ -75,7 +75,7 @@ struct CheckResultModel
     int m_OS_OD;
     typename ParamTraits<type>::params m_params;
     ResultData<type> m_data;
-    QVector<QVector<QByteArray>> m_pic;
+    std::vector<std::vector<std::vector<std::string>>> m_pic;     //[点序号][每个点图片序号][1为DB大小,2为图片]
     QString m_diagnosis;
     QDateTime m_time;
     int m_patient_id;
@@ -92,6 +92,8 @@ struct CheckResultModel
         m_params=Utility::QStringToEntity<ParamTraits<type>::params>(checkResult_ptr->m_params);
         qDebug()<<checkResult_ptr->m_data;
         m_data=Utility::QStringToEntity<ResultData<type>>(checkResult_ptr->m_data);
+        qDebug()<<checkResult_ptr->m_pic;
+        m_pic=Utility::QStringToEntity<std::vector<std::vector<std::vector<std::string>>>>(checkResult_ptr->m_pic);
 //        qDebug()<<checkResult_ptr->m_data;
 //        qDebug()<<m_data.pupilDiameter;
         m_diagnosis=checkResult_ptr->m_diagnosis;
@@ -111,6 +113,7 @@ struct CheckResultModel
         checkResult_ptr->m_params=Utility::entityToQString(m_params);
         qDebug()<<checkResult_ptr->m_params;
         checkResult_ptr->m_data=Utility::entityToQString(m_data);
+        checkResult_ptr->m_pic=Utility::entityToQString(m_pic);
         qDebug()<<checkResult_ptr->m_data;
         checkResult_ptr->m_time=m_time;
         checkResult_ptr->m_diagnosis=m_diagnosis;

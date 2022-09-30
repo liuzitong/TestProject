@@ -71,8 +71,8 @@ void TestClass::test()
 //        qDebug()<<i;
 //    }
 
-    createPatientData();
-
+//    createPatientData();
+    createCheckResultData();
 }
 
 void TestClass::createPatientData()
@@ -120,7 +120,33 @@ void TestClass::createPatientData()
 //    qx::dao::insert(list);
     qx::dao::insert(pplist);
 
-//    db.commit();
+    //    db.commit();
+}
+
+void TestClass::createCheckResultData()
+{
+    CheckResultModel<Type::ThreshHold> checkModel;
+    checkModel.m_params.commonParams={{1,2}};
+    checkModel.m_params.fixedParams={1,2};
+    checkModel.m_data={1,2,3};
+    checkModel.m_data.checkdata={1,2,3,4};
+    checkModel.m_pic={{{"30","aaaa"},{"40","bbbbb"}},{{"30","aaaa"},{"40","bbbbb"}}};
+    auto pp=checkModel.ModelToDB();
+    qx::dao::insert(pp);
+
+}
+
+void TestClass::createDynamicCheckResultData()
+{
+    CheckResultModel<Type::ThreshHold> checkModel;
+    checkModel.m_params.commonParams={{1,2}};
+    checkModel.m_params.fixedParams={1,2};
+    checkModel.m_data={1,2,3};
+    checkModel.m_data.checkdata={1,2,3,4};
+    checkModel.m_pic={{{"30","aaaa"},{"40","bbbbb"}},{{"30","aaaa"},{"40","bbbbb"}}};
+    auto pp=checkModel.ModelToDB();
+    qx::dao::insert(pp);
+
 }
 
 

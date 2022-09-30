@@ -20,11 +20,6 @@ CheckResultVm::CheckResultVm(const QVariantList & args)
     else
     {
         int checkResult_id=args[0].toInt();
-//        qx_query query("select * from CheckResult where checkResult_id=:checkResult_id");
-//        query.bind(":checkResult_id",checkResult_id);
-//        CheckResult_List checkResult_List;
-//        QSqlError daoError = qx::dao::execute_query(query, checkResult_List);
-//        CheckResult_ptr checkResult_ptr=checkResult_List.first();
         CheckResult_ptr checkResult_ptr(new CheckResult());
         checkResult_ptr->m_id=checkResult_id;
         qx::dao::fetch_by_id(checkResult_ptr);
@@ -52,7 +47,7 @@ CheckResultVm::CheckResultVm(const QVariantList & args)
             m_id=checkResultModel->m_id;
             m_type=int(checkResultModel->m_type);
             m_OS_OD=checkResultModel->m_OS_OD;
-            m_pic=checkResultModel->m_pic;
+//            m_pic=checkResultModel->m_pic;
             m_diagnosis=checkResultModel->m_diagnosis;
             m_time=checkResultModel->m_time;
             m_params=new DynamicParamsVM(checkResultModel->m_params);
@@ -63,6 +58,16 @@ CheckResultVm::CheckResultVm(const QVariantList & args)
     }
 
 }
+
+class DynamicDotResultVm:public QObject
+{
+    Q_OBJECT
+
+    std::string name;
+    QVector<QPoint> start;
+    std::vector<Point> end;
+    bool isSeen;
+};
 
 CheckResultVm::~CheckResultVm()
 {
