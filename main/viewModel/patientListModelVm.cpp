@@ -134,7 +134,7 @@ void PatientListModelVm:: deletePatient(long id)
 void PatientListModelVm::getPatientListByTimeSpan(QDate from,QDate to)
 {
     if(from.toString()=="") from.setDate(1900,1,1);
-    if(to.toString()=="") to=QDate::currentDate().addDays(1);
+    if(to.toString()=="") to=QDate::currentDate().addYears(100);
     qx_query query("select * from patient where lastUpdate>=:from and lastUpdate<=:to ORDER BY lastUpdate DESC");
     query.bind(":from",from.toString("yyyy-MM-dd"));
     query.bind(":to",to.toString("yyyy-MM-dd"));

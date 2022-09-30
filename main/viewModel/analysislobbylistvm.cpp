@@ -165,10 +165,14 @@ QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
                 analysisMethodSvc->ThresholdAnalysis(resultId,dev,mDev,peDev,peMDev,md,psd,VFI,GHT,p_md,p_psd);
                 analysisMethodSvc->drawPE(peMDev,locs,range,img);
             }
-            else if(checkReport(1))      //三合一显示量化缺损
+            else if(checkReport(1)||checkReport(3))      //三合一显示量化缺损
             {
                 analysisMethodSvc->ThreeInOneAnalysis(resultId,dev);
                 analysisMethodSvc->drawDefectDepth(dev,locs,range,img);
+            }
+            else if(checkReport(4))
+            {
+                analysisMethodSvc->drawText(values,locs,range,OS_OD,img);
             }
         }
 

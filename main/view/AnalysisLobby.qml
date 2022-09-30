@@ -173,7 +173,7 @@ Column {
                                 case 0:diagramWidth=root.height*14/15*0.92*0.97/3*1.25*0.8;break;
                                 case 1:diagramWidth=root.height*14/15*0.92*0.47*0.8;break;
                                 case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
-                                case 3:diagramWidth=root.height*14/15*0.92*0.8;break;                                                      //三合一
+                                case 3:diagramWidth=root.height*14/15*0.92*0.5;break;                                                      //三合一
                                 case 4:diagramWidth=root.height*14/15*0.92*0.8;break;                                                      //阈值图
                                 }
                                 break;

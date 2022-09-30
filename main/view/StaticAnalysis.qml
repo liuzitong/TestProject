@@ -31,6 +31,8 @@ Item
             case 0:content.source="StaticAnalysisReportSingle.qml";break;
             case 1:content.source="StaticAnalysisReportThreeInOne.qml";break;
             case 2:content.source="StaticAnalysisReportOverView.qml";break;
+            case 3:content.source="StaticAnalysisReportTwoInOne.qml";break;
+            case 4:content.source="StaticAnalysisReportDB.qml";break;
             }
         }
         else

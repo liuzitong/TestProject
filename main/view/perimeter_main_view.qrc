@@ -27,5 +27,7 @@
         <file>StaticAnalysisReportThreeInOne.qml</file>
         <file>StaticParamsSetting.qml</file>
         <file>VisionFieldIsland.qml</file>
+        <file>StaticAnalysisReportTwoInOne.qml</file>
+        <file>StaticAnalysisReportDB.qml</file>
     </qresource>
 </RCC>

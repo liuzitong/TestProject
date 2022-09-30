@@ -507,7 +507,7 @@ void AnalysisSvc::ThreeInOneAnalysis(int resultId, QVector<int> &dev)
             }
 
             if(sv[i]>0)  {dev[i]=checkResult.m_data.checkdata[i]-sv[i];}                                                   //dev 盲点
-            else{ dev[i]=-99; }
+            else{ dev[i]=-99; }           //盲点
 
         }
 
@@ -769,12 +769,13 @@ void AnalysisSvc::drawRoundCrossPixScale(int range, QImage &img)
     }
 }
 
-void AnalysisSvc::drawText(QVector<int> values,QVector<QPointF> locs,int range,int OS_OD,QImage& img)
+void AnalysisSvc::drawText(QVector<int> values,QVector<QPointF> locs,int range,int OS_OD,QImage& img,float minificationFactor,bool isReport)
 {
     img.fill(qRgb(255, 255, 255));
     drawPixScale(range,img);
     QPainter painter(&img);
-    int fontPixSize=img.width()/17;
+//    int fontPixSize=img.width()/17*minificationFactor;
+    int fontPixSize=qMin(int(img.width()/17*minificationFactor),!isReport?16:32);
     QFont font("consolas");
     font.setPixelSize(fontPixSize);
     painter.setFont(font);
@@ -968,12 +969,13 @@ void AnalysisSvc::drawProgess(QVector<int> values, QVector<QPointF> locs, int ra
     }
 }
 
-void AnalysisSvc::drawDefectDepth(QVector<int> values, QVector<QPointF> locs, int range, QImage& img)
+void AnalysisSvc::drawDefectDepth(QVector<int> values, QVector<QPointF> locs, int range, QImage& img,float minificationFactor,bool isReport)
 {
     img.fill(qRgb(255, 255, 255));
     drawPixScale(range,img);
     QPainter painter(&img);
-    int fontPixSize=img.width()/18;
+//    int fontPixSize=img.width()/17*minificationFactor;
+    int fontPixSize=qMin(int(img.width()/17*minificationFactor),!isReport?16:32);
     QFont font("consolas");
     font.setPixelSize(fontPixSize);
     painter.setFont(font);
@@ -985,7 +987,7 @@ void AnalysisSvc::drawDefectDepth(QVector<int> values, QVector<QPointF> locs, in
         if(values[i]>-4)
         {
             float scale;
-            if(img.width()<400)
+            if(img.width()*minificationFactor<500)
             {
 //                scale=qFloor(float(m_image.width())/240);
 //                if(scale<1) scale=1;
@@ -1275,10 +1277,12 @@ void AnalysisSvc::drawBaseLine(QVector<float> mds,int startYear,QVector<int> mon
 int AnalysisSvc::getIndex(const QPointF &dot, const QVector<QPointF> &pointLoc)
 {
     int index=-1;
+    int distMin=INT_MAX;
     for(int i=0;i<pointLoc.length();i++)
     {
         int dist=pow(pointLoc[i].x()-dot.x(),2)+pow(pointLoc[i].y()-dot.y(),2);
         if(dist<FLT_EPSILON){index=i;break;}
+        else if(dist<distMin){distMin=dist;index=i;}
     }
     return index;
 }
@@ -1287,6 +1291,7 @@ int AnalysisSvc::getIndex(const QPointF &dot, const QVector<QPointF> &pointLoc)
 int AnalysisSvc::getIndex(const QPointF& dot,const QVector<QPoint> &pointLoc, int OS_OD)
 {
     int index=-1;
+    int distMin=INT_MAX;
 
     for(int i=0;i<pointLoc.length();i++)
     {
@@ -1299,7 +1304,9 @@ int AnalysisSvc::getIndex(const QPointF& dot,const QVector<QPoint> &pointLoc, in
         {
             dist=pow(pointLoc[i].x()-(-dot.x()),2)+pow(pointLoc[i].y()-dot.y(),2);
         }
-        if(dist<FLT_EPSILON){index=i;break;}
+        if(dist<FLT_EPSILON)
+        {index=i;break;}
+        else if(dist<distMin){distMin=dist;index=i;}
     }
     return index;
 }

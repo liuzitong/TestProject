@@ -25,7 +25,7 @@ Row{
 //    anchors.horizontalCenter: parent.horizontalCenter;
     Column{
         width: parent.height*0.8;height:parent.height;
-        CusText{text:root.textTop; anchors.horizontalCenter: parent.horizontalCenter;height:parent.height*0.1;font.pointSize: height*0.35;width: parent.width;}
+        CusText{text:root.textTop; anchors.horizontalCenter: parent.horizontalCenter;height:parent.height*0.1;font.pointSize: root.fontSize;width: parent.width;}
         Canvas
         {
             id:canvas;
@@ -81,7 +81,7 @@ Row{
                 Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + root.source;})}
             }
         }
-        CusText{text:root.textBottom; anchors.horizontalCenter: parent.horizontalCenter;height:parent.height*0.1;font.pointSize: height*0.35;width: parent.width;}
+        CusText{text:root.textBottom; anchors.horizontalCenter: parent.horizontalCenter;height:parent.height*0.1;font.pointSize: root.fontSize;width: parent.width;}
     }
     Column{
         width: parent.height*0.15;height: parent.height;

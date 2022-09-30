@@ -41,7 +41,7 @@ public:
 
     void drawRoundCrossPixScale(int range,QImage& img);
 
-    void drawText(QVector<int> values,QVector<QPointF> locs,int range,int OS_OD,QImage& img);             //db,dev,mdev
+    void drawText(QVector<int> values,QVector<QPointF> locs,int range,int OS_OD,QImage& img,float minificationFactor=1.0,bool isReport=false);             //db,dev,mdev
 
     void drawGray(QVector<int> values,QVector<QPointF> locs,int range,int innerRange,QImage& img);
 
@@ -49,7 +49,7 @@ public:
 
     void drawProgess(QVector<int> values,QVector<QPointF> locs,int range,QImage& img);
 
-    void drawDefectDepth(QVector<int> values,QVector<QPointF> locs,int range,QImage& img);
+    void drawDefectDepth(QVector<int> values,QVector<QPointF> locs,int range,QImage& img,float minificationFactor=1.0,bool isReport=false);
 
     void drawScreening(QVector<int> values,QVector<QPointF> locs,int range,int OS_OD,QImage& img);
 

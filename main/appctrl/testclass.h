@@ -1,4 +1,4 @@
-﻿#ifndef TESTCLASS_H
+#ifndef TESTCLASS_H
 #define TESTCLASS_H
 #include "perimeter/base/common/perimeter_def.h"
 #include <QByteArray>
@@ -10,6 +10,7 @@ public:
     TestClass()=default;
     ~TestClass()=default;
     Q_INVOKABLE void test();
+    void createPatientData();
 
 };
 }

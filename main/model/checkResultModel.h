@@ -90,6 +90,7 @@ struct CheckResultModel
         m_type=static_cast<Type>(checkResult_ptr->m_type);
         m_OS_OD=checkResult_ptr->m_OS_OD;
         m_params=Utility::QStringToEntity<ParamTraits<type>::params>(checkResult_ptr->m_params);
+        qDebug()<<checkResult_ptr->m_data;
         m_data=Utility::QStringToEntity<ResultData<type>>(checkResult_ptr->m_data);
 //        qDebug()<<checkResult_ptr->m_data;
 //        qDebug()<<m_data.pupilDiameter;

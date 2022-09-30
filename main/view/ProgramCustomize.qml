@@ -305,6 +305,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                     {
                                         currentProgram.category=4;
                                         currentProgram.name=saveToAnotherProgram.name;
+                                        currentProgram.report=[4];
                                         console.log(currentProgram.name);
                                         currentProgram.insertProgram();
                                         programLists.refreshData();
