@@ -20,7 +20,7 @@ StaticProgramVM::StaticProgramVM(const QVariantList & args)
     QSqlError daoError = qx::dao::execute_query(query, program_List);
     Program_ptr program_ptr=program_List.first();
 //    qDebug()<<program_ptr->m_params;
-    QSharedPointer<ProgramModel<Type::ThreshHold>> programModel=QSharedPointer<ProgramModel<Type::ThreshHold>>(new ProgramModel<Type::ThreshHold>(program_ptr));
+    QSharedPointer<StaticProgramModel> programModel=QSharedPointer<StaticProgramModel>(new StaticProgramModel(program_ptr));
     m_id=programModel->m_id;
     m_type=int(programModel->m_type);
     m_name=programModel->m_name;
@@ -72,7 +72,7 @@ void StaticProgramVM::deleteProgram()
 
 Program_ptr StaticProgramVM::getProgramData()
 {
-    QSharedPointer<ProgramModel<Type::ThreshHold>> programModel=QSharedPointer<ProgramModel<Type::ThreshHold>>(new ProgramModel<Type::ThreshHold>());
+    QSharedPointer<StaticProgramModel> programModel=QSharedPointer<StaticProgramModel>(new StaticProgramModel());
     programModel->m_id=m_id;
     programModel->m_name=m_name;
     programModel->m_type=Type(m_type);
@@ -128,7 +128,7 @@ DynamicProgramVM::DynamicProgramVM(const QVariantList & args)
     QSqlError daoError = qx::dao::execute_query(query, program_List);
     Program_ptr program_ptr=program_List.first();
 //    qDebug()<<program_ptr->m_params;
-    auto programModel=QSharedPointer<ProgramModel<Type::Dynamic>>(new ProgramModel<Type::Dynamic>(program_ptr));
+    auto programModel=QSharedPointer<DynamicProgramModel>(new DynamicProgramModel(program_ptr));
     m_id=programModel->m_id;
     m_name=programModel->m_name;
     m_type=int(programModel->m_type);
@@ -174,7 +174,7 @@ void DynamicProgramVM::deleteProgram()
 
 Program_ptr DynamicProgramVM::getProgramData()
 {
-    QSharedPointer<ProgramModel<Type::Dynamic>> programModel=QSharedPointer<ProgramModel<Type::Dynamic>>(new ProgramModel<Type::Dynamic>());
+    QSharedPointer<DynamicProgramModel> programModel=QSharedPointer<DynamicProgramModel>(new DynamicProgramModel());
     programModel->m_id=m_id;
     programModel->m_type=Type(m_type);
     programModel->m_name=m_name;

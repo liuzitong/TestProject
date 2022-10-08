@@ -153,7 +153,7 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
     qx::dao::fetch_by_id(patient_ptr);
 
     CheckResultModel<Type::ThreshHold> checkResult(checkResult_ptr);
-    ProgramModel<Type::ThreshHold> program(program_ptr);
+    StaticProgramModel program(program_ptr);
     PatientModel patient(patient_ptr);
 
     auto params=checkResult.m_params;
@@ -440,7 +440,7 @@ void AnalysisSvc::ThreeInOneAnalysis(int resultId, QVector<int> &dev)
         qx::dao::fetch_by_id(patient_ptr);
 
         CheckResultModel<Type::ThreshHold> checkResult(checkResult_ptr);
-        ProgramModel<Type::ThreshHold> program(program_ptr);
+        StaticProgramModel program(program_ptr);
         PatientModel patient(patient_ptr);
 
         auto params=checkResult.m_params;
@@ -524,7 +524,7 @@ void AnalysisSvc::ScreeningAnalysis(int resultId,int& dotSeen,int& dotWeakSeen,i
     qx::dao::fetch_by_id(program_ptr);
 
     CheckResultModel<Type::ThreshHold> checkResult(checkResult_ptr);
-    ProgramModel<Type::ThreshHold> program(program_ptr);
+    StaticProgramModel program(program_ptr);
 
     if(checkResult.m_type==Type::Screening)
     {

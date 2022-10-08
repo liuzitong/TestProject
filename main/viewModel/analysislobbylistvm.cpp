@@ -137,7 +137,7 @@ QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
     if(checkResult_ptr->m_type!=2)
     {
         auto checkResult=CheckResultModel<Type::ThreshHold>(checkResult_ptr);
-        auto program=ProgramModel<Type::ThreshHold>(program_ptr);
+        auto program=StaticProgramModel(program_ptr);
         QVector<int> values,fixationValues,dev,mDev,peDev,peMDev;
         QVector<QPointF> locs;
         float md,psd,VFI,p_md,p_psd;
@@ -184,7 +184,7 @@ QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
     else                         //移动
     {
         auto checkResult=CheckResultModel<Type::Dynamic>(checkResult_ptr);
-        auto program=ProgramModel<Type::Dynamic>(program_ptr);
+        auto program=DynamicProgramModel(program_ptr);
         QVector<QPointF> values;
         values.resize(checkResult.m_data.checkdata.size());
         for(int i=0;i<int(checkResult.m_data.checkdata.size());i++)

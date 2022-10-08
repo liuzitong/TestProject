@@ -35,7 +35,7 @@ private:
     QString m_reportFolder="./reportImage/";
 
     CheckResultModel<Type::ThreshHold> m_checkResult;
-    ProgramModel<Type::ThreshHold> m_program;
+    StaticProgramModel m_program;
     PatientModel m_patient;
 };
 
@@ -57,7 +57,7 @@ private:
     QVector<int> m_fixationValues;
     int m_type,m_range;
     CheckResultModel<Type::Dynamic> m_checkResult;
-    ProgramModel<Type::Dynamic> m_program;
+    DynamicProgramModel m_program;
     PatientModel m_patient;
 };
 

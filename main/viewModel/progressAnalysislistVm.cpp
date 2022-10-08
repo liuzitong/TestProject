@@ -548,7 +548,7 @@ ProgressAnalysisListVm::Data ProgressAnalysisListVm::getProgressData(CheckResult
     Program_ptr program_ptr(new Program());
     program_ptr->m_id=checkResult_ptr->m_program->m_id;
     qx::dao::fetch_by_id(program_ptr);
-    auto program=ProgramModel<Type::ThreshHold>(program_ptr);
+    auto program=StaticProgramModel(program_ptr);
 
 
     QVector<int> dev,mDev,peDev,peMDev;

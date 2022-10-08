@@ -51,7 +51,7 @@ private:
 
     Program_ptr getProgramData();
 
-//    QSharedPointer<ProgramModel<Type::ThreshHold>> programModel;
+//    QSharedPointer<StaticProgramModel> programModel;
     Q_DISABLE_COPY(StaticProgramVM);
 };
 

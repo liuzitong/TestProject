@@ -70,10 +70,10 @@ StaticAnalysisVm::StaticAnalysisVm(const QVariantList &args)
     qx::dao::fetch_by_id(patient_ptr);
 
 //    CheckResultModel<Type::ThreshHold> checkResult(checkResult_ptr);
-//    ProgramModel<Type::ThreshHold> program(program_ptr);
+//    StaticProgramModel program(program_ptr);
 //    PatientModel patient(patient_ptr);
     m_checkResult=CheckResultModel<Type::ThreshHold>(checkResult_ptr);
-    m_program=ProgramModel<Type::ThreshHold>(program_ptr);
+    m_program=StaticProgramModel(program_ptr);
     m_patient=PatientModel(patient_ptr);
     m_type=int(m_checkResult.m_type);
     m_values.resize(m_checkResult.m_data.checkdata.size());
@@ -386,7 +386,7 @@ DynamicAnalysisVm::DynamicAnalysisVm(const QVariantList &args)
     qx::dao::fetch_by_id(patient_ptr);
 
     m_checkResult=CheckResultModel<Type::Dynamic>(checkResult_ptr);
-    m_program=ProgramModel<Type::Dynamic>(program_ptr);
+    m_program=DynamicProgramModel(program_ptr);
     m_patient=PatientModel(patient_ptr);
     m_type=int(m_program.m_type);
 
