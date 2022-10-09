@@ -3,7 +3,6 @@
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 
-
 struct Point                         //标准动态程序的测试点的室 x表示长度,y表示角度
 {
     float x;
@@ -16,6 +15,7 @@ struct Point                         //标准动态程序的测试点的室 x表
     }
 
 };
+
 
 
 //struct Line

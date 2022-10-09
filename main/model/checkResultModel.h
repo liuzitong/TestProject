@@ -23,6 +23,83 @@ struct CheckDataTraits<Type::Dynamic>
 };
 
 
+struct ResultData1
+{
+    int alarm;
+    float pupilDiameter;
+    int testTimespan;
+    int ambientLight;
+    int E_Light_pv;
+    int T_Light_pv;
+    std::vector<int> fixationDeviation;
+
+    template<class Archive>
+    void serialize(Archive& archive, const unsigned int version)
+    {
+        archive & BOOST_SERIALIZATION_NVP(alarm);
+        archive & BOOST_SERIALIZATION_NVP(pupilDiameter);
+        archive & BOOST_SERIALIZATION_NVP(testTimespan);
+        archive & BOOST_SERIALIZATION_NVP(ambientLight);
+        archive & BOOST_SERIALIZATION_NVP(E_Light_pv);
+        archive & BOOST_SERIALIZATION_NVP(T_Light_pv);
+        archive & BOOST_SERIALIZATION_NVP(fixationDeviation);
+    }
+};
+
+struct StaticResultData:public ResultData1
+{
+
+    int falsePositiveCount;
+    int falsePositiveTestCount;
+    int falseNegativeCount;
+    int falseNegativeTestCount;
+    int fixationLostCount;
+    int fixationLostTestCount;
+    std::vector<int> checkData;
+
+    template<class Archive>
+    void serialize(Archive& archive, const unsigned int version)
+    {
+        archive & BOOST_SERIALIZATION_NVP(falsePositiveCount);
+        archive & BOOST_SERIALIZATION_NVP(falsePositiveTestCount);
+        archive & BOOST_SERIALIZATION_NVP(falseNegativeCount);
+        archive & BOOST_SERIALIZATION_NVP(falseNegativeTestCount);
+        archive & BOOST_SERIALIZATION_NVP(fixationLostCount);
+        archive & BOOST_SERIALIZATION_NVP(fixationLostTestCount);
+        archive & BOOST_SERIALIZATION_NVP(fixationDeviation);
+        archive & BOOST_SERIALIZATION_NVP(checkData);
+    }
+};
+
+struct DynamicDataNode
+{
+    std::string name;
+    Point start;
+    Point end;
+    bool isSeen;
+
+    template<class Archive>
+    void serialize(Archive& archive, const unsigned int version)
+    {
+        archive & BOOST_SERIALIZATION_NVP(name);
+        archive & BOOST_SERIALIZATION_NVP(start);
+        archive & BOOST_SERIALIZATION_NVP(end);
+        archive & BOOST_SERIALIZATION_NVP(isSeen);
+    }
+};
+
+
+struct DynamicResultData:public ResultData1
+{
+    std::vector<DynamicDataNode> checkData;
+    template<class Archive>
+    void serialize(Archive& archive, const unsigned int version)
+    {
+        archive & BOOST_SERIALIZATION_NVP(checkData);
+    }
+};
+
+
 template<Type T>
 struct ResultData
 {

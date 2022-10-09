@@ -15,8 +15,12 @@
 
 
 namespace Perimeter {
+
+
 void TestClass::test()
 {
+
+
 
 //    using Params=StaticParams::CommonParams;
 //    CheckResultModel<Type::Dynamic> checkResultModel;
@@ -72,7 +76,39 @@ void TestClass::test()
 //    }
 
 //    createPatientData();
-    createCheckResultData();
+//    createCheckResultData();
+//    StaticResultData data;
+//    data.alarm=1;
+//    data.pupilDiameter=2.3;
+//    data.testTimespan=200;
+//    data.ambientLight=3;
+//    data.E_Light_pv=4;
+//    data.T_Light_pv=10;
+//    data.fixationDeviation={1,2,3,4,5,23,};
+
+//    data.falsePositiveCount=3;
+//    data.falseNegativeTestCount=4;
+//    data.checkData={2,3,4,2};
+
+
+//    auto str=Utility::entityToQString(data);
+//    qDebug()<<str;
+
+
+    DynamicResultData data;
+    data.alarm=1;
+    data.pupilDiameter=2.3;
+    data.testTimespan=200;
+    data.ambientLight=3;
+    data.E_Light_pv=4;
+    data.T_Light_pv=10;
+    data.fixationDeviation={1,2,3,4,5,23,};
+
+    data.checkData={{"hello",{33,float(45.3)},{float(32.5),float(26.3)},true},{"world",{13,float(25.3)},{float(72.5),float(56.3)},true}};
+
+    auto str=Utility::entityToQString(data);
+    std::cout<<str.toStdString();
+    qDebug()<<str;
 }
 
 void TestClass::createPatientData()

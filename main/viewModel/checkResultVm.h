@@ -85,6 +85,7 @@ class ResultDataVm:public QObject
     Q_PROPERTY(QVariantList checkData READ getCheckData WRITE setCheckData)
 
 
+
 public:
     Q_INVOKABLE explicit ResultDataVm()=default;
     explicit ResultDataVm(ResultData<Type::ThreshHold> resultData);
