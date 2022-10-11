@@ -145,6 +145,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                                         {
                                                             currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[model.program_id]);
                                                             staticParamsSetting.currentProgram=currentProgram;
+                                                            console.log(currentProgram.params.fixedParams.stimulationTime);
                                                         }
                                                         else{
                                                             currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicProgramVM", false,[model.program_id]);
@@ -193,7 +194,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                                 width: parent.width;height: parent.height/7;spacing: 0.5*height;
                                                 CusCheckBox{
                                                     property int strategy:modelData.strategy;
-                                                    height: parent.height;checked:{if(currentProgram.type!==2){return currentProgram.strategies.indexOf(strategy)>-1;}else return false ;} width: parent.height;
+                                                    height: parent.height;checked:{if(currentProgram.type!==2){return currentProgram.data.strategies.indexOf(strategy)>-1;}else return false ;} width: parent.height;
                                                     enabled: if(currentProgram.type!==2){return !(currentProgram.params.commonParams.strategy===strategy);} else return false;
                                                     onClicked:
                                                     {
@@ -227,11 +228,11 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                 display.type=currentProgram.type;
                                 display.category=currentProgram.category;
 //                                console.log("haha");
-                                dotList=currentProgram.dots;
+                                dotList=currentProgram.data.dots;
                                 displayCanvas.requestPaint();
 
                             }
-                            onDotListChanged:{if(currentProgram!==null) {currentProgram.dots=dotList;currentProgram.type===2?dynamicParamsSetting.currentProgramChanged():staticParamsSetting.currentProgramChanged();}}
+                            onDotListChanged:{if(currentProgram!==null) {currentProgram.data.dots=dotList;currentProgram.type===2?dynamicParamsSetting.currentProgramChanged():staticParamsSetting.currentProgramChanged();}}
                         }
                     }
                 }

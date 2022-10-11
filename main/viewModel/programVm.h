@@ -10,88 +10,176 @@
 namespace Perimeter
 {
 
-class StaticProgramVM:public QObject
+class StaticProgramDataVm:public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QVariantList strategies READ getStrategies WRITE setStrategies)
+    Q_PROPERTY(QVariantList dots READ getDots WRITE setDots )                     //data
+
+    QVariantList getStrategies()
+    {
+        QVariantList strategies;
+        for(auto&i:m_data->strategies)
+        {
+            strategies.append(int(i));
+        }
+        return strategies;
+    }
+    void setStrategies(QVariantList value)
+    {
+       m_data->strategies.clear();
+       for(auto&i:value)
+       {
+           m_data->strategies.push_back(StaticParams::CommonParams::Strategy(i.toInt()));
+       }
+    }
+
+    QVariantList getDots()
+    {
+        QVariantList dots;
+        for(auto&i:m_data->dots)
+        {
+            dots.append(QPointF{i.x,i.y});
+        }
+        return dots;
+    }
+
+    void setDots(QVariantList value)
+    {
+        m_data->dots.clear();
+        for(auto& v:value)
+        {
+            if(!v.canConvert(QMetaType::QPointF))
+            {
+                float x=v.toMap()["x"].toFloat();
+                float y=v.toMap()["y"].toFloat();
+                m_data->dots.push_back({x,y});
+            }
+            else{
+                m_data->dots.push_back({float(v.toPointF().x()),float(v.toPointF().y())});
+            }
+        }
+    }
+
+public:
+    StaticProgramDataVm(StaticProgramData* data){m_data=data;}
+private:
+    StaticProgramData* m_data;
+};
+
+class DynamicProgramDataVm:public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QVariantList dots READ getDots WRITE setDots )                     //data
+
+    QVariantList getDots()
+    {
+        QVariantList dots;
+        for(auto&i:m_data->dots)
+        {
+            dots.append(QPointF{i.x,i.y});
+        }
+        return dots;
+    }
+
+    void setDots(QVariantList value)
+    {
+        m_data->dots.clear();
+        for(auto& v:value)
+        {
+            if(!v.canConvert(QMetaType::QPointF))
+            {
+                float x=v.toMap()["x"].toFloat();
+                float y=v.toMap()["y"].toFloat();
+                m_data->dots.push_back({x,y});
+            }
+            else{
+                m_data->dots.push_back({float(v.toPointF().x()),float(v.toPointF().y())});
+            }
+        }
+    }
+public:
+    DynamicProgramDataVm(DynamicProgramData* data){m_data=data;}
+private:
+    DynamicProgramData* m_data;
+};
+
+
+class ProgramVm:public QObject
 {
     Q_OBJECT
     Q_PROPERTY(long id READ getID WRITE setID)
     Q_PROPERTY(int type READ getType WRITE setType)
     Q_PROPERTY(QString name READ getName WRITE setName);
-    Q_PROPERTY(QObject* params READ getParams)
-    Q_PROPERTY(QVariantList strategies READ getStrategies WRITE setStrategies)
-    Q_PROPERTY(QVariantList dots READ getDots WRITE setDots )
     Q_PROPERTY(QVariantList report READ getReport WRITE setReport )
     Q_PROPERTY(int category READ getCategory WRITE setCategory)
-
 public:
-    Q_INVOKABLE explicit StaticProgramVM(const QVariantList &);
-    Q_INVOKABLE virtual ~StaticProgramVM();
-    Q_INVOKABLE void updateProgram();
-    Q_INVOKABLE void insertProgram();
-    Q_INVOKABLE void deleteProgram();
-
-    long getID(){return m_id;}void setID(int value){m_id=value;}
-    long getType(){return m_type;}void setType(int value){m_type=value;}
-    QString getName(){return m_name;}void setName(QString value){m_name=value;}
-    StaticParamsVM* getParams(){return m_staticParamsVm;}
-    QVariantList getStrategies(){return m_strategies;}void setStrategies(QVariantList value){m_strategies=value;}
-    QVariantList getDots(){return m_dots;}void setDots(QVariantList value){m_dots=value;}
-    QVariantList getReport(){return m_report;}void setReport(QVariantList value){m_report=value;}
-
-    int getCategory(){return m_category;}void setCategory(int value){m_category=value;}
-
-private:
-    long m_id;
-    int m_type;
-    QString m_name;
-    StaticParamsVM* m_staticParamsVm;
-    QVariantList m_strategies;
-    QVariantList m_dots;
-    QVariantList m_report;
-    int m_category;
-
-    Program_ptr getProgramData();
-
-//    QSharedPointer<StaticProgramModel> programModel;
-    Q_DISABLE_COPY(StaticProgramVM);
+    long getID(){return m_data->m_id;}void setID(int value){m_data->m_id=value;}
+    long getType(){return long(m_data->m_type);}void setType(int value){m_data->m_type=Type(value);}
+    QString getName(){return m_data->m_name;}void setName(QString value){m_data->m_name=value;}
+    QVariantList getReport()
+    {
+        QVariantList reports;
+        for(auto&i: m_data->m_report)
+        {
+            reports.append(i);
+        }
+        return reports;
+    }
+    void setReport(QVariantList value)
+    {
+        m_data->m_report.clear();
+        for(auto&i:value)
+        {
+            m_data->m_report.push_back(i.toInt());
+        }
+    }
+    int getCategory(){return int(m_data->m_category);}void setCategory(int value){m_data->m_category=Category(value);}
+protected:
+    ProgramModel* m_data;
 };
 
-class DynamicProgramVM:public QObject
+class StaticProgramVm:public ProgramVm
 {
     Q_OBJECT
+    Q_PROPERTY(QObject* params READ getParams)
+    Q_PROPERTY(QObject* data READ getData)
 public:
-    Q_INVOKABLE explicit DynamicProgramVM(const QVariantList &);
-    Q_INVOKABLE virtual ~DynamicProgramVM();
+    Q_INVOKABLE explicit StaticProgramVm(const QVariantList &);
+    Q_INVOKABLE virtual ~StaticProgramVm()=default;
     Q_INVOKABLE void updateProgram();
     Q_INVOKABLE void insertProgram();
     Q_INVOKABLE void deleteProgram();
 
-    Q_PROPERTY(long id READ getID WRITE setID);
-    Q_PROPERTY(int type READ getType WRITE setType);
-    Q_PROPERTY(QString name READ getName WRITE setName);
-    Q_PROPERTY(QObject* params READ getParams);
-    Q_PROPERTY(QVariantList dots READ getDots WRITE setDots);
-    Q_PROPERTY(QVariantList report READ getReport WRITE setReport )
-    Q_PROPERTY(int category READ getCategory WRITE setCategory)
-
-    long getID(){return m_id;}void setID(int value){m_id=value;}
-    long getType(){return m_type;}void setType(int value){m_type=value;}
-    QString getName(){return m_name;}void setName(QString value){m_name=value;}
-    DynamicParamsVM* getParams(){return m_dynamicParamsVm;}
-    QVariantList getDots(){return m_dots;}void setDots(QVariantList value){m_dots=value;}
-    QVariantList getReport(){return m_report;}void setReport(QVariantList value){m_report=value;}
-    int getCategory(){return m_category;}void setCategory(int value){m_category=value;}
+    StaticParamsVM* getParams(){return m_staticParamsVm.data();}
+    StaticProgramDataVm* getData(){return m_staticDataVm.data();}
 private:
-    long m_id;
-    int m_type;
-    QString m_name;
-    DynamicParamsVM* m_dynamicParamsVm;
-    QVariantList m_dots;
-    QVariantList m_report;
-    int m_category;
+    QSharedPointer<StaticProgramModel> m_data;
+    QSharedPointer<StaticParamsVM> m_staticParamsVm;
+    QSharedPointer<StaticProgramDataVm> m_staticDataVm;
 
-    Program_ptr getProgramData();
-//    QSharedPointer<ProgramModel<Type::Dynamic>> programModel;
-    Q_DISABLE_COPY(DynamicProgramVM);
+};
+
+
+class DynamicProgramVm:public ProgramVm
+{
+public:
+    Q_OBJECT
+    Q_INVOKABLE explicit DynamicProgramVm(const QVariantList &);
+    Q_INVOKABLE virtual ~DynamicProgramVm()=default;
+    Q_INVOKABLE void updateProgram();
+    Q_INVOKABLE void insertProgram();
+    Q_INVOKABLE void deleteProgram();
+
+    Q_PROPERTY(QObject* params READ getParams);
+    Q_PROPERTY(QObject* data READ getData)
+
+    DynamicParamsVM* getParams(){return m_dynamicParamsVm.data();}
+    DynamicProgramDataVm* getData(){return m_dynamicDataVm.data();}
+private:
+    QSharedPointer<DynamicProgramModel> m_data;
+    QSharedPointer<DynamicParamsVM> m_dynamicParamsVm;
+    QSharedPointer<DynamicProgramDataVm> m_dynamicDataVm;
 };
 }
 

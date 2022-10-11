@@ -5,8 +5,8 @@
 
 struct Point                         //标准动态程序的测试点的室 x表示长度,y表示角度
 {
-    float x;
-    float y;
+    float x;                    //radius
+    float y;                    //angle
     template<class Archive>
     void serialize(Archive& archive, const unsigned int version)
     {

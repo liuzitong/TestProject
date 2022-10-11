@@ -61,6 +61,8 @@ public:
 
     QPoint convertDegLocToPixLoc(QPointF DegLoc,int range,QImage img);
 
+    QPointF convertPolarToOrth(QPointF loc);
+
     void drawBaseLine(QVector<float> mds,int startYear,QVector<int> months,QImage& img);
 
 

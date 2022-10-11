@@ -159,18 +159,18 @@ struct DynamicParams
 //    }
 };
 
-template <Type T>
-struct ParamTraits
-{
-    typedef StaticParams params;
-};
+//template <Type T>
+//struct ParamTraits
+//{
+//    typedef StaticParams params;
+//};
 
 
-template <>
-struct ParamTraits<Type::Dynamic>
-{
-    typedef DynamicParams params;
-};
+//template <>
+//struct ParamTraits<Type::Dynamic>
+//{
+//    typedef DynamicParams params;
+//};
 
 
 

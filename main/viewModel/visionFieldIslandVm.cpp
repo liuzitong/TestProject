@@ -25,12 +25,12 @@ VisionFieldIslandVm::VisionFieldIslandVm(const QVariantList &args)
     QVector<int> values;
     QVector<QPointF> locs;
 
-    auto checkResult=CheckResultModel<Type::ThreshHold>(checkResult_ptr);
+    auto checkResult=StaticCheckResultModel(checkResult_ptr);
     auto program=StaticProgramModel(program_ptr);
-    values.resize(checkResult.m_data.checkdata.size());
-    for(int i=0;i<int(checkResult.m_data.checkdata.size());i++)
+    values.resize(checkResult.m_data.checkData.size());
+    for(int i=0;i<int(checkResult.m_data.checkData.size());i++)
     {
-        values[i]=checkResult.m_data.checkdata[i];
+        values[i]=checkResult.m_data.checkData[i];
     }
     locs.resize(program.m_data.dots.size());
     for(int i=0;i<int(program.m_data.dots.size());i++)

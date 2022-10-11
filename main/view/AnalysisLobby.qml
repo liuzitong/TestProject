@@ -56,8 +56,18 @@ Column {
                                             content.cancelSelected();parent.selected=true;
                                             console.log(checkResultId);
                                             if(currentCheckResult!==null)
-                                            {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm", currentCheckResult);}
-                                            currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[checkResultId]);
+                                            {
+                                                if(currentCheckResult.type!==2)
+                                                     IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticCheckResultVm", currentCheckResult);
+                                                else
+                                                     IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicCheckResultVm", currentCheckResult);
+                                            }
+
+                                            if(type!==2)
+                                                currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticCheckResultVm", false,[checkResultId]);
+                                            else
+                                                currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicCheckResultVm", false,[checkResultId]);
+
                                             if(currentProgram!==null)
                                             {
                                                 if(currentProgram.type!==2)
@@ -65,7 +75,7 @@ Column {
                                                 else
                                                     IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicProgramVM", currentProgram);
                                             }
-                                            if(currentCheckResult.type!==2)
+                                            if(type!==2)
                                                 currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[currentCheckResult.program_id]);
                                             else
                                                 currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicProgramVM", false,[currentCheckResult.program_id]);

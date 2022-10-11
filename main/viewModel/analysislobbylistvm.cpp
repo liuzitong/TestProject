@@ -13,13 +13,16 @@ class SimpleCheckResultList:public QAbstractListModel
     enum SimpleCheckResultListRoles
     {
         checkResultId=Qt::UserRole+1,
+        type,
         picName,
     };
 
     struct Data
     {
         int checkResultId;
+        int type;
         QString picName;
+
     };
     Q_OBJECT
     // QAbstractItemModel interface
@@ -40,6 +43,7 @@ public:
         {
             case SimpleCheckResultListRoles::checkResultId:return m_dataList[index.row()].checkResultId;
             case SimpleCheckResultListRoles::picName:return m_dataList[index.row()].picName;
+            case SimpleCheckResultListRoles::type:return m_dataList[index.row()].type;
         }
         return QVariant();
     }
@@ -47,6 +51,7 @@ public:
     {
         QHash<int, QByteArray> roles;
         roles[checkResultId] = "checkResultId";
+        roles[type]="type";
         roles[picName] = "picName";
         return roles;
     }
@@ -104,7 +109,7 @@ void AnalysisLobbyListVm::generateModelListData(CheckResult_List checkResult_lis
             if(checkResult_list[j]->m_time.date()==dateList[i])
             {
                 auto imageFileName=drawImage(checkResult_list[j]);
-                simpleCheckResultList->m_dataList.append({checkResult_list[j]->m_id,imageFileName});
+                simpleCheckResultList->m_dataList.append({checkResult_list[j]->m_id,checkResult_list[j]->m_type,imageFileName});
                 data.simpleCheckResult=simpleCheckResultList;
             }
         }
@@ -136,7 +141,7 @@ QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
 //    qDebug()<<checkReport(2);
     if(checkResult_ptr->m_type!=2)
     {
-        auto checkResult=CheckResultModel<Type::ThreshHold>(checkResult_ptr);
+        auto checkResult=StaticCheckResultModel(checkResult_ptr);
         auto program=StaticProgramModel(program_ptr);
         QVector<int> values,fixationValues,dev,mDev,peDev,peMDev;
         QVector<QPointF> locs;
@@ -144,10 +149,10 @@ QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
         int GHT;
         int range=program.m_params.commonParams.Range[1];
         int OS_OD=checkResult.m_OS_OD;
-        values.resize(checkResult.m_data.checkdata.size());
-        for(int i=0;i<int(checkResult.m_data.checkdata.size());i++)
+        values.resize(checkResult.m_data.checkData.size());
+        for(int i=0;i<int(checkResult.m_data.checkData.size());i++)
         {
-            values[i]=checkResult.m_data.checkdata[i];
+            values[i]=checkResult.m_data.checkData[i];
         }
         locs.resize(program.m_data.dots.size());
         for(int i=0;i<int(program.m_data.dots.size());i++)
@@ -183,13 +188,13 @@ QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
     }
     else                         //移动
     {
-        auto checkResult=CheckResultModel<Type::Dynamic>(checkResult_ptr);
+        auto checkResult=DynamicCheckResultModel(checkResult_ptr);
         auto program=DynamicProgramModel(program_ptr);
         QVector<QPointF> values;
-        values.resize(checkResult.m_data.checkdata.size());
-        for(int i=0;i<int(checkResult.m_data.checkdata.size());i++)
+        values.resize(checkResult.m_data.checkData.size());
+        for(int i=0;i<int(checkResult.m_data.checkData.size());i++)
         {
-            values[i]={checkResult.m_data.checkdata[i].x,checkResult.m_data.checkdata[i].y};
+            values[i]={checkResult.m_data.checkData[i].end.x,checkResult.m_data.checkData[i].end.y};
         }
         int range=program.m_params.Range[1];
         QVector<int> fixationValues;

@@ -41,12 +41,12 @@ private:
   void initialize(){qDebug()<<("initializing");}
   void check(){
       qDebug()<<("checking");
-      auto val=m_checkResultVm->getResultData()->getFalseNegativeTestCount();
-      qDebug()<<val;
-      m_checkResultVm->getResultData()->setFalseNegativeTestCount(val+1);
+//      auto val=m_checkResultVm->getResultData()->getFalseNegativeTestCount();
+//      qDebug()<<val;
+//      m_checkResultVm->getResultData()->setFalseNegativeTestCount(val+1);
 //      QApplication::processEvents();
       thread()->msleep(50);
-      if(val>=100){setCheckState(4);}
+//      if(val>=100){setCheckState(4);}
       emit checkResultChanged();
   }
 
@@ -65,11 +65,11 @@ void CheckSvc::start()
     qDebug("start");
     if(m_checkResultVm->getType()!=2)
     {
-        auto params=static_cast<StaticParamsVM*>(m_checkResultVm->getParams());
+//        auto params=static_cast<StaticParamsVM*>(m_checkResultVm->getParams());
     }else
     {
-        auto params=static_cast<DynamicParamsVM*>(m_checkResultVm->getParams());
-        qDebug()<<params->getBrightness();
+//        auto params=static_cast<DynamicParamsVM*>(m_checkResultVm->getParams());
+//        qDebug()<<params->getBrightness();
     }
     CheckSvcWorker *worker = new CheckSvcWorker(&m_checkState,m_patientVm,m_programVm,m_checkResultVm);
     worker->moveToThread(&m_workerThread);

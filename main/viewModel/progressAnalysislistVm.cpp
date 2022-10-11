@@ -200,7 +200,7 @@ void ProgressAnalysisListVm::getProgressBaseLineReport()
         peMDev=m_currentDataList[index].peMDev;
 
         analysisSvc->drawGray(values,locs,range,innerRange,img);img.save(m_reportFolder+"baseLine_gray"+QString::number(index)+".bmp");
-        analysisSvc->drawText(values,locs,range,OS_OD,img);img.save(m_reportFolder+"baseLine_dBDiagram"+QString::number(index)+".bmp");
+        analysisSvc->drawText(values,locs,range,OS_OD,img,1.0,true);img.save(m_reportFolder+"baseLine_dBDiagram"+QString::number(index)+".bmp");
         analysisSvc->drawPE(peDev,locs,range,img);img.save(m_reportFolder+"baseLine_TotalPE"+QString::number(index)+".bmp");
         analysisSvc->drawPE(peMDev,locs,range,img);img.save(m_reportFolder+"baseLine_PatternPE"+QString::number(index)+".bmp");
     };
@@ -304,7 +304,7 @@ void Perimeter::ProgressAnalysisListVm::getThreeFollowUpsReport(int index)
     {
         analysisSvc->drawGray(val[i],locs[i],30,m_OS_OD,img);img.save(m_reportFolder+"threeFollowUps_grey"+QString::number(i)+".bmp");
         analysisSvc->drawPE(mPE[i],locs[i],30,img);img.save(m_reportFolder+"threeFollowUps_PatternPE"+QString::number(i)+".bmp");
-        analysisSvc->drawText(progressVal[i],progressLocs[i],30,m_OS_OD,img);img.save(m_reportFolder+"threeFollowUps_progressVal"+QString::number(i)+".bmp");
+        analysisSvc->drawText(progressVal[i],progressLocs[i],30,m_OS_OD,img,1.0,true);img.save(m_reportFolder+"threeFollowUps_progressVal"+QString::number(i)+".bmp");
         analysisSvc->drawProgess(progressPicVal[i],progressLocs[i],30,img);img.save(m_reportFolder+"threeFollowUps_progressPic"+QString::number(i)+".bmp");
     }
 
@@ -367,7 +367,7 @@ void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index)
     CheckResult_ptr checkResult_ptr(new CheckResult());
     checkResult_ptr->m_id=m_selectedResultId;
     qx::dao::fetch_by_id(checkResult_ptr);
-    auto checkResult=CheckResultModel<Type::ThreshHold>(checkResult_ptr);
+    auto checkResult=StaticCheckResultModel(checkResult_ptr);
 
 
     QVector<int> single_dev,single_mDev,single_peDev,single_peMDev;
@@ -395,11 +395,11 @@ void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index)
     analysisSvc->ProgressAnalysis(mDev,locs,m_OS_OD,progressLocs,progressVal,progressPicVal,progress);
 
     QImage img=QImage({500,500}, QImage::Format_RGB32);
-    analysisSvc->drawText(val.last(),locs.last(),30,m_OS_OD,img);img.save(m_reportFolder+"singleProgress_dBDiagram.bmp");
+    analysisSvc->drawText(val.last(),locs.last(),30,m_OS_OD,img,1.0,true);img.save(m_reportFolder+"singleProgress_dBDiagram.bmp");
     analysisSvc->drawGray(val.last(),locs.last(),30,0,img);img.save(m_reportFolder+"singleProgress_gray.bmp");
 
-    analysisSvc->drawText(m_currentDataList[index].dev,locs.last(),30,m_OS_OD,img);img.save(m_reportFolder+"singleProgress_TotalDeviation.bmp");
-    analysisSvc->drawText(m_currentDataList[index].mDev,locs.last(),30,m_OS_OD,img);img.save(m_reportFolder+"singleProgress_PatternDeviation.bmp");
+    analysisSvc->drawText(m_currentDataList[index].dev,locs.last(),30,m_OS_OD,img,1.0,true);img.save(m_reportFolder+"singleProgress_TotalDeviation.bmp");
+    analysisSvc->drawText(m_currentDataList[index].mDev,locs.last(),30,m_OS_OD,img,1.0,true);img.save(m_reportFolder+"singleProgress_PatternDeviation.bmp");
 
     analysisSvc->drawPE(m_currentDataList[index].peDev,locs.last(),30,img);img.save(m_reportFolder+"singleProgress_TotalPE.bmp");
     analysisSvc->drawPE(m_currentDataList[index].peMDev,locs.last(),30,img);img.save(m_reportFolder+"singleProgress_PatternPE.bmp");
@@ -544,7 +544,7 @@ void ProgressAnalysisListVm::generateDataList()
 
 ProgressAnalysisListVm::Data ProgressAnalysisListVm::getProgressData(CheckResult_ptr checkResult_ptr)
 {
-    auto checkResult=CheckResultModel<Type::ThreshHold>(checkResult_ptr);
+    auto checkResult=StaticCheckResultModel(checkResult_ptr);
     Program_ptr program_ptr(new Program());
     program_ptr->m_id=checkResult_ptr->m_program->m_id;
     qx::dao::fetch_by_id(program_ptr);
@@ -559,15 +559,15 @@ ProgressAnalysisListVm::Data ProgressAnalysisListVm::getProgressData(CheckResult
     auto analysisMethodSvc=AnalysisSvc::getSingleton();
     analysisMethodSvc->ThresholdAnalysis(resultId,dev,mDev,peDev,peMDev,md,psd,VFI,GHT,p_md,p_psd);
     QVector<QPointF> locs(program.m_data.dots.size());
-    QVector<int> values(checkResult.m_data.checkdata.size());
+    QVector<int> values(checkResult.m_data.checkData.size());
 
     for(int i=0;i<int(program.m_data.dots.size());i++)
     {
         locs[i]={program.m_data.dots[i].x,program.m_data.dots[i].y};
     }
-    for(int i=0;i<int(checkResult.m_data.checkdata.size());i++)
+    for(int i=0;i<int(checkResult.m_data.checkData.size());i++)
     {
-        values[i]=checkResult.m_data.checkdata[i];
+        values[i]=checkResult.m_data.checkData[i];
     }
 
 

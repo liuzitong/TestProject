@@ -22,7 +22,10 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
     property bool isCustomProg:false;
     property var currentProgram:null;
 
+
     property int fontPointSize: CommonSettings.fontPointSize;
+
+    onCurrentProgramChanged:console.log("changed");
 
 
 
@@ -175,11 +178,12 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                            width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;
                                            Component.onCompleted: {
                                                idPopup.ok.connect(function(){currentProgram.params.commonParams.intervalTime=value;})
-                                               idPopup.currentProgramChanged.connect(function(){if(currentProgram!==null){value=currentProgram.params.commonParams.intervalTime;}});
+                                               idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.commonParams.intervalTime;});
                                            }
                                        }
-
                                    }
+
+
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"中心点监测"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
@@ -245,43 +249,40 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"刺激时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
-                                            width: parent.width*0.6; anchors.right: parent.right;step:10;max:500;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.stimulationTime;
-                                            Component.onCompleted:
-                                            {
-                                                idPopup.ok.connect(function(){currentProgram.params.fixedParams.stimulationTime=value;
-                                                idPopup.currentProgramChanged.connect(function(){if(currentProgram!==null);value=currentProgram.params.fixedParams.stimulationTime;});}) }
+                                            width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.stimulationTime=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.stimulationTime;});}
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"间隔时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
-                                            width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.intervalTime;
-                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.intervalTime=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.intervalTime;});}) }
+                                            width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.intervalTime=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.intervalTime;});}
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"假阳性周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
-                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.falsePositiveCycle;
-                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.falsePositiveCycle=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.falsePositiveCycle;});}) }
+                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.falsePositiveCycle=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.falsePositiveCycle;}); }
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"假阴性周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
-                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.falseNegativeCycle;
-                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.falseNegativeCycle=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.falseNegativeCycle;});}) }
+                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.falseNegativeCycle=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.falseNegativeCycle;}); }
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"固视丢失率周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
-                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.fixationViewLossCycle;
-                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.fixationViewLossCycle=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.fixationViewLossCycle;});}) }
+                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;
+                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.fixationViewLossCycle=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.fixationViewLossCycle;}); }
                                         }
                                     }
 
@@ -292,24 +293,24 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"单刺激分贝"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
-                                           width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.singleStimulationDB;
-                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.singleStimulationDB=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.singleStimulationDB;});}) }
+                                           width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.singleStimulationDB=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.singleStimulationDB;}); }
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"盲点刺激分贝"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
-                                           width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;value:currentProgram===null?0:currentProgram.params.fixedParams.blindDotStimulationDB;
-                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.blindDotStimulationDB=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.blindDotStimulationDB;});}) }
+                                           width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.blindDotStimulationDB=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.blindDotStimulationDB;}); }
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:"短期波动次数"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
-                                           width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:1;value:currentProgram===null?0:currentProgram.params.fixedParams.shortTermFluctuationCount;
-                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.shortTermFluctuationCount=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.shortTermFluctuationCount;});}) }
+                                           width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:1;
+                                           Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.shortTermFluctuationCount=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.shortTermFluctuationCount;}); }
                                        }
                                    }
                                 }
@@ -331,15 +332,16 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 //
                             CusButton{text:"取消";onClicked: idPopup.close();}
                             CusButton{text:"确定";onClicked:{ok();idPopup.close();dataRefreshed();}}
-//                             CusButton{text:"aa";onClicked:{
-//                                     console.log(currentProgram.params.commonParams.cursorSize) ;
-//                                     console.log(currentProgram.params.commonParams.intervalTime) ;
-////                                     console.log(intevalTimeididid.value);
+                             CusButton{text:"aa";onClicked:{
+                                     console.log(currentProgram.params.commonParams.cursorSize) ;
+                                     console.log(currentProgram.params.fixedParams.stimulationTime) ;
+                                     stim.value=currentProgram.params.fixedParams.stimulationTime;
+//                                     console.log(intevalTimeididid.value);
 
-////                                     intevalTimeididid.value+=currentProgram.params.commonParams.intervalTime;
-////                                     intevalTimeididid.value=currentProgram.params.commonParams.intervalTime;
+//                                     intevalTimeididid.value+=currentProgram.params.commonParams.intervalTime;
+//                                     intevalTimeididid.value=currentProgram.params.commonParams.intervalTime;
 
-//                                 }}
+                                 }}
                         }
                     }
                 }

@@ -58,9 +58,10 @@ void  Main :: registerTypes( QxPack::IcAppCtrlBase *app_base )
     obj_mgr->registerType<Perimeter::PatientVm>(QStringLiteral("Perimeter::PatientVm"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::PatientListModelVm>(QStringLiteral("Perimeter::PatientListModelVm"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::ProgramListModelVm>(QStringLiteral("Perimeter::ProgramListModelVm"), Q_NULLPTR);
-    obj_mgr->registerType<Perimeter::StaticProgramVM>(QStringLiteral("Perimeter::StaticProgramVM"), Q_NULLPTR);
-    obj_mgr->registerType<Perimeter::DynamicProgramVM>(QStringLiteral("Perimeter::DynamicProgramVM"), Q_NULLPTR);
-    obj_mgr->registerType<Perimeter::CheckResultVm>(QStringLiteral("Perimeter::CheckResultVm"), Q_NULLPTR);
+    obj_mgr->registerType<Perimeter::StaticProgramVm>(QStringLiteral("Perimeter::StaticProgramVM"), Q_NULLPTR);
+    obj_mgr->registerType<Perimeter::DynamicProgramVm>(QStringLiteral("Perimeter::DynamicProgramVM"), Q_NULLPTR);
+    obj_mgr->registerType<Perimeter::StaticCheckResultVm>(QStringLiteral("Perimeter::StaticCheckResultVm"), Q_NULLPTR);
+    obj_mgr->registerType<Perimeter::DynamicCheckResultVm>(QStringLiteral("Perimeter::DynamicCheckResultVm"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::AnalysisLobbyListVm>(QStringLiteral("Perimeter::AnalysisLobbyListVm"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::ProgressAnalysisListVm>(QStringLiteral("Perimeter::ProgressAnalysisListVm"), Q_NULLPTR);
     obj_mgr->registerType<Perimeter::StaticAnalysisVm>(QStringLiteral("Perimeter::StaticAnalysisVm"), Q_NULLPTR);

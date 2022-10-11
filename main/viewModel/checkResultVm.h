@@ -5,131 +5,184 @@
 #include <perimeter/main/viewModel/paramsVm.h>
 namespace Perimeter
 {
-class ResultDataVm;
-class CheckResultVm: public QObject
-{
-
-    Q_OBJECT
-    Q_PROPERTY(long id READ getID WRITE setID)
-    Q_PROPERTY(int type READ getType WRITE setType)
-    Q_PROPERTY(int OS_OD READ getOS_OD WRITE setOS_OD)
-    Q_PROPERTY(QObject* params READ getParams WRITE setParams )
-    Q_PROPERTY(ResultDataVm* resultData READ getResultData)
-    Q_PROPERTY(QString diagnosis READ getDiagnosis WRITE setDiagnosis NOTIFY diagnosisChanged)
-    Q_PROPERTY(QDateTime time READ getTime WRITE setTime)
-    Q_PROPERTY(int patient_id READ getPatient_id WRITE setPatient_id)
-    Q_PROPERTY(int program_id READ getProgram_id WRITE setProgram_id)
-
-public:
-    Q_INVOKABLE explicit CheckResultVm(const QVariantList &);
-    Q_INVOKABLE virtual ~CheckResultVm();
-    Q_INVOKABLE void insert();
-    Q_INVOKABLE void update();
-    int getID(){return m_id;}void setID(int value){m_id=value;}
-    int getType(){return m_type;}void setType(int value){m_type=value;}
-    int getOS_OD(){return m_OS_OD;}void setOS_OD(int value){m_OS_OD=value;}
-    QObject* getParams(){return m_params;}void setParams(QObject* value){
-        if(m_type==0)
-        {
-            auto val=static_cast<StaticParamsVM*>(value);
-            auto m_val=static_cast<StaticParamsVM*>(m_params);
-            *m_val=*val;
-        }
-        else if(m_type==1){
-            auto val=static_cast<DynamicParamsVM*>(value);
-            auto m_val=static_cast<DynamicParamsVM*>(m_params);
-            *m_val=*val;
-        }
-    }
-    ResultDataVm* getResultData(){return m_resultData;}
-    QString getDiagnosis(){return m_diagnosis;}void setDiagnosis(QString value){m_diagnosis=value;emit diagnosisChanged(value);}Q_SIGNAL void diagnosisChanged(QString value);
-    QDateTime getTime(){return m_time;}void setTime(QDateTime value){m_time=value;}
-    int getPatient_id(){return m_patient_id;}void setPatient_id(int value){m_patient_id=value;}
-    int getProgram_id(){return m_program_id;}void setProgram_id(int value){m_program_id=value;}
-
-
-private:
-    CheckResult_ptr getCheckResultData();
-    long m_id;
-    int m_type;
-    int m_OS_OD;
-    std::vector<std::vector<std::vector<std::string>>> m_pic;      //算了 图片还是用方法调用
-
-    QObject* m_params;
-    ResultDataVm* m_resultData;
-    QString m_diagnosis;
-    QDateTime m_time;
-    int m_patient_id;
-    int m_program_id;
-};
-
-
 class ResultDataVm:public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int alarm READ getAlarm WRITE setAlarm)
     Q_PROPERTY(float pupilDiameter READ getPupilDiameter WRITE setPupilDiameter)
+    Q_PROPERTY(int testTimespan READ getTestTimespan WRITE setTestTimespan)
+    Q_PROPERTY(QVariantList fixationDeviation READ getFixationDeviation)
+public:
+    Q_INVOKABLE explicit ResultDataVm(ResultData* data){setData(data);};
+    Q_INVOKABLE virtual ~ResultDataVm()=default;
+    int getAlarm(){return m_data->alarm;}void setAlarm(int value){m_data->alarm=value;}
+    float getPupilDiameter(){return m_data->pupilDiameter;}void setPupilDiameter(float value){m_data->pupilDiameter=value;}
+    int getTestTimespan(){return m_data->testTimespan;}void setTestTimespan(int value){m_data->testTimespan=value;}
+    QVariantList getFixationDeviation()
+    {
+        QVariantList list;
+        for(auto& i:m_data->fixationDeviation)
+        {
+            list.append(QVariant(i));
+        }
+        return list;
+    }
+    void setData(ResultData* data){m_data=data;}
+private:
+    ResultData* m_data;
+};
+
+class StaticResultDataVm:public ResultDataVm
+{
+    Q_OBJECT
     Q_PROPERTY(int falsePositiveCount READ getFalsePositiveCount WRITE setFalsePositiveCount)
     Q_PROPERTY(int falsePositiveTestCount READ getFalsePositiveTestCount WRITE setFalsePositiveTestCount)
     Q_PROPERTY(int falseNegativeCount READ getFalseNegativeCount WRITE setFalseNegativeCount)
     Q_PROPERTY(int falseNegativeTestCount READ getFalseNegativeTestCount WRITE setFalseNegativeTestCount)
     Q_PROPERTY(int fixationLostCount READ getFixationLostCount WRITE setFixationLostCount)
     Q_PROPERTY(int fixationLostTestCount READ getFixationLostTestCount WRITE setFixationLostTestCount)
-    Q_PROPERTY(int stimulusCount READ getStimulusCount WRITE setStimulusCount)
-    Q_PROPERTY(int thresholdCount READ getThresholdCount WRITE setThresholdCount)
-    Q_PROPERTY(int testTimespan READ getTestTimespan WRITE setTestTimespan)
-    Q_PROPERTY(int ambientLight READ getAmbientLight WRITE setAmbientLight)
-    Q_PROPERTY(int E_Light_pv READ getE_Light_pv WRITE setE_Light_pv)
-    Q_PROPERTY(int T_Light_pv READ getT_Light_pv WRITE setT_Light_pv)
-    Q_PROPERTY(QVariantList fixationDeviation READ getFixationDeviation WRITE setFixationDeviation)
-    Q_PROPERTY(QVariantList checkData READ getCheckData WRITE setCheckData)
-
-
+    Q_PROPERTY(QVariantList checkData READ getCheckData)
 
 public:
-    Q_INVOKABLE explicit ResultDataVm()=default;
-    explicit ResultDataVm(ResultData<Type::ThreshHold> resultData);
-    explicit ResultDataVm(ResultData<Type::Dynamic> resultData);
-    Q_INVOKABLE virtual ~ResultDataVm()=default;
-    int getAlarm(){return m_alarm;}void setAlarm(int value){m_alarm=value;}
-    float getPupilDiameter(){return m_pupilDiameter;}void setPupilDiameter(float value){m_pupilDiameter=value;}
-    int getFalsePositiveCount(){return m_falsePositiveCount;}void setFalsePositiveCount(int value){m_falsePositiveCount=value;}
-    int getFalsePositiveTestCount(){return m_falsePositiveTestCount;}void setFalsePositiveTestCount(int value){m_falsePositiveTestCount=value;}
-    int getFalseNegativeCount(){return m_falseNegativeCount;}void setFalseNegativeCount(int value){m_falseNegativeCount=value;}
-    int getFalseNegativeTestCount(){return m_falseNegativeTestCount;}void setFalseNegativeTestCount(int value){m_falseNegativeTestCount=value;}
-    int getFixationLostCount(){return m_fixationLostCount;}void setFixationLostCount(int value){m_fixationLostCount=value;}
-    int getFixationLostTestCount(){return m_fixationLostTestCount;}void setFixationLostTestCount(int value){m_fixationLostTestCount=value;}
-    int getStimulusCount(){return m_stimulusCount;}void setStimulusCount(int value){m_stimulusCount=value;}
-    int getThresholdCount(){return m_thresholdCount;}void setThresholdCount(int value){m_thresholdCount=value;}
-    int getTestTimespan(){return m_testTimespan;}void setTestTimespan(int value){m_testTimespan=value;}
-    int getAmbientLight(){return m_ambientLight;}void setAmbientLight(int value){m_ambientLight=value;}
-    int getE_Light_pv(){return m_E_Light_pv;}void setE_Light_pv(int value){m_E_Light_pv=value;}
-    int getT_Light_pv(){return m_T_Light_pv;}void setT_Light_pv(int value){m_T_Light_pv=value;}
-    QVariantList getFixationDeviation(){return m_fixationDeviation;}void setFixationDeviation(QVariantList value){m_fixationDeviation=value;}
-    QVariantList getCheckData(){return m_checkData;}void setCheckData(QVariantList value){m_checkData=value;}
-    ResultData<Type::ThreshHold> getThresholdData();
-    ResultData<Type::Dynamic> getDynamicData();
+    Q_INVOKABLE explicit StaticResultDataVm(StaticResultData* data):ResultDataVm(data){setData(data);}
+    Q_INVOKABLE virtual ~StaticResultDataVm()=default;
+    int getFalsePositiveCount(){return m_data->falsePositiveCount;}void setFalsePositiveCount(int value){m_data->falsePositiveCount=value;}
+    int getFalsePositiveTestCount(){return m_data->falsePositiveTestCount;}void setFalsePositiveTestCount(int value){m_data->falsePositiveTestCount=value;}
+    int getFalseNegativeCount(){return m_data->falseNegativeCount;}void setFalseNegativeCount(int value){m_data->falseNegativeCount=value;}
+    int getFalseNegativeTestCount(){return m_data->falseNegativeTestCount;}void setFalseNegativeTestCount(int value){m_data->falseNegativeTestCount=value;}
+    int getFixationLostCount(){return m_data->fixationLostCount;}void setFixationLostCount(int value){m_data->fixationLostCount=value;}
+    int getFixationLostTestCount(){return m_data->fixationLostTestCount;}void setFixationLostTestCount(int value){m_data->fixationLostTestCount=value;}
+    QVariantList getCheckData()
+    {
+        QVariantList list;
+        for(auto& i:m_data->checkData)
+        {
+            list.append(QVariant(i));
+        }
+        return list;
+    }
+
+    void setData(StaticResultData* data){m_data=data;}
 private:
-    int m_alarm;
-    float m_pupilDiameter;
-    int m_falsePositiveCount;
-    int m_falsePositiveTestCount;
-    int m_falseNegativeCount;
-    int m_falseNegativeTestCount;
-    int m_fixationLostCount;
-    int m_fixationLostTestCount;
-    int m_stimulusCount;
-    int m_thresholdCount;
-    int m_testTimespan;
-    int m_ambientLight;
-    int m_E_Light_pv;
-    int m_T_Light_pv;
-    QVariantList m_fixationDeviation;
-    QVariantList m_checkData;       //非移动时为int 移动时是QPoint
+    StaticResultData* m_data;
 };
 
 
+class DynamicDataNodeVm:public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString name READ getName)
+    Q_PROPERTY(QPointF start READ getStart)
+    Q_PROPERTY(QPointF end READ getEnd)
+    Q_PROPERTY(bool isSeen READ getIsSeen)
+public:
+    DynamicDataNodeVm(DynamicDataNode* data){setData(data);}
+    ~DynamicDataNodeVm()=default;
+    QString getName(){return QString(m_data->name.c_str());}
+    QPointF getStart(){return QPointF{m_data->start.x,m_data->start.y};}
+    QPointF getEnd(){return QPointF{m_data->end.x,m_data->end.y};}
+    bool getIsSeen(){return m_data->isSeen;}
+
+    void setData(DynamicDataNode* data){m_data=data;}
+private:
+    DynamicDataNode* m_data;
+};
+
+class DynamicResultDataVm:public ResultDataVm
+{
+    Q_OBJECT
+    Q_PROPERTY(QVector<DynamicDataNodeVm*> checkData READ getCheckData)
+public:
+    Q_INVOKABLE explicit DynamicResultDataVm(DynamicResultData* data):ResultDataVm(data){setData(data);};
+    Q_INVOKABLE virtual ~DynamicResultDataVm(){for(auto&i: m_checkData){delete i;}}
+    QVector<DynamicDataNodeVm*> getCheckData(){return m_checkData;}
+
+    void setData(DynamicResultData* data)
+    {
+        m_data=data;
+        auto dataList=m_data->checkData;
+        for(auto&data:dataList)
+        {
+            auto vm=new DynamicDataNodeVm(&data);
+            m_checkData.append(vm);
+        }
+    }
+private:
+    DynamicResultData* m_data;
+    QVector<DynamicDataNodeVm*> m_checkData;
+};
 
 
+class CheckResultVm: public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(long id READ getID WRITE setID)
+    Q_PROPERTY(int type READ getType WRITE setType)
+    Q_PROPERTY(int OS_OD READ getOS_OD WRITE setOS_OD)
+//    Q_PROPERTY(QObject* params READ getParams WRITE setParams )
+//    Q_PROPERTY(ResultDataVm* resultData READ getResultData)
+    Q_PROPERTY(QString diagnosis READ getDiagnosis WRITE setDiagnosis NOTIFY diagnosisChanged)
+    Q_PROPERTY(QDateTime time READ getTime WRITE setTime)
+    Q_PROPERTY(int patient_id READ getPatient_id WRITE setPatient_id)
+    Q_PROPERTY(int program_id READ getProgram_id WRITE setProgram_id)
+
+public:
+    Q_INVOKABLE explicit CheckResultVm()=default;
+    Q_INVOKABLE virtual ~CheckResultVm()=default;
+//    virtual void insert()=0;
+//    virtual void update()=0;
+    int getID(){return m_data->m_id;}void setID(int value){m_data->m_id=value;}
+    int getType(){return int(m_data->m_type);}void setType(int value){m_data->m_type=Type(value);}
+    int getOS_OD(){return m_data->m_OS_OD;}void setOS_OD(int value){m_data->m_OS_OD=value;}
+    QString getDiagnosis(){return m_data->m_diagnosis;}void setDiagnosis(QString value){m_data->m_diagnosis=value;emit diagnosisChanged(value);}Q_SIGNAL void diagnosisChanged(QString value);
+    QDateTime getTime(){return m_data->m_time;}void setTime(QDateTime value){m_data->m_time=value;}
+    int getPatient_id(){return m_data->m_patient_id;}void setPatient_id(int value){m_data->m_patient_id=value;}
+    int getProgram_id(){return m_data->m_program_id;}void setProgram_id(int value){m_data->m_program_id=value;}
+    void setData(CheckResultModel* data){m_data=data;}
+private:
+    CheckResultModel* m_data;
+};
+
+
+class StaticCheckResultVm:public CheckResultVm
+{
+    Q_OBJECT
+    Q_PROPERTY(StaticParamsVM* params READ getParams WRITE setParams )
+    Q_PROPERTY(StaticResultDataVm* resultData READ getResultData)
+
+public:
+    Q_INVOKABLE explicit StaticCheckResultVm(const QVariantList &);
+    Q_INVOKABLE virtual ~StaticCheckResultVm()=default;
+    Q_INVOKABLE void insert();
+    Q_INVOKABLE void update();
+
+    StaticParamsVM* getParams(){return m_params.data();}void setParams(StaticParamsVM* other){*m_params=*other;}
+    StaticResultDataVm* getResultData(){return m_resultData.data();}
+private:
+    QSharedPointer<StaticCheckResultModel> m_data;
+    QSharedPointer<StaticParamsVM> m_params;
+    QSharedPointer<StaticResultDataVm> m_resultData;
+
+};
+
+class DynamicCheckResultVm:public CheckResultVm
+{
+    Q_OBJECT
+    Q_PROPERTY(DynamicParamsVM* params READ getParams WRITE setParams )
+    Q_PROPERTY(DynamicResultDataVm* resultData READ getResultData)
+
+public:
+    Q_INVOKABLE explicit DynamicCheckResultVm(const QVariantList &);
+    Q_INVOKABLE virtual ~DynamicCheckResultVm()=default;
+    Q_INVOKABLE void insert();
+    Q_INVOKABLE void update();
+
+    DynamicParamsVM* getParams(){return m_params.data();}void setParams(DynamicParamsVM* other){*m_params=*other;}
+    DynamicResultDataVm* getResultData(){return m_resultData.data();}
+private:
+    QSharedPointer<DynamicCheckResultModel> m_data;
+    QSharedPointer<DynamicParamsVM> m_params;
+    QSharedPointer<DynamicResultDataVm> m_resultData;
+};
 }
 #endif // CHECKRESULTVM_H

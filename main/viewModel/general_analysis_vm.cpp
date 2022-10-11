@@ -69,17 +69,17 @@ StaticAnalysisVm::StaticAnalysisVm(const QVariantList &args)
     patient_ptr->m_id=checkResult_ptr->m_patient->m_id;
     qx::dao::fetch_by_id(patient_ptr);
 
-//    CheckResultModel<Type::ThreshHold> checkResult(checkResult_ptr);
+//    StaticCheckResultModel checkResult(checkResult_ptr);
 //    StaticProgramModel program(program_ptr);
 //    PatientModel patient(patient_ptr);
-    m_checkResult=CheckResultModel<Type::ThreshHold>(checkResult_ptr);
+    m_checkResult=StaticCheckResultModel(checkResult_ptr);
     m_program=StaticProgramModel(program_ptr);
     m_patient=PatientModel(patient_ptr);
     m_type=int(m_checkResult.m_type);
-    m_values.resize(m_checkResult.m_data.checkdata.size());
-    for(int i=0;i<int(m_checkResult.m_data.checkdata.size());i++)
+    m_values.resize(m_checkResult.m_data.checkData.size());
+    for(int i=0;i<int(m_checkResult.m_data.checkData.size());i++)
     {
-        m_values[i]=m_checkResult.m_data.checkdata[i];
+        m_values[i]=m_checkResult.m_data.checkData[i];
     }
     m_locs.resize(m_program.m_data.dots.size());
     for(int i=0;i<int(m_program.m_data.dots.size());i++)
@@ -202,24 +202,24 @@ void StaticAnalysisVm::showReport(int report)
         if(report==0)
         {
 //            analysisMethodSvc->DrawThreshold(resultId)
-            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550);img550.save(m_reportFolder+"dBDiagram.bmp");
+            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550,1.0,true);img550.save(m_reportFolder+"dBDiagram.bmp");
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img550);img550.save(m_reportFolder+"gray.bmp");
 
-            analysisMethodSvc->drawText(m_dev,m_locs,m_range,m_OS_OD,img500);img500.save(m_reportFolder+"TotalDeviation.bmp");
-            analysisMethodSvc->drawText(m_mDev,m_locs,m_range,m_OS_OD,img500);img500.save(m_reportFolder+"PatternDeviation.bmp");
+            analysisMethodSvc->drawText(m_dev,m_locs,m_range,m_OS_OD,img500,1.0,true);img500.save(m_reportFolder+"TotalDeviation.bmp");
+            analysisMethodSvc->drawText(m_mDev,m_locs,m_range,m_OS_OD,img500,1.0,true);img500.save(m_reportFolder+"PatternDeviation.bmp");
 
             analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,img500);img500.save(m_reportFolder+"TotalPE.bmp");
             analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,img500);img500.save(m_reportFolder+"PatternPE.bmp");
         }
         else if(report==1)
         {
-            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550);img550.save(m_reportFolder+"dBDiagram.bmp");
+            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550,1.0,true);img550.save(m_reportFolder+"dBDiagram.bmp");
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img550);img550.save(m_reportFolder+"gray.bmp");
             analysisMethodSvc->drawDefectDepth(m_dev,m_locs,m_range,img550);img550.save(m_reportFolder+"defectDepth.bmp");
         }
         else if(report==2)
         {
-            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550);img550.save(m_reportFolder+"dBDiagram.bmp");
+            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550,1.0,true);img550.save(m_reportFolder+"dBDiagram.bmp");
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img550);img550.save(m_reportFolder+"gray.bmp");
             analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,img550);img550.save(m_reportFolder+"TotalPE.bmp");
             analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,img550);img550.save(m_reportFolder+"PatternPE.bmp");
@@ -385,17 +385,18 @@ DynamicAnalysisVm::DynamicAnalysisVm(const QVariantList &args)
     patient_ptr->m_id=checkResult_ptr->m_patient->m_id;
     qx::dao::fetch_by_id(patient_ptr);
 
-    m_checkResult=CheckResultModel<Type::Dynamic>(checkResult_ptr);
+    m_checkResult=DynamicCheckResultModel(checkResult_ptr);
     m_program=DynamicProgramModel(program_ptr);
     m_patient=PatientModel(patient_ptr);
     m_type=int(m_program.m_type);
 
     auto analysisMethodSvc=AnalysisSvc::getSingleton();
-    m_values.resize(m_checkResult.m_data.checkdata.size());
-    for(int i=0;i<int(m_checkResult.m_data.checkdata.size());i++)
+    m_values.resize(m_checkResult.m_data.checkData.size());
+    for(int i=0;i<int(m_checkResult.m_data.checkData.size());i++)
     {
-        m_values[i]={m_checkResult.m_data.checkdata[i].x,m_checkResult.m_data.checkdata[i].y};
+        m_values[i]={m_checkResult.m_data.checkData[i].end.x,m_checkResult.m_data.checkData[i].end.y};
     }
+    qDebug()<<m_values;
     m_range=m_program.m_params.Range[1];
     m_fixationValues.resize(m_checkResult.m_data.fixationDeviation.size());
     for(int i=0;i<int(m_checkResult.m_data.fixationDeviation.size());i++)

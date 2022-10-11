@@ -76,7 +76,7 @@ public:
 
     Program_ptr ModelToDB()
     {
-        auto pp=(static_cast<ProgramModel*>(this))->ModelToDB();
+        auto pp=ProgramModel::ModelToDB();
         pp->m_params=Utility::entityToQString(m_params);
         pp->m_data=Utility::entityToQString(m_data);
         return pp;
@@ -98,7 +98,7 @@ public:
 
     Program_ptr ModelToDB()
     {
-        auto pp=(static_cast<ProgramModel*>(this))->ModelToDB();
+        auto pp=ProgramModel::ModelToDB();
         pp->m_params=Utility::entityToQString(m_params);
         pp->m_data=Utility::entityToQString(m_data);
         return pp;

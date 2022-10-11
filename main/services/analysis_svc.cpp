@@ -152,7 +152,7 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
     patient_ptr->m_id=checkResult_ptr->m_patient->m_id;
     qx::dao::fetch_by_id(patient_ptr);
 
-    CheckResultModel<Type::ThreshHold> checkResult(checkResult_ptr);
+    StaticCheckResultModel checkResult(checkResult_ptr);
     StaticProgramModel program(program_ptr);
     PatientModel patient(patient_ptr);
 
@@ -253,7 +253,7 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
             if(sv[i]>0) sv[i]-=age_correction;else if(sv[i]<0) sv[i]+=age_correction;
         }
 
-        if(sv[i]>0)  {dev[i]=checkResult.m_data.checkdata[i]-sv[i];}                                                   //dev 盲点
+        if(sv[i]>0)  {dev[i]=checkResult.m_data.checkData[i]-sv[i];}                                                   //dev 盲点
         else{ dev[i]=-99; }
 
 
@@ -279,7 +279,7 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
             if(ringIndex>4) ringIndex=4;
 
             vfiRingStandard[ringIndex]+=sv[i];
-            vfiRingTest[ringIndex]+=checkResult.m_data.checkdata[i];
+            vfiRingTest[ringIndex]+=checkResult.m_data.checkData[i];
         }
     }
 
@@ -439,7 +439,7 @@ void AnalysisSvc::ThreeInOneAnalysis(int resultId, QVector<int> &dev)
         patient_ptr->m_id=checkResult_ptr->m_patient->m_id;
         qx::dao::fetch_by_id(patient_ptr);
 
-        CheckResultModel<Type::ThreshHold> checkResult(checkResult_ptr);
+        StaticCheckResultModel checkResult(checkResult_ptr);
         StaticProgramModel program(program_ptr);
         PatientModel patient(patient_ptr);
 
@@ -506,7 +506,7 @@ void AnalysisSvc::ThreeInOneAnalysis(int resultId, QVector<int> &dev)
                 if(sv[i]>0) sv[i]-=age_correction;else if(sv[i]<0) sv[i]+=age_correction;
             }
 
-            if(sv[i]>0)  {dev[i]=checkResult.m_data.checkdata[i]-sv[i];}                                                   //dev 盲点
+            if(sv[i]>0)  {dev[i]=checkResult.m_data.checkData[i]-sv[i];}                                                   //dev 盲点
             else{ dev[i]=-99; }           //盲点
 
         }
@@ -523,13 +523,13 @@ void AnalysisSvc::ScreeningAnalysis(int resultId,int& dotSeen,int& dotWeakSeen,i
     program_ptr->m_id=checkResult_ptr->m_program->m_id;
     qx::dao::fetch_by_id(program_ptr);
 
-    CheckResultModel<Type::ThreshHold> checkResult(checkResult_ptr);
+    StaticCheckResultModel checkResult(checkResult_ptr);
     StaticProgramModel program(program_ptr);
 
     if(checkResult.m_type==Type::Screening)
     {
         dotSeen=0,dotWeakSeen=0,dotUnseen=0;
-        auto& checkData=checkResult.m_data.checkdata;
+        auto& checkData=checkResult.m_data.checkData;
         for(auto& i:checkData)
         {
             if(i==0) dotUnseen++;
@@ -1058,10 +1058,15 @@ void AnalysisSvc::drawDynamic(QVector<QPointF> values, int range, QImage& img)
     painter.setBrush(QBrush(QColor("black")));
     painter.setPen({Qt::black,float(scale)});
     qDebug()<<values.length();
+
+
     for(int i=0;i<values.length();i++)
     {
-        auto begin=convertDegLocToPixLoc(values[i],range,img);
-        auto end=convertDegLocToPixLoc(values[(i+1)%values.length()],range,img);
+        qDebug()<<convertPolarToOrth(values[i]);
+        auto begin=convertDegLocToPixLoc(convertPolarToOrth(values[i]),range,img);
+        qDebug()<<begin;
+        auto end=convertDegLocToPixLoc(convertPolarToOrth(values[(i+1)%values.length()]),range,img);
+
         painter.drawLine(QLine(begin.x(),begin.y(),end.x(),end.y()));
         painter.drawEllipse(begin,3*scale,3*scale);
     }
@@ -1196,6 +1201,15 @@ QPoint AnalysisSvc::convertDegLocToPixLoc(QPointF DegLoc,int range,QImage img)
     float pixPerDegW=float(img.width()/2)/range;
     float pixPerDegH=float(img.height()/2)/range;
     return QPoint(img.width()/2+DegLoc.x()*pixPerDegW,img.height()/2-DegLoc.y()*pixPerDegH);
+}
+
+QPointF AnalysisSvc::convertPolarToOrth(QPointF loc)
+{
+    auto radius=loc.x();
+    auto angle=loc.y();
+    auto x=radius*qCos(angle/180*M_PI);
+    auto y=radius*qSin(angle/180*M_PI);
+    return QPointF{x,y};
 }
 
 
