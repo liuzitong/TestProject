@@ -3,6 +3,7 @@
 #include <QObject>
 #include <perimeter/main/model/checkResultModel.h>
 #include <perimeter/main/viewModel/paramsVm.h>
+#include <QDebug>
 namespace Perimeter
 {
 class ResultDataVm:public QObject
@@ -78,7 +79,7 @@ class DynamicDataNodeVm:public QObject
 public:
     DynamicDataNodeVm(DynamicDataNode* data){setData(data);}
     ~DynamicDataNodeVm()=default;
-    QString getName(){return QString(m_data->name.c_str());}
+    QString getName(){return m_data->name.c_str();}
     QPointF getStart(){return QPointF{m_data->start.x,m_data->start.y};}
     QPointF getEnd(){return QPointF{m_data->end.x,m_data->end.y};}
     bool getIsSeen(){return m_data->isSeen;}
@@ -91,25 +92,25 @@ private:
 class DynamicResultDataVm:public ResultDataVm
 {
     Q_OBJECT
-    Q_PROPERTY(QVector<DynamicDataNodeVm*> checkData READ getCheckData)
+    Q_PROPERTY(QVariantList checkData READ getCheckData)
 public:
     Q_INVOKABLE explicit DynamicResultDataVm(DynamicResultData* data):ResultDataVm(data){setData(data);};
-    Q_INVOKABLE virtual ~DynamicResultDataVm(){for(auto&i: m_checkData){delete i;}}
-    QVector<DynamicDataNodeVm*> getCheckData(){return m_checkData;}
+    Q_INVOKABLE virtual ~DynamicResultDataVm(){for(auto&i: m_checkData){delete i.value<DynamicDataNodeVm*>();}}
+    QVariantList getCheckData(){return m_checkData;}
 
     void setData(DynamicResultData* data)
     {
         m_data=data;
-        auto dataList=m_data->checkData;
-        for(auto&data:dataList)
+        auto& dataList=m_data->checkData;
+        for(auto& data:dataList)
         {
-            auto vm=new DynamicDataNodeVm(&data);
-            m_checkData.append(vm);
+            QObject* vm=new DynamicDataNodeVm(&data);
+            m_checkData.append(QVariant::fromValue(vm));
         }
     }
 private:
     DynamicResultData* m_data;
-    QVector<DynamicDataNodeVm*> m_checkData;
+    QVariantList m_checkData;
 };
 
 
@@ -119,8 +120,6 @@ class CheckResultVm: public QObject
     Q_PROPERTY(long id READ getID WRITE setID)
     Q_PROPERTY(int type READ getType WRITE setType)
     Q_PROPERTY(int OS_OD READ getOS_OD WRITE setOS_OD)
-//    Q_PROPERTY(QObject* params READ getParams WRITE setParams )
-//    Q_PROPERTY(ResultDataVm* resultData READ getResultData)
     Q_PROPERTY(QString diagnosis READ getDiagnosis WRITE setDiagnosis NOTIFY diagnosisChanged)
     Q_PROPERTY(QDateTime time READ getTime WRITE setTime)
     Q_PROPERTY(int patient_id READ getPatient_id WRITE setPatient_id)
@@ -185,4 +184,7 @@ private:
     QSharedPointer<DynamicResultDataVm> m_resultData;
 };
 }
+
+
+Q_DECLARE_OPAQUE_POINTER(Perimeter::DynamicDataNodeVm);
 #endif // CHECKRESULTVM_H

@@ -36,7 +36,6 @@ DynamicCheckResultVm::DynamicCheckResultVm(const QVariantList &args)
     qx::dao::fetch_by_id(checkResult_ptr);
     m_data.reset(new DynamicCheckResultModel(checkResult_ptr));
     CheckResultVm::setData(m_data.data());
-
     m_params.reset(new DynamicParamsVM(&m_data->m_params));
     m_resultData.reset(new DynamicResultDataVm(&m_data->m_data));
 }

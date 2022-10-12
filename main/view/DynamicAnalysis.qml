@@ -1,5 +1,6 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.0
+import QtQuick.Controls 1.0
 import QtQuick.Window 2.3
 import QtQml 2.2
 import QtQuick.Controls.Styles 1.4
@@ -111,6 +112,44 @@ Item
                         source:"/previewImage/Dynamic.bmp";
                         range:root.range;
                         Component.onCompleted: {root.refresh.connect(refresh);}
+                        visible: report==0;
+                    }
+
+                    Column
+                    {
+                        anchors.fill: parent;
+                        Row{
+                            width: scrollView.width-20;height: parent.height/21;
+                            Repeater{
+                                model:["等视标识线","离心度起点","子午线起点","离心度停止","子午线停止","刺激亮度反应"]
+                                CusText{width:parent.width/6;text:modelData;font.pointSize: fontPointSize;}
+                            }
+                        }
+                        ScrollView
+                        {
+                            width: parent.width;height: parent.height*20/21;
+                            horizontalScrollBarPolicy: 1
+                            verticalScrollBarPolicy: 0
+                            clip: true
+                            id:scrollView;
+                            Column
+                            {
+                                width: scrollView.width-20;
+                                height: (currentCheckResult.resultData.checkData.length)/20*scrollView.height;
+                                Repeater
+                                {
+                                    model:currentCheckResult.resultData.checkData
+                                    Row{
+                                        width:parent.width;height:scrollView.height/20;
+                                        Repeater
+                                        {
+                                            model:[modelData.name,modelData.start.x,modelData.start.y,modelData.end.x,modelData.end.y,modelData.isSeen]
+                                            CusText{width:parent.width/6;height: parent.height;font.pointSize:fontPointSize;text:modelData;}
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

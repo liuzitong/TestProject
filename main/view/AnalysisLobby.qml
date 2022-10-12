@@ -159,7 +159,7 @@ Column {
                         height: parent.height;width: height*3.5;
                         enabled: currentCheckResult!==null;
                         property var listModel:ListModel {}
-                        property var reportNames: [["常规分析","三合一图","总览图","三合一图","阈值图"],["筛选"],["动态"]]
+                        property var reportNames: [["常规分析","三合一图","总览图","三合一图","阈值图"],["筛选"],["动态","动态数据"]]
                         comboBox.model: listModel;popDirectionDown: false;complexType: true;
                         button.text: "分析";
                         button.onClicked:
