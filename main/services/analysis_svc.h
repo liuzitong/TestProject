@@ -53,7 +53,7 @@ public:
 
     void drawScreening(QVector<int> values,QVector<QPointF> locs,int range,int OS_OD,QImage& img);
 
-    void drawDynamic(QVector<QPointF> values,int range,QImage& img);
+    void drawDynamic(QVector<QPointF> values,QVector<QString> dotNames,int range,QImage& img,float minificationFactor=1.0,bool isReport=false);
 
     void drawVisionFieldIsland(QVector<int> values,QVector<QPointF> locs,int range,int innerRange,QImage& img);
 

@@ -54,12 +54,14 @@ private:
     QString m_previewFolder="./previewImage/";
     QString m_reportFolder="./reportImage/";
     QVector<QPointF> m_values;
+    QVector<QString> m_dotNames;
     QVector<int> m_fixationValues;
     int m_type,m_range;
     DynamicCheckResultModel m_checkResult;
     DynamicProgramModel m_program;
     PatientModel m_patient;
 };
+
 
 }
 #endif // GENERAL_ANALYSIS_VM_H

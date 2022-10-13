@@ -117,6 +117,7 @@ Item
 
                     Column
                     {
+                        visible: report==1;
                         anchors.fill: parent;
                         Row{
                             width: scrollView.width-20;height: parent.height/21;
@@ -143,7 +144,7 @@ Item
                                         width:parent.width;height:scrollView.height/20;
                                         Repeater
                                         {
-                                            model:[modelData.name,modelData.start.x,modelData.start.y,modelData.end.x,modelData.end.y,modelData.isSeen]
+                                            model:[modelData.name,modelData.start.x,modelData.start.y,modelData.end.x,modelData.end.y,modelData.isSeen?"Seen":"UnSeen"]
                                             CusText{width:parent.width/6;height: parent.height;font.pointSize:fontPointSize;text:modelData;}
                                         }
                                     }

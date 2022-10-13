@@ -203,7 +203,7 @@ QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
         {
             fixationValues[i]=checkResult.m_data.fixationDeviation[i];
         }
-        analysisMethodSvc->drawDynamic(values,range,img);
+        analysisMethodSvc->drawDynamic(values,{},range,img);
     }
     info.fill(qRgb(255, 255, 255));
     QPainter painter(&info);

@@ -15,6 +15,7 @@ public:
 
     void createDynamicCheckResultData();
     void createCheckResultVm();
+    void TestReport();
 };
 }
 

@@ -1047,7 +1047,7 @@ void AnalysisSvc::drawScreening(QVector<int> values, QVector<QPointF> locs, int 
     }
 }
 
-void AnalysisSvc::drawDynamic(QVector<QPointF> values, int range, QImage& img)
+void AnalysisSvc::drawDynamic(QVector<QPointF> values,QVector<QString> dotNames,int range, QImage& img,float minificationFactor,bool isReport)
 {
 //    QImage img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
     img.fill(qRgb(255, 255, 255));
@@ -1057,16 +1057,21 @@ void AnalysisSvc::drawDynamic(QVector<QPointF> values, int range, QImage& img)
     painter.setBackground(QBrush(QColor("white")));
     painter.setBrush(QBrush(QColor("black")));
     painter.setPen({Qt::black,float(scale)});
-    qDebug()<<values.length();
 
+    int fontPixSize=qMin(int(img.width()/17*minificationFactor),!isReport?16:32);
+    QFont font("consolas");
+    font.setPixelSize(fontPixSize);
+    painter.setFont(font);
+    qDebug()<<values.length();
 
     for(int i=0;i<values.length();i++)
     {
-        qDebug()<<convertPolarToOrth(values[i]);
         auto begin=convertDegLocToPixLoc(convertPolarToOrth(values[i]),range,img);
-        qDebug()<<begin;
         auto end=convertDegLocToPixLoc(convertPolarToOrth(values[(i+1)%values.length()]),range,img);
-
+        if(!dotNames.isEmpty())
+        {
+            painter.drawText(QPoint{begin.x()+fontPixSize/4,begin.y()-fontPixSize/4},dotNames[i]);
+        }
         painter.drawLine(QLine(begin.x(),begin.y(),end.x(),end.y()));
         painter.drawEllipse(begin,3*scale,3*scale);
     }

@@ -21,8 +21,9 @@ void TestClass::test()
 {
 //    createPatientData();
 //    createCheckResultData();
-    createDynamicCheckResultData();
+//    createDynamicCheckResultData();
 //    createCheckResultVm();
+    TestReport();
 }
 
 void TestClass::createPatientData()
@@ -122,5 +123,36 @@ void TestClass::createCheckResultVm()
     qDebug()<<resultVm.getResultData()->getCheckData()[2];
 
 }
+
+void TestClass::TestReport()
+{
+    auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
+
+    reportEngine->loadFromFile("./reports/DynamicDotsInfo.lrxml");
+    auto manager=reportEngine->dataManager();
+    auto dataSource=manager->dataSource("bba");
+    auto model=dataSource->model();
+    model->insertRows(0,100);
+    for(int i=0;i<100;i++)
+    {
+        model->setData( model->index(i,0),"wawa");
+        model->setData( model->index(i,1),"wawa1");
+        model->setData( model->index(i,2),"wawa2");
+        model->setData( model->index(i,3),"wawa2");
+        model->setData( model->index(i,4),"wawa2");
+        model->setData( model->index(i,5),"wawa2");
+    }
+
+//    qDebug()<<model->data(QModelIndex( model->index(0,0)));
+//    QStringList simpleData;
+//    simpleData << "value1" << "value2" << "value3";
+//    QStringListModel* stringListModel = new QStringListModel();
+//    stringListModel->setStringList(simpleData);
+//    manager->addModel("bba.3",stringListModel,true);
+    reportEngine->setShowProgressDialog(true);
+    reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,50);
+    reportEngine->previewReport(/*LimeReport::PreviewHint::ShowAllPreviewBars*/);
+}
+
 
 }

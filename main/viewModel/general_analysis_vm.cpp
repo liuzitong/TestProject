@@ -392,9 +392,11 @@ DynamicAnalysisVm::DynamicAnalysisVm(const QVariantList &args)
 
     auto analysisMethodSvc=AnalysisSvc::getSingleton();
     m_values.resize(m_checkResult.m_data.checkData.size());
+    m_dotNames.resize(m_checkResult.m_data.checkData.size());
     for(int i=0;i<int(m_checkResult.m_data.checkData.size());i++)
     {
         m_values[i]={m_checkResult.m_data.checkData[i].end.x,m_checkResult.m_data.checkData[i].end.y};
+        m_dotNames[i]=m_checkResult.m_data.checkData[i].name.c_str();
     }
     qDebug()<<m_values;
     m_range=m_program.m_params.Range[1];
@@ -403,8 +405,9 @@ DynamicAnalysisVm::DynamicAnalysisVm(const QVariantList &args)
     {
         m_fixationValues[i]=m_checkResult.m_data.fixationDeviation[i];
     }
+
     QImage img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
-    analysisMethodSvc->drawDynamic(m_values,m_range,img);img.save(m_previewFolder+"Dynamic.bmp");
+    analysisMethodSvc->drawDynamic(m_values,m_dotNames,m_range,img);img.save(m_previewFolder+"Dynamic.bmp");
 
 }
 
@@ -418,12 +421,19 @@ void DynamicAnalysisVm::showReport(int report)
     auto analysisMethodSvc=AnalysisSvc::getSingleton();
     QImage img1100=QImage({1100,1100}, QImage::Format_RGB32);
     QImage imgFixation=QImage({322*2,27*2}, QImage::Format_RGB32);
-    analysisMethodSvc->drawDynamic(m_values,m_range,img1100);img1100.save(m_reportFolder+"Dynamic.bmp");
+    analysisMethodSvc->drawDynamic(m_values,m_dotNames,m_range,img1100,1.0,true);img1100.save(m_reportFolder+"Dynamic.bmp");
     analysisMethodSvc->drawFixationDeviation(m_fixationValues,imgFixation);imgFixation.save(m_reportFolder+"FixationDeviation.bmp");
 
 
     auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
-    reportEngine->loadFromFile("./reports/Dynamic.lrxml");
+    if(report==0)
+    {
+        reportEngine->loadFromFile("./reports/Dynamic.lrxml");
+    }
+    else
+    {
+        reportEngine->loadFromFile("./reports/DynamicDotsInfo.lrxml");
+    }
     auto manager=reportEngine->dataManager();
     manager->clearUserVariables();
     manager->setReportVariable("ProgramName",m_program.m_name);
@@ -457,9 +467,30 @@ void DynamicAnalysisVm::showReport(int report)
     QString cursorBrightness=QString::number(params.brightness);
 
     manager->setReportVariable("stimCursor","Stimulus: "+cursorSize+","+cursorColor+","+cursorSpeed+","+cursorBrightness);
-    manager->setReportVariable("testTime","Test Duration: "+time.toString("mm:ss"));
 
-    manager->setReportVariable("DynamicImagePath","./reportImage/Dynamic.bmp");
+
+    if(report==0)
+    {
+        manager->setReportVariable("DynamicImagePath","./reportImage/Dynamic.bmp");
+    }
+    else
+    {
+//        manager->addModel("band",&model,false);
+        auto data=m_checkResult.m_data.checkData;
+        auto dataSource=manager->dataSource("dotinfos");
+        auto model=dataSource->model();
+        model->insertRows(0,data.size());
+
+        for(int i=0;i<int(data.size());i++)
+        {
+            model->setData( model->index(i,0),data[i].name.c_str());
+            model->setData( model->index(i,1),QString::number(data[i].start.x,'f',0));
+            model->setData( model->index(i,2),QString::number(data[i].start.y,'f',0));
+            model->setData( model->index(i,3),QString::number(data[i].end.x,'f',0));
+            model->setData( model->index(i,4),QString::number(data[i].end.y,'f',0));
+            model->setData( model->index(i,5),data[i].isSeen?"Seen":"UnSeen");
+        }
+    }
 
     manager->setReportVariable("FixationDeviationImagePath","./reportImage/FixationDeviation.bmp");
     manager->setReportVariable("DoctorSign","DoctorSign: ");
@@ -467,11 +498,11 @@ void DynamicAnalysisVm::showReport(int report)
     manager->setReportVariable("deviceInfo","Device Info: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
     manager->setReportVariable("version", "Version: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
 
+
     reportEngine->setShowProgressDialog(true);
     reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,50);
     reportEngine->previewReport(/*LimeReport::PreviewHint::ShowAllPreviewBars*/);
 }
-
 
 
 }
