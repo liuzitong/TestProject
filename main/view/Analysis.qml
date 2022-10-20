@@ -23,7 +23,7 @@ Column {
     signal changePage(var pageName,var params);
 
     onRefresh: {
-        console.log("report type is "+report);
+//        console.log("report type is "+report);
         var type=currentProgram.type;
         if(type!==2)
         {
@@ -77,7 +77,7 @@ Column {
             Item{height: parent.height;width:parent.width*0.52;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;width: parent.width;anchors.horizontalCenter: parent.horizontalCenter
-                        CusButton{text:"重测";onClicked:{root.changePage("check",null);}}
+                        CusButton{text:"重测";onClicked:{root.changePage("check",{currentProgram:currentProgram});}}
                         CusButton{text:"新建患者";onClicked:{;root.changePage("patientManagement","createNewPatient");}}
                     }
                 }

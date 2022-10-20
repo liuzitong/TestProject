@@ -11,17 +11,27 @@ Item
 {
     id:root;
     signal refresh();
+    signal realTimePicRefresh(var count);
     property var currentPatient: null;
     property var currentProgram: null;
     property var currentCheckResult: null;
     property var analysisResult: null;
     property var analysisVm: null;
+    property int fontPointSize: CommonSettings.fontPointSize;
+    property int textHeight:CommonSettings.textHeight;
+    property var selectedDotIndex: analysisVm.selectedDotIndex;
     property var report:null;                           //0:常规,1:三合一,2:总览,3:筛选
     property string rx:"";
     width: 1366;
     height: 660;
-    property int fontPointSize: CommonSettings.fontPointSize;
-    property int textHeight:CommonSettings.textHeight;
+    onSelectedDotIndexChanged:{if(currentCheckResult==null) return;var count=currentCheckResult.drawRealTimeEyePosPic(selectedDotIndex);realTimePicRefresh(count);}
+//    onRealTimePicRefresh: {console.log(count);}
+
+
+
+
+
+
     onRefresh:
     {
         if(currentProgram.type===0)
@@ -137,10 +147,32 @@ Item
                     id:content;
                     width: parent.width*0.65;height:parent.height
                 }
-
             }
         }
-        Rectangle{width:parent.width*0.25;height: parent.height;color:"white";}
-    }
+        Rectangle{width:parent.width*0.25;height: parent.height;color:"white";
+            Grid{anchors.fill: parent;rows: 3;columns: 2;rowSpacing:(height-width/2*3)/2;columnSpacing: 0;
+                Repeater{model:[0,1,2,3,4,5]
+                    Image{
+                       property string picSource: "/realTimeEyePosPic/"+modelData+".bmp";
+                       height: width; fillMode: Image.PreserveAspectCrop;width: parent.width/2;smooth: false;cache: false;        //to refresh image
+                       Component.onCompleted:
+                       {
+                           root.realTimePicRefresh.connect(function(count)
+                           {
+                               source="";source="file:///" + applicationDirPath + picSource;
+                               visible=modelData<count;
+                           })
+                           root.refresh.connect(function(){visible=false;});
+                       }
+                    }
+                }
+                Component.onCompleted:
+                {
+                    root.refresh.connect(function(){visible=false;parent.color="white"});
+                    root.realTimePicRefresh.connect(function(count){visible=true;parent.color="grey"})
+                }
+            }
 
+        }
+    }
 }

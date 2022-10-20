@@ -156,12 +156,13 @@ StaticAnalysisVm::~StaticAnalysisVm()
 
 QPointF StaticAnalysisVm::getClickDot(float MouseX, float MouseY, float width, float height)
 {
-    qDebug()<<QString("x:%1,y:%2,w:%3,h:%4").arg(QString::number(MouseX)).arg(QString::number(MouseY)).arg(QString::number(width)).arg(QString::number(height));
+//    qDebug()<<QString("x:%1,y:%2,w:%3,h:%4").arg(QString::number(MouseX)).arg(QString::number(MouseY)).arg(QString::number(width)).arg(QString::number(height));
 
+    auto temp=m_selectedDotIndex;
     float x_degree=(MouseX/width-0.5)*m_range*2;
     float y_degree=-(MouseY/height-0.5)*m_range*2;
 
-    qDebug()<<QString("xdegre:%1,y:dgeree:%2").arg(QString::number(x_degree)).arg(QString::number(y_degree));
+//    qDebug()<<QString("xdegre:%1,y:dgeree:%2").arg(QString::number(x_degree)).arg(QString::number(y_degree));
 
     QPointF nearestDot;
     float nearest_dist_squared=10000;
@@ -176,12 +177,16 @@ QPointF StaticAnalysisVm::getClickDot(float MouseX, float MouseY, float width, f
             m_selectedDotIndex=i;
         }
     }
+    if(temp!=m_selectedDotIndex)
+    {
+        emit selectedDotIndexChanged();
+    }
     return nearestDot;
 }
 
 QPointF StaticAnalysisVm::getPixFromPoint(QPointF point, float width, float height)
 {
-    qDebug()<<QString("x:nearestDot:%1,y:nearestDot:%2").arg(QString::number(point.x())).arg(QString::number(point.y()));
+//    qDebug()<<QString("x:nearestDot:%1,y:nearestDot:%2").arg(QString::number(point.x())).arg(QString::number(point.y()));
 
     float pixPerDegW=float(width/2)/m_range;
     float pixPerDegH=float(height/2)/m_range;
@@ -215,7 +220,7 @@ void StaticAnalysisVm::showReport(int report)
         {
             analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550,1.0,true);img550.save(m_reportFolder+"dBDiagram.bmp");
             analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img550);img550.save(m_reportFolder+"gray.bmp");
-            analysisMethodSvc->drawDefectDepth(m_dev,m_locs,m_range,img550);img550.save(m_reportFolder+"defectDepth.bmp");
+            analysisMethodSvc->drawDefectDepth(m_dev,m_locs,m_range,img550,1.0,true);img550.save(m_reportFolder+"defectDepth.bmp");
         }
         else if(report==2)
         {
@@ -465,7 +470,7 @@ void DynamicAnalysisVm::showReport(int report)
     QString cursorColor;switch(int(params.cursorColor)){case 0:cursorColor="White";break;case 1:cursorColor="Red";break;case 2:cursorColor="Blue";break;}
     QString cursorSpeed=QString::number(params.speed);
     QString cursorBrightness=QString::number(params.brightness);
-
+    manager->setReportVariable("testTime","Test Duration: "+time.toString("mm:ss"));
     manager->setReportVariable("stimCursor","Stimulus: "+cursorSize+","+cursorColor+","+cursorSpeed+","+cursorBrightness);
 
 

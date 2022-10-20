@@ -14,13 +14,13 @@ Row{
     property string textBottom: ""
     property int range;
     property var analysisVm: null;
-    signal refresh;
-    signal clearDot;
-    signal clicked;
     property var dot: null;
     property alias canvas: canvas;
     width: parent.height;height:parent.height;
     property int fontSize:CommonSettings.fontPointSize;
+    signal refresh;
+    signal clearDot;
+    signal clicked;
 
 //    anchors.horizontalCenter: parent.horizontalCenter;
     Column{
@@ -35,7 +35,6 @@ Row{
             Component.onCompleted:
             {
                 root.clearDot.connect(function(){
-//                    console.log("cleardot");
                     dot=null;
                     requestPaint();
                 })
@@ -45,7 +44,7 @@ Row{
             {
                 if(dot==null) return;
                 var pix=analysisVm.getPixFromPoint(dot,width,height);
-                console.log(pix.x+" "+pix.y);
+//                console.log(pix.x+" "+pix.y);
                 var dotRadius=width/25;
                 var ctx = getContext("2d");
                 ctx.lineWidth = 0;

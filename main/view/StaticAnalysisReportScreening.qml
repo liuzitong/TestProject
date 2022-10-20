@@ -16,7 +16,7 @@ Item {
     anchors.fill: parent;
     property var analysisResult: null;
     property var analysisVm: null;
-
+    onRefresh: clearDot();
     Row
     {
         anchors.fill: parent

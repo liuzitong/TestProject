@@ -16,7 +16,7 @@ Item {
     property int range: currentProgram.params.commonParams.Range[1];
     property var analysisResult: null;
     property var analysisVm: null;
-
+    onRefresh: clearDot();
     AnalysisDiagram{
 //                id:defect;
         width: height;height:parent.height*0.5*1.25;

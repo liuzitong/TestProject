@@ -18,6 +18,7 @@ public:
     int m_OS_OD;                       //0左眼 OS,1右眼 OD
     QString m_params;
     QString m_data;
+    QByteArray m_blob;
     QString m_diagnosis;
     QDateTime m_time;
     Patient_ptr m_patient;

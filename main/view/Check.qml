@@ -19,14 +19,20 @@ Item {id:root; width: 1366;height: 691
     property var currentPatient: null;
     property var currentCheckResult: null;
     property var analysisVm: null;
-    signal enterPage();
+    signal refresh();
     property int fontPointSize: CommonSettings.fontPointSize;
+    signal realTimePicRefresh(var count);
 
-    onEnterPage: {
+    onCurrentCheckResultChanged: {realTimeDBRec.visible=false;}
+//    property var selectedDotIndex;
+//    onSelectedDotIndexChanged:{if(currentCheckResult==null) return;var count=currentCheckResult.drawRealTimeEyePosPic(selectedDotIndex);realTimePicRefresh(count);}
+
+
+    onRefresh: {
         var program_id=IcUiQmlApi.appCtrl.settings.defaultProgramId;
         var program_type=IcUiQmlApi.appCtrl.settings.defaultProgramType;
-        console.log(program_id);
-        console.log(program_type);
+//        console.log(program_id);
+//        console.log(program_type);
         if (currentProgram!==null)
         {
             if(currentProgram.type!==2)
@@ -47,7 +53,18 @@ Item {id:root; width: 1366;height: 691
 
     Column{anchors.fill: parent;
         Rectangle{width: parent.width; height: parent.height*14/15; id:content;
-            ChooseProgram{id:chooseProgram;anchors.fill: parent;onOk:{root.currentProgram=currentProgram;currentProgram.type!==2?staticParamsSetting.currentProgram=currentProgram:dynamicParamsSetting.currentProgram=currentProgram;}}
+            ChooseProgram{id:chooseProgram;anchors.fill: parent;
+                onOk:{
+                    root.currentProgram=currentProgram;
+                    currentProgram.type!==2?staticParamsSetting.currentProgram=currentProgram:dynamicParamsSetting.currentProgram=currentProgram;
+                    if(currentCheckResult.type!==2)
+                        IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticCheckResultVm",currentCheckResult);
+
+                    else
+                        IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicCheckResultVm",currentCheckResult);
+                    currentCheckResult=null;
+                }
+            }
             DynamicParamsSetting{id:dynamicParamsSetting;anchors.fill: parent;onDataRefreshed:root.currentProgramChanged();}
             StaticParamsSetting{id:staticParamsSetting;anchors.fill: parent;isCustomProg:false;onDataRefreshed:{root.currentProgramChanged();}}
             Item{anchors.fill: parent;anchors.margins: 2;
@@ -133,7 +150,7 @@ Item {id:root; width: 1366;height: 691
                                                 CusText{text:"测试点数"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.checkData.length;
-                                                    property var totalDots: currentProgram===null?0:currentProgram.dots.length;
+                                                    property var totalDots: currentProgram===null?0:currentProgram.data.dots.length;
                                                     text:checkedDots+"/"+totalDots;width: parent.width*0.7;textInput.readOnly: true;
                                                 }
                                             }
@@ -150,7 +167,7 @@ Item {id:root; width: 1366;height: 691
                         }
                     }
                     Rectangle{ width: parent.width*0.25-2;height:parent.height;color: backGroundColor;
-                        Item{anchors.fill: parent;anchors.margins: parent.height*0.02
+                        Item{anchors.fill: parent;anchors.margins: parent.height*0.02;
                             Column{id: column;anchors.fill: parent;spacing:/*(height-videoArea.height-controlPanel.height-eyeOptionsGroup.height)/2*/height*0.03;
                                 Item{id:videoArea; width: parent.width*0.83;height: width*3/4;anchors.horizontalCenter: parent.horizontalCenter;
                                     Rectangle{anchors.fill: parent;color:"black";}
@@ -191,13 +208,40 @@ Item {id:root; width: 1366;height: 691
                                 }
                             }
                         }
+                        Rectangle{ id: realTimeDBRec;visible:false;anchors.fill: parent;anchors.margins: parent.height*0.02;color:"grey";z:1;
+                            CusButton{anchors.right: parent.right;  anchors.top: parent.top;anchors.topMargin: 0; anchors.rightMargin: 0;z:1; imageHightScale: 1;height:image.sourceSize.height; width:image.sourceSize.width; rec.visible: false;imageSrc: "qrc:/Pics/base-svg/window_4close_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/window_4close_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/window_4close_3press.svg";onClicked: parent.visible=false;}
+                            Grid{anchors.fill: parent;rows: 3;columns: 2;rowSpacing:(height-width/2*3)/2;columnSpacing: 0;
+                                Repeater{model:[0,1,2,3,4,5]
+                                    Image{
+                                       property string picSource: "/realTimeEyePosPic/"+modelData+".bmp";
+                                       height: width; fillMode: Image.PreserveAspectCrop;width: parent.width/2;smooth: false;cache: false;        //to refresh image
+                                       Component.onCompleted:
+                                       {
+                                           root.realTimePicRefresh.connect(function(count)
+                                           {
+                                               source="";source="file:///" + applicationDirPath + picSource;
+                                               visible=modelData<count;
+                                           })
+                                           root.refresh.connect(function(){visible=false;});
+                                       }
+                                    }
+                                }
+                            }
+                        }
                     }
                     Rectangle{width: parent.width*0.5;height: parent.height;color:backGroundColorCheckPanel;
                         CusText{
                             id:os_od;font.pointSize: fontPointSize*2;
                             property int value: 0;
                             text:value===0?"左眼":"右眼"; z: 1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;height: parent.height*0.05;}
-                        CheckDisplay{id:checkDisplay; currentProgram:root.currentProgram;currentCheckResult:root.currentCheckResult}
+                        CheckDisplay{id:checkDisplay; currentProgram:root.currentProgram;currentCheckResult:root.currentCheckResult;
+                            onClickedDotIndexChanged: {
+                                if(currentCheckResult==null) return;
+                                realTimeDBRec.visible=true;
+                                var count=currentCheckResult.drawRealTimeEyePosPic(clickedDotIndex);
+                                realTimePicRefresh(count);
+                            }
+                        }
                     }
                 }
             }
@@ -225,21 +269,31 @@ Item {id:root; width: 1366;height: 691
                             property int checkState: IcUiQmlApi.appCtrl.checkSvc.checkState;
                             height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
                             CusButton{
-                                text:/*(checkControl.checkState>=2)?"开始测试":"暂停测试";*/
-                                {if(checkControl.checkState>=3) return "开始测试";if(checkControl.checkState==2) return "恢复检查";if(checkControl.checkState==1) return "暂停检查"}
+                                text:"开始测试";
+//                                {if(checkControl.checkState>=3) return "开始测试";if(checkControl.checkState==2) return "恢复检查";if(checkControl.checkState==1) return "暂停检查"}
                                 onClicked:{
-                                    if(currentCheckResult!=null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
+                                    if(currentCheckResult!=null)
+                                    {
+                                        if(currentCheckResult.type!==2)
+                                            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticCheckResultVm",currentCheckResult);
+
+                                        else
+                                            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicCheckResultVm",currentCheckResult);
+                                        currentCheckResult=null;
+                                    }
+
                                     if(currentProgram.type===0)
                                     {
-                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[1]);
+                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticCheckResultVm", false,[1]);
+                                        console.log(currentCheckResult.resultData.testTimespan);
                                     }
                                     else if(currentProgram.type===1)
                                     {
-                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[200]);
+                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticCheckResultVm", false,[200]);
                                     }
                                     else
                                     {
-                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[300]);
+                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicCheckResultVm", false,[300]);
                                     }
 
 //                                    console.log(checkControl.checkState);
@@ -282,11 +336,11 @@ Item {id:root; width: 1366;height: 691
                         }
 
                         CusComboBoxButton{
-                            id:queryStrategy;anchors.right: parent.right;
-                            height: parent.height;width: height*3.5;
+                            id:queryStrategy;
+                            height: parent.height; anchors.right: parent.right; anchors.rightMargin: 0;width: height*3.5;
                             enabled: currentCheckResult!==null;
                             property var listModel:ListModel {}
-                            property var reportNames: ["常规分析","三合一图","总览图","筛选","标准动态","盲区","暗区","直线"]
+                            property var reportNames: [["常规分析","三合一图","总览图","三合一图","阈值图"],["筛选"],["动态","动态数据"]]
                             comboBox.model: listModel;popDirectionDown: false;complexType: true;
                             button.text: "分析";
                             button.onClicked:
@@ -302,15 +356,25 @@ Item {id:root; width: 1366;height: 691
                             function analysis(report)
                             {
                                 var diagramWidth;
-                                switch (report)
+                                switch (currentProgram.type)
                                 {
-                                case 0:diagramWidth=root.height*14/15*0.92*0.97/3*1.25*0.8;break;
-                                case 1:diagramWidth=root.height*14/15*0.92*0.47*0.8;break;
-                                case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
-                                case 3:case 4:case 5:case 6:case7:diagramWidth=root.height*14/15*0.92*0.8;break;
+                                case 0:
+                                    switch (report)
+                                    {
+                                    case 0:diagramWidth=root.height*14/15*0.92*0.97/3*1.25*0.8;break;
+                                    case 1:diagramWidth=root.height*14/15*0.92*0.47*0.8;break;
+                                    case 2:diagramWidth=root.height*14/15*0.92*0.40*0.8;break;
+                                    case 3:diagramWidth=root.height*14/15*0.92*0.5;break;                                                      //三合一
+                                    case 4:diagramWidth=root.height*14/15*0.92*0.8;break;                                                      //阈值图
+                                    }
+                                    break;
+                                case 1:
+                                    diagramWidth=root.height*14/15*0.92*0.8;break;
+                                case 2:
+                                    diagramWidth=root.height*14/15*0.92*0.8;break;
                                 }
-//                                var analysisResult=IcUiQmlApi.appCtrl.analysisSvc.runProcess(report,currentPatient,currentCheckResult,currentProgram,diagramWidth);
-//                                changePage("analysis",{pageFrom:"check",report:report,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
+
+
                                 var analysisResult=null;
                                 if(analysisVm!=null)
                                 {
@@ -320,23 +384,28 @@ Item {id:root; width: 1366;height: 691
                                 if(currentProgram.type!==2)
                                 {
                                     analysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticAnalysisVm", false,[currentCheckResult.id,diagramWidth,report]);
-                                    analysisResult=analysisVm.getResult();
+                                    if(report===0||report===2)//三合一不用获取结果
+                                    {
+                                        analysisResult=analysisVm.getResult();
+                                    }
                                 }
                                 else
                                 {
                                     analysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicAnalysisVm", false,[currentCheckResult.id,diagramWidth,report]);
                                 }
-
                                 changePage("analysis",{pageFrom:"check",report:report,analysisVm:analysisVm,program:currentProgram,checkResult:currentCheckResult,analysisResult:analysisResult});
                             }
 
                             Component.onCompleted: {
                                 root.currentProgramChanged.connect(function()
                                 {
+    //                                console.log(currentProgram.type);
                                     listModel.clear();
                                     var report=currentProgram.report;
+    //                                console.log(report[0])
                                     report.forEach(function(item){
-                                        listModel.append({name:reportNames[item],report:item});
+    //                                    console.log(item);
+                                        listModel.append({name:reportNames[currentProgram.type][item],report:item});
                                     })
                                     comboBox.currentIndex=0;
                                 })

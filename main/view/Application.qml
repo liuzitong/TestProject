@@ -10,11 +10,12 @@ import perimeter.main.view.Utils 1.0
 
 
 Window {
-    id: window;visible: true;width: 1366;height: 768;title: qsTr("Hello World");
+    id: window;visible: true;width: 1366;height: 768;title: qsTr("Perimeter");
     minimumWidth: 1366;minimumHeight: 768;property string currentpage: "Login";
     property string language: IcUiQmlApi.appCtrl.settings.language
     Content{id:content;anchors.fill: parent;}
     Login{id:login;visible: false;anchors.fill: parent;}
+
 
     Component.onCompleted: {idPriv.init();content.changePage.connect(changePage);login.changePage.connect(changePage);CommonSettings.windowHeight=height;}
 

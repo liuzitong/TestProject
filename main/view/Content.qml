@@ -28,14 +28,10 @@ Rectangle {
         Rectangle{
             id:topRibbon;width: parent.width;height: parent.height*0.1;color: "#333e44";
             CusButton{imageHightScale: 1;height:image.sourceSize.height;width:image.sourceSize.width; anchors.right: parent.right;  anchors.top: parent.top; rec.visible: false;imageSrc: "qrc:/Pics/base-svg/window_4close_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/window_4close_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/window_4close_3press.svg";onClicked: Qt.quit()}
-            Item{
-                anchors.fill: parent;anchors.margins:parent.height*0.07;
-                Column{
-                    anchors.fill:parent;spacing: height*0.1
-                    Item{
-                        width: parent.width;height: parent.height*0.30;
-                        Flow{
-                            height:parent.height;spacing: height*0.2
+            Item{anchors.fill: parent;anchors.margins:parent.height*0.07;
+                Column{anchors.fill:parent;spacing: height*0.1
+                    Item{width: parent.width;height: parent.height*0.30;
+                        Flow{height:parent.height;spacing: height*0.2
                             Image {width: height;height: parent.height;source: "qrc:/Pics/user-svg/0syseye_logo.svg";}
                             CusText{text:"电脑自动视野仪系统"; horizontalAlignment: Text.AlignLeft;color: "white";font.pointSize: height*0.5;width:height*10;}
 
@@ -133,7 +129,6 @@ Rectangle {
 
             function changePage(pageName,params)
             {
-                console.log("change to page "+pageName);
                 patientPage.visible=false;
                 checkPage.visible=false;
                 progressAnalysisLobbyPage.visible=false;
@@ -185,7 +180,8 @@ Rectangle {
                     case "check":
                         checkPage.visible=true;
 //                        checkPage.rePaintCanvas();
-                        if(params.pageFrom==="patientManagement") checkPage.enterPage();          //区别是从其它页面返回
+                        if(params.pageFrom==="patientManagement") checkPage.refresh();          //区别是从其它页面返回
+                        else {checkPage.currentProgram=params.currentProgram;}
                         patientContentButton.image.source=patientContentButton.imageSrc;
                         checkContentButton.image.source=checkContentButton.pressImageSrc;
                         seperator1.opacity=0;

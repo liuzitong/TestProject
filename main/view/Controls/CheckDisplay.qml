@@ -7,24 +7,27 @@ Item{
     property alias displayCanvas: displayCanvas;
     property var currentProgram: null;
     property var currentCheckResult:null;
-    property var dBList:[];
-    property var dotList:[];
+    property int clickedDotIndex: -1;
+//    property var dotList:[];
+//    property int state:0;                        //0:idle 1:started testing;
+//    signal refresh;
+//    onRefresh: displayCanvas.requestPaint();
+//    signal clickedDotIndex(var index);
 
-    property int state:0;                        //0 no started;
+//    onClickedDotIndex: {console.log(index);}
 
     onCurrentProgramChanged: {
-        if(currentProgram.type!==2)
-        {
-            range=currentProgram.params.commonParams.Range[1];
-        }
-        else
-        {
-            range=currentProgram.params.Range[1];
-        }
-
-        dotList=currentProgram.dots;
+//        if(currentProgram.type!==2)
+//            range=currentProgram.params.commonParams.Range[1];
+//            range=currentProgram.params.Range[1];
         displayCanvas.requestPaint();
     }
+    onCurrentCheckResultChanged: {
+        clickedDotIndex=-1;
+        displayCanvas.requestPaint();
+    }
+
+
 
     signal painted();
     antialiasing: true
@@ -37,14 +40,39 @@ Item{
 
     Canvas{
         id:displayCanvas;
-        property int degreeRange: 0;
+        property int degreeRange: currentProgram.type!==2?currentProgram.params.commonParams.Range[1]:currentProgram.params.Range[1];
         anchors.fill: parent;
         property double diameter: height-heightMargin*2;
         property double widthMargin: (width-diameter)/2;
         property double heightMargin:height*0.015;
         property int fontSize: diameter*0.022;
-        smooth: false
-
+        smooth: false;
+        MouseArea{
+            anchors.fill: parent;
+            onClicked:{
+//                console.log(mouseX);console.log(mouseY);
+//                console.log(displayCanvas.pixCoordToDot(mouseX,mouseY).x);
+//                console.log(displayCanvas.pixCoordToDot(mouseX,mouseY).y);
+                if(currentCheckResult===null) return;
+                var dotClicked=displayCanvas.pixCoordToDot(mouseX,mouseY);
+                var dotList=currentProgram.data.dots;
+                var dist=Math.pow(10,6);
+                var index;
+                for(var i=0;i<dotList.length;i++)
+                {
+                    var dot=dotList[i];
+                    var temp=Math.pow(dot.x-dotClicked.x,2)+Math.pow(dot.y-dotClicked.y,2)
+                    if(temp<dist)
+                    {
+                        dist=temp;
+                        index=i;
+                    }
+                }
+//                clickedDotIndex(index);
+                clickedDotIndex=index;
+                displayCanvas.requestPaint();
+            }
+        }
 
         function drawDashCircle(x, y, radius, length)
         {
@@ -62,6 +90,9 @@ Item{
                 ctx.closePath();
             }
         }
+
+
+
 
         function drawDashLine(pointBegin,radius,angle,length)
         {
@@ -108,6 +139,16 @@ Item{
             return {x:dot_x,y:dot_y};
         }
 
+        function dotToPixCoord(dot_x,dot_y)
+        {
+            var pix_coordX=(diameter/2)/degreeRange*dot_x;
+            var pix_coordY=(diameter/2)/degreeRange*dot_y;
+            console.log(pix_coordX);console.log(pix_coordY);
+            var pix_x=pix_coordX+width/2;
+            var pix_y=-pix_coordY+height/2;
+            return {x:pix_x,y:pix_y};
+        }
+
         function polarToOrth(dot)
         {
             var radius=dot.x;
@@ -146,6 +187,17 @@ Item{
             ctx.stroke();
             ctx.closePath();
         }
+
+        function drawDB(db,dot)
+        {
+//            console.log(dot.x);
+//            console.log(dot.y);
+//            console.log(db);
+            var x_pix=(dot.x/degreeRange)*(diameter*0.5)+width/2;
+            var y_pix=(-dot.y/degreeRange)*(diameter*0.5)+height/2;
+            drawText(db,x_pix,y_pix);
+        }
+
 
 
         function drawAxisEndText(string,x_pix,y_pix,size)
@@ -238,11 +290,42 @@ Item{
                 }
             }
 
-            dotList.forEach(function(item){drawDot(item);})
+            if(root.currentCheckResult==null)
+            {
+                currentProgram.data.dots.forEach(function(item)
+                {
 
+                    drawDot(item);
+                })
+            }
+            else
+            {
+                if(currentProgram.type===0)
+                {
+//                    console.log(currentCheckResult.diagnosis);
+                    var dBList=currentCheckResult.resultData.checkData;
+                    var dotList=currentProgram.data.dots;
+                    for(i=0;i<dotList.length;i++)
+                    {
+                        drawDB(dBList[i],dotList[i]);
+                    }
+                }
+            }
+//            console.log(clickedDotIndex);
+            if(currentProgram.type!==2&clickedDotIndex!=-1)
+            {
+                var clickedDot=currentProgram.data.dots[clickedDotIndex];
+                var pixLoc=dotToPixCoord(clickedDot.x,clickedDot.y);
+//                console.log(pixLoc);console.log(pixLoc.y);
+                ctx.lineWidth = 0;
+                ctx.strokeStyle = "blue";
+                ctx.beginPath();
+                ctx.arc(pixLoc.x, pixLoc.y, diameter/40, 0, Math.PI*2);
+                ctx.closePath();
+                ctx.stroke();
+                root.painted();
+            }
 
-
-            root.painted();
         }
     }
 }

@@ -25,8 +25,6 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
     property int fontPointSize: CommonSettings.fontPointSize;
 
-    onCurrentProgramChanged:console.log("changed");
-
 
 
 
@@ -56,7 +54,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"参数设置"; anchors.right: parent.right; anchors.rightMargin: height*0.5;font.pointSize:fontPointSize;}
+                    CusText{text:"参数设置";horizontalAlignment: Text.AlignLeft;height:parent.height; anchors.left: parent.left; anchors.leftMargin:height*0.5;font.pointSize:fontPointSize;}
                 }
                 Column{
                     width: parent.width;height: parent.height-header.height;
@@ -332,16 +330,16 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 //
                             CusButton{text:"取消";onClicked: idPopup.close();}
                             CusButton{text:"确定";onClicked:{ok();idPopup.close();dataRefreshed();}}
-                             CusButton{text:"aa";onClicked:{
-                                     console.log(currentProgram.params.commonParams.cursorSize) ;
-                                     console.log(currentProgram.params.fixedParams.stimulationTime) ;
-                                     stim.value=currentProgram.params.fixedParams.stimulationTime;
-//                                     console.log(intevalTimeididid.value);
+//                             CusButton{text:"aa";onClicked:{
+//                                     console.log(currentProgram.params.commonParams.cursorSize) ;
+//                                     console.log(currentProgram.params.fixedParams.stimulationTime) ;
+//                                     stim.value=currentProgram.params.fixedParams.stimulationTime;
+////                                     console.log(intevalTimeididid.value);
 
-//                                     intevalTimeididid.value+=currentProgram.params.commonParams.intervalTime;
-//                                     intevalTimeididid.value=currentProgram.params.commonParams.intervalTime;
+////                                     intevalTimeididid.value+=currentProgram.params.commonParams.intervalTime;
+////                                     intevalTimeididid.value=currentProgram.params.commonParams.intervalTime;
 
-                                 }}
+//                                 }}
                         }
                     }
                 }

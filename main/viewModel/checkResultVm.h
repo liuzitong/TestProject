@@ -154,9 +154,12 @@ public:
     Q_INVOKABLE virtual ~StaticCheckResultVm()=default;
     Q_INVOKABLE void insert();
     Q_INVOKABLE void update();
+    Q_INVOKABLE int drawRealTimeEyePosPic(int index);
 
     StaticParamsVM* getParams(){return m_params.data();}void setParams(StaticParamsVM* other){*m_params=*other;}
     StaticResultDataVm* getResultData(){return m_resultData.data();}
+
+    QSharedPointer<StaticCheckResultModel> getData(){return m_data;}
 private:
     QSharedPointer<StaticCheckResultModel> m_data;
     QSharedPointer<StaticParamsVM> m_params;

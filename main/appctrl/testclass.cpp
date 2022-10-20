@@ -23,7 +23,13 @@ void TestClass::test()
 //    createCheckResultData();
 //    createDynamicCheckResultData();
 //    createCheckResultVm();
-    TestReport();
+//    TestReport();
+    makePicData();
+//    makePic();
+//    drawPicData();
+//testData();
+//    serialization();
+
 }
 
 void TestClass::createPatientData()
@@ -91,7 +97,7 @@ void TestClass::createCheckResultData()
     checkModel.m_data.fixationDeviation={1,2,3,4};
     checkModel.m_data.falseNegativeCount=1;
     checkModel.m_data.checkData={2,3,4,5};
-    checkModel.m_data.pic={{{"30","aaaa"},{"40","bbbbb"}},{{"30","aaaa"},{"40","bbbbb"}}};
+    checkModel.m_data.realTimeDB={{22},{24,23},{32,25,14},{32,25,14,44},{13,25,14,32,21},{13,25,44,32,26,42},{13,25,14,32,21},{32,25,14,44},{32,25,14},{24,23},{22}};
 
     auto pp=checkModel.ModelToDB();
     qx::dao::insert(pp);
@@ -112,8 +118,7 @@ void TestClass::createDynamicCheckResultData()
     checkModel.m_data.fixationDeviation={1,2,3,4};
     checkModel.m_data.checkData={{"A",{50,45},{50,45},true},{"B",{50,135},{50,135},true},{"C",{50,225},{50,225},true},{"D",{50,315},{50,315},true}};
 
-    auto pp=checkModel.ModelToDB();
-    qx::dao::insert(pp);
+
 
 }
 
@@ -152,6 +157,128 @@ void TestClass::TestReport()
     reportEngine->setShowProgressDialog(true);
     reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,50);
     reportEngine->previewReport(/*LimeReport::PreviewHint::ShowAllPreviewBars*/);
+}
+
+void TestClass::makePicData()
+{
+    StaticCheckResultVm checkResultVm(QVariantList{1});
+    auto resultModel=checkResultVm.getData();
+    resultModel->m_data.realTimeDB={{22},{24,23},{32,25,14},{32,25,14,44},{13,25,14,32,21},{13,25,44,32,26,42},{13,25,14,32,21},{32,25,14,44},{32,25,14},{24,23},{22}};
+
+    QByteArray byteArr;
+    byteArr.fill(uchar(255),320*240);
+    auto dbData=resultModel->m_data.realTimeDB;
+    qDebug()<<dbData.size();
+    for(quint8 i=0;i<dbData.size();i++)
+    {
+        int number=0;
+        for(quint8 j=0;j<dbData[i].size();j++)
+        {
+            number++;
+            for(int h=0;h<240;h++)
+            {
+                for(int w=0;w<320;w++)
+                {
+                    byteArr.data()[h*320+w]=w*number%255;
+                }
+            }
+            resultModel->m_blob.append(byteArr);
+        }
+    }
+    auto pp=resultModel->ModelToDB();
+    qx::dao::update(pp);
+
+
+}
+
+void TestClass::makePic()
+{
+
+    QByteArray byteArr;
+    byteArr.fill(uchar(255),320*240);
+    for(int h=0;h<240;h++)
+    {
+        for(int w=0;w<320;w++)
+        {
+            byteArr.data()[h*320+w]=w%255;
+        }
+    }
+    QImage img((uchar*)byteArr.data(),320,240,QImage::Format_Grayscale8);
+    img.save(R"(C:\Users\syseye\Desktop\Pic\generated.bmp)");
+}
+
+void TestClass::drawPicData()
+{
+    StaticCheckResultVm checkResultVm(QVariantList{1});
+    auto resultModel=checkResultVm.getData();
+    auto pic=resultModel->m_blob;
+    int picCount=pic.size()/(320*240);
+    qDebug()<<picCount;
+    for(int i=0;i<picCount;i++)
+    {
+        auto qa=pic.mid(i*320*240,320*240);
+        QImage img((uchar*)qa.data(),320,240,QImage::Format_Grayscale8);
+        img.save(R"(C:\Users\syseye\Desktop\Pic\fromModel\)"+QString::number(i)+".bmp");
+    }
+//    auto byteArr=QByteArray::fromBase64(base64String.c_str());
+
+}
+
+void TestClass::serialization()
+{
+//    std::vector<std::vector<uint8_t[320*240]>> pic;
+//    for(int i=0;i<3;i++)
+//    {
+//        std::vector<uint8_t[320*240]> picA;
+//        for(int j=0;j<6;j++)
+//        {
+//            uint8_t bytes[320*240];
+//            memset(&bytes[0],i*j,320*240);
+//            picA.push_back(bytes);
+//        }
+//        pic.push_back(picA);
+//    }
+    //    qDebug()<<Utility::entityToQString(pic);
+}
+
+void TestClass::testData()
+{
+    CheckResult_ptr checkResult_ptr(new CheckResult());
+    checkResult_ptr->m_id=331;
+    qx::dao::fetch_by_id(checkResult_ptr);
+
+    auto blob=checkResult_ptr->m_blob;
+    for(int i=0;i<4;i++)
+    {
+        qDebug()<<QString::number(blob.data()[i]);
+    }
+}
+
+
+
+
+Folder TestClass::getFileListUnderDir(const QString &dirPath)
+{
+
+    Folder folder;
+//    QStringList fileList;
+    QDir dir(dirPath);
+    QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Dirs);
+    folder.name=dir.path();
+    foreach (auto fileInfo, fileInfoList) {
+        if(fileInfo.isDir())
+        {
+            folder.folders.append(getFileListUnderDir(fileInfo.absoluteFilePath()));
+        }
+
+        if(fileInfo.isFile())
+        {
+            qDebug() << __FUNCTION__ << __LINE__ << "  : " << fileInfo.absoluteFilePath();
+            folder.files.append( fileInfo.absoluteFilePath());
+        }
+    }
+    return folder;
+//    return fileList;
 }
 
 

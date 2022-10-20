@@ -16,6 +16,7 @@ Item {
     property int range: currentProgram.params.commonParams.Range[1];
     property var analysisResult: null;
     property var analysisVm: null;
+    onRefresh: clearDot();
 
     AnalysisDiagram{
         width: height;height:parent.height*0.8*1.25;

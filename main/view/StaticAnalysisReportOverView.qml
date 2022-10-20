@@ -15,7 +15,7 @@ Item {
     property int range: currentProgram.params.commonParams.Range[1];
     property var analysisResult: null;
     property var analysisVm: null;
-
+    onRefresh: clearDot();
     anchors.fill: parent;
     Column{anchors.fill: parent;spacing:height*0.2
         Row{ id: row;width: parent.width;height:parent.height*0.8/2;

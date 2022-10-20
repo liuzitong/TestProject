@@ -1,5 +1,7 @@
 #include "checkResultVm.h"
 #include "paramsVm.h"
+#include <QImage>
+#include <QPainter>
 namespace Perimeter
 {
 
@@ -27,6 +29,46 @@ void StaticCheckResultVm::update()
     auto sp=m_data->ModelToDB();
     qx::dao::update(sp);
 }
+
+int StaticCheckResultVm::drawRealTimeEyePosPic(int index)
+{
+    auto blob=m_data->m_blob;
+    auto realTimeDB=m_data->m_data.realTimeDB;
+    if(uint(index)>=realTimeDB.size()) return 0;
+    int picIndexStart=0;
+    for(int i=0;i<index;i++)
+    {
+        picIndexStart+=realTimeDB[i].size();
+    }
+//    int picCount=blob.size()/(320*240);
+    for(uint i=0;i<realTimeDB[index].size();i++)
+    {
+        int picIndex=picIndexStart+i;
+        auto qa=blob.mid(picIndex*320*240,320*240);
+        QImage img((uchar*)qa.data(),320,240,QImage::Format_Grayscale8);
+        img.save(R"(./realTimeEyePosPic/)"+QString::number(i)+".bmp");
+
+    }
+    return realTimeDB[index].size();
+}
+
+//void StaticCheckResultVm::drawPic(int index)
+//{
+////    auto picData=m_data->m_data.pic[index];
+////    for(uint i=0;i<picData.size();i++)
+////    {
+////        auto db=std::stoi(picData[i][0]);
+////        auto base64Str=picData[i][1].c_str();
+////        QByteArray byteArr=QByteArray::fromStdString(base64Str);
+////        QImage pic((const uchar *)byteArr.data(),320,240,QImage::Format_Grayscale8);
+////        QPainter painter(&pic);
+////        QFont font("consolas");
+////        font.setPixelSize(14);
+////        painter.setFont(font);
+////        painter.drawText(QPoint{300,220},QString::number(db)+"db");
+////        pic.save("./realTimeEye/"+QString::number(i)+".bmp");
+////    }
+//}
 
 DynamicCheckResultVm::DynamicCheckResultVm(const QVariantList &args)
 {

@@ -7,6 +7,7 @@
 #include <QQmlContext>
 #include <QSharedPointer>
 #include <QApplication>
+#include <QIcon>
 
 #include "perimeter/main/appctrl/perimeter_appctrl.hxx"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
@@ -156,6 +157,8 @@ int  main ( int argc, char *argv[] )
         qmlRegisterSingletonType(QUrl("qrc:/perimeter/main/view/Utils/CusUtils.qml"), "perimeter.main.view.Utils", 1, 0, "CusUtils");
 
         gPrintMemCntr("enter eventloop stage");
+
+        app.setWindowIcon(QIcon(":/Pics/base-svg/2logo_256_black.svg"));
         ret = app.exec();
         eng->deleteLater();
 

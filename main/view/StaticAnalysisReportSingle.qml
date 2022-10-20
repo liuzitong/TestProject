@@ -17,6 +17,7 @@ Item {
     property int range: currentProgram.params.commonParams.Range[1];
     property int fontPointSize: CommonSettings.fontPointSize;
     property int textHeight:CommonSettings.textHeight;
+    onRefresh: clearDot();
 
     anchors.fill: parent;
     Column{anchors.fill: parent;/*spacing:height*0.035*/

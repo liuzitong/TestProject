@@ -864,7 +864,7 @@ void AnalysisSvc::drawGray(QVector<int> values, QVector<QPointF> locs, int range
 //    {
 //        if(i.ry())
 //    }
-    qDebug()<<paintLocs;
+//    qDebug()<<paintLocs;
 
 
     for(int i=0;i<paintLocs.length();i++)
@@ -916,7 +916,6 @@ void AnalysisSvc::drawGray(QVector<int> values, QVector<QPointF> locs, int range
        if(paintLocs[i].x()>FLT_MIN) tempPoint.setX(paintLocs[i].x()+gap); else tempPoint.setX(paintLocs[i].x()-gap);   //偏移一个gap.呈现中间空白的效果
        if(paintLocs[i].y()>FLT_MIN) tempPoint.setY(paintLocs[i].y()+gap); else tempPoint.setY(paintLocs[i].y()-gap);
        auto pixLoc=convertDegLocToPixLoc(tempPoint,range,img);
-       qDebug()<<pixLoc;
        QString path=QString(":/grays/Gray")+QString::number(grayVal)+".bmp";
        QImage image(path);
        float scale;

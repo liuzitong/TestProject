@@ -200,10 +200,10 @@ Column {
                                 if(analysisVm.type!==2){ IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticAnalysisVm",analysisVm);}
                                     else{ IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicAnalysisVm",analysisVm);}
                             }
-                            if(currentProgram.type!==2) //三合一不用获取结果
+                            if(currentProgram.type!==2)
                             {
                                 analysisVm=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticAnalysisVm", false,[currentCheckResult.id,diagramWidth,report]);
-                                if(report===0||report===2)
+                                if(report===0||report===2)//三合一不用获取结果
                                 {
                                     analysisResult=analysisVm.getResult();
                                 }
@@ -218,12 +218,12 @@ Column {
                         Component.onCompleted: {
                             root.currentProgramChanged.connect(function()
                             {
-                                console.log(currentProgram.type);
+//                                console.log(currentProgram.type);
                                 listModel.clear();
                                 var report=currentProgram.report;
-                                console.log(report[0])
+//                                console.log(report[0])
                                 report.forEach(function(item){
-                                    console.log(item);
+//                                    console.log(item);
                                     listModel.append({name:reportNames[currentProgram.type][item],report:item});
                                 })
                                 comboBox.currentIndex=0;

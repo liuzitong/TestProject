@@ -26,7 +26,7 @@ struct StaticResultData:public ResultData
     int falseNegativeTestCount;
     int fixationLostCount;
     int fixationLostTestCount;
-    std::vector<std::vector<std::vector<std::string>>> pic;   //[点序号][每个点图片序号][1为DB大小,2为图片]
+    std::vector<std::vector<int>> realTimeDB;   //[点序号][每个点图片序号]
     std::vector<int> checkData;
 
     template<class Archive>
@@ -42,7 +42,7 @@ struct StaticResultData:public ResultData
         archive & BOOST_SERIALIZATION_NVP(falseNegativeTestCount);
         archive & BOOST_SERIALIZATION_NVP(fixationLostCount);
         archive & BOOST_SERIALIZATION_NVP(fixationLostTestCount);
-        archive & BOOST_SERIALIZATION_NVP(pic);
+        archive & BOOST_SERIALIZATION_NVP(realTimeDB);
         archive & BOOST_SERIALIZATION_NVP(checkData);
     }
 };
@@ -123,12 +123,14 @@ struct StaticCheckResultModel:public CheckResultModel
 {
     StaticParams m_params;
     StaticResultData m_data;
+    QByteArray m_blob;
 
     StaticCheckResultModel()=default;
     StaticCheckResultModel(CheckResult_ptr checkResult_ptr):CheckResultModel(checkResult_ptr)
     {
         m_params=Utility::QStringToEntity<StaticParams>(checkResult_ptr->m_params);
         m_data=Utility::QStringToEntity<StaticResultData>(checkResult_ptr->m_data);
+        m_blob=checkResult_ptr->m_blob;
     }
 
     CheckResult_ptr ModelToDB()
@@ -136,6 +138,7 @@ struct StaticCheckResultModel:public CheckResultModel
         auto pp=CheckResultModel::ModelToDB();
         pp->m_params=Utility::entityToQString(m_params);
         pp->m_data=Utility::entityToQString(m_data);
+        pp->m_blob=m_blob;
         return pp;
 
     }
