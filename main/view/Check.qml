@@ -208,26 +208,66 @@ Item {id:root; width: 1366;height: 691
                                 }
                             }
                         }
-                        Rectangle{ id: realTimeDBRec;visible:false;anchors.fill: parent;anchors.margins: parent.height*0.02;color:"grey";z:1;
-                            CusButton{anchors.right: parent.right;  anchors.top: parent.top;anchors.topMargin: 0; anchors.rightMargin: 0;z:1; imageHightScale: 1;height:image.sourceSize.height; width:image.sourceSize.width; rec.visible: false;imageSrc: "qrc:/Pics/base-svg/window_4close_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/window_4close_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/window_4close_3press.svg";onClicked: parent.visible=false;}
+//                        Rectangle{ id: realTimeDBRec;visible:false;anchors.fill: parent;anchors.margins: parent.height*0.02;color:"grey";z:1;
+//                            CusButton{anchors.right: parent.right;  anchors.top: parent.top;anchors.topMargin: 0; anchors.rightMargin: 0;z:1; imageHightScale: 1;height:image.sourceSize.height; width:image.sourceSize.width; rec.visible: false;imageSrc: "qrc:/Pics/base-svg/window_4close_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/window_4close_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/window_4close_3press.svg";onClicked: parent.visible=false;}
+//                            Grid{anchors.fill: parent;rows: 3;columns: 2;rowSpacing:(height-width/2*3)/2;columnSpacing: 0;
+//                                Repeater{model:[0,1,2,3,4,5]
+//                                    Image{
+//                                       property string picSource: "/realTimeEyePosPic/"+modelData+".bmp";
+//                                       height: width; fillMode: Image.PreserveAspectCrop;width: parent.width/2;smooth: false;cache: false;        //to refresh image
+//                                       Component.onCompleted:
+//                                       {
+//                                           root.realTimePicRefresh.connect(function(count)
+//                                           {
+//                                               source="";source="file:///" + applicationDirPath + picSource;
+//                                               visible=modelData<count;
+//                                           })
+//                                           root.refresh.connect(function(){visible=false;});
+//                                       }
+//                                    }
+//                                }
+//                            }
+//                        }
+                        Rectangle{id: realTimeDBRec;visible:false;anchors.fill: parent;anchors.margins: parent.height*0.02;color:"grey";z:1;
+                            CusButton{opacity:0.5;anchors.right: parent.right;  anchors.top: parent.top;anchors.topMargin: 0; anchors.rightMargin: 0;z:1; imageHightScale: 1;height:image.sourceSize.height; width:image.sourceSize.width; rec.visible: false;imageSrc: "qrc:/Pics/base-svg/window_4close_1normal.svg";hoverImageSrc:"qrc:/Pics/base-svg/window_4close_2hover.svg";pressImageSrc: "qrc:/Pics/base-svg/window_4close_3press.svg";onClicked: parent.visible=false;}
                             Grid{anchors.fill: parent;rows: 3;columns: 2;rowSpacing:(height-width/2*3)/2;columnSpacing: 0;
-                                Repeater{model:[0,1,2,3,4,5]
-                                    Image{
-                                       property string picSource: "/realTimeEyePosPic/"+modelData+".bmp";
-                                       height: width; fillMode: Image.PreserveAspectCrop;width: parent.width/2;smooth: false;cache: false;        //to refresh image
-                                       Component.onCompleted:
-                                       {
-                                           root.realTimePicRefresh.connect(function(count)
-                                           {
-                                               source="";source="file:///" + applicationDirPath + picSource;
-                                               visible=modelData<count;
-                                           })
-                                           root.refresh.connect(function(){visible=false;});
-                                       }
+                                Repeater{id:repeater;model:listModel;
+                                    property ListModel listModel:ListModel{}
+                                    Item{height: width; width: parent.width/2;
+                                        Image{
+                                           property string picSource: "/realTimeEyePosPic/"+index+".bmp";
+                                           anchors.fill: parent;
+                                           fillMode: Image.PreserveAspectCrop;smooth: false;cache: false;        //to refresh image
+                                           source: "file:///" + applicationDirPath + picSource;
+                                        }
+                                        Rectangle
+                                        {
+                                            opacity: 0.8;radius: 2;color: "grey";width: 20;height: 12;anchors.top: parent.top; anchors.topMargin: parent.height*0.05; anchors.left: parent.left; anchors.leftMargin:parent.width*0.05;
+                                            CusText{ anchors.fill: parent;text:index;color: "white"; }
+                                        }
+                                        Rectangle
+                                        {
+                                            opacity: 0.8;radius: 2;color: "grey";width: 40;height: 12;anchors.bottom: parent.bottom; anchors.bottomMargin: parent.height*0.05; anchors.right: parent.right; anchors.rightMargin:parent.width*0.05;
+                                            CusText{ anchors.fill: parent;text:currentCheckResult.resultData.realTimeDB[checkDisplay.clickedDotIndex][index]+"DB";color: "white"; }
+                                        }
                                     }
+                                }
+                                Component.onCompleted:
+                                {
+                                    root.refresh.connect(function(){visible=false;parent.color="white"});
+                                    root.realTimePicRefresh.connect(
+                                    function(count){
+                                        visible=true;parent.color="grey"
+                                        repeater.listModel.clear();
+                                        for(var i=0;i<count;i++)
+                                        {
+                                           repeater.listModel.append({index:i});
+                                        }
+                                    })
                                 }
                             }
                         }
+
                     }
                     Rectangle{width: parent.width*0.5;height: parent.height;color:backGroundColorCheckPanel;
                         CusText{

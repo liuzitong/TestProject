@@ -151,28 +151,41 @@ Item
         }
         Rectangle{width:parent.width*0.25;height: parent.height;color:"white";
             Grid{anchors.fill: parent;rows: 3;columns: 2;rowSpacing:(height-width/2*3)/2;columnSpacing: 0;
-                Repeater{model:[0,1,2,3,4,5]
-                    Image{
-                       property string picSource: "/realTimeEyePosPic/"+modelData+".bmp";
-                       height: width; fillMode: Image.PreserveAspectCrop;width: parent.width/2;smooth: false;cache: false;        //to refresh image
-                       Component.onCompleted:
-                       {
-                           root.realTimePicRefresh.connect(function(count)
-                           {
-                               source="";source="file:///" + applicationDirPath + picSource;
-                               visible=modelData<count;
-                           })
-                           root.refresh.connect(function(){visible=false;});
-                       }
+                Repeater{id:repeater;model:listModel;
+                    property ListModel listModel:ListModel{}
+                    Item{height: width; width: parent.width/2;
+                        Image{
+                           property string picSource: "/realTimeEyePosPic/"+index+".bmp";
+                           anchors.fill: parent;
+                           fillMode: Image.PreserveAspectCrop;smooth: false;cache: false;        //to refresh image
+                           source: "file:///" + applicationDirPath + picSource;
+                        }
+                        Rectangle
+                        {
+                            opacity: 0.8;radius: 2;color: "grey";width: 20;height: 12;anchors.top: parent.top; anchors.topMargin: parent.height*0.05; anchors.left: parent.left; anchors.leftMargin:parent.width*0.05;
+                            CusText{ anchors.fill: parent;text:index;color: "white"; }
+                        }
+                        Rectangle
+                        {
+                            opacity: 0.8;radius: 2;color: "grey";width: 40;height: 12;anchors.bottom: parent.bottom; anchors.bottomMargin: parent.height*0.05; anchors.right: parent.right; anchors.rightMargin:parent.width*0.05;
+                            CusText{ anchors.fill: parent;text:currentCheckResult.resultData.realTimeDB[selectedDotIndex][index]+"DB";color: "white"; }
+                        }
                     }
                 }
                 Component.onCompleted:
                 {
                     root.refresh.connect(function(){visible=false;parent.color="white"});
-                    root.realTimePicRefresh.connect(function(count){visible=true;parent.color="grey"})
+                    root.realTimePicRefresh.connect(
+                    function(count){
+                        visible=true;parent.color="grey"
+                        repeater.listModel.clear();
+                        for(var i=0;i<count;i++)
+                        {
+                           repeater.listModel.append({index:i});
+                        }
+                    })
                 }
             }
-
         }
     }
 }

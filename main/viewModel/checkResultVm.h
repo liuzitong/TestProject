@@ -43,6 +43,7 @@ class StaticResultDataVm:public ResultDataVm
     Q_PROPERTY(int fixationLostCount READ getFixationLostCount WRITE setFixationLostCount)
     Q_PROPERTY(int fixationLostTestCount READ getFixationLostTestCount WRITE setFixationLostTestCount)
     Q_PROPERTY(QVariantList checkData READ getCheckData)
+    Q_PROPERTY(QVariantList realTimeDB READ getRealTimeDB)
 
 public:
     Q_INVOKABLE explicit StaticResultDataVm(StaticResultData* data):ResultDataVm(data){setData(data);}
@@ -59,6 +60,22 @@ public:
         for(auto& i:m_data->checkData)
         {
             list.append(QVariant(i));
+        }
+        return list;
+    }
+    QVariantList getRealTimeDB()
+    {
+        QVariantList list;
+        for(auto& i:m_data->realTimeDB)
+        {
+            QVariantList list2;
+            {
+                for(auto& j:i)
+                {
+                    list2.append(j);
+                }
+            }
+            list.append(QVariant::fromValue(list2));
         }
         return list;
     }

@@ -143,7 +143,6 @@ Item{
         {
             var pix_coordX=(diameter/2)/degreeRange*dot_x;
             var pix_coordY=(diameter/2)/degreeRange*dot_y;
-            console.log(pix_coordX);console.log(pix_coordY);
             var pix_x=pix_coordX+width/2;
             var pix_y=-pix_coordY+height/2;
             return {x:pix_x,y:pix_y};

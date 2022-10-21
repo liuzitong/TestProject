@@ -6,7 +6,7 @@ Text {
     text: qsTr("中文")
     wrapMode: Text.NoWrap
     width: IcUiQmlApi.appCtrl.settings.language==="Chinese"?(text.length*0.9)*height:(text.length*0.4)*height;
-    font.pointSize: height*0.8
+    font.pointSize: height*0.7
     fontSizeMode: Text.Fit
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignHCenter
