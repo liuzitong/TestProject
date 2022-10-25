@@ -62,6 +62,21 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
             anchors.fill: parent;
         }
 
+        ProgramCustomizeCircleDot
+        {
+            id:circleDot;
+            anchors.fill: parent;
+            onConfirm: currentProgram.circleDots(outterRadius,innerRadius,gap);
+        }
+
+        ProgramCustomizeSquareDot
+        {
+            id:squareDot;
+            anchors.fill: parent;
+            onConfirm: currentProgram.rectangleDots(x0,y0,x1,y1,gap);
+        }
+
+
         anchors.top: parent.top
         Item{anchors.fill: parent;anchors.margins: 2;
             Row{anchors.fill: parent;spacing: 2;
@@ -193,6 +208,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                             Row{
                                                 width: parent.width;height: parent.height/7;spacing: 0.5*height;
                                                 CusCheckBox{
+                                                    id:strategyCheckBox
                                                     property int strategy:modelData.strategy;
                                                     height: parent.height;checked:{if(currentProgram.type!==2){return currentProgram.data.strategies.indexOf(strategy)>-1;}else return false ;} width: parent.height;
                                                     enabled: if(currentProgram.type!==2){return !(currentProgram.params.commonParams.strategy===strategy);} else return false;
@@ -218,6 +234,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                         ProgramCustomizeDisplay{
                             id:display;
                             locked: root.locked;
+                            dotList:currentProgram.data.dots;
                             function currentProgramChanged()
                             {
 
@@ -228,11 +245,11 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                 display.type=currentProgram.type;
                                 display.category=currentProgram.category;
 //                                console.log("haha");
-                                dotList=currentProgram.data.dots;
+//                                dotList=currentProgram.data.dots;
                                 displayCanvas.requestPaint();
 
                             }
-                            onDotListChanged:{if(currentProgram!==null) {currentProgram.data.dots=dotList;currentProgram.type===2?dynamicParamsSetting.currentProgramChanged():staticParamsSetting.currentProgramChanged();}}
+                          onRefreshProgramDots:{if(currentProgram!==null) {currentProgram.data.dots=dotList;currentProgram.type===2?dynamicParamsSetting.currentProgramChanged():staticParamsSetting.currentProgramChanged();}}
                         }
                     }
                 }
@@ -291,11 +308,17 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                 }
 //                                CusButton{text:"取消";height: parent.width*0.3;width: parent.width;}
                                 CusButton{
-                                    text:"保存";height: parent.width*0.3;width: parent.width;enabled: currentProgram.category===4||!locked;
+                                    text:"保存";height: parent.width*0.3;width: parent.width;enabled:currentProgram===null?false:currentProgram.category===4||!locked;
                                     onClicked: {/*currentProgram.dots.forEach(function(item){console.log("x:"+item.x+" y:"+item.y);});*/currentProgram.updateProgram();}
                                 }
 
-                                CusButton{text:"删除";height: parent.width*0.3;width: parent.width;enabled:currentProgram.category===4||!locked; onClicked:{ currentProgram.deleteProgram();paramsSetting.enabled=false;programLists.refreshData();}}
+                                CusButton{text:"删除";height: parent.width*0.3;width: parent.width;enabled:currentProgram===null?false:currentProgram.category===4||!locked; onClicked:{ currentProgram.deleteProgram();paramsSetting.enabled=false;programLists.refreshData();}}
+                                CusButton{text:"清除";height: parent.width*0.3;width: parent.width;enabled:currentProgram===null?false:currentProgram.category===4||!locked;
+                                    onClicked:
+                                    {
+                                        currentProgram.data.dots=[];
+//                                        currentProgramChanged;
+                                    }}
                                 CusButton{
                                     text:"复制";height: parent.width*0.3;width: parent.width;
                                     onClicked: saveToAnotherProgram.open();
@@ -306,7 +329,19 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                     {
                                         currentProgram.category=4;
                                         currentProgram.name=saveToAnotherProgram.name;
-                                        currentProgram.report=[4];
+                                        if(currentProgram.type===0)
+                                        {
+                                            currentProgram.report=[4];
+                                        }
+                                        else if(currentProgram.type===1)
+                                        {
+                                            currentProgram.report=[0];
+                                        }
+                                        else
+                                        {
+                                            currentProgram.report=[0,1];
+                                        }
+
                                         console.log(currentProgram.name);
                                         currentProgram.insertProgram();
                                         programLists.refreshData();
@@ -333,8 +368,8 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter
                         CusButton{id:paramsSetting;text:"参数设置";enabled:false;onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { dynamicParamsSetting.open();}}
-                        CusButton{text:"圆形选点";}
-                        CusButton{text:"矩形选点";}
+                        CusButton{text:"圆形选点";enabled: currentProgram==null?false:((currentProgram.category===4||!locked)&&currentProgram.type!==2)?true:false;onClicked: circleDot.open();}
+                        CusButton{text:"矩形选点";enabled: currentProgram==null?false:((currentProgram.category===4||!locked)&&currentProgram.type!==2)?true:false;onClicked: squareDot.open();}
                         }
                     }
                 }
@@ -362,3 +397,5 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
         }
     }
 }
+
+

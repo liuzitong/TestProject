@@ -162,13 +162,13 @@ Item
                         }
                         Rectangle
                         {
-                            opacity: 0.8;radius: 2;color: "grey";width: 20;height: 12;anchors.top: parent.top; anchors.topMargin: parent.height*0.05; anchors.left: parent.left; anchors.leftMargin:parent.width*0.05;
-                            CusText{ anchors.fill: parent;text:index;color: "white"; }
+                            opacity: 0.8;radius: 2;color: "grey";width: 16;height: 12;anchors.top: parent.top; anchors.topMargin: parent.height*0.05; anchors.left: parent.left; anchors.leftMargin:parent.width*0.05;
+                            CusText{ anchors.fill: parent;text:index;color: "white";}
                         }
                         Rectangle
                         {
-                            opacity: 0.8;radius: 2;color: "grey";width: 40;height: 12;anchors.bottom: parent.bottom; anchors.bottomMargin: parent.height*0.05; anchors.right: parent.right; anchors.rightMargin:parent.width*0.05;
-                            CusText{ anchors.fill: parent;text:currentCheckResult.resultData.realTimeDB[selectedDotIndex][index]+"DB";color: "white"; }
+                            opacity: 0.8;radius: 2;color: "grey";width: 34;height: 12;anchors.bottom: parent.bottom; anchors.bottomMargin: parent.height*0.05; anchors.right: parent.right; anchors.rightMargin:parent.width*0.05;
+                            CusText{ visible:currentProgram.type===0; anchors.fill: parent;text:currentCheckResult.resultData.realTimeDB[selectedDotIndex][index]+"DB";color: "white"; }
                         }
                     }
                 }

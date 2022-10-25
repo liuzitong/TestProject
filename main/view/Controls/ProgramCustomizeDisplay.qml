@@ -11,6 +11,10 @@ Item{
     property bool locked;
 
 
+
+    onDotListChanged: {displayCanvas.requestPaint();}
+    signal refreshProgramDots;
+
     signal painted();
 //    CusText{text:qsTr("点坐标");z:1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
 //    CusText{text:"(-90,71)"; z:1;anchors.top: parent.top; anchors.topMargin: 0.08*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
@@ -59,15 +63,29 @@ Item{
                         if (newDist<distance) {nearestDot=item;distance=newDist;}
                     })
                     console.log("nearestDot:"+nearestDot.x+"  "+nearestDot.y)
-                    dotList.forEach(function(item){if(!(item.x===nearestDot.x&&item.y===nearestDot.y)) newDotList.push(item)});
-                    dotList=newDotList;
-                    root.dotListChanged();
+
+                    for(var i=0;i<dotList.length;i++)
+                    {
+                        if(dotList[i].x===nearestDot.x&&dotList[i].y===nearestDot.y)
+                        {
+                            console.log(i);
+                            console.log(dotList);
+                            dotList.splice(i,1);
+                            console.log(dotList);
+                        }
+                    }
+
+//                    dotList.forEach(function(item){if(!(item.x===nearestDot.x&&item.y===nearestDot.y)) newDotList.push(item)});
+//                    dotList.forEach(function(item){if((item.x===nearestDot.x&&item.y===nearestDot.y)) {dotList.pop(item);}});
+
+//                    dotList=newDotList;
+                    root.refreshProgramDots();
                     displayCanvas.requestPaint();
                 }
                 else{
                     if(type==2){dot=displayCanvas.orthToPolar(dot)}
                     dotList.push(dot);
-                    root.dotListChanged();
+                    root.refreshProgramDots();
                     displayCanvas.requestPaint();
                 }
             }

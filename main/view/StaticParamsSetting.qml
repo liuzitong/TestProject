@@ -17,7 +17,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
     property string backGroundBorderColor:"#bdc0c6"
     property int type;
     signal ok();
-    signal dataRefreshed();
+//    signal dataRefreshed();
     signal cancel();
     property bool isCustomProg:false;
     property var currentProgram:null;
@@ -102,7 +102,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"测试点数"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
-                                        LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.dots.length;}
+                                        LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.data.dots.length;}
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
@@ -329,7 +329,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             anchors.verticalCenter: parent.verticalCenter
 //
                             CusButton{text:"取消";onClicked: idPopup.close();}
-                            CusButton{text:"确定";onClicked:{ok();idPopup.close();dataRefreshed();}}
+                            CusButton{text:"确定";onClicked:{ok();idPopup.close();/*dataRefreshed();*/}}
 //                             CusButton{text:"aa";onClicked:{
 //                                     console.log(currentProgram.params.commonParams.cursorSize) ;
 //                                     console.log(currentProgram.params.fixedParams.stimulationTime) ;

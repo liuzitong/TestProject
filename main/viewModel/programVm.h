@@ -14,8 +14,10 @@ class StaticProgramDataVm:public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QVariantList strategies READ getStrategies WRITE setStrategies)
-    Q_PROPERTY(QVariantList dots READ getDots WRITE setDots )                     //data
+    Q_PROPERTY(QVariantList dots READ getDots WRITE setDots NOTIFY dotsChanged)                     //data
 
+
+public:
     QVariantList getStrategies()
     {
         QVariantList strategies;
@@ -59,7 +61,10 @@ class StaticProgramDataVm:public QObject
                 m_data->dots.push_back({float(v.toPointF().x()),float(v.toPointF().y())});
             }
         }
+        dotsChanged();
     }
+
+    Q_SIGNAL void dotsChanged();
 
 public:
     StaticProgramDataVm(StaticProgramData* data){m_data=data;}
@@ -150,6 +155,9 @@ public:
     Q_INVOKABLE void updateProgram();
     Q_INVOKABLE void insertProgram();
     Q_INVOKABLE void deleteProgram();
+    Q_INVOKABLE void circleDots(int outterRadius,int innerRadius,int gap);
+    Q_INVOKABLE void rectangleDots(int x0,int y0,int x1,int y1,int gap);
+
 
     StaticParamsVM* getParams(){return m_staticParamsVm.data();}
     StaticProgramDataVm* getData(){return m_staticDataVm.data();}

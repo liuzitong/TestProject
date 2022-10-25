@@ -10,7 +10,7 @@ class CommonParamsVM:public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList<int> Range READ getRange WRITE setRange)
-    Q_PROPERTY(int strategy READ getStrategy WRITE setStrategy)
+    Q_PROPERTY(int strategy READ getStrategy WRITE setStrategy NOTIFY strategyChanged)
     Q_PROPERTY(int strategyMode READ getStrategyMode WRITE setStrategyMode)
     Q_PROPERTY(int cursorColor READ getCursorColor WRITE setCursorColor)
     Q_PROPERTY(int cursorSize READ getCursorSize WRITE setCursorSize)
@@ -32,7 +32,7 @@ public:
         return *this;
     }
     QList<int> getRange(){return QList<int>{m_data->Range[0],m_data->Range[1]};} void setRange(QList<int> value){m_data->Range[0]=value[0],m_data->Range[1]=value[1];}
-    int getStrategy(){return int(m_data->strategy);}void setStrategy(int value){m_data->strategy=StaticParams::CommonParams::Strategy(value);};
+    int getStrategy(){return int(m_data->strategy);}void setStrategy(int value){m_data->strategy=StaticParams::CommonParams::Strategy(value);strategyChanged();}Q_SIGNAL void strategyChanged();
     int getStrategyMode(){return int(m_data->strategyMode);}void setStrategyMode(int value){m_data->strategyMode=StaticParams::CommonParams::StrategyMode(value);}
     int getCursorColor(){return int(m_data->cursorColor);}void setCursorColor(int value){m_data->cursorColor=CursorColor(value);}
     int getCursorSize(){return int(m_data->cursorSize);}void setCursorSize(int value){m_data->cursorSize=CursorSize(value);}

@@ -11,7 +11,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
     id:idPopup
     property alias color: idContent.color;
     reqEnterEventLoop:false;
-//    width: 1366;height: 680;
+    width: 1366;height: 680;
 //    property alias contentWidth : idContent.implicitWidth;
 //    property alias contentHeight: idContent.implicitHeight;
 //    property int textHeight: height*0.02;

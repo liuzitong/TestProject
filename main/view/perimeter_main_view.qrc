@@ -29,5 +29,7 @@
         <file>VisionFieldIsland.qml</file>
         <file>StaticAnalysisReportTwoInOne.qml</file>
         <file>StaticAnalysisReportDB.qml</file>
+        <file>ProgramCustomizeCircleDot.qml</file>
+        <file>ProgramCustomizeSquareDot.qml</file>
     </qresource>
 </RCC>
