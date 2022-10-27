@@ -108,11 +108,60 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:"策略"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
-                                            property var threshold:["全阈值","智能交互式","快速智能交互式"];
-                                            property var screening: ["二区法","三区法","量化缺损","单刺激"];
-                                            width: parent.width*0.6; anchors.right: parent.right;model:currentProgram===null?null:currentProgram.type===0?threshold:screening;
-                                            currentIndex: currentProgram===null?0:(currentProgram.type===0?currentProgram.params.commonParams.strategy:currentProgram.params.commonParams.strategy-3);
-                                            Component.onCompleted: idPopup.ok.connect(function(){if(currentProgram.type===0) {currentProgram.params.commonParams.strategy=currentIndex;}else {currentProgram.params.commonParams.strategy=(currentIndex+3);}});
+                                            property var strategies: currentProgram.data.strategies;
+//                                            property var threshold:["全阈值","智能交互式","快速智能交互式"];
+//                                            property var model: [/*"二区法","三区法","量化缺损","单刺激"*/];
+//                                            property var threshold:[];
+//                                            property var screening:[];
+                                            property var listModel: ListModel{}
+                                            width: parent.width*0.6; anchors.right: parent.right;
+                                            model:/*currentProgram===null?null:currentProgram.type===0?threshold:screening;*/listModel;
+                                            currentIndex: 0/*:(currentProgram.type===0?currentProgram.params.commonParams.strategy:currentProgram.params.commonParams.strategy-3)*/;
+                                            Component.onCompleted: idPopup.ok.connect(function(){currentProgram.params.commonParams.strategy=strategies[currentIndex];});
+                                            onStrategiesChanged:
+                                            {
+
+                                                console.log(strategies);
+                                                var i;
+                                                listModel.clear();
+//                                                listModel.append({modelData:"全阈值"});
+//                                                listModel.append({modelData:"智能交互式"});
+//                                                listModel.append({modelData:"快速智能交互式"});
+                                                if(currentProgram.type===0)
+                                                {
+                                                    for(i=0;i<strategies.length;i++)
+                                                    {
+                                                        switch (strategies[i])
+                                                        {
+                                                        case 0:listModel.append({modelData:"全阈值"});break;
+                                                        case 1:listModel.append({modelData:"智能交互式"});break;
+                                                        case 2:listModel.append({modelData:"快速智能交互式"});break;
+                                                        }
+                                                        if(currentProgram.params.commonParams.strategy===strategies[i])
+                                                        {
+                                                            currentIndex=i;
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    for(i=0;i<strategies.length;i++)
+                                                    {
+                                                        switch (strategies[i])
+                                                        {
+                                                        case 3:listModel.append({modelData:"二区法"});break;
+                                                        case 4:listModel.append({modelData:"三区法"});break;
+                                                        case 5:listModel.append({modelData:"量化缺损"});break;
+                                                        case 6:listModel.append({modelData:"单刺激"});break;
+                                                        }
+                                                        if(currentProgram.params.commonParams.strategy===strategies[i])
+                                                        {
+                                                            currentIndex=i;
+                                                        }
+                                                    }
+                                                }
+
+                                            }
                                         }
                                     }
                                     Item{

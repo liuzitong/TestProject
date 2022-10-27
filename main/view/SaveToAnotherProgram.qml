@@ -44,7 +44,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"另存为程序";font.pointSize: fontPointSize;}
+                    CusText{text:"另存为程序"; horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;height: parent.height;anchors.left: parent.left;anchors.leftMargin: 0.5*height;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;

@@ -12,12 +12,15 @@ Item{
 
 
 
-    onDotListChanged: {displayCanvas.requestPaint();}
+    onDotListChanged: {displayCanvas.requestPaint();dotPosDisplay.text="";}
     signal refreshProgramDots;
 
     signal painted();
-//    CusText{text:qsTr("点坐标");z:1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
-//    CusText{text:"(-90,71)"; z:1;anchors.top: parent.top; anchors.topMargin: 0.08*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
+    signal dotPos(var dot);
+
+
+    CusText{id:dotPosDisplay;text:qsTr(""); horizontalAlignment: Text.AlignLeft;z:1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
+    //    CusText{text:"(-90,71)"; z:1;anchors.top: parent.top; anchors.topMargin: 0.08*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
 //    Component.onCompleted:
 //    {
 //        addDB(11,22,33);
@@ -36,13 +39,39 @@ Item{
         property double widthMargin: /*(width-height)/2+heightMargin;*/(width-diameter)/2;
         property double heightMargin:height*0.015;
         property int fontSize: diameter*0.022;
+
 //        property int pi: 0;
 //        property point mouseCoord;
 
+
+
         MouseArea{
             anchors.fill: parent;
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            acceptedButtons: Qt.LeftButton | Qt.RightButton;
+            hoverEnabled:range!==0;
             property var newDotList:[];
+
+            onPositionChanged:
+            {
+                var dot;
+//                if(category!==4&&locked==true) return;
+                dot = displayCanvas.pixCoordToDot(mouseX,mouseY)
+                if(type!==2)
+                {
+                    dot.x=Math.round(dot.x);dot.y=Math.round(dot.y);
+                    dotPosDisplay.text="x:"+dot.x+" y:"+dot.y;
+                }
+                else
+                {
+                    dot=displayCanvas.orthToPolar(dot)
+                    dot.x=Math.round(dot.x);dot.y=Math.round(dot.y);
+                    dotPosDisplay.text="radius:"+dot.x+" angle:"+dot.y;
+                }
+
+                dotPos(dot);
+            }
+
+
             onClicked:
             {
                 if(category!==4&&locked==true)
@@ -68,10 +97,11 @@ Item{
                     {
                         if(dotList[i].x===nearestDot.x&&dotList[i].y===nearestDot.y)
                         {
-                            console.log(i);
-                            console.log(dotList);
+//                            console.log(i);
+//                            console.log(dotList);
                             dotList.splice(i,1);
-                            console.log(dotList);
+                            break;
+//                            console.log(dotList);
                         }
                     }
 
@@ -84,6 +114,8 @@ Item{
                 }
                 else{
                     if(type==2){dot=displayCanvas.orthToPolar(dot)}
+                    dot.x=Math.round(dot.x);
+                    dot.y=Math.round(dot.y);
                     dotList.push(dot);
                     root.refreshProgramDots();
                     displayCanvas.requestPaint();
@@ -156,8 +188,8 @@ Item{
         {
             var pix_coordX=pix_x-width/2;
             var pix_coordY=-(pix_y-height/2);
-            var dot_x=Math.round(pix_coordX/(diameter/2)*degreeRange);
-            var dot_y=Math.round(pix_coordY/(diameter/2)*degreeRange);
+            var dot_x=(pix_coordX/(diameter/2)*degreeRange);
+            var dot_y=(pix_coordY/(diameter/2)*degreeRange);
             return {x:dot_x,y:dot_y};
         }
 
@@ -170,9 +202,9 @@ Item{
 
         function orthToPolar(dot)
         {
-            var radius=Math.sqrt(Math.pow(dot.x,2)+Math.pow(dot.y,2));
+            var radius=(Math.sqrt(Math.pow(dot.x,2)+Math.pow(dot.y,2)));
             var rad=Math.asin(dot.y/radius);
-            var angle=rad*(180/Math.PI);
+            var angle=(rad*(180/Math.PI));
             if(dot.x<0)
             {
                 if(dot.y>=0){angle=90+(90-angle)}

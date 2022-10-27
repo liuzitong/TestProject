@@ -9,6 +9,10 @@ StaticProgramVm::StaticProgramVm(const QVariantList &args)
     if(args.count()==0)
     {
         pp=new StaticProgramModel;
+        using spcp=StaticParams::CommonParams;
+        pp->m_params={StaticParams::CommonParams{{0,30},spcp::Strategy::fastInterative,spcp::StrategyMode::ageRelated,CursorColor::white,CursorSize::I,BackGroundColor::white,
+                                                 true,true,850,true,true,FixationTarget::centerPoint,FixationMonitor::dontAlarm,true},
+                      StaticParams::FixedParams{180,1000,20,20,10,10,10,10}};
     }
     else
     {
@@ -89,9 +93,11 @@ void StaticProgramVm::rectangleDots(int x0, int y0, int x1, int y1, int gap)
 DynamicProgramVm::DynamicProgramVm(const QVariantList &args)
 {
     DynamicProgramModel* pp;
+    using dp=DynamicParams;
     if(args.count()==0)
     {
         pp=new DynamicProgramModel;
+        pp->m_params={{0,30},dp::Strategy::standard,CursorColor::white,CursorSize::I,BackGroundColor::white,1,10,dp::DynamicMethod::_6Lines,dp::DynamicDistance::_10,FixationMonitor::onlyAlarm};
     }
     else
     {

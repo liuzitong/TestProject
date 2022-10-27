@@ -7,13 +7,14 @@
 #include <QPoint>
 #include <perimeter/main/database/program.h>
 #include <qsharedpointer.h>
+#include <vector>
 namespace Perimeter
 {
 
 class StaticProgramDataVm:public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QVariantList strategies READ getStrategies WRITE setStrategies)
+    Q_PROPERTY(QVariantList strategies READ getStrategies WRITE setStrategies NOTIFY strategiesChanged)
     Q_PROPERTY(QVariantList dots READ getDots WRITE setDots NOTIFY dotsChanged)                     //data
 
 
@@ -29,12 +30,30 @@ public:
     }
     void setStrategies(QVariantList value)
     {
-       m_data->strategies.clear();
-       for(auto&i:value)
-       {
-           m_data->strategies.push_back(StaticParams::CommonParams::Strategy(i.toInt()));
-       }
+//       m_data->strategies.clear();
+//       for(auto&i:value)
+//       {
+//           m_data->strategies.push_back(StaticParams::CommonParams::Strategy(i.toInt()));
+//       }
+        std::vector<int> strategies;
+        for(auto&i:value)
+        {
+            strategies.push_back(i.toInt());
+        }
+
+        std::sort(strategies.begin(),strategies.end(),[](int a,int b)->bool{return a<b;});
+
+
+        m_data->strategies.clear();
+        for(auto&i:strategies)
+        {
+            m_data->strategies.push_back(StaticParams::CommonParams::Strategy(i));
+        }
+
+        strategiesChanged();
     }
+
+    Q_SIGNAL void strategiesChanged();
 
     QVariantList getDots()
     {
@@ -114,13 +133,13 @@ class ProgramVm:public QObject
 {
     Q_OBJECT
     Q_PROPERTY(long id READ getID WRITE setID)
-    Q_PROPERTY(int type READ getType WRITE setType)
+    Q_PROPERTY(int type READ getType WRITE setType NOTIFY typeChanged())
     Q_PROPERTY(QString name READ getName WRITE setName);
     Q_PROPERTY(QVariantList report READ getReport WRITE setReport )
-    Q_PROPERTY(int category READ getCategory WRITE setCategory)
+    Q_PROPERTY(int category READ getCategory WRITE setCategory NOTIFY categoryChanged)
 public:
     long getID(){return m_data->m_id;}void setID(int value){m_data->m_id=value;}
-    long getType(){return long(m_data->m_type);}void setType(int value){m_data->m_type=Type(value);}
+    long getType(){return long(m_data->m_type);}void setType(int value){m_data->m_type=Type(value);typeChanged();}Q_SIGNAL void typeChanged();
     QString getName(){return m_data->m_name;}void setName(QString value){m_data->m_name=value;}
     QVariantList getReport()
     {
@@ -139,7 +158,7 @@ public:
             m_data->m_report.push_back(i.toInt());
         }
     }
-    int getCategory(){return int(m_data->m_category);}void setCategory(int value){m_data->m_category=Category(value);}
+    int getCategory(){return int(m_data->m_category);}void setCategory(int value){m_data->m_category=Category(value);categoryChanged();}Q_SIGNAL void categoryChanged();
 protected:
     ProgramModel* m_data;
 };

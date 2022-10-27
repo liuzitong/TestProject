@@ -49,7 +49,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"创建程序";font.pointSize: fontPointSize;}
+                    CusText{text:"创建程序"; horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;height: parent.height;anchors.left: parent.left;anchors.leftMargin: 0.5*height;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;
@@ -57,25 +57,12 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         Column{anchors.fill: parent;spacing:parent.height*(1-0.12*5)/4;
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
                                 CusText{text:"名字:";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
-                                LineEdit{
-                                    id:nameEdit;
-                                    width: parent.width*0.7;
-                                    height:parent.height;
-                                }
+                                LineEdit{id:nameEdit;text:"";width: parent.width*0.7;height:parent.height;}
                             }
 
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
                                 CusText{text:"范围:";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
-                                NumberLineEdit{
-                                    id:rangeEdit;
-                                    width: parent.width*0.7;
-                                    height:parent.height;
-                                    step:1;
-                                    min:5;
-                                    max:90;
-                                    value:5;
-//                                    readOnly: true;
-                                }
+                                NumberLineEdit{id:rangeEdit;width: parent.width*0.7;height:parent.height;step:1;min:5;max:90;value:30;}
                             }
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
                                 CusText{text:"类别:";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}

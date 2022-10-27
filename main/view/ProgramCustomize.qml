@@ -155,12 +155,12 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                                         }
 
                                                         var type=model.type;
-                                                        console.log(type);
+//                                                        console.log(type);
                                                         if(type!==2)
                                                         {
                                                             currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[model.program_id]);
                                                             staticParamsSetting.currentProgram=currentProgram;
-                                                            console.log(currentProgram.params.fixedParams.stimulationTime);
+//                                                            console.log(currentProgram.params.fixedParams.stimulationTime);
                                                         }
                                                         else{
                                                             currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicProgramVM", false,[model.program_id]);
@@ -214,10 +214,34 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                                     enabled: if(currentProgram.type!==2){return !(currentProgram.params.commonParams.strategy===strategy);} else return false;
                                                     onClicked:
                                                     {
-                                                        var list = currentProgram.strategies;
-                                                        checked?list.push(strategy):list.pop(strategy);
-                                                        currentProgram.strategies=list;
-                                                        console.log(currentProgram.strategies.length);
+//                                                        var list = currentProgram.strategies;
+//                                                        checked?list.push(strategy):list.pop(strategy);
+                                                        var list=currentProgram.data.strategies;
+//                                                        console.log(list);
+                                                        if(checked)
+                                                        {
+//                                                            console.log("checked");
+                                                            list.push(strategy)
+//                                                            console.log(list);
+                                                        }
+                                                        else
+                                                        {
+//                                                            console.log("unchecked");
+                                                            for(var i=0;i<list.length;i++)
+                                                            {
+                                                                if(list[i]===strategy)
+                                                                {
+//                                                                    console.log("get");
+//                                                                    console.log(list.length);
+                                                                    list.splice(i,1)
+//                                                                    console.log(list.length);
+                                                                    break;
+                                                                }
+                                                            }
+//                                                            console.log(list);
+                                                        }
+                                                        currentProgram.data.strategies=list;
+//                                                        console.log(currentProgram.data.strategies);
                                                     }
                                                 }
                                                 CusText{text:modelData.name; horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.35}
@@ -240,7 +264,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 
                                 if(currentProgram.type!==2){display.range=currentProgram.params.commonParams.Range[1];}
                                 else{display.range=currentProgram.params.Range[1]}
-                                console.log(display.range);
+//                                console.log(display.range);
 //                                console.log(display.range);
                                 display.type=currentProgram.type;
                                 display.category=currentProgram.category;
@@ -287,12 +311,23 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         {
                                             currentProgram.params.commonParams.strategy=newProgram.strategy;
                                             currentProgram.params.commonParams.Range[1]=newProgram.range;
-                                            if(currentProgram.type===0) currentProgram.strategies=[0,1,2]; else currentProgram.strategies=[3,4,5,6];
+                                            if(currentProgram.type===0)
+                                            {
+                                                currentProgram.data.strategies=[0,1,2];
+                                                currentProgram.report=[4];
+                                            }
 
+                                            else
+                                            {
+                                                currentProgram.data.strategies=[3,4,5,6];
+                                                currentProgram.report=[0]
+
+                                            }
                                         }
                                         else{
                                             currentProgram.params.strategy=newProgram.strategy;
                                             currentProgram.params.Range[1]=newProgram.range;
+                                            currentProgram.reports=[0,1];
                                         }
                                         strategyStack.currentProgramChanged();
                                         display.currentProgramChanged();
@@ -300,6 +335,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         currentProgram.name=newProgram.programName;
                                         currentProgram.category=4;
                                         currentProgram.insertProgram();
+//                                        currentProgramChanged();
                                         programLists.refreshData();
                                         paramsSetting.enabled=true;
                                         bar.currentIndex=4;
