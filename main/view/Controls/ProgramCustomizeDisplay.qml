@@ -9,48 +9,26 @@ Item{
     property int type;
     property int category;
     property bool locked;
-
-
-
-    onDotListChanged: {displayCanvas.requestPaint();dotPosDisplay.text="";}
     signal refreshProgramDots;
-
     signal painted();
-    signal dotPos(var dot);
-
+    onDotListChanged: {displayCanvas.requestPaint();dotPosDisplay.text="";}
 
     CusText{id:dotPosDisplay;text:qsTr(""); horizontalAlignment: Text.AlignLeft;z:1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
-    //    CusText{text:"(-90,71)"; z:1;anchors.top: parent.top; anchors.topMargin: 0.08*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
-//    Component.onCompleted:
-//    {
-//        addDB(11,22,33);
-//        addDB(15,-20,-44);
-//        console.log("display create");
-//        console.log("display create");
-//        console.log("display create");
-//        console.log("display create");
-//    }
 
     Canvas{
         id:displayCanvas;
         property int degreeRange: 0;
-        anchors.fill: parent;
         property double diameter: height-heightMargin*2;
         property double widthMargin: /*(width-height)/2+heightMargin;*/(width-diameter)/2;
         property double heightMargin:height*0.015;
         property int fontSize: diameter*0.022;
-
-//        property int pi: 0;
-//        property point mouseCoord;
-
-
+        anchors.fill: parent;
 
         MouseArea{
+            property var newDotList:[];
             anchors.fill: parent;
             acceptedButtons: Qt.LeftButton | Qt.RightButton;
             hoverEnabled:range!==0;
-            property var newDotList:[];
-
             onPositionChanged:
             {
                 var dot;
@@ -67,15 +45,11 @@ Item{
                     dot.x=Math.round(dot.x);dot.y=Math.round(dot.y);
                     dotPosDisplay.text="radius:"+dot.x+" angle:"+dot.y;
                 }
-
-                dotPos(dot);
             }
-
 
             onClicked:
             {
-                if(category!==4&&locked==true)
-                    return;
+                if(category!==4&&locked==true) return;
                 newDotList=[];
                 var dot = displayCanvas.pixCoordToDot(mouseX,mouseY)
                 if (mouse.button === Qt.RightButton)
@@ -97,18 +71,10 @@ Item{
                     {
                         if(dotList[i].x===nearestDot.x&&dotList[i].y===nearestDot.y)
                         {
-//                            console.log(i);
-//                            console.log(dotList);
                             dotList.splice(i,1);
                             break;
-//                            console.log(dotList);
                         }
                     }
-
-//                    dotList.forEach(function(item){if(!(item.x===nearestDot.x&&item.y===nearestDot.y)) newDotList.push(item)});
-//                    dotList.forEach(function(item){if((item.x===nearestDot.x&&item.y===nearestDot.y)) {dotList.pop(item);}});
-
-//                    dotList=newDotList;
                     root.refreshProgramDots();
                     displayCanvas.requestPaint();
                 }
@@ -125,7 +91,6 @@ Item{
 
         function drawDashCircle(x, y, radius, length)
         {
-//            console.log("drawDsh");
             var step=length/radius
             for (var b = 0, e = step ; e <=Math.PI*2; b += step*2, e += step*2)
             {
@@ -173,16 +138,6 @@ Item{
             ctx.fillStyle="black";
             ctx.fillText(content, x_pix, y_pix+fontSize*1/3);
         }
-
-//        function drawDB(dot)
-//        {
-//            var x_coord=(dot.x/degreeRange)*(diameter*0.5)+width/2;
-//            var y_coord=(-dot.y/degreeRange)*(diameter*0.5)+height/2;
-//            var db=dot.db;
-//            var size=dot.size;
-//            drawText(db,x_coord,y_coord,size);
-//        }
-
 
         function pixCoordToDot(pix_x,pix_y)
         {
@@ -325,7 +280,6 @@ Item{
                     }
                 }
             }
-//            drawText("o",mouseCoord.x,mouseCoord.y,fontSize);
             dotList.forEach(function(item){drawDot(item);})
             root.painted();
         }

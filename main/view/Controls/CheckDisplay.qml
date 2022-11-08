@@ -8,35 +8,19 @@ Item{
     property var currentProgram: null;
     property var currentCheckResult:null;
     property int clickedDotIndex: -1;
-//    property var dotList:[];
-//    property int state:0;                        //0:idle 1:started testing;
-//    signal refresh;
-//    onRefresh: displayCanvas.requestPaint();
-//    signal clickedDotIndex(var index);
 
-//    onClickedDotIndex: {console.log(index);}
 
-    onCurrentProgramChanged: {
-//        if(currentProgram.type!==2)
-//            range=currentProgram.params.commonParams.Range[1];
-//            range=currentProgram.params.Range[1];
-        displayCanvas.requestPaint();
-    }
+    function testOver() {displayCanvas.testOver=true;displayCanvas.requestPaint();}
+
+    onCurrentProgramChanged: displayCanvas.requestPaint();
+
     onCurrentCheckResultChanged: {
         clickedDotIndex=-1;
         displayCanvas.requestPaint();
     }
 
-
-
     signal painted();
     antialiasing: true
-
-    Component.onCompleted:
-    {
-//        addDB(11,22,33);
-//        addDB(15,-20,-44);
-    }
 
     Canvas{
         id:displayCanvas;
@@ -46,15 +30,13 @@ Item{
         property double widthMargin: (width-diameter)/2;
         property double heightMargin:height*0.015;
         property int fontSize: diameter*0.022;
+        property bool testOver: true;
         smooth: false;
         MouseArea{
             anchors.fill: parent;
             onClicked:{
-//                console.log(mouseX);console.log(mouseY);
-//                console.log(displayCanvas.pixCoordToDot(mouseX,mouseY).x);
-//                console.log(displayCanvas.pixCoordToDot(mouseX,mouseY).y);
                 if(currentCheckResult===null) return;
-                var dotClicked=displayCanvas.pixCoordToDot(mouseX,mouseY);
+                var dotClicked=displayCanvas.pixCoordToDot({x:mouseX,y:mouseY});
                 var dotList=currentProgram.data.dots;
                 var dist=Math.pow(10,6);
                 var index;
@@ -68,7 +50,6 @@ Item{
                         index=i;
                     }
                 }
-//                clickedDotIndex(index);
                 clickedDotIndex=index;
                 displayCanvas.requestPaint();
             }
@@ -76,7 +57,6 @@ Item{
 
         function drawDashCircle(x, y, radius, length)
         {
-//            console.log("drawDsh");
             var step=length/radius
             for (var b = 0, e = step ; e <=Math.PI*2; b += step*2, e += step*2)
             {
@@ -90,9 +70,6 @@ Item{
                 ctx.closePath();
             }
         }
-
-
-
 
         function drawDashLine(pointBegin,radius,angle,length)
         {
@@ -128,21 +105,19 @@ Item{
             ctx.fillText(content, x_pix, y_pix+fontSize*1/3);
         }
 
-
-
-        function pixCoordToDot(pix_x,pix_y)
+        function pixCoordToDot(pix)
         {
-            var pix_coordX=pix_x-width/2;
-            var pix_coordY=-(pix_y-height/2);
+            var pix_coordX=pix.x-width/2;
+            var pix_coordY=-(pix.y-height/2);
             var dot_x=Math.round(pix_coordX/(diameter/2)*degreeRange);
             var dot_y=Math.round(pix_coordY/(diameter/2)*degreeRange);
             return {x:dot_x,y:dot_y};
         }
 
-        function dotToPixCoord(dot_x,dot_y)
+        function dotToPixCoord(dot)
         {
-            var pix_coordX=(diameter/2)/degreeRange*dot_x;
-            var pix_coordY=(diameter/2)/degreeRange*dot_y;
+            var pix_coordX=(diameter/2)/degreeRange*dot.x;
+            var pix_coordY=(diameter/2)/degreeRange*dot.y;
             var pix_x=pix_coordX+width/2;
             var pix_y=-pix_coordY+height/2;
             return {x:pix_x,y:pix_y};
@@ -189,15 +164,10 @@ Item{
 
         function drawDB(db,dot)
         {
-//            console.log(dot.x);
-//            console.log(dot.y);
-//            console.log(db);
             var x_pix=(dot.x/degreeRange)*(diameter*0.5)+width/2;
             var y_pix=(-dot.y/degreeRange)*(diameter*0.5)+height/2;
             drawText(db,x_pix,y_pix);
         }
-
-
 
         function drawAxisEndText(string,x_pix,y_pix,size)
         {
@@ -216,7 +186,6 @@ Item{
             ctx.stroke();
         }
 
-
         onPaint:
         {
             if(degreeRange==0) return;
@@ -228,7 +197,6 @@ Item{
             if(degreeStart==0){degreeStart=degreeStep=degreeRange/3;}
             else{degreeStep=(degreeRange-degreeStart)/2;}
 
-//            console.log("start:"+degreeStart+"  step:"+degreeStep);
             var i;
             for(i=3;i>=1;i--)
             {
@@ -293,7 +261,6 @@ Item{
             {
                 currentProgram.data.dots.forEach(function(item)
                 {
-
                     drawDot(item);
                 })
             }
@@ -301,21 +268,81 @@ Item{
             {
                 if(currentProgram.type===0)
                 {
-//                    console.log(currentCheckResult.diagnosis);
                     var dBList=currentCheckResult.resultData.checkData;
                     var dotList=currentProgram.data.dots;
                     for(i=0;i<dotList.length;i++)
                     {
-                        drawDB(dBList[i],dotList[i]);
+                        if(dBList[i]===-1)
+                            drawDot(dotList[i]);
+                        else
+                            drawDB(dBList[i],dotList[i]);
+                    }
+                }
+                else if(currentProgram.type===1)
+                {
+                    dBList=currentCheckResult.resultData.checkData;
+                    dotList=currentProgram.data.dots;                                                                                //todo
+                    for(i=0;i<dotList.length;i++)
+                    {
+                        if(dBList[i]===-1)
+                            drawDot(dotList[i]);
+                        else
+                            drawDB(dBList[i],dotList[i]);
+                    }
+                }
+                else if(currentProgram.type===2)
+                {
+                    dotList=currentCheckResult.resultData.checkData;
+                    var dotRadius=diameter/180*1;
+
+//                    ctx.beginPath();
+//                    ctx.moveTo(100,100);
+//                    ctx.lineTo(200,200);
+//                    ctx.closePath();
+//                    ctx.stroke();
+
+//                    console.log(dotList[0].end.x);
+                    for(i=0;i<dotList.length;i++)
+                    {
+                        var dot=dotToPixCoord(polarToOrth(dotList[i].end));
+                        ctx.lineWidth = 0;
+                        ctx.strokeStyle = "black";
+                        ctx.beginPath();
+                        ctx.arc(dot.x, dot.y, dotRadius, 0, Math.PI*2);
+                        ctx.stroke();
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+
+                    for(i=1;i<dotList.length-1;i++)
+                    {
+                        var dot_Begin=dotToPixCoord(polarToOrth(dotList[i].end));
+                        var dot_End=dotToPixCoord(polarToOrth(dotList[i+1].end));
+                        console.log(dot_Begin.x+" "+dot_Begin.y);
+                        console.log(dot_End.x+" "+dot_End.y);
+                        ctx.beginPath();
+                        ctx.moveTo(dot_Begin.x,dot_Begin.y);
+                        ctx.lineTo(dot_End.x,dot_End.y);
+                        ctx.closePath();
+                        ctx.stroke();
+                    }
+
+                    if(testOver===true)
+                    {
+                        dot_Begin=dotToPixCoord(polarToOrth(dotList[dotList.length-1].end));
+                        dot_End=dotToPixCoord(polarToOrth(dotList[0].end));
+                        ctx.beginPath();
+                        ctx.moveTo(dot_Begin.x,dot_Begin.y);
+                        ctx.lineTo(dot_End.x,dot_End.y);
+                        ctx.closePath();
+                        ctx.stroke();
                     }
                 }
             }
-//            console.log(clickedDotIndex);
-            if(currentProgram.type!==2&clickedDotIndex!=-1)
+            if(currentProgram.type!==2&clickedDotIndex!=-1)                                     //选择点--实时图片用
             {
                 var clickedDot=currentProgram.data.dots[clickedDotIndex];
                 var pixLoc=dotToPixCoord(clickedDot.x,clickedDot.y);
-//                console.log(pixLoc);console.log(pixLoc.y);
                 ctx.lineWidth = 0;
                 ctx.strokeStyle = "blue";
                 ctx.beginPath();
@@ -324,12 +351,9 @@ Item{
                 ctx.stroke();
                 root.painted();
             }
-
         }
     }
 }
-
-
 
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}

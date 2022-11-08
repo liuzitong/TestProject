@@ -113,31 +113,31 @@ Item {id:root; width: 1366;height: 691
                                         }
                                     }
                                 }
-                                Rectangle{ width: parent.width;height: parent.height*0.28; anchors.horizontalCenter: parent.horizontalCenter; border.color: backGroundBorderColor; color: backGroundColor;radius: width*0.03;
+                                Rectangle{ width: parent.width;height: parent.height*0.28; anchors.horizontalCenter: parent.horizontalCenter; border.color:backGroundBorderColor; color: currentProgram.type===null? backGroundColor:currentProgram.type!==2?backGroundColor:"grey";radius: width*0.03;
                                     Item{ anchors.fill: parent;anchors.margins: parent.height*0.1;
                                         Column{anchors.fill: parent;spacing: 0.175*height;
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
                                                 CusText{text:"假阳性率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{
-                                                    property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.falsePositiveCount;
-                                                    property var totalDots: currentCheckResult===null?0:currentCheckResult.resultData.falsePositiveTestCount;
-                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.7;textInput.readOnly: true;
+                                                    property var checkedDots:currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.falsePositiveCount;
+                                                    property var totalDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.falsePositiveTestCount;
+                                                    text:currentCheckResult===null?"":currentCheckResult.type!==2?checkedDots+"/"+totalDots:"";width: parent.width*0.7;textInput.readOnly: true;
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
                                                 CusText{text:"假阴形率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{
-                                                    property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.falseNegativeCount;
-                                                    property var totalDots: currentCheckResult===null?0:currentCheckResult.resultData.falseNegativeTestCount;
-                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.7;textInput.readOnly: true;
+                                                    property var checkedDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.falseNegativeCount;
+                                                    property var totalDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.falseNegativeTestCount;
+                                                    text:currentCheckResult===null?"":currentCheckResult.type!==2?checkedDots+"/"+totalDots:"";width: parent.width*0.7;textInput.readOnly: true;
                                                 }
                                             }
                                             Row{ width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
                                                 CusText{text:"固视丢失率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{
-                                                    property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.fixationLostCount;
-                                                    property var totalDots: currentCheckResult===null?0:currentCheckResult.resultData.fixationLostTestCount;
-                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.7;textInput.readOnly: true;
+                                                    property var checkedDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.fixationLostCount;
+                                                    property var totalDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.fixationLostTestCount;
+                                                    text:currentCheckResult===null?"":currentCheckResult.type!==2?checkedDots+"/"+totalDots:"";width: parent.width*0.7;textInput.readOnly: true;
                                                 }
                                             }
                                         }
@@ -291,7 +291,22 @@ Item {id:root; width: 1366;height: 691
             Row{anchors.fill: parent;
                 Item{ height: parent.height;width:parent.width*0.25;
                     Item{anchors.fill: parent; anchors.margins:parent.height*0.15;
-                        CusButton{text:"返回";onClicked:root.changePage("patientManagement",null);}
+                        CusButton
+                        {
+                            text:"返回";onClicked:
+                            {
+                                if(currentCheckResult!==null)
+                                {
+                                    if(currentCheckResult.type!==2)
+                                        IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticCheckResultVm",currentCheckResult);
+
+                                    else
+                                        IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicCheckResultVm",currentCheckResult);
+                                    currentCheckResult=null;
+                                }
+                                root.changePage("patientManagement",null);
+                            }
+                        }
                     }
                 }
                 Item{height: parent.height;width:parent.width*0.25;
