@@ -1,4 +1,4 @@
-#include "testclass.h"
+﻿#include "testclass.h"
 
 #include <QJsonArray>
 #include <qfile.h>
@@ -20,11 +20,11 @@ namespace Perimeter {
 void TestClass::test()
 {
 //    createPatientData();
-//    createCheckResultData();
+    createCheckResultData();
 //    createDynamicCheckResultData();
 //    createCheckResultVm();
 //    TestReport();
-    makePicData();
+//    makePicData();
 //    makePic();
 //    drawPicData();
 //testData();
@@ -97,7 +97,7 @@ void TestClass::createCheckResultData()
     checkModel.m_data.fixationDeviation={1,2,3,4};
     checkModel.m_data.falseNegativeCount=1;
     checkModel.m_data.checkData={2,3,4,5};
-    checkModel.m_data.realTimeDB={{22},{24,23},{32,25,14},{32,25,14,44},{13,25,14,32,21},{13,25,44,32,26,42},{13,25,14,32,21},{32,25,14,44},{32,25,14},{24,23},{22}};
+//    checkModel.m_data.realTimeDB={{22},{24,23},{32,25,14},{32,25,14,44},{13,25,14,32,21},{13,25,44,32,26,42},{13,25,14,32,21},{32,25,14,44},{32,25,14},{24,23},{22}};
 
     auto pp=checkModel.ModelToDB();
     qx::dao::insert(pp);
