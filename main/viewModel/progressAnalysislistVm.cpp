@@ -1,4 +1,4 @@
-#include "progressAnalysislistVm.h"
+﻿#include "progressAnalysislistVm.h"
 #include <perimeter/main/database/checkResult.h>
 #include <perimeter/main/services/analysis_svc.h>
 #include <perimeter/main/viewModel/general_analysis_vm.h>
@@ -531,6 +531,7 @@ void ProgressAnalysisListVm::generateDataList()
 //    m_mDevList.resize(checkResult_List.size());
 
 
+    if(checkResult_List.size()==0) return;
 
     for(int i=0;i<checkResult_List.size();i++)
     {
