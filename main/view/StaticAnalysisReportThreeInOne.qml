@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
@@ -22,7 +22,6 @@ Item {
         Item{
             id: row
             width: parent.width;height: parent.height*0.47;
-
             AnalysisDiagram{
                 width: parent.height;height:parent.height;
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -41,7 +40,7 @@ Item {
 //                id:defect;
                 width: parent.height;height:parent.height;
                 anchors.left: parent.left
-                anchors.leftMargin: parent.width*0.07
+                anchors.leftMargin: parent.width*0.05
                 source:"/previewImage/defectDepth.bmp";
                 textTop:"缺陷深度(db)";
                 textBottom:"□=4db的预期";
@@ -55,7 +54,7 @@ Item {
             AnalysisDiagram{
                 width: parent.height;height:parent.height;
                 anchors.right: parent.right
-                anchors.rightMargin: parent.width*0.07
+                anchors.rightMargin: parent.width*0.05
                 source:"/previewImage/dBDiagram.bmp";
                 textTop:"阈值(dB)";
                 analysisVm: root.analysisVm;
