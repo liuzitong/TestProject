@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -104,7 +104,10 @@ Column {
                             root.changePage("patientManagement",null);
                             if(currentCheckResult!==null)
                             {
-                                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm", currentCheckResult);
+                                if(currentCheckResult.type!==2)
+                                    IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticCheckResultVm", currentCheckResult);
+                                else
+                                    IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicCheckResultVm", currentCheckResult);
                                 currentCheckResult=null;
                             }
                         }}

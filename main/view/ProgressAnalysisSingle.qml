@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -28,15 +28,18 @@ Item
     onRefresh:
     {
         var checkResultId=progressAnalysisListVm.selectedResultId;
-
         if(currentCheckResult!==null)
-        {IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm", currentCheckResult);}
-        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,[checkResultId]);
+        {
+            if(currentCheckResult.type!==2)
+                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticCheckResultVm", currentCheckResult);
+            else
+                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicCheckResultVm", currentCheckResult);
+        }
+        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticCheckResultVm", false,[checkResultId]);
 
         if(currentProgram!==null)
            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);
         currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[currentCheckResult.program_id]);
-
 
         if(currentPatient.os_od===0)  //左
             rx=currentPatient.rx.rx1_l.toFixed(2)+"DS "+currentPatient.rx.rx2_l.toFixed(2)+"DC "+currentPatient.rx.rx3_l.toFixed(2)+"X";
@@ -225,17 +228,17 @@ Item
                                 }
                                 CusText{
                                     property var progress: ["没有进展","可能的进展","很有可能的进展"];
-                                    height: textHeight;text:progress[progressAnalysisResult] ;horizontalAlignment: Text.AlignLeft
+                                    height: textHeight;text:progressAnalysisResult===null?"":progress[progressAnalysisResult] ;horizontalAlignment: Text.AlignLeft
                                 }
                                 CusText{height: textHeight;text:"基线检查:" ;horizontalAlignment: Text.AlignLeft}
                                 Row{width: parent.width;height: textHeight;spacing: parent.width*0.1;
-                                    CusText{height: parent.height;width:parent.width*0.4;text:Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
-                                    CusText{height: parent.height;width:parent.width*0.4;text:Qt.formatDateTime(progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
+                                    CusText{height: parent.height;width:parent.width*0.4;text:progressAnalysisListVm===null?"":Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
+                                    CusText{height: parent.height;width:parent.width*0.4;text:progressAnalysisListVm===null?"":Qt.formatDateTime(progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
                                 }
                                 CusText{height: textHeight;text:"以前的追踪检查:" ;horizontalAlignment: Text.AlignLeft}
                                 Row{width: parent.width;height: textHeight;spacing: parent.width*0.1;
-                                    CusText{height: parent.height;width:parent.width*0.4;text:Qt.formatDateTime(progressAnalysisListVm.getData(progressAnalysisListVm.selectedIndex-2,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
-                                    CusText{height: parent.height;width:parent.width*0.4;text:Qt.formatDateTime(progressAnalysisListVm.getData(progressAnalysisListVm.selectedIndex-1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
+                                    CusText{height: parent.height;width:parent.width*0.4;text:progressAnalysisListVm===null?"":Qt.formatDateTime(progressAnalysisListVm.getData(progressAnalysisListVm.selectedIndex-2,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
+                                    CusText{height: parent.height;width:parent.width*0.4;text:progressAnalysisListVm===null?"":Qt.formatDateTime(progressAnalysisListVm.getData(progressAnalysisListVm.selectedIndex-1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
                                 }
                                 Repeater{
                                     anchors.fill: parent;

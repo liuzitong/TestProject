@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -170,10 +170,9 @@ Rectangle {
                         progressAnalysisPage.progressAnalysisListVm=params.progressAnalysisListVm;
                         progressAnalysisPage.report=params.report;
                         progressAnalysisPage.progressAnalysisResult=params.result;
-                        console.log(params.result[2]);
                         if(params.report===2)
                         {
-                            progressAnalysisPage.staticAnalysisVm=params.staticAnalysisVm
+                            progressAnalysisPage.staticAnalysisVm=params.staticAnalysisVm;
                         }
                         progressAnalysisPage.refresh();
                         break;

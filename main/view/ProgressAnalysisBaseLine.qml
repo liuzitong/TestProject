@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 1.0
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
@@ -138,8 +138,7 @@ Rectangle {
                     property string picSource: "/previewImage/baseLine.bmp"
                     height: sourceSize.height;width: sourceSize.width;
                     smooth: false; cache: false;
-//                    Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + picSource;})}
-                    source: "file:///D:/perimeterProject/perimeter/bin/debug/visionFieldIsland/layer_1.png";
+                    Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + picSource;})}
                 }
             }
         }

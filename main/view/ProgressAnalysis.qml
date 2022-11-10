@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -37,6 +37,7 @@ Column {
             content.item.staticAnalysisVm=staticAnalysisVm;
             content.item.currentPatient=currentPatient;
         }
+        console.log(Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd"));
 
         content.item.refresh();
     }
