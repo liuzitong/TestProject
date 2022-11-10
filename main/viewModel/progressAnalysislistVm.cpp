@@ -90,6 +90,7 @@ QObject *ProgressAnalysisListVm::getProgressBaseLinePreview(int imageSize)
     };
 
     int startYear=m_currentDataList[0].dateTime.date().year();
+    int endYear=m_currentDataList.last().dateTime.date().year()+1;
     QVector<int> months;
     for(int i=0;i<m_currentDataList.length();i++)
     {
@@ -97,8 +98,8 @@ QObject *ProgressAnalysisListVm::getProgressBaseLinePreview(int imageSize)
         months.push_back(month);
     }
 
-    img=QImage({600,300}, QImage::Format_RGB32);
-    analysisSvc->drawBaseLine(mdList,startYear,months,img);img.save(m_previewFolder+"baseLine.bmp");
+    img=QImage({(endYear-startYear)*24+120,300}, QImage::Format_RGB32);
+    analysisSvc->drawBaseLine(mdList,startYear,endYear,months,img);img.save(m_previewFolder+"baseLine.bmp");
     analysisSvc->BaseLineAnalysis(mdList,months,avgMd,progressSpeedBase,progressSpeedDeviation,slopeType);
     return new BaseLineResult(avgMd,progressSpeedBase,progressSpeedDeviation,slopeType);
 }
@@ -124,15 +125,15 @@ QVariantList ProgressAnalysisListVm::getThreeFollowUpsPreview(int index,int imag
         mDev.append(m_currentDataList[i].mDev);
         locs.append(m_currentDataList[i].locs);
     }
-
     analysisSvc->ProgressAnalysis(mDev,locs,m_OS_OD,progressLocs,progressVal,progressPicVal,progress);
-
     QImage img=QImage({imageSize,imageSize}, QImage::Format_RGB32);
-
     for(int i=0;i<progressVal.length();i++)
     {
-        analysisSvc->drawGray(val[i],locs[i],30,m_OS_OD,img);img.save(m_previewFolder+"threeFollowUps_grey"+QString::number(i)+".bmp");
-        analysisSvc->drawPE(mPE[i],locs[i],30,img);img.save(m_previewFolder+"threeFollowUps_PatternPE"+QString::number(i)+".bmp");
+        //  locs + 序号要+2 排除 基线的locs
+        analysisSvc->drawGray(val[i],locs[i+2],30,m_OS_OD,img);img.save(m_previewFolder+"threeFollowUps_grey"+QString::number(i)+".bmp");
+        analysisSvc->drawPE(mPE[i],locs[i+2],30,img);img.save(m_previewFolder+"threeFollowUps_PatternPE"+QString::number(i)+".bmp");
+//        analysisSvc->drawText(val[i],locs[i+2],30,m_OS_OD,img,1.0,true);img.save(m_previewFolder+"threeFollowUps_PatternPE"+QString::number(i)+".bmp");
+//        analysisSvc->drawText(mDev[i+2],locs[i+2],30,m_OS_OD,img,1.0,true);img.save(m_previewFolder+"threeFollowUps_PatternPE"+QString::number(i)+".bmp");
         analysisSvc->drawText(progressVal[i],progressLocs[i],30,m_OS_OD,img);img.save(m_previewFolder+"threeFollowUps_progressVal"+QString::number(i)+".bmp");
         analysisSvc->drawProgess(progressPicVal[i],progressLocs[i],30,img);img.save(m_previewFolder+"threeFollowUps_progressPic"+QString::number(i)+".bmp");
     }
@@ -215,6 +216,7 @@ void ProgressAnalysisListVm::getProgressBaseLineReport()
     };
 
     int startYear=m_currentDataList[0].dateTime.date().year();
+    int endYear=m_currentDataList.last().dateTime.date().year()+1;
     QVector<int> months;
     for(int i=0;i<m_currentDataList.length();i++)
     {
@@ -222,8 +224,8 @@ void ProgressAnalysisListVm::getProgressBaseLineReport()
         months.push_back(month);
     }
 
-    img=QImage({1200,600}, QImage::Format_RGB32);
-    analysisSvc->drawBaseLine(mdList,startYear,months,img);img.save(m_reportFolder+"baseLine.bmp");
+    img=QImage({((endYear-startYear)*24+120)*2,600}, QImage::Format_RGB32);
+    analysisSvc->drawBaseLine(mdList,startYear,endYear,months,img,true);img.save(m_reportFolder+"baseLine.bmp");
     analysisSvc->BaseLineAnalysis(mdList,months,avgMd,progressSpeedBase,progressSpeedDeviation,slopeType);
 
 
@@ -302,8 +304,10 @@ void Perimeter::ProgressAnalysisListVm::getThreeFollowUpsReport(int index)
 
     for(int i=0;i<progressVal.length();i++)
     {
-        analysisSvc->drawGray(val[i],locs[i],30,m_OS_OD,img);img.save(m_reportFolder+"threeFollowUps_grey"+QString::number(i)+".bmp");
-        analysisSvc->drawPE(mPE[i],locs[i],30,img);img.save(m_reportFolder+"threeFollowUps_PatternPE"+QString::number(i)+".bmp");
+        //  locs + 序号要+2 排除 基线的locs
+        analysisSvc->drawGray(val[i],locs[i+2],30,m_OS_OD,img);img.save(m_reportFolder+"threeFollowUps_grey"+QString::number(i)+".bmp");
+//        analysisSvc->drawText(val[i],locs[i+2],30,m_OS_OD,img,1.0,true);img.save(m_reportFolder+"threeFollowUps_PatternPE"+QString::number(i)+".bmp");
+        analysisSvc->drawPE(mPE[i],locs[i+2],30,img);img.save(m_reportFolder+"threeFollowUps_PatternPE"+QString::number(i)+".bmp");
         analysisSvc->drawText(progressVal[i],progressLocs[i],30,m_OS_OD,img,1.0,true);img.save(m_reportFolder+"threeFollowUps_progressVal"+QString::number(i)+".bmp");
         analysisSvc->drawProgess(progressPicVal[i],progressLocs[i],30,img);img.save(m_reportFolder+"threeFollowUps_progressPic"+QString::number(i)+".bmp");
     }

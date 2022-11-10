@@ -43,7 +43,7 @@ Rectangle {
                     model: [
                         {name:"日期",param:Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd")},
                         {name:"选择程序",param:progressAnalysisListVm.getData(0,"program")},
-                        {name:"青光眼半视野检查",param:ght[progressAnalysisListVm.getData(0,"GHT")]},
+                        {name:"青光眼半视野检查",param:progressAnalysisListVm==null?"":ght[progressAnalysisListVm.getData(0,"GHT")]},
                         {name:"中心点",param:centerDotCheck[progressAnalysisListVm.getData(0,"centerDotCheck")?1:0]},
                         {name:"平均缺损",param:progressAnalysisListVm.getData(0,"md").toFixed(2)+(progressAnalysisListVm.getData(0,"p_md")>0?(" (<"+progressAnalysisListVm.getData(0,"p_md")+"%)"):"")},
                         {name:"平均标准差",param:progressAnalysisListVm.getData(0,"psd").toFixed(2)+(progressAnalysisListVm.getData(0,"p_psd")>0?(" (<"+progressAnalysisListVm.getData(0,"p_psd")+"%)"):"")},
@@ -133,7 +133,7 @@ Rectangle {
             }
             ScrollView
             {
-                width: 600+18;height: parent.height;
+                width: parent.width;height: parent.height;
                 Image{
                     property string picSource: "/previewImage/baseLine.bmp"
                     height: sourceSize.height;width: sourceSize.width;

@@ -1,4 +1,4 @@
-#include "analysis_svc.h"
+﻿#include "analysis_svc.h"
 #include <QDebug>
 #include <QImage>
 #include <QPainter>
@@ -631,7 +631,7 @@ void AnalysisSvc::ProgressAnalysis(const QVector<QVector<int> > &mDev,const  QVe
     _locs.prepend(baseLocs);
 
 
-
+    //进展差值计算
     for(int i=0;i<_mDev.length()-1;i++)
     {
         QVector<int> Val;
@@ -651,6 +651,8 @@ void AnalysisSvc::ProgressAnalysis(const QVector<QVector<int> > &mDev,const  QVe
                 }
             }
         }
+        qDebug()<<resultVal.length();
+        qDebug()<<resultLocs.length();
         resultVal.append(Val);
         resultLocs.append(Loc);
     }
@@ -1217,11 +1219,10 @@ QPointF AnalysisSvc::convertPolarToOrth(QPointF loc)
 }
 
 
-void AnalysisSvc::drawBaseLine(QVector<float> mds,int startYear,QVector<int> months, QImage &img)
+void AnalysisSvc::drawBaseLine(QVector<float> mds,int startYear,int endYear,QVector<int> months, QImage &img,bool isReport)
 {
     float scale;
-    if(img.width()<=600){ scale=1;}
-    else scale=2;
+    !isReport?scale=1:scale=2;
     img.fill(qRgb(255, 255, 255));
     QPainter painter(&img);
     painter.setBackground(QBrush(QColor("white")));
@@ -1233,32 +1234,32 @@ void AnalysisSvc::drawBaseLine(QVector<float> mds,int startYear,QVector<int> mon
     font.setPixelSize(fontPixSize);
     painter.setFont(font);
 
-    painter.drawLine(QLine(QPoint(0.1*img.width(),0.05*img.height()),QPoint(0.9*img.width(),0.05*img.height())));  //600*0.8/24= 20year
-    painter.drawLine(QLine(QPoint(0.1*img.width(),0.05*img.height()),QPoint(0.1*img.width(),0.95*img.height())));
+    painter.drawLine(QLine(QPoint(60*scale,0.05*img.height()),QPoint(img.width()-60*scale,0.05*img.height())));  //600*0.8/24= 20year
+    painter.drawLine(QLine(QPoint(60*scale,0.05*img.height()),QPoint(60*scale,0.95*img.height())));
 
-    QRect rectangle = QRect(0.05*img.width()-fontPixSize*1.8*0.9, 0.5*img.height()-fontPixSize*0.5,fontPixSize*1.9, fontPixSize*0.8);
+    QRect rectangle = QRect(30*scale-fontPixSize*1.8*0.9, 0.5*img.height()-fontPixSize*0.5,fontPixSize*1.9, fontPixSize*0.8);
     painter.drawText(rectangle,Qt::AlignCenter|Qt::AlignVCenter,"MD");
-    rectangle = QRect(0.05*img.width()-fontPixSize*1.8*0.9, 0.5*img.height()+fontPixSize*0.5,fontPixSize*1.9, fontPixSize*0.8);
+    rectangle = QRect(30*scale-fontPixSize*1.8*0.9, 0.5*img.height()+fontPixSize*0.5,fontPixSize*1.9, fontPixSize*0.8);
     painter.drawText(rectangle,Qt::AlignCenter|Qt::AlignVCenter,"(DB)");
 
 
     int dbScale=1;
     for(int i=1;i<=16;i++)
     {
-        const QRect rectangle = QRect(0.05*img.width()+fontPixSize*1.6*0.1, 0.06*img.height()*i-fontPixSize*0.5,fontPixSize*1.6, fontPixSize*0.8);
+        const QRect rectangle = QRect(30*scale+fontPixSize*1.6*0.1, 0.06*img.height()*i-fontPixSize*0.5,fontPixSize*1.6, fontPixSize*0.8);
         painter.drawText(rectangle,Qt::AlignCenter|Qt::AlignVCenter,QString::number(dbScale));
         dbScale--;
     }
 
 
     int yearScale=startYear;
-    for(int i=0;i<=20;i++)
+    for(int i=0;i<=endYear-startYear;i++)
     {
-        const QRect rectangle = QRect(0.1*img.width()+0.8*img.width()/20*i-fontPixSize*1.6*0.5, fontPixSize*0.2,fontPixSize*1.2, fontPixSize*0.8);
+        const QRect rectangle = QRect(60*scale+24*scale*i-fontPixSize*1.6*0.5, fontPixSize*0.2,fontPixSize*1.2, fontPixSize*0.8);
         painter.drawText(rectangle,Qt::AlignCenter|Qt::AlignVCenter,QString::number(yearScale%100));
         yearScale++;
     }
-    rectangle = QRect(0.95*img.width()-fontPixSize*1.6*0.5, fontPixSize*0.2,fontPixSize*2.3, fontPixSize*0.8);
+    rectangle = QRect(img.width()-30*scale-fontPixSize*1.6*0.5, fontPixSize*0.2,fontPixSize*2.3, fontPixSize*0.8);
 //    painter.drawText(QPoint(0.93*img.width(),fontPixSize*0.35),"(YEAR)");
     painter.drawText(rectangle,Qt::AlignCenter|Qt::AlignVCenter,"YEAR");
 
@@ -1273,21 +1274,32 @@ void AnalysisSvc::drawBaseLine(QVector<float> mds,int startYear,QVector<int> mon
 
     auto getMDPixy=[&](float md)->int{return int((0.05+0.06*(1-md))*img.height());};
 
-    painter.drawLine(QLine(QPoint(0.1*img.width(),(0.05+0.06*(1-(-2)))*img.height()),QPoint(0.9*img.width(),(0.05+0.06*(1-(-2)))*img.height())));
-    painter.drawText(QPoint(0.93*img.width(),(0.05+0.06*(1-(-2)))*img.height()+fontPixSize*0.35),"P<%5");
-    painter.drawLine(QLine(QPoint(0.1*img.width(),(0.05+0.06*(1-(-3.5)))*img.height()),QPoint(0.9*img.width(),(0.05+0.06*(1-(-3.5)))*img.height())));
-    painter.drawText(QPoint(0.93*img.width(),(0.05+0.06*(1-(-3.5)))*img.height()+fontPixSize*0.35),"P<%1");
+    painter.drawLine(QLine(QPoint(60*scale,(0.05+0.06*(1-(-2)))*img.height()),QPoint(img.width()-60*scale,(0.05+0.06*(1-(-2)))*img.height())));
+    painter.drawText(QPoint(img.width()-42*scale,(0.05+0.06*(1-(-2)))*img.height()+fontPixSize*0.35),"P<%5");
+    painter.drawLine(QLine(QPoint(60*scale,(0.05+0.06*(1-(-3.5)))*img.height()),QPoint(img.width()-60*scale,(0.05+0.06*(1-(-3.5)))*img.height())));
+    painter.drawText(QPoint(img.width()-42*scale,(0.05+0.06*(1-(-3.5)))*img.height()+fontPixSize*0.35),"P<%1");
 
 
     for(int i=0;i<mds.length();i++)
     {
-        if(i!=mds.length()-1) painter.drawLine(QLine(QPoint{int(0.1*img.width()+months[i]*0.8*img.width()/240),getMDPixy(mds[i])},QPoint{int(0.1*img.width()+months[i+1]*0.8*img.width()/240),getMDPixy(mds[i+1])}));
+        if(i!=mds.length()-1) painter.drawLine(QLine(QPoint{int(60*scale+months[i]*2*scale),getMDPixy(mds[i])},QPoint{int(60*scale+months[i+1]*2*scale),getMDPixy(mds[i+1])}));
         float diameter=0.02*img.height();
-        QPoint center={int(0.1*img.width()+months[i]*0.8*img.width()/240),getMDPixy(mds[i])};
+//        QPoint center={int(0.1*img.width()+months[i]*0.8*img.width()/240),getMDPixy(mds[i])};
+        QPoint center={int(60*scale+months[i]*2*scale),getMDPixy(mds[i])};
         painter.setBrush(QBrush(Qt::black));
         QRectF rect(center.x()-diameter/2,center.y()-diameter/2,diameter,diameter);
         painter.drawEllipse(rect);
     }
+
+//    for(int i=0;i<mds.length();i++)
+//    {
+//        if(i!=mds.length()-1) painter.drawLine(QLine(QPoint{int(60*scale+months[i]*20*scale),getMDPixy(mds[i])},QPoint{int(60*scale+months[i+1]*20*scale),getMDPixy(mds[i+1])}));
+//        float diameter=0.02*img.height();
+//        QPoint center={int(60*scale+months[i]*20*scale),getMDPixy(mds[i])};
+//        painter.setBrush(QBrush(Qt::black));
+//        QRectF rect(center.x()-diameter/2,center.y()-diameter/2,diameter,diameter);
+//        painter.drawEllipse(rect);
+//    }
 
 
 }

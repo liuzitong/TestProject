@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 1.0
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
@@ -85,7 +85,7 @@ Rectangle {
                 width: parent.width*0.15;
                 height: parent.height;spacing:textHeight;
                 CusText{text:"基线平均缺损:"+((progressAnalysisListVm.getData(0,"md")+progressAnalysisListVm.getData(1,"md"))/2).toFixed(2); horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
-                CusText{text:"基线检查:"+Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd")+"  "+Qt.formatDateTime(progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
+                CusText{text:"基线检查:"+Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd")+"  "+Qt.formatDateTime(progressAnalysisListVm==null?"":progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                 Row{
                     width: parent.width;height: parent.height*0.4
                     Column{

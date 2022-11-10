@@ -189,7 +189,7 @@ Column {
                                 return;
                             case 1:
                                 diagramWidth=root.height*14/15*0.92*0.96*0.32;
-                                console.log(progressAnalysisListVm.selectedIndex);
+//                                console.log(progressAnalysisListVm.selectedIndex);
                                 threeFollowUpsAnalysisResult=progressAnalysisListVm.getThreeFollowUpsPreview(progressAnalysisListVm.selectedIndex,diagramWidth);
                                 changePage("progressAnalysis",{progressAnalysisListVm:progressAnalysisListVm,report:report,result:threeFollowUpsAnalysisResult});
                                 return;

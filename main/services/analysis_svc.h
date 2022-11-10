@@ -1,4 +1,4 @@
-#ifndef ANALYSIS_SVC
+﻿#ifndef ANALYSIS_SVC
 #define ANALYSIS_SVC
 
 #include <QObject>
@@ -63,7 +63,7 @@ public:
 
     QPointF convertPolarToOrth(QPointF loc);
 
-    void drawBaseLine(QVector<float> mds,int startYear,QVector<int> months,QImage& img);
+    void drawBaseLine(QVector<float> mds,int startYear,int endYear,QVector<int> months,QImage& img,bool isReport=false);
 
 
 
