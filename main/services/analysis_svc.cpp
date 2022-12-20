@@ -797,7 +797,7 @@ void AnalysisSvc::drawText(QVector<int> values,QVector<QPointF> locs,int range,i
         auto pixLoc=convertDegLocToPixLoc(locs[i],range,img);
         const QRect rectangle = QRect(pixLoc.x()-fontPixSize*1.6*0.45, pixLoc.y()-fontPixSize*0.8/2, fontPixSize*1.6,fontPixSize*0.8);
         painter.drawText(rectangle,Qt::AlignCenter,QString::number(values[i]));
-//        img.setPixel(pixLoc.x(),pixLoc.y(),0xFFFF0000); //标个小红点
+        img.setPixel(pixLoc.x(),pixLoc.y(),0xFFFF0000); //标个小红点
     }
 }
 
@@ -960,7 +960,7 @@ void AnalysisSvc::drawProgess(QVector<int> values, QVector<QPointF> locs, int ra
 //    if(img.width()<200) scale=1;
 //    else if(img.width()<300) scale=2;
 //    else scale=4;
-    if(img.width()<400) scale=1;
+    if(img.width()<300) scale=1;
     else scale=2;
     for(int i=0;i<locs.length()&&i<values.length();i++)             //画DB图
     {
