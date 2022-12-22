@@ -86,8 +86,10 @@ private:
     QVector<QPoint> m_pointLoc_30d;
     QVector<QPoint> m_pointLoc_60d;
 
-    QVector<QVector<QVector<int>>> m_value_30d_cursorSize_ageCorrectionOrCursorColor;     //cursorSize!=2 ,it's CursorColor
+    QVector<QVector<QVector<int>>> m_value_30d_cursorSize_cursorColor;     //cursorSize!=2 ,it's CursorColor
+    QVector<QVector<int>> m_value_30d_cursorSizeIII_ageCorrection;     //cursorSize!=2 ,it's CursorColor
     QVector<int> m_value_60d;
+//    QVector<int> m_value_30d;
 
     QVector<int> m_pe_v5[2];
     QVector<int> m_pe_v2[2];

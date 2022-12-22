@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -23,7 +23,7 @@ Item {id:root; width: 1366;height: 691
     property int fontPointSize: CommonSettings.fontPointSize;
     signal realTimePicRefresh(var count);
 
-    onCurrentCheckResultChanged: {realTimeDBRec.visible=false;}
+//    onCurrentCheckResultChanged: {realTimeDBRec.visible=false;}
 //    property var selectedDotIndex;
 //    onSelectedDotIndexChanged:{if(currentCheckResult==null) return;var count=currentCheckResult.drawRealTimeEyePosPic(selectedDotIndex);realTimePicRefresh(count);}
 
@@ -45,6 +45,20 @@ Item {id:root; width: 1366;height: 691
         else
             currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicProgramVM", false,[program_id]);
         program_type!==2?staticParamsSetting.currentProgram=currentProgram:dynamicParamsSetting.currentProgram=currentProgram;
+
+        if(currentCheckResult!=null)
+        {
+            if(currentProgram.type!==2)
+                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticCheckResultVm",currentCheckResult);
+            else
+                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicCheckResultVm",currentCheckResult);
+            currentCheckResult=null;
+        }
+
+        realTimeDBRec.visible=false;
+        checkDisplay.clickedDotIndex=-1;
+        IcUiQmlApi.appCtrl.checkSvc.checkedCount=0;
+
     }
 
     Component.onCompleted: {
@@ -66,7 +80,7 @@ Item {id:root; width: 1366;height: 691
                 }
             }
             DynamicParamsSetting{id:dynamicParamsSetting;anchors.fill: parent;onDataRefreshed:root.currentProgramChanged();}
-            StaticParamsSetting{id:staticParamsSetting;anchors.fill: parent;isCustomProg:false;/*onOk:{root.currentProgramChanged()*/}
+            StaticParamsSetting{id:staticParamsSetting;anchors.fill: parent;isCustomProg:false;onDataRefreshed:root.currentProgramChanged();}
             Item{anchors.fill: parent;anchors.margins: 2;
                 Row{anchors.fill: parent;spacing: 2;
                     Rectangle{ width: parent.width*0.25-2;height: parent.height;color: backGroundColor;
@@ -149,7 +163,7 @@ Item {id:root; width: 1366;height: 691
                                             Row{width:parent.width;height: parent.height*1/3;spacing: width*0.05;
                                                 CusText{text:"测试点数"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                                 LineEdit{
-                                                    property var checkedDots: currentCheckResult===null?0:currentCheckResult.resultData.checkData.length;
+                                                    property var checkedDots: IcUiQmlApi.appCtrl.checkSvc===null?0:IcUiQmlApi.appCtrl.checkSvc.checkedCount;
                                                     property var totalDots: currentProgram===null?0:currentProgram.data.dots.length;
                                                     text:checkedDots+"/"+totalDots;width: parent.width*0.7;textInput.readOnly: true;
                                                 }
@@ -293,6 +307,7 @@ Item {id:root; width: 1366;height: 691
                     Item{anchors.fill: parent; anchors.margins:parent.height*0.15;
                         CusButton
                         {
+                            enabled: IcUiQmlApi.appCtrl.checkSvc.checkState>=3;
                             text:"返回";onClicked:
                             {
                                 if(currentCheckResult!==null)
@@ -312,8 +327,8 @@ Item {id:root; width: 1366;height: 691
                 Item{height: parent.height;width:parent.width*0.25;
                     Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                         Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
-                            CusButton{text:"选择程序";onClicked: chooseProgram.open();}
-                            CusButton{id:paramsSetting;text:"参数选择";enabled:!(currentProgram===null);onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { dynamicParamsSetting.open();}}
+                            CusButton{enabled:IcUiQmlApi.appCtrl.checkSvc.checkState>=3;text:"选择程序";onClicked: chooseProgram.open();}
+                            CusButton{id:paramsSetting;text:"参数选择";enabled:(currentProgram!==null&&IcUiQmlApi.appCtrl.checkSvc.checkState>=3);onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { dynamicParamsSetting.open();}}
                         }
                     }
                 }
@@ -321,85 +336,108 @@ Item {id:root; width: 1366;height: 691
                     Item{id: item1; anchors.fill: parent;anchors.margins:parent.height*0.15;
                         Flow{
                             id:checkControl
-                            property int checkState: IcUiQmlApi.appCtrl.checkSvc.checkState;
                             height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
                             CusButton{
-                                text:"开始测试";
-//                                {if(checkControl.checkState>=3) return "开始测试";if(checkControl.checkState==2) return "恢复检查";if(checkControl.checkState==1) return "暂停检查"}
+//                                text:"开始测试";
+                                property int checkState: IcUiQmlApi.appCtrl.checkSvc.checkState;
+                                text:{if(checkState>=3||checkState==-1) return "开始测试";if(checkState===2) return "恢复检查";if(checkState===0||checkState===1) return "暂停检查"}
                                 onClicked:{
+//                                    if(currentCheckResult!=null)
+//                                    {
+//                                        if(currentCheckResult.type!==2)
+//                                            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticCheckResultVm",currentCheckResult);
+
+//                                        else
+//                                            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicCheckResultVm",currentCheckResult);
+//                                        currentCheckResult=null;
+//                                    }
+
+//                                    if(currentProgram.type===0)
+//                                    {
+//                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticCheckResultVm", false,[1]);
+//                                        console.log(currentCheckResult.resultData.testTimespan);
+//                                    }
+//                                    else if(currentProgram.type===1)
+//                                    {
+//                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticCheckResultVm", false,[200]);
+//                                    }
+//                                    else
+//                                    {
+//                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicCheckResultVm", false,[300]);
+//                                    }
+
+                                    if(checkState>=3||checkState==-1)
+                                    {
+                                        if(currentCheckResult!=null)
+                                        {
+                                            if(currentProgram.type!==2)
+                                                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticCheckResultVm",currentCheckResult);
+                                            else
+                                                IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicCheckResultVm",currentCheckResult);
+                                            currentCheckResult=null;
+                                        }
+
+                                        if(currentProgram.type!==2){
+                                            currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticCheckResultVm", false,[]);
+                                        }
+                                        else
+                                        {
+                                            currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicCheckResultVm", false,[]);
+                                        }
+                                        currentCheckResult.OS_OD=os_od.value;
+                                        currentCheckResult.params=currentProgram.params;
+                                        IcUiQmlApi.appCtrl.checkSvc.program=currentProgram;
+                                        IcUiQmlApi.appCtrl.checkSvc.patient=currentPatient;
+                                        IcUiQmlApi.appCtrl.checkSvc.checkResult=currentCheckResult;
+                                        IcUiQmlApi.appCtrl.checkSvc.start();
+
+                                    }
+                                    else if(checkState===2)
+                                    {
+                                        IcUiQmlApi.appCtrl.checkSvc.resume();
+                                    }
+                                    else if(checkState===1)
+                                    {
+                                        IcUiQmlApi.appCtrl.checkSvc.pause();
+                                    }
+
+                                }
+//                                Component.onCompleted: {
+//                                    IcUiQmlApi.appCtrl.checkSvc.checkResultChanged.connect(function(){console.log("checkResultChanged.")});
+//                                }
+                            }
+                            CusButton{
+                                text:"停止测试";enabled: IcUiQmlApi.appCtrl.checkSvc.checkState<=2;
+                                onClicked:
+                                {
+                                    IcUiQmlApi.appCtrl.checkSvc.stop();
                                     if(currentCheckResult!=null)
                                     {
-                                        if(currentCheckResult.type!==2)
+                                        if(currentProgram.type!==2)
                                             IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticCheckResultVm",currentCheckResult);
-
                                         else
                                             IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicCheckResultVm",currentCheckResult);
                                         currentCheckResult=null;
                                     }
-
-                                    if(currentProgram.type===0)
-                                    {
-                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticCheckResultVm", false,[1]);
-                                        console.log(currentCheckResult.resultData.testTimespan);
-                                    }
-                                    else if(currentProgram.type===1)
-                                    {
-                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticCheckResultVm", false,[200]);
-                                    }
-                                    else
-                                    {
-                                        currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::DynamicCheckResultVm", false,[300]);
-                                    }
-
-//                                    console.log(checkControl.checkState);
-//                                    if(checkControl.checkState>=3)
-//                                    {
-//                                        if(currentCheckResult!=null)
-//                                        {
-//                                            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::CheckResultVm",currentCheckResult);
-//                                            currentCheckResult=null;
-//                                        }
-
-//                                        if(currentProgram.type===0){
-//                                            currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,["Threshold"]);
-//                                        }
-//                                        else
-//                                        {
-//                                            currentCheckResult=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::CheckResultVm", false,["Dynamic"]);
-//                                        }
-//                                        currentCheckResult.OS_OD=os_od.value;
-//                                        currentCheckResult.params=currentProgram.params;
-//                                        IcUiQmlApi.appCtrl.checkSvc.program=currentProgram;
-//                                        IcUiQmlApi.appCtrl.checkSvc.patient=currentPatient;
-//                                        IcUiQmlApi.appCtrl.checkSvc.checkResult=currentCheckResult;
-//                                        IcUiQmlApi.appCtrl.checkSvc.start();
-
-//                                    }
-//                                    if(checkControl.checkState==2)
-//                                    {
-//                                        IcUiQmlApi.appCtrl.checkSvc.resume();
-//                                    }
-//                                    if(checkControl.checkState==1)
-//                                    {
-//                                        IcUiQmlApi.appCtrl.checkSvc.pause();
-//                                    }
-
-                                }
+                                }}
+                            CusButton{
+                                text:"切换眼别";onClicked:os_od.value=(os_od.value+1)%2;
+                                enabled:IcUiQmlApi.appCtrl.checkSvc.checkState>=3;
                             }
-                            CusButton{text:"停止测试";onClicked: {IcUiQmlApi.appCtrl.checkSvc.stop();}}
-                            CusButton{text:"切换眼别";onClicked:os_od.value=(os_od.value+1)%2;}
                         }
 
                         CusComboBoxButton{
                             id:queryStrategy;
                             height: parent.height; anchors.right: parent.right; anchors.rightMargin: 0;width: height*3.5;
-                            enabled: currentCheckResult!==null;
+//                            enabled: currentCheckResult!==null;
+                            enabled: currentCheckResult!==null&&IcUiQmlApi.appCtrl.checkSvc.checkState===4;
                             property var listModel:ListModel {}
                             property var reportNames: [["常规分析","三合一图","总览图","三合一图","阈值图"],["筛选"],["动态","动态数据"]]
                             comboBox.model: listModel;popDirectionDown: false;complexType: true;
                             button.text: "分析";
                             button.onClicked:
                             {
+//                                console.log(currentCheckResult.id);
                                 var report=listModel.get(0).report;
                                 analysis(report);
                             }

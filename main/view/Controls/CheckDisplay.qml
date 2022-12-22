@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 
 Item{
     id:root;
@@ -8,14 +8,14 @@ Item{
     property var currentProgram: null;
     property var currentCheckResult:null;
     property int clickedDotIndex: -1;
+    property alias testOver:displayCanvas.testOver;
 
-
-    function testOver() {displayCanvas.testOver=true;displayCanvas.requestPaint();}
+//    function testOver() {displayCanvas.testOver=true;displayCanvas.requestPaint();}
 
     onCurrentProgramChanged: displayCanvas.requestPaint();
 
     onCurrentCheckResultChanged: {
-        clickedDotIndex=-1;
+//        clickedDotIndex=-1;
         displayCanvas.requestPaint();
     }
 
@@ -51,6 +51,7 @@ Item{
                     }
                 }
                 clickedDotIndex=index;
+                console.log(clickedDotIndex);
                 displayCanvas.requestPaint();
             }
         }
@@ -198,7 +199,7 @@ Item{
             else{degreeStep=(degreeRange-degreeStart)/2;}
 
             var i;
-            for(i=3;i>=1;i--)
+            for(i=3;i>=1;i--)                   //画三个圈圈
             {
                 if(i!==3)
                      drawDashCircle(width/2,height/2,(degreeStart+degreeStep*(i-1))/degreeRange*diameter/2, 3)
@@ -214,7 +215,7 @@ Item{
                 }
             }
 
-            ctx.beginPath();
+            ctx.beginPath();                                    //画正交轴线
             ctx.moveTo(widthMargin,height/2);
             ctx.lineTo(widthMargin+diameter,height/2);
             ctx.closePath();
@@ -225,7 +226,7 @@ Item{
             ctx.closePath();
             ctx.stroke();
 
-            if(currentProgram.type===2)
+            if(currentProgram.type===2)                         //移动投射画中心点放射线
             {
                 for(i=1;i<12;i++)
                 {
@@ -237,7 +238,7 @@ Item{
                 }
             }
 
-            for(i=-3;i<=3;i++)
+            for(i=-3;i<=3;i++)                                  //画轴线角度标记
             {
                 if(i!==0)
                 {
@@ -257,7 +258,7 @@ Item{
                 }
             }
 
-            if(root.currentCheckResult==null)
+            if(root.currentCheckResult==null)                       //结果为空的时候按照程序画圆点
             {
                 currentProgram.data.dots.forEach(function(item)
                 {
@@ -266,7 +267,7 @@ Item{
             }
             else
             {
-                if(currentProgram.type===0)
+                if(currentProgram.type!==2)                                     //静态是结果-1(表示没测到)画点,其它画值
                 {
                     var dBList=currentCheckResult.resultData.checkData;
                     var dotList=currentProgram.data.dots;
@@ -278,19 +279,7 @@ Item{
                             drawDB(dBList[i],dotList[i]);
                     }
                 }
-                else if(currentProgram.type===1)
-                {
-                    dBList=currentCheckResult.resultData.checkData;
-                    dotList=currentProgram.data.dots;                                                                                //todo
-                    for(i=0;i<dotList.length;i++)
-                    {
-                        if(dBList[i]===-1)
-                            drawDot(dotList[i]);
-                        else
-                            drawDB(dBList[i],dotList[i]);
-                    }
-                }
-                else if(currentProgram.type===2)
+                else                                                        //绘制动态检查结果
                 {
                     dotList=currentCheckResult.resultData.checkData;
                     var dotRadius=diameter/180*1;
@@ -302,7 +291,7 @@ Item{
 //                    ctx.stroke();
 
 //                    console.log(dotList[0].end.x);
-                    for(i=0;i<dotList.length;i++)
+                    for(i=0;i<dotList.length;i++)                               //画点
                     {
                         var dot=dotToPixCoord(polarToOrth(dotList[i].end));
                         ctx.lineWidth = 0;
@@ -314,7 +303,7 @@ Item{
                         ctx.closePath();
                     }
 
-                    for(i=1;i<dotList.length-1;i++)
+                    for(i=1;i<dotList.length-1;i++)                                 //连线
                     {
                         var dot_Begin=dotToPixCoord(polarToOrth(dotList[i].end));
                         var dot_End=dotToPixCoord(polarToOrth(dotList[i+1].end));
@@ -327,7 +316,7 @@ Item{
                         ctx.stroke();
                     }
 
-                    if(testOver===true)
+                    if(testOver===true)                                                 //检查完之后连接
                     {
                         dot_Begin=dotToPixCoord(polarToOrth(dotList[dotList.length-1].end));
                         dot_End=dotToPixCoord(polarToOrth(dotList[0].end));
@@ -342,8 +331,10 @@ Item{
             if(currentProgram.type!==2&clickedDotIndex!=-1)                                     //选择点--实时图片用
             {
                 var clickedDot=currentProgram.data.dots[clickedDotIndex];
-                var pixLoc=dotToPixCoord(clickedDot.x,clickedDot.y);
-                ctx.lineWidth = 0;
+                console.log(clickedDot);
+                var pixLoc=dotToPixCoord(clickedDot);
+                console.log(pixLoc.x+","+pixLoc.y);
+                ctx.lineWidth = 1;
                 ctx.strokeStyle = "blue";
                 ctx.beginPath();
                 ctx.arc(pixLoc.x, pixLoc.y, diameter/40, 0, Math.PI*2);

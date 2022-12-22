@@ -38,7 +38,7 @@ public:
 private:
     CheckSvcWorker* m_worker;
     QThread m_workerThread;
-    int m_checkState=-1;                        //-1:beforeStarted,0:start,1:checking,2:pausing,3:stopped,4:finished
+    int m_checkState=3;                        //0:start,1:checking,2:pausing,3:stopped,4:finished
     int m_checkedCount=0;
     PatientVm* m_patientVm;
     ProgramVm* m_programVm;

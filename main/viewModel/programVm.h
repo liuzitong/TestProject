@@ -1,4 +1,4 @@
-#ifndef PROGRAMVM_H
+﻿#ifndef PROGRAMVM_H
 #define PROGRAMVM_H
 #include <QObject>
 #include <perimeter/main/model/programModel.h>
@@ -180,6 +180,8 @@ public:
 
     StaticParamsVM* getParams(){return m_staticParamsVm.data();}
     StaticProgramDataVm* getData(){return m_staticDataVm.data();}
+
+    QSharedPointer<StaticProgramModel> getModel(){return m_data;}
 private:
     QSharedPointer<StaticProgramModel> m_data;
     QSharedPointer<StaticParamsVM> m_staticParamsVm;
@@ -203,6 +205,8 @@ public:
 
     DynamicParamsVM* getParams(){return m_dynamicParamsVm.data();}
     DynamicProgramDataVm* getData(){return m_dynamicDataVm.data();}
+
+    QSharedPointer<DynamicProgramModel> getModel(){return m_data;}
 private:
     QSharedPointer<DynamicProgramModel> m_data;
     QSharedPointer<DynamicParamsVM> m_dynamicParamsVm;

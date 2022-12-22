@@ -2,40 +2,80 @@
 #include <QApplication>
 #include <QThread>
 #include <QTimer>
+#include <QElapsedTimer>
 namespace Perimeter{
 
 class CheckSvcWorker : public QObject
 {
     Q_OBJECT
 public:
-    explicit CheckSvcWorker(){}
+    explicit CheckSvcWorker()
+    {
+        m_timer=new QTimer (this) ;
+        m_timer->setInterval(200);
+        connect(m_timer,&QTimer::timeout,[&](){m_staticCheckResultModel->m_data.testTimespan++;emit checkResultChanged();});
+    }
 //    explicit CheckSvcWorker(int* m_checkState,PatientVm* patientVm,ProgramVm* programVm,CheckResultVm* checkResultVm):m_checkState(m_checkState),m_patientVm(patientVm),m_programVm(programVm),m_checkResultVm(checkResultVm){}
     virtual ~CheckSvcWorker() Q_DECL_OVERRIDE {}
 public slots:
   void setCheckState(int value)
   {
       *m_checkState=value;
+//      if(value==1)
+//      {
+//           m_timer.start();
+//      }
+//      else
+//      {
+//           m_timer.stop();
+//      }
       emit checkStateChanged();
   }
   void doWork()
   {
+      *m_checkState=0;
       while(true)
       {
-          QString result;
+//          QString result;
 //          QApplication::processEvents();
           qDebug()<<*m_checkState;
           switch (*m_checkState)
           {
           case 0:{initialize();setCheckState(1);break;}
           case 1:{check();break;}
-          case 2:{qDebug()<<("pausing");thread()->msleep(1000);break;}
-          case 3:{qDebug()<<("stopped");/*m_timer.stop();*/goto exit;}
-          case 4:{/*m_checkResultVm->insertCheckResult()*/qDebug()<<("finished");goto exit;}
+          case 2:
+          {
+              qDebug()<<("pausing");
+              m_elapsedTimer.restart();
+              while(m_elapsedTimer.elapsed()<=1000)
+              {
+                  QApplication::processEvents();
+              }
+              break;
+          }
+          case 3:{qDebug()<<("stopped");goto exit;}
+          case 4:{/*m_checkResultVm->insertCheckResult()*/qDebug()<<("finished");m_staticCheckResultVm->insert();goto exit;}
           };
       }
       exit:
-        qDebug()<<("work end");
+         m_timer->stop();
+         qDebug()<<("work end");
   }
+  void pause()
+  {
+      setCheckState(2);m_timer->stop();
+  }
+
+  void resume()
+  {
+      setCheckState(1);m_timer->start();
+  }
+
+  void stop()
+  {
+      setCheckState(3);m_timer->stop();
+  }
+
 signals:
     void checkStateChanged();
     void checkResultChanged();
@@ -58,10 +98,9 @@ private:
           totalCount=m_staticProgramModel->m_data.dots.size();
           m_staticCheckResultModel->m_data.checkData.resize(totalCount,-1);
           m_staticCheckResultModel->m_params=m_staticProgramModel->m_params;
-//          m_timer.setInterval(1000);
       }
-//      m_timer.timeout.connect([](){});
-//      connect(&m_timer,&QTimer::timeout,[&](){m_staticCheckResultModel->m_data.testTimespan++;});
+
+      m_timer->start();
       emit checkedCountChanged(checkedCount);
       emit checkResultChanged();
   }
@@ -80,17 +119,21 @@ private:
 
       auto seed=quint32((QTime::currentTime().msecsSinceStartOfDay()));
       qsrand(seed);
-      m_staticCheckResultModel->m_data.checkData[checkedCount]=qrand()%50;
+      m_staticCheckResultModel->m_data.checkData[checkedCount]=qrand()%40;
 //      m_staticCheckResultModel->m_data.fixationDeviation[checkedCount]=5;
 
       int times=qrand()%5+1;
       for(int i=0;i<times;i++)
             m_staticCheckResultModel->m_data.fixationDeviation.push_back(qrand()%21-10);
       checkedCount++;
-      thread()->msleep(1000);
-
+      m_elapsedTimer.restart();
+      while(m_elapsedTimer.elapsed()<=1000)
+      {
+          QApplication::processEvents();
+      }
       if(checkedCount>=totalCount){setCheckState(4);}
       emit checkResultChanged();
+//      emit m_staticCheckResultVm->getResultData()->checkDataChanged();
       emit checkedCountChanged(checkedCount);
   }
 
@@ -111,7 +154,8 @@ private:
 
 
 public:
-//  QTimer m_timer;
+  QTimer* m_timer;
+  QElapsedTimer m_elapsedTimer;
   int* m_checkState;
   PatientVm* m_patientVm;
   ProgramVm* m_programVm;
@@ -147,30 +191,25 @@ void CheckSvc::start()
     m_worker->m_checkState=&m_checkState;
     setCheckState(0);
     QMetaObject::invokeMethod(m_worker,"doWork",Qt::QueuedConnection);
-//    m_worker->doWork();
-//    m_workerThread.start();
-//    m_worker->m_timer.start();
 
 }
 
 void CheckSvc::pause()
 {
-//    m_worker->m_timer.stop();
-    setCheckState(2);
+    QMetaObject::invokeMethod(m_worker,"pause",Qt::QueuedConnection);
+
 }
 
 void CheckSvc::resume()
 {
-    setCheckState(1);
-//    m_worker->m_timer.start();
-    qDebug()<<"resume";
-    qDebug()<<m_checkState;
+    QMetaObject::invokeMethod(m_worker,"resume",Qt::QueuedConnection);
+
+
 }
 
 void CheckSvc::stop()
 {
-//    m_worker->m_timer.stop();
-    setCheckState(3);
+    QMetaObject::invokeMethod(m_worker,"stop",Qt::QueuedConnection);
 }
 
 

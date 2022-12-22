@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -64,7 +64,7 @@ Item
     Row{
         anchors.fill: parent;
         Rectangle{width:parent.width*0.75;height: parent.height;color:"white";
-            Row{anchors.fill: parent;anchors.leftMargin: parent.width*0.06;anchors.topMargin: parent.height*0.04;anchors.bottomMargin: parent.height*0.04;spacing: width*0.10;
+            Row{anchors.fill: parent;anchors.leftMargin: parent.width*0.06;anchors.topMargin: parent.height*0.04;anchors.bottomMargin: parent.height*0.04;spacing: width*0.05;
                 Column{ id: column;width: parent.width*0.25;height: parent.height;spacing:parent.height*0.02
                     CusText{text:currentProgram.name; font.bold: true; horizontalAlignment: Text.AlignLeft;height:parent.height*0.10;font.pointSize: fontPointSize*2;}
                     Column{id:ttt;width:parent.width;height: parent.height*0.25;spacing: textHeight*0.5;
@@ -145,7 +145,7 @@ Item
                 Loader
                 {
                     id:content;
-                    width: parent.width*0.65;height:parent.height
+                    width: parent.width*0.70;height:parent.height
                 }
             }
         }

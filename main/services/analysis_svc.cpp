@@ -98,20 +98,29 @@ AnalysisSvc::AnalysisSvc()
         QVector<QVector<QString>> jsonObjNames={
             {"NORMAL_VALUE36_45_B1_White","NORMAL_VALUE36_45_B1_Red","NORMAL_VALUE36_45_B1_Blue"},
             {"NORMAL_VALUE36_45_B2_White","NORMAL_VALUE36_45_B2_Red","NORMAL_VALUE36_45_B2_Blue"},
-            {"NORMAL_VALUE15_35","NORMAL_VALUE36_45","NORMAL_VALUE46_55","NORMAL_VALUE56_65","NORMAL_VALUE66_75"},
+            {/*B3_WHITE采用该jsonObjNames2*/"NORMAL_VALUE36_45_B3_Red","NORMAL_VALUE36_45_B3_Blue"},
             {"NORMAL_VALUE36_45_B4_White","NORMAL_VALUE36_45_B4_Red","NORMAL_VALUE36_45_B4_Blue"},
             {"NORMAL_VALUE36_45_B5_White","NORMAL_VALUE36_45_B5_Red","NORMAL_VALUE36_45_B5_Blue"}
         };
 
-        m_value_30d_cursorSize_ageCorrectionOrCursorColor.resize(jsonObjNames.length());
+        QVector<QString> jsonObjNames2={"NORMAL_VALUE15_35","NORMAL_VALUE36_45","NORMAL_VALUE46_55","NORMAL_VALUE56_65","NORMAL_VALUE66_75"};
+
+        m_value_30d_cursorSize_cursorColor.resize(jsonObjNames.length());
         for(int i=0;i<jsonObjNames.length();i++)
         {
-            m_value_30d_cursorSize_ageCorrectionOrCursorColor[i].resize(jsonObjNames[i].length());
+            m_value_30d_cursorSize_cursorColor[i].resize(jsonObjNames[i].length());
             for(int j=0;j<jsonObjNames[i].length();j++)
             {
-                 jsonArrToVectorInt(m_value_30d_cursorSize_ageCorrectionOrCursorColor[i][j],jsonObjNames[i][j],jo);
+                 jsonArrToVectorInt(m_value_30d_cursorSize_cursorColor[i][j],jsonObjNames[i][j],jo);
             }
         }
+
+        m_value_30d_cursorSizeIII_ageCorrection.resize(jsonObjNames2.length());
+        for(int i=0;i<jsonObjNames2.length();i++)
+        {
+             jsonArrToVectorInt(m_value_30d_cursorSizeIII_ageCorrection[i],jsonObjNames2[i],jo);
+        }
+
         jsonArrToVectorInt(m_value_60d,"NORMAL_VALUE15_35_60d",jo);
 
         jsonArrToVectorPoint(m_GHT1_RIGHT,"GHT1_RIGHT",jo);
@@ -161,30 +170,31 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
     int cursorColor=int(params.commonParams.cursorColor);
     int backGroundColor=int(params.commonParams.backGroundColor);
 
-    int value_30d_secondIndex;
     int age_correction;
     auto testDate=checkResult.m_time.date();
     auto birthDate=patient.m_birthDate;
     int testAge= testDate.year()- birthDate.year();
     if (testDate.month() < birthDate.month() || (testDate.month() == birthDate.month() && testDate.day() < birthDate.day())) { testAge--;}
 
+    if(testAge<=35){age_correction=0;}
+    else if(testAge<=45){age_correction=1;}
+    else if(testAge<=55){age_correction=2;}
+    else if(testAge<=65){age_correction=3;}
+    else {age_correction=4;}
+
+    QVector<int> value_30d;
     if(cursorSize==2)
     {
-        if(testAge<=35){age_correction=0;}
-        else if(testAge<=45){age_correction=1;}
-        else if(testAge<=55){age_correction=2;}
-        else if(testAge<=65){age_correction=3;}
-        else {age_correction=4;}
-        value_30d_secondIndex=age_correction;
+        if(cursorColor==0)
+            value_30d=m_value_30d_cursorSizeIII_ageCorrection[age_correction];
+        else
+            value_30d=m_value_30d_cursorSize_cursorColor[cursorSize][cursorColor-1];
     }
     else
-    {
-        value_30d_secondIndex=cursorColor;
-    }
-
-    QVector<int> value_30d=m_value_30d_cursorSize_ageCorrectionOrCursorColor[cursorSize][value_30d_secondIndex];
+        value_30d=m_value_30d_cursorSize_cursorColor[cursorSize][cursorColor];
 
 
+    qDebug()<<value_30d;
 //    auto getIndex=[&](QPointF&& dot,QVector<QPoint>& pointLoc)->int{
 //        int distMin=10000;
 //        int index=-1;
@@ -211,6 +221,7 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
     else
     {  pe_v5=m_pe_v5[0]; pe_v2=m_pe_v2[0]; pe_v1=m_pe_v1[0]; pe_v05=m_pe_v05[0];}
 
+
     auto dotList=program.m_data.dots;
     QVector<int> sv(dotList.size(),0);
     dev.fill(0,dotList.size());
@@ -228,50 +239,54 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
         auto dot=dotList[i];
         float radius=sqrt(pow(dot.x,2)+pow(dot.y,2));
         int index;
-        if(radius<=30)
+//        if(radius<=30)
+//        {
+        index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_30d,checkResult.m_OS_OD);
+        if(index==-1) continue;
+        sv[i]=value_30d[index]/10;
+//        }
+//        else if(radius<=60)                     //应该没有此情况，阈值分析都是radius<30
+//        {
+//            index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_60d,checkResult.m_OS_OD);
+//            if(index==-1) continue;
+//            sv[i]=m_value_60d[index]/10;
+//        }
+        if(!(cursorSize==2&&cursorColor==0))                //CURSORIII_white情况已经考虑年龄了所以不年龄修正
         {
-            index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_30d,checkResult.m_OS_OD);
-            if(index==-1) continue;
-            sv[i]=value_30d[index]/10;
-            if(!(cursorSize==2&&cursorColor==0)){
-                if(cursorColor==2)
-                {
-                    if(sv[i]>0){sv[i]-=2*(age_correction-1);} else if(sv[i]<0){sv[i]+=2*(age_correction-1);}
-                }
-                else
-                {
-                    if(sv[i]>0){sv[i]-=(age_correction-1);} else if(sv[i]<0){sv[i]+=(age_correction-1);}
-                }
+            if(cursorColor==2)
+            {
+                if(sv[i]>0){sv[i]-=2*(age_correction-1);} else if(sv[i]<0){sv[i]+=2*(age_correction-1);}
             }
-
-        }
-        else if(radius<=60)
-        {
-            index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_60d,checkResult.m_OS_OD);
-            if(index==-1) continue;
-            sv[i]=m_value_60d[index]/10;
-            if(sv[i]>0) sv[i]-=age_correction;else if(sv[i]<0) sv[i]+=age_correction;
+            else
+            {
+                if(sv[i]>0){sv[i]-=(age_correction-1);} else if(sv[i]<0){sv[i]+=(age_correction-1);}
+            }
         }
 
-        if(sv[i]>0)  {dev[i]=checkResult.m_data.checkData[i]-sv[i];}                                                   //dev 盲点
+
+        qDebug()<<sv[i];
+
+
+        if(sv[i]>=0)  {dev[i]=checkResult.m_data.checkData[i]-sv[i];}                                                   //dev 盲点
         else{ dev[i]=-99; }
 
+        qDebug()<<dev[i];
 
-        if(radius<=30)
+
+        if(dev[i]!=-99)
         {
-            if(dev[i]!=-99)
-            {
-                int v=-dev[i];
-                if (v<=pe_v5[index]) peDev[i]=0;
-                else if(v<=pe_v2[index]) peDev[i]=1;
-                else if(v<=pe_v1[index]) peDev[i]=2;
-                else if(v<=pe_v05[index]) peDev[i]=3;
-                else peDev[i]=4;
-            }
-            else{
-                peDev[i]=-99;
-            }
+            int v=-dev[i];
+            if (v<=pe_v5[index]) peDev[i]=0;
+            else if(v<=pe_v2[index]) peDev[i]=1;
+            else if(v<=pe_v1[index]) peDev[i]=2;
+            else if(v<=pe_v05[index]) peDev[i]=3;
+            else peDev[i]=4;
         }
+        else{
+            peDev[i]=-99;
+        }
+
+        qDebug()<<peDev[i];
 
         if(sv[i]>0)
         {
@@ -429,89 +444,84 @@ void AnalysisSvc::ThresholdAnalysis(int resultId,QVector<int>& dev,QVector<int>&
 
 void AnalysisSvc::ThreeInOneAnalysis(int resultId, QVector<int> &dev)
 {
-        CheckResult_ptr checkResult_ptr(new CheckResult());
-        checkResult_ptr->m_id=resultId;
-        qx::dao::fetch_by_id(checkResult_ptr);
-        Program_ptr program_ptr(new Program());
-        program_ptr->m_id=checkResult_ptr->m_program->m_id;
-        qx::dao::fetch_by_id(program_ptr);
-        Patient_ptr patient_ptr(new Patient());
-        patient_ptr->m_id=checkResult_ptr->m_patient->m_id;
-        qx::dao::fetch_by_id(patient_ptr);
+    CheckResult_ptr checkResult_ptr(new CheckResult());
+    checkResult_ptr->m_id=resultId;
+    qx::dao::fetch_by_id(checkResult_ptr);
+    Program_ptr program_ptr(new Program());
+    program_ptr->m_id=checkResult_ptr->m_program->m_id;
+    qx::dao::fetch_by_id(program_ptr);
+    Patient_ptr patient_ptr(new Patient());
+    patient_ptr->m_id=checkResult_ptr->m_patient->m_id;
+    qx::dao::fetch_by_id(patient_ptr);
 
-        StaticCheckResultModel checkResult(checkResult_ptr);
-        StaticProgramModel program(program_ptr);
-        PatientModel patient(patient_ptr);
+    StaticCheckResultModel checkResult(checkResult_ptr);
+    StaticProgramModel program(program_ptr);
+    PatientModel patient(patient_ptr);
 
-        auto params=checkResult.m_params;
-        int cursorSize=int(params.commonParams.cursorSize);
-        int cursorColor=int(params.commonParams.cursorColor);
+    auto params=checkResult.m_params;
+    int cursorSize=int(params.commonParams.cursorSize);
+    int cursorColor=int(params.commonParams.cursorColor);
 
-        int value_30d_secondIndex;
-        int age_correction;
-        auto testDate=checkResult.m_time.date();
-        auto birthDate=patient.m_birthDate;
-        int testAge= testDate.year()- birthDate.year();
-        if (testDate.month() < birthDate.month() || (testDate.month() == birthDate.month() && testDate.day() < birthDate.day())) { testAge--;}
+    int age_correction;
+    auto testDate=checkResult.m_time.date();
+    auto birthDate=patient.m_birthDate;
+    int testAge= testDate.year()- birthDate.year();
+    if (testDate.month() < birthDate.month() || (testDate.month() == birthDate.month() && testDate.day() < birthDate.day())) { testAge--;}
 
-        if(cursorSize==2)
-        {
-            if(testAge<=35){age_correction=0;}
-            else if(testAge<=45){age_correction=1;}
-            else if(testAge<=55){age_correction=2;}
-            else if(testAge<=65){age_correction=3;}
-            else {age_correction=4;}
-            value_30d_secondIndex=age_correction;
-        }
+    if(testAge<=35){age_correction=0;}
+    else if(testAge<=45){age_correction=1;}
+    else if(testAge<=55){age_correction=2;}
+    else if(testAge<=65){age_correction=3;}
+    else {age_correction=4;}
+
+    QVector<int> value_30d;
+    if(cursorSize==2)
+    {
+        if(cursorColor==0)
+            value_30d=m_value_30d_cursorSizeIII_ageCorrection[age_correction];
         else
+            value_30d=m_value_30d_cursorSize_cursorColor[cursorSize][cursorColor-1];
+    }
+    else
+         QVector<int> value_30d=m_value_30d_cursorSize_cursorColor[cursorSize][cursorColor];
+
+    auto dotList=program.m_data.dots;
+    QVector<int> sv(dotList.size(),0);
+    dev.fill(0,dotList.size());
+
+    for(int i=0;i<int(dotList.size());i++)
+    {
+        auto dot=dotList[i];
+        float radius=sqrt(pow(dot.x,2)+pow(dot.y,2));
+        int index;
+        if(radius<=30)
         {
-            value_30d_secondIndex=cursorColor;
+            index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_30d,checkResult.m_OS_OD);
+            if(index==-1) continue;
+            sv[i]=value_30d[index]/10;
+        }
+        else if(radius<=60)
+        {
+            index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_60d,checkResult.m_OS_OD);
+            if(index==-1) continue;
+            sv[i]=m_value_60d[index]/10;
+//            if(sv[i]>0) sv[i]-=age_correction;else if(sv[i]<0) sv[i]+=age_correction;
+        }
+        if(!(cursorSize==2&&cursorColor==0))                //CURSORIII_white情况已经考虑年龄了所以不年龄修正
+        {
+            if(cursorColor==2)
+            {
+                if(sv[i]>0){sv[i]-=2*(age_correction-1);} else if(sv[i]<0){sv[i]+=2*(age_correction-1);}
+            }
+            else
+            {
+                if(sv[i]>0){sv[i]-=(age_correction-1);} else if(sv[i]<0){sv[i]+=(age_correction-1);}
+            }
         }
 
-        QVector<int> value_30d=m_value_30d_cursorSize_ageCorrectionOrCursorColor[cursorSize][value_30d_secondIndex];
-
-
-        auto dotList=program.m_data.dots;
-        QVector<int> sv(dotList.size(),0);
-        dev.fill(0,dotList.size());
-
-
-        for(int i=0;i<int(dotList.size());i++)
-        {
-            auto dot=dotList[i];
-            float radius=sqrt(pow(dot.x,2)+pow(dot.y,2));
-            int index;
-            if(radius<=30)
-            {
-                index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_30d,checkResult.m_OS_OD);
-                if(index==-1) continue;
-                sv[i]=value_30d[index]/10;
-                if(!(cursorSize==2&&cursorColor==0)){
-                    if(cursorColor==2)
-                    {
-                        if(sv[i]>0){sv[i]-=2*(age_correction-1);} else if(sv[i]<0){sv[i]+=2*(age_correction-1);}
-                    }
-                    else
-                    {
-                        if(sv[i]>0){sv[i]-=(age_correction-1);} else if(sv[i]<0){sv[i]+=(age_correction-1);}
-                    }
-                }
-
-            }
-            else if(radius<=60)
-            {
-                index=getIndex(QPointF{dot.x,dot.y},m_pointLoc_60d,checkResult.m_OS_OD);
-                if(index==-1) continue;
-                sv[i]=m_value_60d[index]/10;
-                if(sv[i]>0) sv[i]-=age_correction;else if(sv[i]<0) sv[i]+=age_correction;
-            }
-
-            if(sv[i]>0)  {dev[i]=checkResult.m_data.checkData[i]-sv[i];}                                                   //dev 盲点
-            else{ dev[i]=-99; }           //盲点
-
-        }
-
-
+        if(sv[i]>0)  {dev[i]=checkResult.m_data.checkData[i]-sv[i];}                                                   //dev 盲点
+        else{ dev[i]=-99; }           //盲点
+    }
 }
 
 void AnalysisSvc::ScreeningAnalysis(int resultId,int& dotSeen,int& dotWeakSeen,int& dotUnseen)

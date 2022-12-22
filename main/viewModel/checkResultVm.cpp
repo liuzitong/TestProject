@@ -1,4 +1,4 @@
-#include "checkResultVm.h"
+﻿#include "checkResultVm.h"
 #include "paramsVm.h"
 #include <QImage>
 #include <QPainter>
@@ -7,21 +7,34 @@ namespace Perimeter
 
 StaticCheckResultVm::StaticCheckResultVm(const QVariantList &args)
 {
-    int checkResult_id=args[0].toInt();
-    CheckResult_ptr checkResult_ptr(new CheckResult());
-    checkResult_ptr->m_id=checkResult_id;
-    qx::dao::fetch_by_id(checkResult_ptr);
-    m_data.reset(new StaticCheckResultModel(checkResult_ptr));
-    CheckResultVm::setData(m_data.data());
+    if(args.count()==1)
+    {
+        int checkResult_id=args[0].toInt();
+        CheckResult_ptr checkResult_ptr(new CheckResult());
+        checkResult_ptr->m_id=checkResult_id;
+        qx::dao::fetch_by_id(checkResult_ptr);
+        m_data.reset(new StaticCheckResultModel(checkResult_ptr));
+        CheckResultVm::setData(m_data.data());
 
-    m_params.reset(new StaticParamsVM(&m_data->m_params));
-    m_resultData.reset(new StaticResultDataVm(&m_data->m_data));
+        m_params.reset(new StaticParamsVM(&m_data->m_params));
+        m_resultData.reset(new StaticResultDataVm(&m_data->m_data));
+    }
+    else
+    {
+        m_data.reset(new StaticCheckResultModel());
+        CheckResultVm::setData(m_data.data());
+        m_params.reset(new StaticParamsVM(&m_data->m_params));
+        m_resultData.reset(new StaticResultDataVm(&m_data->m_data));
+    }
 }
 
 void StaticCheckResultVm::insert()
 {
     auto sp=m_data->ModelToDB();
+    sp->m_time=QDateTime::currentDateTime();
     qx::dao::insert(sp);
+    m_data->m_id=sp->m_id;
+    qDebug()<<sp->m_id;
 }
 
 void StaticCheckResultVm::update()
@@ -72,14 +85,25 @@ int StaticCheckResultVm::drawRealTimeEyePosPic(int index)
 
 DynamicCheckResultVm::DynamicCheckResultVm(const QVariantList &args)
 {
-    int checkResult_id=args[0].toInt();
-    CheckResult_ptr checkResult_ptr(new CheckResult());
-    checkResult_ptr->m_id=checkResult_id;
-    qx::dao::fetch_by_id(checkResult_ptr);
-    m_data.reset(new DynamicCheckResultModel(checkResult_ptr));
-    CheckResultVm::setData(m_data.data());
-    m_params.reset(new DynamicParamsVM(&m_data->m_params));
-    m_resultData.reset(new DynamicResultDataVm(&m_data->m_data));
+    if(args.count()==1)
+    {
+        int checkResult_id=args[0].toInt();
+        CheckResult_ptr checkResult_ptr(new CheckResult());
+        checkResult_ptr->m_id=checkResult_id;
+        qx::dao::fetch_by_id(checkResult_ptr);
+        m_data.reset(new DynamicCheckResultModel(checkResult_ptr));
+        CheckResultVm::setData(m_data.data());
+        m_params.reset(new DynamicParamsVM(&m_data->m_params));
+        m_resultData.reset(new DynamicResultDataVm(&m_data->m_data));
+    }
+    else
+    {
+        m_data.reset(new DynamicCheckResultModel());
+        CheckResultVm::setData(m_data.data());
+        m_params.reset(new DynamicParamsVM(&m_data->m_params));
+        m_resultData.reset(new DynamicResultDataVm(&m_data->m_data));
+    }
+
 }
 
 void DynamicCheckResultVm::insert()

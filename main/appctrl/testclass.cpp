@@ -162,7 +162,7 @@ void TestClass::TestReport()
 void TestClass::makePicData()
 {
     StaticCheckResultVm checkResultVm(QVariantList{1});
-    auto resultModel=checkResultVm.getData();
+    auto resultModel=checkResultVm.getModel();
     resultModel->m_data.realTimeDB={{22},{24,23},{32,25,14},{32,25,14,44},{13,25,14,32,21},{13,25,44,32,26,42},{13,25,14,32,21},{32,25,14,44},{32,25,14},{24,23},{22}};
 
     QByteArray byteArr;
@@ -210,7 +210,7 @@ void TestClass::makePic()
 void TestClass::drawPicData()
 {
     StaticCheckResultVm checkResultVm(QVariantList{1});
-    auto resultModel=checkResultVm.getData();
+    auto resultModel=checkResultVm.getModel();
     auto pic=resultModel->m_blob;
     int picCount=pic.size()/(320*240);
     qDebug()<<picCount;

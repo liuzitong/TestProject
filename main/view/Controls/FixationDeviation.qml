@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtQuick.Controls 1.0
 ScrollView
 {
@@ -18,6 +18,7 @@ ScrollView
 
         function drawBackGround(){
             var ctx = getContext("2d")
+            ctx.clearRect(0,0,322,27);
             ctx.strokeStyle="black";
             ctx.lineWidth=0;
             ctx.beginPath();

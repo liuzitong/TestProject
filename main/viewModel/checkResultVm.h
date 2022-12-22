@@ -1,4 +1,4 @@
-#ifndef CHECKRESULTVM_H
+﻿#ifndef CHECKRESULTVM_H
 #define CHECKRESULTVM_H
 #include <QObject>
 #include <perimeter/main/model/checkResultModel.h>
@@ -22,10 +22,13 @@ public:
     QVariantList getFixationDeviation()
     {
         QVariantList list;
-        for(auto& i:m_data->fixationDeviation)
-        {
-            list.append(QVariant(i));
-        }
+//        for(auto& i:m_data->fixationDeviation)
+//        {
+//            list.append(QVariant(i));
+//        }
+//        return list;
+        for(uint i=0;i<m_data->fixationDeviation.size();i++)
+            list.append(QVariant(m_data->fixationDeviation[i]));
         return list;
     }
     void setData(ResultData* data){m_data=data;}
@@ -42,7 +45,7 @@ class StaticResultDataVm:public ResultDataVm
     Q_PROPERTY(int falseNegativeTestCount READ getFalseNegativeTestCount WRITE setFalseNegativeTestCount)
     Q_PROPERTY(int fixationLostCount READ getFixationLostCount WRITE setFixationLostCount)
     Q_PROPERTY(int fixationLostTestCount READ getFixationLostTestCount WRITE setFixationLostTestCount)
-    Q_PROPERTY(QVariantList checkData READ getCheckData)
+    Q_PROPERTY(QVariantList checkData READ getCheckData NOTIFY checkDataChanged)
     Q_PROPERTY(QVariantList realTimeDB READ getRealTimeDB)
 
 public:
@@ -63,6 +66,7 @@ public:
         }
         return list;
     }
+    Q_SIGNAL void checkDataChanged();
     QVariantList getRealTimeDB()
     {
         QVariantList list;
@@ -176,7 +180,7 @@ public:
     StaticParamsVM* getParams(){return m_params.data();}void setParams(StaticParamsVM* other){*m_params=*other;}
     StaticResultDataVm* getResultData(){return m_resultData.data();}
 
-    QSharedPointer<StaticCheckResultModel> getData(){return m_data;}
+    QSharedPointer<StaticCheckResultModel> getModel(){return m_data;}
 private:
     QSharedPointer<StaticCheckResultModel> m_data;
     QSharedPointer<StaticParamsVM> m_params;
@@ -198,6 +202,8 @@ public:
 
     DynamicParamsVM* getParams(){return m_params.data();}void setParams(DynamicParamsVM* other){*m_params=*other;}
     DynamicResultDataVm* getResultData(){return m_resultData.data();}
+
+    QSharedPointer<DynamicCheckResultModel> getModel(){return m_data;}
 private:
     QSharedPointer<DynamicCheckResultModel> m_data;
     QSharedPointer<DynamicParamsVM> m_params;

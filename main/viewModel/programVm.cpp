@@ -1,4 +1,4 @@
-#include "programVm.h"
+﻿#include "programVm.h"
 #include <qDebug>
 #include <math.h>
 namespace Perimeter {
