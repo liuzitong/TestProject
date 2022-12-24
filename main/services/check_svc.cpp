@@ -98,6 +98,7 @@ private:
           totalCount=m_staticProgramModel->m_data.dots.size();
           m_staticCheckResultModel->m_data.checkData.resize(totalCount,-1);
           m_staticCheckResultModel->m_params=m_staticProgramModel->m_params;
+          m_staticCheckResultModel->m_data.pupilDiameter=3.5;
       }
 
       m_timer->start();
@@ -127,6 +128,9 @@ private:
             m_staticCheckResultModel->m_data.fixationDeviation.push_back(qrand()%21-10);
       checkedCount++;
       m_elapsedTimer.restart();
+      m_staticCheckResultModel->m_data.falseNegativeTestCount+=2;
+      m_staticCheckResultModel->m_data.falseNegativeCount+=1;
+      m_staticCheckResultModel->m_data.pupilDiameter+=0.01;
       while(m_elapsedTimer.elapsed()<=1000)
       {
           QApplication::processEvents();

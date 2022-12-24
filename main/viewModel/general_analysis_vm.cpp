@@ -1,4 +1,4 @@
-#include "general_analysis_vm.h"
+﻿#include "general_analysis_vm.h"
 #include <QVariant>
 #include <perimeter/main/services/analysis_svc.h>
 #include <perimeter/main/model/checkResultModel.h>
@@ -196,6 +196,7 @@ QPointF StaticAnalysisVm::getPixFromPoint(QPointF point, float width, float heig
 void StaticAnalysisVm::showReport(int report)
 {
     auto analysisMethodSvc=AnalysisSvc::getSingleton();
+    QImage img480=QImage({480,480}, QImage::Format_RGB32);
     QImage img550=QImage({550,550}, QImage::Format_RGB32);
     QImage img800=QImage({800,800}, QImage::Format_RGB32);
     QImage img500=QImage({500,500}, QImage::Format_RGB32);
@@ -207,27 +208,27 @@ void StaticAnalysisVm::showReport(int report)
         if(report==0)
         {
 //            analysisMethodSvc->DrawThreshold(resultId)
-            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550,1.0,true);img550.save(m_reportFolder+"dBDiagram.bmp");
-            analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img550);img550.save(m_reportFolder+"gray.bmp");
+            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img480,1.0,true);img480.save(m_reportFolder+"dBDiagram.bmp");
+            analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img480);img480.save(m_reportFolder+"gray.bmp");
 
-            analysisMethodSvc->drawText(m_dev,m_locs,m_range,m_OS_OD,img500,1.0,true);img500.save(m_reportFolder+"TotalDeviation.bmp");
-            analysisMethodSvc->drawText(m_mDev,m_locs,m_range,m_OS_OD,img500,1.0,true);img500.save(m_reportFolder+"PatternDeviation.bmp");
+            analysisMethodSvc->drawText(m_dev,m_locs,m_range,m_OS_OD,img480,1.0,true);img480.save(m_reportFolder+"TotalDeviation.bmp");
+            analysisMethodSvc->drawText(m_mDev,m_locs,m_range,m_OS_OD,img480,1.0,true);img480.save(m_reportFolder+"PatternDeviation.bmp");
 
-            analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,img500);img500.save(m_reportFolder+"TotalPE.bmp");
-            analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,img500);img500.save(m_reportFolder+"PatternPE.bmp");
+            analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,img480);img480.save(m_reportFolder+"TotalPE.bmp");
+            analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,img480);img480.save(m_reportFolder+"PatternPE.bmp");
         }
         else if(report==1)
         {
-            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550,1.0,true);img550.save(m_reportFolder+"dBDiagram.bmp");
-            analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img550);img550.save(m_reportFolder+"gray.bmp");
-            analysisMethodSvc->drawDefectDepth(m_dev,m_locs,m_range,img550,1.0,true);img550.save(m_reportFolder+"defectDepth.bmp");
+            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img480,1.0,true);img480.save(m_reportFolder+"dBDiagram.bmp");
+            analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img480);img480.save(m_reportFolder+"gray.bmp");
+            analysisMethodSvc->drawDefectDepth(m_dev,m_locs,m_range,img480,1.0,true);img480.save(m_reportFolder+"defectDepth.bmp");
         }
         else if(report==2)
         {
-            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img550,1.0,true);img550.save(m_reportFolder+"dBDiagram.bmp");
-            analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img550);img550.save(m_reportFolder+"gray.bmp");
-            analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,img550);img550.save(m_reportFolder+"TotalPE.bmp");
-            analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,img550);img550.save(m_reportFolder+"PatternPE.bmp");
+            analysisMethodSvc->drawText(m_values,m_locs,m_range,m_OS_OD,img480,1.0,true);img480.save(m_reportFolder+"dBDiagram.bmp");
+            analysisMethodSvc->drawGray(m_values,m_locs,m_range,m_innerRange,img480);img480.save(m_reportFolder+"gray.bmp");
+            analysisMethodSvc->drawPE(m_peDev,m_locs,m_range,img480);img480.save(m_reportFolder+"TotalPE.bmp");
+            analysisMethodSvc->drawPE(m_peMDev,m_locs,m_range,img480);img480.save(m_reportFolder+"PatternPE.bmp");
         }
         else if(report==3)
         {

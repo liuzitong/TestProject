@@ -398,7 +398,7 @@ void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index)
 
     analysisSvc->ProgressAnalysis(mDev,locs,m_OS_OD,progressLocs,progressVal,progressPicVal,progress);
 
-    QImage img=QImage({500,500}, QImage::Format_RGB32);
+    QImage img=QImage({480,480}, QImage::Format_RGB32);
     analysisSvc->drawText(val.last(),locs.last(),30,m_OS_OD,img,1.0,true);img.save(m_reportFolder+"singleProgress_dBDiagram.bmp");
     analysisSvc->drawGray(val.last(),locs.last(),30,0,img);img.save(m_reportFolder+"singleProgress_gray.bmp");
 
@@ -421,6 +421,7 @@ void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index)
 
 
     auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
+//    reportEngine->setReportLanguage(QLocale::Chinese);
     reportEngine->loadFromFile("./reports/SingleProgress.lrxml");
     auto manager=reportEngine->dataManager();
     manager->clearUserVariables();

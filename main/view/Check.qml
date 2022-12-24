@@ -202,7 +202,7 @@ Item {id:root; width: 1366;height: 691
                                             Row{width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{}
                                                 CusText{text:"瞳孔尺寸"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
-                                                LineEdit{text:"0.0";width: parent.width*0.5;textInput.readOnly: true;}
+                                                LineEdit{text:currentCheckResult.resultData.pupilDiameter.toFixed(2);width: parent.width*0.5;textInput.readOnly: true;}
                                             }
                                             Row{id: row;width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{enabled: false;checked:currentProgram.type!==2?currentProgram.params.commonParams.fixationMonitor>0:currentProgram.params.fixationMonitor>0;}

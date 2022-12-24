@@ -4,9 +4,9 @@ QT+= printsupport
 QT += xml
 QT += datavisualization
 #QT += sql
-CONFIG += console thread
+CONFIG += thread
 #CONFIG += c++17  qml_debug
-CONFIG += c++11 qml_debug
+CONFIG += c++11
 CONFIG -= app_bundle
 DEFINES += QT_DEPRECATED_WARNINGS QT_MESSAGELOGCONTEXT _QX_NO_PRECOMPILED_HEADER
 QMAKE_CFLAGS += /utf-8
@@ -46,11 +46,16 @@ LIBS += -L$$PWD/../../../perimeter/third-part/LimeReport/build/5.9.7/win32/relea
 # 设置生成的目标名称、添加依赖库
 CONFIG(debug, debug|release) {
     LIBS += -l"QxOrmd" -l"limereportd" -l"QtZintd"
-
+#    CONFIG += qml_debug console
 #    LIBS += -l"libboost_serialization-vc140-mt-gd-x32-1_78"
     DESTDIR=$$PWD/../../bin/debug
 } else {
     LIBS += -l"QxOrm" -l"limereport" -l"QtZint"
+
+    CONFIG -= qml_debug
+    CONFIG -= console
+    DEFINES+=QT_QML_DEBUG_NO_WARNING
+#    CONFIG -= qml_debug console
 #    LIBS += -l"libboost_serialization-vc140-mt-x32-1_78"
     DESTDIR=$$PWD/../../bin/release
 }
