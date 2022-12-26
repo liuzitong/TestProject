@@ -46,13 +46,15 @@ SOURCES += \
     $$PWD/appctrl/testclass.cpp \
     $$PWD/services/check_svc.cpp \
     $$PWD/services/analysis_svc.cpp \
-    $$PWD/object_wrapper.cpp
+    $$PWD/object_wrapper.cpp \
+    $$PWD/services/translate_svc.cpp
 
 HEADERS += \
     $$PWD/appctrl/testclass.h \
     $$PWD/services/check_svc.h \
     $$PWD/services/analysis_svc.h \
-    $$PWD/object_wrapper.h
+    $$PWD/object_wrapper.h \
+    $$PWD/services/translate_svc.h
 
 RESOURCES += \
     $$PWD/view/utils/utils.qrc
