@@ -1,4 +1,4 @@
-import QtQuick 2.7
+﻿import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import qxpack.indcom.ui_qml_base 1.0     // [HINT] this is the pre-registered module name.
@@ -11,9 +11,10 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
    property alias color: idContent.color;
    reqEnterEventLoop:false;
    anchors.fill: parent;
-   width: 1366;height: 640;
+//   width: 1366;height: 640;
 
    property int fontPointSize: CommonSettings.fontPointSize;
+   property int rowHeight: CommonSettings.windowHeight*0.04;
 
    contentItem:
    Rectangle{
@@ -21,14 +22,14 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
         Rectangle
         {
         // [HINT] Popup element need implicitWidth & implicitHeight to calc. the right position
-            id: menu; width:idPopup.width*0.30; height: idPopup.height*0.6; color: "#f0f1f2";radius: 5;/*width:480; height:480;*/
+            id: menu; width:idPopup.width*0.30; height: idPopup.height*0.5; color: "#f0f1f2";radius: 5;/*width:480; height:480;*/
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             border.color: "#7C7C7C";
             Column{
                 anchors.fill: parent;
                 Canvas{
-                    id:header;height: parent.height/14;width: parent.width;
+                    id:header;height: rowHeight;width: parent.width;
                     property alias radius: menu.radius;
                     onPaint: {
                         var ctx = getContext("2d");
@@ -43,7 +44,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         ctx.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"设置";width: height*1.4;font.pointSize: fontPointSize;}
+                    CusText{text:qsTr("Settings");width: height*1.4;font.pointSize: fontPointSize;anchors.left:parent.left;anchors.leftMargin: height*0.5;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;
@@ -52,53 +53,59 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         anchors.fill: parent;anchors.margins:height/10
                         Column{
                             id: column
-                            property int rowHeight: height/12;spacing: rowHeight*1.0;
+//                            property int rowHeight: height/12;
+                            spacing: rowHeight*1.0;
                             anchors.fill: parent;
-                            Item{width: parent.width;height:column.rowHeight*0.1;}
+                            Item{width: parent.width;height:rowHeight*0.1;}
                             Flow{
-                                height: column.rowHeight; width: parent.width*0.7;anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
-                                CusText{text:"语言选择";width:parent.width*0.3;font.pointSize: fontPointSize;}
+                                height: rowHeight; width: parent.width*0.7;anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
+                                CusText{text:qsTr("Select language")+":"; horizontalAlignment: Text.AlignRight;width:parent.width*0.3;font.pointSize: fontPointSize;}
                                 CusComboBox{
                                     id:languageSelection;height: parent.height;width:parent.width*0.60;
                                     borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                                     imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                                    model: ListModel {ListElement { name: "中文" } ListElement { name: "English" }}
-                                    currentIndex: IcUiQmlApi.appCtrl.settings.language==="Chinese"?0:1;
+                                    model: ListModel {ListElement { name: qsTr("Default") }ListElement { name: "中文" } ListElement { name: "English" }}
+                                    currentIndex:
+                                    {
+                                        if(IcUiQmlApi.appCtrl.settings.language==="Default") return 0;
+                                        else if(IcUiQmlApi.appCtrl.settings.language==="Chinese") return 1;
+                                        else return 2;
+                                    }
                                 }
                             }
                             Flow{
-                                height: column.rowHeight;width: parent.width*0.7; anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
-                                CusText{text:"医院名称";width: parent.width*0.3;font.pointSize: fontPointSize;}
-                                LineEdit{id:hospitalName;height: column.rowHeight;width:parent.width*0.60;text:IcUiQmlApi.appCtrl.settings.hospitalName}
+                                height: rowHeight;width: parent.width*0.7; anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
+                                CusText{text:qsTr("Hospital name")+":"; horizontalAlignment: Text.AlignRight;width: parent.width*0.3;font.pointSize: fontPointSize;}
+                                LineEdit{id:hospitalName;height: rowHeight;width:parent.width*0.60;text:IcUiQmlApi.appCtrl.settings.hospitalName}
                             }
 
                             Flow{
-                                height: column.rowHeight;width: parent.width*0.7; anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
-                                CusText{text:"双姓名输入";width: parent.width*0.3;font.pointSize: fontPointSize;}
-                                CusCheckBox{id:doubleName;checked:IcUiQmlApi.appCtrl.settings.doubleName;}
-                        }
+                                height: rowHeight;width: parent.width*0.7; anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
+//                                CusText{text:"First name and last name separated";width: parent.width*0.3;font.pointSize: fontPointSize;}
+//                                CusCheckBox{id:doubleName;checked:IcUiQmlApi.appCtrl.settings.doubleName;}
+                            }
                         }
                         Item{
-                            height: column.rowHeight; anchors.bottom: parent.bottom; anchors.bottomMargin: 0; anchors.horizontalCenter: parent.horizontalCenter; width: parent.width*0.6
+                            height: rowHeight; anchors.bottom: parent.bottom; anchors.bottomMargin: 0; anchors.horizontalCenter: parent.horizontalCenter; width: parent.width*0.6;
                             CusButton
                             {
                                 buttonColor: CommonSettings.darkButtonColor;
-                                text:"确定";
-                                anchors.left: parent.left
-                                anchors.leftMargin: 0
+                                text:qsTr("OK");
+                                anchors.left: parent.left;
+                                anchors.leftMargin: 0;
                                 onClicked:
                                 {
-                                    if(languageSelection.currentIndex==0) IcUiQmlApi.appCtrl.settings.language="Chinese";
-                                    if(languageSelection.currentIndex==1) IcUiQmlApi.appCtrl.settings.language="English";
-
-                                    console.log(doubleName.checked);
-                                    IcUiQmlApi.appCtrl.settings.doubleName=doubleName.checked;
+                                    if(languageSelection.currentIndex==0) IcUiQmlApi.appCtrl.settings.language="Default";
+                                    if(languageSelection.currentIndex==1) IcUiQmlApi.appCtrl.settings.language="Chinese";
+                                    if(languageSelection.currentIndex==2) IcUiQmlApi.appCtrl.settings.language="English";
+//                                    console.log(doubleName.checked);
+//                                    IcUiQmlApi.appCtrl.settings.doubleName=doubleName.checked;
                                     IcUiQmlApi.appCtrl.settings.hospitalName=hospitalName.text;
                                     IcUiQmlApi.appCtrl.settings.save();
                                     idPopup.close();
                                 }
                             }
-                            CusButton{buttonColor: CommonSettings.darkButtonColor;text:"取消"; anchors.right: parent.right; anchors.rightMargin: 0;onClicked: {idPopup.close();}}
+                            CusButton{buttonColor: CommonSettings.darkButtonColor;text:qsTr("Cancel"); anchors.right: parent.right; anchors.rightMargin: 0;onClicked: {idPopup.close();}}
                         }
                     }
                 }

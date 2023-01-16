@@ -1,4 +1,4 @@
-pragma Singleton
+﻿pragma Singleton
 import QtQuick 2.0
 
 Item {
@@ -10,6 +10,7 @@ Item {
 
     property int textHeight: windowHeight*0.018;
     property int fontPointSize: textHeight*0.8;
+
 }
 
 /*##^## Designer {

@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Controls 1.0
 import QtQuick.Window 2.3
@@ -31,18 +31,16 @@ Item
     Row{
         anchors.fill: parent;
         Rectangle{width:parent.width;height: parent.height;color:"white";
-            Row{ id: row;anchors.fill: parent;anchors.leftMargin: parent.width*0.06;anchors.topMargin: parent.height*0.04;anchors.bottomMargin: parent.height*0.04;spacing: width*0.10;
+            Row{ id: row;anchors.fill: parent;anchors.leftMargin: parent.width*0.04;anchors.topMargin: parent.height*0.04;anchors.bottomMargin: parent.height*0.04;spacing: width*0.10;
                 Column{ id: column;width: parent.width*0.18;height: parent.height;spacing:parent.height*0.01
                     CusText{text:currentProgram.name; font.bold: true; horizontalAlignment: Text.AlignLeft;height:parent.height*0.10;font.pointSize: fontPointSize*2;}
                     Column{width:parent.width;height: parent.height*0.15;spacing: textHeight*0.5;
                         Repeater{
                             property var params: currentCheckResult.params;
                             property int timeSpan:currentCheckResult.resultData.testTimespan;
-                            property var fixationMonitor: ["不报警","只报警","报警并暂停"];
+                            property var fixationMonitor: [qsTr("No alarm"),qsTr("Only alarm"),qsTr("Alarm and pause")];
 
-                            model: [
-                                {name:"眼动报警模式",param:fixationMonitor[params.fixationMonitor]},
-                                {name:"测试用时",param:Math.floor(timeSpan/60)+":"+timeSpan%60}]
+                            model: [{name:qsTr("Eye move alarm mode"),param:fixationMonitor[params.fixationMonitor]},{name:qsTr("Check time"),param:Math.floor(timeSpan/60)+":"+timeSpan%60}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
     //                        CusText{text:"固视监测";  horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
@@ -51,28 +49,28 @@ Item
                         Repeater{
                             property var params: currentCheckResult.params;
                             property var cursorSize: ["I","II","III","IV","V"];
-                            property var cursorColor: ["白色","红色","蓝色"];
+                            property var cursorColor: [qsTr("White"),qsTr("Red"),qsTr("Blue")];
                             property var backGroundColor: ["31.5 ASB","315 ASB"];
-                            property var strategy: ["标准动态","盲区","暗区","直线"]
+                            property var strategy: [qsTr("Standard"),qsTr("Blind area"),qsTr("Dark area"),qsTr("Straight line")]
                             model: [
-                                {name:"刺激光标",param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
-                                {name:"背景光",param:backGroundColor[params.backGroundColor]},
-                                {name:"策略",param:strategy[params.strategy]}]
+                                {name:qsTr("Stimulus cursor"),param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
+                                {name:qsTr("Background color"),param:backGroundColor[params.backGroundColor]},
+                                {name:qsTr("Strategy"),param:strategy[params.strategy]}]
                             CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
                     Column{width:parent.width;height: parent.height*0.15;spacing: textHeight*0.5;
                         Repeater{
                             model: [
-                                {name:"瞳孔直径",param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
-                                {name:"视力",param:!currentCheckResult.OS_OD?currentPatient.rx.visual_l.toFixed(2):currentPatient.rx.visual_r.toFixed(2)},
-                                {name:"屈光度",param:"Rx:"+rx}]
+                                {name:qsTr("Pupil diameter"),param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
+                                {name:qsTr("Visual acuity"),param:!currentCheckResult.OS_OD?currentPatient.rx.visual_l.toFixed(2):currentPatient.rx.visual_r.toFixed(2)},
+                                {name:qsTr("Diopter"),param:"Rx:"+rx}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
 
                     Column{width:parent.width;height: parent.height*0.25;spacing: textHeight*0.5;
-                        CusText{text:"诊断:"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
+                        CusText{text:qsTr("Diagnosis")+":"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
                         Rectangle{ id: rectangle;width:parent.width;height: parent.height*0.73;radius: 5;border.color: "black";smooth: false;
                             TextInput
                             {
@@ -85,7 +83,7 @@ Item
                             }
 
                             CusButton{ id: cusButton;height: parent.height*0.25;width: height*2;
-                                text:"保存";anchors.right: parent.right;anchors.bottom: parent.bottom;
+                                text:qsTr("Save");anchors.right: parent.right;anchors.bottom: parent.bottom;
                                 anchors.rightMargin: 5;anchors.bottomMargin: 5;
                                 onClicked:
                                 {
@@ -122,7 +120,7 @@ Item
                         Row{
                             width: scrollView.width-20;height: parent.height/21;
                             Repeater{
-                                model:["等视标识线","离心度起点","子午线起点","离心度停止","子午线停止","刺激亮度反应"]
+                                model:[qsTr("Iospter ident"),qsTr("Degrees start"),qsTr("Meridian start"),qsTr("Degrees stop"),qsTr("Meridian stop"),qsTr("Stimulus response")]
                                 CusText{width:parent.width/6;text:modelData;font.pointSize: fontPointSize;}
                             }
                         }

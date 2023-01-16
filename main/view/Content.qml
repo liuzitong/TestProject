@@ -33,24 +33,24 @@ Rectangle {
                     Item{width: parent.width;height: parent.height*0.30;
                         Flow{height:parent.height;spacing: height*0.2
                             Image {width: height;height: parent.height;source: "qrc:/Pics/user-svg/0syseye_logo.svg";}
-                            CusText{text:"电脑自动视野仪系统"; horizontalAlignment: Text.AlignLeft;color: "white";font.pointSize: height*0.5;width:height*10;}
+                            CusText{text:qsTr("Computer automatic perimeter system"); horizontalAlignment: Text.AlignLeft;color: "white";font.pointSize: height*0.5;width:height*10;}
 
                             Flow{
                                 id:patientInfo;visible: false;height: parent.height;spacing: height*0.5;
                                 Flow{
                                     height: parent.height;
-                                    CusText{text:"姓名:  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
+                                    CusText{text:qsTr("Name")+":  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
                                     CusText{id:name;text:currentPatient.name; horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;}
                                 }
                                 Flow{
                                     height: parent.height;
-                                    CusText{text:"性别:  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
+                                    CusText{text:qsTr("Sex")+":  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
                                     CusText{id:sex;text:{switch (currentPatient.sex){ case 0:return "男";case 1:return "女";case 2:return "其它";};}
                                             horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1;}
                                 }
                                 Flow{
                                     height: parent.height;
-                                    CusText{text:"年龄:  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
+                                    CusText{text:qsTr("Age")+":  "; horizontalAlignment: Text.AlignRight;color:"white";width: 2*height;font.pointSize: height*0.4;}
                                     CusText{id:age;text:CusUtils.getAge(currentPatient.birthDate); horizontalAlignment: Text.AlignLeft;color:"white";font.pointSize: height*0.4;width: height*1;}
                                 }
 
@@ -66,18 +66,18 @@ Rectangle {
                     Item{
                         width: parent.width;height: parent.height*0.60;
                         CusButton{
-                            type:"click";isAnime: false;underImageText.text: "登录";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_login.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_login_select.svg";
+                            type:"click";isAnime: false;underImageText.text: qsTr("Login");underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_login.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_login_select.svg";
                             onClicked: {changePage("login");}
                         }
                         Flow{
                             id:contentSwitcher
-                            property string contentType: "patientManagement";
+//                            property string contentType: "patientManagement";
                             height: parent.height;
                             anchors.horizontalCenter: parent.horizontalCenter
                             Rectangle{ id:seperator1;height: parent.height; gradient: Gradient {GradientStop {position: 0;color: "#333e44"}GradientStop { position: 0.5;color: "#7e8588"}GradientStop {position: 1;color: "#333e44"; }} width: 2;}
-                            CusButton{id:patientContentButton;isAnime: false;image.source:pressImageSrc;underImageText.text: "患者";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width*2;imageSrc: "qrc:/Pics/base-svg/menu_patient.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_patient_select.svg";enabled: false;/*onClicked: {switchContent("patientManagement")}*/}
+                            CusButton{id:patientContentButton;isAnime: false;image.source:pressImageSrc;underImageText.text: qsTr("Patient");underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width*2;imageSrc: "qrc:/Pics/base-svg/menu_patient.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_patient_select.svg";enabled: false;/*onClicked: {switchContent("patientManagement")}*/}
                             Rectangle{ id:seperator2;height: parent.height; gradient: Gradient {GradientStop {position: 0;color: "#333e44"}GradientStop { position: 0.5;color: "#7e8588"}GradientStop {position: 1;color: "#333e44"; }} width: 2;}
-                            CusButton{id:checkContentButton;isAnime: false;underImageText.text: "检测";underImageText.color: "white"; rec.visible: false;width:image.sourceSize.width*2; fontSize: height/4;imageSrc: "qrc:/Pics/base-svg/menu_capture.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_capture_select.svg";enabled: false;/*onClicked: {switchContent("check")}*/}
+                            CusButton{id:checkContentButton;isAnime: false;underImageText.text: qsTr("Check");underImageText.color: "white"; rec.visible: false;width:image.sourceSize.width*2; fontSize: height/4;imageSrc: "qrc:/Pics/base-svg/menu_capture.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_capture_select.svg";enabled: false;/*onClicked: {switchContent("check")}*/}
                             Rectangle{ id:seperator3;opacity: 0;height: parent.height; gradient: Gradient {GradientStop {position: 0;color: "#333e44"}GradientStop { position: 0.5;color: "#7e8588"}GradientStop {position: 1;color: "#333e44"; }} width: 2;}
                         }
                         Flow{
@@ -89,7 +89,7 @@ Rectangle {
                                 onClicked: {IcUiQmlApi.appCtrl.testClass.test();}
                             }
                             CusButton{
-                                type:"click";isAnime: false;underImageText.text: "设置";underImageText.color: "white"; fontSize: height/4;rec.visible: false;
+                                type:"click";isAnime: false;underImageText.text: qsTr("Settings");underImageText.color: "white"; fontSize: height/4;rec.visible: false;
                                 width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_set.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_set_select.svg";
                                 onClicked:
                                 {
@@ -98,10 +98,10 @@ Rectangle {
                                 }
                             }
                             CusButton{
-                                type:"click";isAnime: false;underImageText.text: "自定义";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_customize.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_customize_select.svg";
+                                type:"click";isAnime: false;underImageText.text: qsTr("Customize");underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_customize.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_customize_select.svg";
                                 onClicked: contentPage.changePage("programCustomize",null);
                             }
-                            CusButton{type:"click";isAnime: false;underImageText.text: "关于";underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_about.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_about_select.svg";onClicked: {about.open();}}
+                            CusButton{type:"click";isAnime: false;underImageText.text: qsTr("About");underImageText.color: "white"; fontSize: height/4;rec.visible: false;width:image.sourceSize.width;imageSrc: "qrc:/Pics/base-svg/menu_about.svg";pressImageSrc: "qrc:/Pics/base-svg/menu_about_select.svg";onClicked: {about.open();}}
                         }
                     }
                 }
@@ -140,6 +140,7 @@ Rectangle {
                 switch(pageName)
                 {
                     case "patientManagement":
+                        if(params==="createNewPatient") patientPage.createNewPatient();
                         patientPage.visible=true;
                         checkContentButton.image.source=checkContentButton.imageSrc;
                         patientContentButton.image.source=patientContentButton.pressImageSrc;

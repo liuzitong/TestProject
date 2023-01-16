@@ -1,4 +1,4 @@
-import QtQuick 2.7
+﻿import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
@@ -47,7 +47,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"创建圆形程序的范围"; horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;height:parent.height;anchors.left: parent.left; anchors.leftMargin:height*0.5;}
+                    CusText{text:"Create program according to square"; horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;height:parent.height;anchors.left: parent.left; anchors.leftMargin:height*0.5;}
                 }
                 Item{width: parent.width;height: parent.height-header.height;
                     Column{width: parent.width*0.8;height: parent.height*0.8;anchors.horizontalCenter: parent.horizontalCenter;anchors.verticalCenter: parent.verticalCenter;
@@ -97,7 +97,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     NumberLineEdit{id:y1;width: parent.width*0.6;step:1;max:range[1];min:-range[1];}
                                 }
                                 Row{width: parent.width;height: content.rowHeight;spacing: width*0.1;
-                                    CusText{text:"间距";width: parent.width*0.3;font.pointSize: CommonSettings.fontPointSize;}
+                                    CusText{text:qsTr("Spacing");width: parent.width*0.3;font.pointSize: CommonSettings.fontPointSize;}
                                     NumberLineEdit{id:gap;width: parent.width*0.6;step:1;max:range[1];value:1;min:1;}
                                 }
                             }
@@ -105,14 +105,14 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
 
                         Row{height: content.rowHeight; width: parent.width;spacing: width*0.05;
-                            CusText{width: parent.width*0.50; text:"* 单位:°,度。";horizontalAlignment: Text.AlignLeft;font.pointSize:CommonSettings.fontPointSize;}
-                            CusButton{width: parent.width*0.20;buttonColor: "#e0e0e0";text:"确定";
+                            CusText{width: parent.width*0.50; text:"* "+qsTr("Unit")+":°,"+qsTr("degree");horizontalAlignment: Text.AlignLeft;font.pointSize:CommonSettings.fontPointSize;}
+                            CusButton{width: parent.width*0.20;buttonColor: "#e0e0e0";text:qsTr("OK");
                                 onClicked: {
                                     confirm(x0.value,y0.value,x1.value,y1.value,gap.value);
                                     idPopup.close();
                                 }
                             }
-                            CusButton{width: parent.width*0.20;buttonColor: "#e0e0e0";text:"取消";
+                            CusButton{width: parent.width*0.20;buttonColor: "#e0e0e0";text:qsTr("Cancel");
                                 onClicked: {
                                     cancel();
                                     idPopup.close();

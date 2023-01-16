@@ -7,7 +7,7 @@ Rectangle {
     color: "blue";
     MouseArea{
         anchors.fill: parent;
-        onClicked: {changePage("main")}
+//        onClicked: {changePage("Login")}
     }
 }
 

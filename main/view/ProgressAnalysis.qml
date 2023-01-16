@@ -69,13 +69,13 @@ Column {
         Row{anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:"返回";onClicked:{root.changePage("progressAnalysisLobby",null);content.active=false;}}}
+                    CusButton{text:qsTr("Back");onClicked:{root.changePage("progressAnalysisLobby",null);content.active=false;}}}
                 }
             Item{height: parent.height;width:parent.width*0.52;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;width: parent.width;anchors.horizontalCenter: parent.horizontalCenter
-                        CusButton{text:"重测";onClicked:{root.changePage("check",null);}}
-                        CusButton{text:"新建患者";onClicked:{;root.changePage("patientManagement","createNewPatient");}}
+                        CusButton{text:qsTr("Recheck");onClicked:{root.changePage("check",null);}}
+                        CusButton{text:qsTr("New patient");onClicked:{;root.changePage("patientManagement","createNewPatient");}}
                     }
                 }
             }
@@ -86,7 +86,7 @@ Column {
                     {
                         height: parent.height; layoutDirection: Qt.RightToLeft;spacing: height*0.8;width: parent.width
                         anchors.horizontalCenter: parent.horizontalCenter
-                        CusButton{text:"打印";onClicked:
+                        CusButton{text:qsTr("Print");onClicked:
                             {
                                 switch (report)
                                 {

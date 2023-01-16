@@ -63,18 +63,18 @@ Item
                         Repeater{
                             property var params: currentCheckResult.params.commonParams;
                             property int timeSpan:currentCheckResult.resultData.testTimespan;
-                            property var fixationMonitor: ["不报警","只报警","报警并暂停"];
-                            property var fixationTarget: ["中心点","小菱形","大菱形","底点"]
-                            property var centerDotCheck: ["打开","关闭"];
+                            property var fixationMonitor: [qsTr("No alarm"),qsTr("只报警"),qsTr("Alarm and pause")];
+                            property var fixationTarget: [qsTr("Center point"),qsTr("Small diamond"),qsTr("Big diamond"),qsTr("Bottom point")]
+                            property var centerDotCheck: [qsTr("On"),qsTr("Off")];
 
                             model: [
-                                {name:"眼动报警模式",param:fixationMonitor[params.fixationMonitor]},
-                                {name:"固视选择",param:fixationTarget[params.fixationTarget]},
-                                {name:"固视丢失率",param:Math.round(currentCheckResult.resultData.fixationLostCount/currentCheckResult.resultData.fixationLostTestCount*100)+"%"},
-                                {name:"假阳性率",param:Math.round(currentCheckResult.resultData.falsePositiveCount/currentCheckResult.resultData.falsePositiveTestCount*100)+"%"},
-                                {name:"假阴性率",param:Math.round(currentCheckResult.resultData.falseNegativeCount/currentCheckResult.resultData.falseNegativeTestCount*100)+"%"},
-                                {name:"测试用时",param:Math.floor(timeSpan/60)+":"+timeSpan%60},
-                                {name:"中心点检测",param:params.centerDotCheck?centerDotCheck[0]:centerDotCheck[1]}]
+                                {name:qsTr("Eye move alarm mode"),param:fixationMonitor[params.fixationMonitor]},
+                                {name:qsTr("Fixation target"),param:fixationTarget[params.fixationTarget]},
+                                {name:qsTr("Fixation loss rate"),param:Math.round(currentCheckResult.resultData.fixationLostCount/currentCheckResult.resultData.fixationLostTestCount*100)+"%"},
+                                {name:qsTr("False positive rate"),param:Math.round(currentCheckResult.resultData.falsePositiveCount/currentCheckResult.resultData.falsePositiveTestCount*100)+"%"},
+                                {name:qsTr("False negative rate"),param:Math.round(currentCheckResult.resultData.falseNegativeCount/currentCheckResult.resultData.falseNegativeTestCount*100)+"%"},
+                                {name:qsTr("Check time"),param:Math.floor(timeSpan/60)+":"+timeSpan%60},
+                                {name:qsTr("Center point check"),param:params.centerDotCheck?centerDotCheck[0]:centerDotCheck[1]}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
@@ -82,28 +82,28 @@ Item
                         Repeater{
                             property var params: currentCheckResult.params.commonParams;
                             property var cursorSize: ["I","II","III","IV","V"];
-                            property var cursorColor: ["白色","红色","蓝色"];
+                            property var cursorColor: [qsTr("white"),qsTr("red"),qsTr("blue")];
                             property var backGroundColor: ["31.5 ASB","315 ASB"];
-                            property var strategy: ["全阈值","智能交互式","快速智能交互式","二区法","三区法","量化缺损","单刺激"]
+                            property var strategy: [qsTr("Full threshold"),qsTr("Smart interactive"),qsTr("Fast interactive"),qsTr("One stage screening"),qsTr("Two stages screening"),qsTr("Quantify defects"),qsTr("Single stimulus")]
                             model: [
-                                {name:"刺激光标",param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
-                                {name:"背景光",param:backGroundColor[params.backGroundColor]},
-                                {name:"策略",param:strategy[params.strategy]}]
+                                {name:qsTr("Stimulus cursor"),param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
+                                {name:qsTr("Background light"),param:backGroundColor[params.backGroundColor]},
+                                {name:qsTr("Strategy"),param:strategy[params.strategy]}]
                             CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
                     Column{width:parent.width;height: parent.height*0.12;spacing: textHeight*0.5;
                         Repeater{
                             model: [
-                                {name:"瞳孔直径",param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
-                                {name:"视力",param:!currentCheckResult.OS_OD?currentPatient.rx.visual_l.toFixed(2):currentPatient.rx.visual_r.toFixed(2)},
-                                {name:"屈光度",param:"Rx:"+rx}]
+                                {name:qsTr("Pupil diameter"),param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
+                                {name:qsTr("Visual acuity"),param:!currentCheckResult.OS_OD?currentPatient.rx.visual_l.toFixed(2):currentPatient.rx.visual_r.toFixed(2)},
+                                {name:qsTr("Diopter"),param:"Rx:"+rx}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
 
                     Column{width:parent.width;height: parent.height*0.20;spacing: textHeight*0.3;
-                        CusText{text:"诊断:"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
+                        CusText{text:qsTr("Diagnosis")+":"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
                         Rectangle{ id: rectangle;width:parent.width;height: parent.height-1.3*textHeight;radius: 5;border.color: "black";smooth: false;
                             TextInput
                             {
@@ -116,7 +116,7 @@ Item
                             }
 
                             CusButton{ id: cusButton;height: parent.height*0.28;width: height*2;
-                                text:"保存";anchors.right: parent.right;anchors.bottom: parent.bottom;
+                                text:qsTr("Save");anchors.right: parent.right;anchors.bottom: parent.bottom;
                                 anchors.rightMargin: 5;anchors.bottomMargin: 5;
                                 onClicked:
                                 {
@@ -181,8 +181,8 @@ Item
 
                         }
                         Row{width: parent.width;height:parent.height*0.03;spacing:width*0.1;
-                            CusText{width:parent.parent.height*0.98/3;height: parent.height;text: "总体偏差"; verticalAlignment: Text.AlignVCenter; font.pointSize: height*0.50}
-                            CusText{width:parent.parent.height*0.98/3;height: parent.height;text: "模式偏差";  verticalAlignment: Text.AlignVCenter;font.pointSize: height*0.50}
+                            CusText{width:parent.parent.height*0.98/3;height: parent.height;text: qsTr("Total deviation"); verticalAlignment: Text.AlignVCenter; font.pointSize: height*0.50}
+                            CusText{width:parent.parent.height*0.98/3;height: parent.height;text: qsTr("Pattern deviation");  verticalAlignment: Text.AlignVCenter;font.pointSize: height*0.50}
                         }
                         Row{
                             width: parent.width;height:parent.height*0.96/3;spacing:width*0.1;
@@ -211,10 +211,10 @@ Item
                     Column{width: parent.width*0.3;height:parent.height;spacing: textHeight*0.5;
                         CusText{width:parent.width;height:textHeight;text:"VFI:"+Math.round(staticAnalysisResult.VFI*100)+"%" ;horizontalAlignment: Text.AlignLeft;}
                         CusText{
-                            property var ght: if(staticAnalysisResult.GHT===0){return "超出界限";} else if(staticAnalysisResult.GHT===1){return "普遍敏感度降低";}else if(staticAnalysisResult.GHT===2){return "边界";}else if(staticAnalysisResult.GHT===3){return "正常范围";}
-                            width:parent.width;height:textHeight;horizontalAlignment: Text.AlignLeft;text:"青光眼半视野检查: "+ ght;}
-                        CusText{width:parent.width;height:textHeight;text:"平均缺损: "+staticAnalysisResult.md.toFixed(2)+(staticAnalysisResult.p_md>0?" (<"+staticAnalysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;}
-                        CusText{width:parent.width;height:textHeight;text:"模式标准偏差: "+staticAnalysisResult.psd.toFixed(2)+(staticAnalysisResult.p_psd>0?" (<"+staticAnalysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;}
+                            property var ght: if(staticAnalysisResult.GHT===0){return qsTr("Out of limits");} else if(staticAnalysisResult.GHT===1){return "普遍敏感度降低";}else if(staticAnalysisResult.GHT===2){return "边界";}else if(staticAnalysisResult.GHT===3){return "正常范围";}
+                            width:parent.width;height:textHeight;horizontalAlignment: Text.AlignLeft;text:qsTr("GHT")+": "+ ght;}
+                        CusText{width:parent.width;height:textHeight;text:qsTr("MD")+": "+staticAnalysisResult.md.toFixed(2)+(staticAnalysisResult.p_md>0?" (<"+staticAnalysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;}
+                        CusText{width:parent.width;height:textHeight;text:qsTr("PSD")+": "+staticAnalysisResult.psd.toFixed(2)+(staticAnalysisResult.p_psd>0?" (<"+staticAnalysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;}
                         Rectangle{
                             width: parent.width;height: parent.height*0.66;border.color: "black";
                             Column{
@@ -227,22 +227,22 @@ Item
                                     Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/previewImage/single_progressPic.bmp";})}
                                 }
                                 CusText{
-                                    property var progress: ["没有进展","可能的进展","很有可能的进展"];
+                                    property var progress: [qsTr("no progress"),qsTr("possible progress"),qsTr("very possible progress")];
                                     height: textHeight;text:progressAnalysisResult===null?"":progress[progressAnalysisResult] ;horizontalAlignment: Text.AlignLeft
                                 }
-                                CusText{height: textHeight;text:"基线检查:" ;horizontalAlignment: Text.AlignLeft}
+                                CusText{height: textHeight;text:qsTr("BaseLine dates")+":" ;horizontalAlignment: Text.AlignLeft}
                                 Row{width: parent.width;height: textHeight;spacing: parent.width*0.1;
                                     CusText{height: parent.height;width:parent.width*0.4;text:progressAnalysisListVm===null?"":Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
                                     CusText{height: parent.height;width:parent.width*0.4;text:progressAnalysisListVm===null?"":Qt.formatDateTime(progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
                                 }
-                                CusText{height: textHeight;text:"以前的追踪检查:" ;horizontalAlignment: Text.AlignLeft}
+                                CusText{height: textHeight;text:qsTr("Previous dates")+":" ;horizontalAlignment: Text.AlignLeft}
                                 Row{width: parent.width;height: textHeight;spacing: parent.width*0.1;
                                     CusText{height: parent.height;width:parent.width*0.4;text:progressAnalysisListVm===null?"":Qt.formatDateTime(progressAnalysisListVm.getData(progressAnalysisListVm.selectedIndex-2,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
                                     CusText{height: parent.height;width:parent.width*0.4;text:progressAnalysisListVm===null?"":Qt.formatDateTime(progressAnalysisListVm.getData(progressAnalysisListVm.selectedIndex-1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
                                 }
                                 Repeater{
                                     anchors.fill: parent;
-                                    model: [{image:"qrc:/grays/GPA1.bmp",progress:"<5% (恶化)"},{image:"qrc:/grays/GPA2.bmp",progress:"<5% (2连续)"},{image:"qrc:/grays/GPA3.bmp",progress:"<5% (3连续)"},{image:"qrc:/grays/GPA4.bmp",progress:"超出范围"}]
+                                    model: [{image:"qrc:/grays/GPA1.bmp",progress:"<5% ("+qsTr("Deterioarted")+")"},{image:"qrc:/grays/GPA2.bmp",progress:"<5% (2"+qsTr("Consecutiveness")+")"},{image:"qrc:/grays/GPA3.bmp",progress:"<5% (3"+qsTr("Consecutiveness")+")"},{image:"qrc:/grays/GPA4.bmp",progress:qsTr("Out of range")}]
                                     Row{
                                         height: textHeight;width: parent.width;
         //                                height:parent.height*0.14;width: parent.width;spacing: height*0.5

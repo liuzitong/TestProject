@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
@@ -21,7 +21,7 @@ Item {
         Row{ id: row;width: parent.width;height:parent.height*0.8/2;
             AnalysisDiagram{
                 width: parent.height;height:parent.height;
-                textTop:"阈值(dB)"
+                textTop:qsTr("Threshold")+"(dB)"
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/dbDiagram.bmp";
                 range:root.range;
@@ -31,7 +31,7 @@ Item {
             }
             AnalysisDiagram{
                 width: parent.height;height:parent.height;
-                textTop:"灰度图"
+                textTop:qsTr("Gray tone")
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/gray.bmp";
                 range:root.range;
@@ -46,11 +46,11 @@ Item {
                 CusText{width:parent.width;height:parent.height*0.12;text:"VFI:"+Math.round(analysisResult.VFI*100)+"%" ;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
                 Item{width:parent.width;height:parent.height*0.1;}
                 CusText{
-                property var ght: if(analysisResult.GHT===0){return "超出界限";} else if(analysisResult.GHT===1){return "普遍敏感度降低";}else if(analysisResult.GHT===2){return "边界";}else if(analysisResult.GHT===3){return "正常范围";}
-                width:parent.width;height:parent.height*0.12;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40;text:"青光眼半视野检查: "+ ght;}
+                property var ght: if(analysisResult.GHT===0){return qsTr("Out of limits");} else if(analysisResult.GHT===1){return qsTr("Low sensitivity");}else if(analysisResult.GHT===2){return qsTr("Border of limits");}else if(analysisResult.GHT===3){return qsTr("Within normal limits");}
+                width:parent.width;height:parent.height*0.12;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40;text:qsTr("GHT")+": "+ ght;}
                 Item{width:parent.width;height:parent.height*0.1;}
-                CusText{width:parent.width;height:parent.height*0.12;text:"平均缺损: "+analysisResult.md.toFixed(2)+(analysisResult.p_md>0?" (<"+analysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
-                CusText{width:parent.width;height:parent.height*0.12;text:"模式标准偏差: "+analysisResult.psd.toFixed(2)+(analysisResult.p_psd>0?" (<"+analysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
+                CusText{width:parent.width;height:parent.height*0.12;text:qsTr("MD")+": "+analysisResult.md.toFixed(2)+(analysisResult.p_md>0?" (<"+analysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
+                CusText{width:parent.width;height:parent.height*0.12;text:qsTr("PSD")+": "+analysisResult.psd.toFixed(2)+(analysisResult.p_psd>0?" (<"+analysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
             }
 
         }
@@ -61,7 +61,7 @@ Item {
             width: parent.width;height:parent.height*0.8/2;
             AnalysisDiagram{
                 width: parent.height;height:parent.height;
-                textTop:"总体偏差"
+                textTop:qsTr("Total deviation")
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/TotalPE.bmp";
                 range:root.range;
@@ -71,7 +71,7 @@ Item {
             }
             AnalysisDiagram{
                 width: parent.height;height:parent.height;
-                textTop:"模式偏差"
+                textTop:qsTr("Pattern deviation")
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/PatternPE.bmp";
                 range:root.range;

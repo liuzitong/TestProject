@@ -1,4 +1,4 @@
-import QtQuick 2.7
+﻿import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
@@ -46,14 +46,14 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"选择程序";horizontalAlignment: Text.AlignLeft;height: parent.height; anchors.left: parent.left;anchors.leftMargin:height*0.5;font.pointSize: fontPointSize;}
+                    CusText{text:qsTr("Select program");horizontalAlignment: Text.AlignLeft;height: parent.height; anchors.left: parent.left;anchors.leftMargin:height*0.5;font.pointSize: fontPointSize;}
                 }
                 Column{id: column;width: parent.width-2; height: parent.height*0.8;
                     anchors.horizontalCenter: parent.horizontalCenter
                     Rectangle{height: parent.height*0.1;width: parent.width;color:"#D2D2D3"
                         TabBar {id: bar;height: parent.height*0.8;anchors.bottom: parent.bottom;anchors.right: parent.right; anchors.rightMargin:0.3*parent.width;
                             anchors.left: parent.left; anchors.leftMargin: 0.03*parent.width;spacing: 0;currentIndex: 0;
-                            Repeater { model:["阈值","筛选","特殊","动态","自定义"]
+                            Repeater { model:[qsTr("Single"),qsTr("Screening"),qsTr("Special"),qsTr("Dynamic"),qsTr("Custom")]
                                 TabButton {width: bar.width*0.20;height: parent.height;
                                     Rectangle{anchors.fill: parent;color:parent.checked? "#E3E5E8":"#D2D2D3";
                                         Rectangle{width: parent.width;height: 3;color: "#0064B6";visible: parent.parent.checked? true:false; }
@@ -130,12 +130,12 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                     CusButton{
                         enabled: programSelection.selectedProgram!==null;
-                        width: height*3;
+                        width: IcUiQmlApi.appCtrl.settings.language==="Chinese"?height*3:height*5;
                         height: parent.height*0.4 ;
                         anchors.left: parent.left
                         anchors.leftMargin: height*1.2;
                         anchors.verticalCenter: parent.verticalCenter
-                        text:"设置为默认程序"
+                        text:qsTr("Set to default program")
                         onClicked: {
                             IcUiQmlApi.appCtrl.settings.defaultProgramId=program_id;
                             IcUiQmlApi.appCtrl.settings.defaultProgramType=program_type;
@@ -154,14 +154,14 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         anchors.right: parent.right
                         anchors.rightMargin: height*1.2;
                         anchors.verticalCenter: parent.verticalCenter
-                        spacing: height;
+                        spacing: height*0.5;
                         layoutDirection: Qt.RightToLeft
-                        CusButton{text:"取消";onClicked: idPopup.close();}
+                        CusButton{text:qsTr("Cancel");onClicked: idPopup.close();}
 
 
                         CusButton
                         {
-                            enabled: programSelection.selectedProgram!==null;text:"确定";
+                            enabled: programSelection.selectedProgram!==null;text:qsTr("Apply");
                             onClicked:
                             {
                                 if (currentProgram!==null)

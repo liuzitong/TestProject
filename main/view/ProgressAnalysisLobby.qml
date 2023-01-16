@@ -78,7 +78,7 @@ Column {
 //                                progressAnalysisListView.deSelectAll();
 //                                parent.isSelected=true;
                                 progressAnalysisListVm.selectedIndex=index;
-//                                progressAnalysisListView.currentIndex=index;
+                                progressAnalysisListView.currentIndex=index;
 
                             }
 
@@ -103,7 +103,7 @@ Column {
         Item{ id: item2;anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:"返回";onClicked:root.changePage("analysisLobby",null);}
+                    CusButton{text:qsTr("Back");onClicked:root.changePage("analysisLobby",null);}
                     }
                 }
 
@@ -111,7 +111,7 @@ Column {
             Item{height: parent.height; anchors.horizontalCenter: parent.horizontalCenter; width:parent.width*0.33;
                 Item{ id: item1;anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height; layoutDirection: Qt.RightToLeft; anchors.right: parent.right; spacing: height*0.4;anchors.horizontalCenter: parent.horizontalCenter;
-                        CusButton{text:"去除";enabled:progressAnalysisListVm==null?false:progressAnalysisListVm.rowCount()>=3;
+                        CusButton{text:qsTr("Remove");enabled:progressAnalysisListVm==null?false:progressAnalysisListVm.rowCount()>=3;
                             onClicked:
                             {
                                 progressAnalysisListVm.removeCheckResult(progressAnalysisListView.currentIndex);
@@ -121,17 +121,16 @@ Column {
                                 }
                                 progressAnalysisListVm.selectedIndex=progressAnalysisListView.currentIndex;
                                 progressAnalysisListVmChanged();
-
                             }
                         }
                         CusButton
                         {
-                            text:"复位";onClicked:
+                            text:qsTr("Reset");onClicked:
                             {
                                 progressAnalysisListVm.reset();progressAnalysisListVmChanged();
                             }
                         }
-                        CusButton{text:"切换眼别";onClicked:{
+                        CusButton{text:qsTr("Switch eye");onClicked:{
                                 progressAnalysisListVm.switchEye();
                                 console.log(root.progressAnalysisListVm.selectedIndex);
 //                                progressAnalysisListView.currentIndex=root.progressAnalysisListVm.selectedIndex;
@@ -158,15 +157,15 @@ Column {
 
                         height: parent.height; anchors.right: parent.right; width: height*3.5;
                         property var listModel:ListModel {
-                            ListElement{name:"进展基线";report:0}
-                            ListElement{name:"进展分析";report:1}
-                            ListElement{name:"单次进展分析";report:2}}
+                            ListElement{name:qsTr("Progress baseline");report:0}
+                            ListElement{name:qsTr("Progress analysis");report:1}
+                            ListElement{name:qsTr("Single Progress");report:2}}
                         property var listModel2:ListModel {
-                            ListElement{name:"进展基线";report:0}}
+                            ListElement{name:qsTr("Progress baseline");report:0}}
                         enabled:progressAnalysisListVm==null?false: progressAnalysisListVm.rowCount()>1;
                         comboBox.model:progressAnalysisListVm.selectedIndex>1?listModel:listModel2;
                         popDirectionDown: false;complexType: true;
-                        button.text: "进展分析";
+                        button.text: qsTr("Progress analysis");
                         button.onClicked:
                         {
                             progressAnalysisListVm.selectedIndex>1?analysis(1):analysis(0);

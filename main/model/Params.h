@@ -1,4 +1,4 @@
-#ifndef PARAMS_H
+﻿#ifndef PARAMS_H
 #define PARAMS_H
 
 #define OPTION int
@@ -45,7 +45,7 @@ struct StaticParams/*:public QObject*/
 
         ON_OFF                      cyanYellowTest;
         ON_OFF                      responseAutoAdapt;
-        int                         intervalTime;
+        int                         responseDelayTime;
         ON_OFF                      centerDotCheck;
         ON_OFF                      shortTermFluctuation;
         FixationTarget              fixationTarget;
@@ -63,7 +63,7 @@ struct StaticParams/*:public QObject*/
             archive & BOOST_SERIALIZATION_NVP(backGroundColor);
             archive & BOOST_SERIALIZATION_NVP(cyanYellowTest);
             archive & BOOST_SERIALIZATION_NVP(responseAutoAdapt);
-            archive & BOOST_SERIALIZATION_NVP(intervalTime);
+            archive & BOOST_SERIALIZATION_NVP(responseDelayTime);
             archive & BOOST_SERIALIZATION_NVP(centerDotCheck);
             archive & BOOST_SERIALIZATION_NVP(shortTermFluctuation);
             archive & BOOST_SERIALIZATION_NVP(fixationTarget);

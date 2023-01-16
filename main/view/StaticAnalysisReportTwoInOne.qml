@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
@@ -23,8 +23,8 @@ Item {
         anchors.left: parent.left
         anchors.top: parent.top
         source:"/previewImage/defectDepth.bmp";
-        textTop:"缺陷深度(db)";
-        textBottom:"□=4db的预期";
+        textTop:qsTr("Defect depth")+"(db)";
+        textBottom:"□=4db"+"Expectation";
         analysisVm: root.analysisVm;
         range:root.range;
         onClicked:root.clearDot();
@@ -37,7 +37,7 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         source:"/previewImage/dBDiagram.bmp";
-        textTop:"阈值(dB)";
+        textTop:qsTr("Threshold")+"(dB)";
         analysisVm: root.analysisVm;
         range:root.range;
         onClicked:root.clearDot();

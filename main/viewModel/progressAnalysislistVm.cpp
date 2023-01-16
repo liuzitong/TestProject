@@ -263,7 +263,7 @@ void ProgressAnalysisListVm::getProgressBaseLineReport()
     manager->setReportVariable("baseLine","./reportImage/baseLine.bmp");
 
     manager->setReportVariable("ProgressSpeed","ProgressSpeed: "+QString::number(progressSpeedBase,'f',2)+"±"+QString::number(progressSpeedDeviation,'f',2));
-    QString slopeStr[]={"slope insignificant","slope significant"};
+    QString slopeStr[]={"Slope insignificant","Slope significant"};
     manager->setReportVariable("Slope","SlopeStatus: "+slopeStr[slopeType]);
     manager->setReportVariable("AvgMD","AverageMD: "+QString::number(avgMd));
 

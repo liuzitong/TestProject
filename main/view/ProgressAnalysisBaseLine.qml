@@ -23,7 +23,7 @@ Rectangle {
     }
     Column
     {
-        anchors.fill: parent;anchors.leftMargin: parent.width*0.06;anchors.rightMargin: parent.width*0.06;anchors.topMargin: parent.height*0.04;anchors.bottomMargin: parent.height*0.04;
+        anchors.fill: parent;anchors.leftMargin: parent.width*0.04;anchors.rightMargin: parent.width*0.04;anchors.topMargin: parent.height*0.04;anchors.bottomMargin: parent.height*0.04;
         Row{
             width: parent.width;height: parent.height*0.04;spacing: parent.width*0.03;
             Item{height: parent.height;width: parent.parent.height*0.32;}
@@ -38,18 +38,18 @@ Rectangle {
             Column{
                 width: height;height: parent.height;spacing: textHeight*0.5;
                 Repeater{
-                    property var centerDotCheck: ["打开","关闭"];
-                    property var ght: ["超出界限","普遍敏感度降低","边界","正常范围"];
+                    property var centerDotCheck: [qsTr("On"),qsTr("Off")];
+                    property var ght: [qsTr("Out of limits"),qsTr("Low sensitivity"),qsTr("Border of limits"),qsTr("Within normal limits")];
                     model: [
-                        {name:"日期",param:Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd")},
-                        {name:"选择程序",param:progressAnalysisListVm.getData(0,"program")},
-                        {name:"青光眼半视野检查",param:progressAnalysisListVm==null?"":ght[progressAnalysisListVm.getData(0,"GHT")]},
-                        {name:"中心点",param:centerDotCheck[progressAnalysisListVm.getData(0,"centerDotCheck")?1:0]},
-                        {name:"平均缺损",param:progressAnalysisListVm.getData(0,"md").toFixed(2)+(progressAnalysisListVm.getData(0,"p_md")>0?(" (<"+progressAnalysisListVm.getData(0,"p_md")+"%)"):"")},
-                        {name:"平均标准差",param:progressAnalysisListVm.getData(0,"psd").toFixed(2)+(progressAnalysisListVm.getData(0,"p_psd")>0?(" (<"+progressAnalysisListVm.getData(0,"p_psd")+"%)"):"")},
-                        {name:"固视丢失率",param:progressAnalysisListVm.getData(0,"fixationLostCount")+"/"+progressAnalysisListVm.getData(0,"fixationLostTestCount")},
-                        {name:"假阴性率",param:Math.round((progressAnalysisListVm.getData(0,"falseNegativeRate")*100))+"%"},
-                        {name:"假阳性率",param:Math.round((progressAnalysisListVm.getData(0,"falsePositiveRate")*100))+"%"},
+                        {name:qsTr("Date"),param:Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd")},
+                        {name:qsTr("Program"),param:progressAnalysisListVm.getData(0,"program")},
+                        {name:qsTr("GHT"),param:progressAnalysisListVm==null?"":ght[progressAnalysisListVm.getData(0,"GHT")]},
+                        {name:qsTr("Center dot"),param:centerDotCheck[progressAnalysisListVm.getData(0,"centerDotCheck")?1:0]},
+                        {name:qsTr("MD"),param:progressAnalysisListVm.getData(0,"md").toFixed(2)+(progressAnalysisListVm.getData(0,"p_md")>0?(" (<"+progressAnalysisListVm.getData(0,"p_md")+"%)"):"")},
+                        {name:qsTr("PSD"),param:progressAnalysisListVm.getData(0,"psd").toFixed(2)+(progressAnalysisListVm.getData(0,"p_psd")>0?(" (<"+progressAnalysisListVm.getData(0,"p_psd")+"%)"):"")},
+                        {name:qsTr("Fixation loss rate"),param:progressAnalysisListVm.getData(0,"fixationLostCount")+"/"+progressAnalysisListVm.getData(0,"fixationLostTestCount")},
+                        {name:qsTr("False negative rate"),param:Math.round((progressAnalysisListVm.getData(0,"falseNegativeRate")*100))+"%"},
+                        {name:qsTr("False positive rate"),param:Math.round((progressAnalysisListVm.getData(0,"falsePositiveRate")*100))+"%"},
                     ]
                    CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                 }
@@ -87,18 +87,18 @@ Rectangle {
             Column{
                 width: height;height: parent.height;spacing: textHeight*0.5;
                 Repeater{
-                    property var centerDotCheck: ["打开","关闭"];
-                    property var ght: ["超出界限","普遍敏感度降低","边界","正常范围"];
+                    property var centerDotCheck: [qsTr("On"),qsTr("Off")];
+                    property var ght: [qsTr("Out of limits"),qsTr("Low sensitivity"),qsTr("Border of limits"),qsTr("Within normal limits")];
                     model: [
-                        {name:"日期",param:Qt.formatDateTime(progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd")},
-                        {name:"选择程序",param:progressAnalysisListVm.getData(1,"program")},
-                        {name:"青光眼半视野检查",param:ght[progressAnalysisListVm.getData(1,"GHT")]},
-                        {name:"中心点",param:centerDotCheck[progressAnalysisListVm.getData(1,"centerDotCheck")?1:0]},
-                        {name:"平均缺损",param:progressAnalysisListVm.getData(1,"md").toFixed(2)+(progressAnalysisListVm.getData(1,"p_md")>0?(" (<"+progressAnalysisListVm.getData(0,"p_md")+"%)"):"")},
-                        {name:"平均标准差",param:progressAnalysisListVm.getData(1,"psd").toFixed(2)+(progressAnalysisListVm.getData(1,"p_psd")>0?(" (<"+progressAnalysisListVm.getData(0,"p_psd")+"%)"):"")},
-                        {name:"固视丢失率",param:progressAnalysisListVm.getData(1,"fixationLostCount")+"/"+progressAnalysisListVm.getData(1,"fixationLostTestCount")},
-                        {name:"假阴性率",param:Math.round((progressAnalysisListVm.getData(1,"falseNegativeRate")*100))+"%"},
-                        {name:"假阳性率",param:Math.round((progressAnalysisListVm.getData(1,"falsePositiveRate")*100))+"%"},
+                        {name:qsTr("Date"),param:Qt.formatDateTime(progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd")},
+                        {name:qsTr("Program"),param:progressAnalysisListVm.getData(1,"program")},
+                        {name:qsTr("GHT"),param:ght[progressAnalysisListVm.getData(1,"GHT")]},
+                        {name:qsTr("Center dot"),param:centerDotCheck[progressAnalysisListVm.getData(1,"centerDotCheck")?1:0]},
+                        {name:qsTr("MD"),param:progressAnalysisListVm.getData(1,"md").toFixed(2)+(progressAnalysisListVm.getData(1,"p_md")>0?(" (<"+progressAnalysisListVm.getData(0,"p_md")+"%)"):"")},
+                        {name:qsTr("PSD"),param:progressAnalysisListVm.getData(1,"psd").toFixed(2)+(progressAnalysisListVm.getData(1,"p_psd")>0?(" (<"+progressAnalysisListVm.getData(0,"p_psd")+"%)"):"")},
+                        {name:qsTr("Fixation loss rate"),param:progressAnalysisListVm.getData(1,"fixationLostCount")+"/"+progressAnalysisListVm.getData(1,"fixationLostTestCount")},
+                        {name:qsTr("False negative rate"),param:Math.round((progressAnalysisListVm.getData(1,"falseNegativeRate")*100))+"%"},
+                        {name:qsTr("False positive rate"),param:Math.round((progressAnalysisListVm.getData(1,"falsePositiveRate")*100))+"%"},
                     ]
                    CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                 }
@@ -121,11 +121,11 @@ Rectangle {
             Column{
                 width: height;height: parent.parent.height*0.32;spacing: textHeight*0.5;
                 Repeater{
-                    property var slopeType: ["斜率不明显","斜率明显"];
+                    property var slopeType: [qsTr("Slope insignificant"),qsTr("Slope significant")];
                     model: [
-                        {name:"进展速度",param:progressAnalysisResult.progressSpeedBase.toFixed(2)+"±"+progressAnalysisResult.progressSpeedDeviation.toFixed(2)+" DB/YEAR"},
-                        {name:"基线平均缺损",param:((progressAnalysisListVm.getData(0,"md")+progressAnalysisListVm.getData(1,"md"))/2).toFixed(2)},
-                        {name:"斜率情况",param:slopeType[progressAnalysisResult.slopeType]},
+                        {name:qsTr("ProgressSpeed"),param:progressAnalysisResult.progressSpeedBase.toFixed(2)+"±"+progressAnalysisResult.progressSpeedDeviation.toFixed(2)+" DB/YEAR"},
+                        {name:qsTr("Baseline average MD"),param:((progressAnalysisListVm.getData(0,"md")+progressAnalysisListVm.getData(1,"md"))/2).toFixed(2)},
+                        {name:qsTr("Slope status"),param:slopeType[progressAnalysisResult.slopeType]},
                     ]
                    CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                 }

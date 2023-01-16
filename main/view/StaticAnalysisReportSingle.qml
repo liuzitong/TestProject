@@ -76,15 +76,15 @@ Item {
                 height:parent.height;width:parent.width*0.9-parent.height*2;spacing:textHeight*0.5;
                 Item{width: parent.width;height: textHeight;}
                 CusText{width:parent.width;height:textHeight;text:"VFI:"+Math.round(analysisResult.VFI*100)+"%" ;horizontalAlignment: Text.AlignLeft;}
-                CusText{property var ght: if(analysisResult.GHT===0){return "超出界限";} else if(analysisResult.GHT===1){return "普遍敏感度降低";}else if(analysisResult.GHT===2){return "边界";}else if(analysisResult.GHT===3){return "正常范围";}
-                width:parent.width;height:textHeight;horizontalAlignment: Text.AlignLeft;text:"青光眼半视野检查: "+ ght;}
-                CusText{width:parent.width;height:textHeight;text:"平均缺损: "+analysisResult.md.toFixed(2)+(analysisResult.p_md>0?" (<"+analysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;}
-                CusText{width:parent.width;height:textHeight;text:"模式标准偏差: "+analysisResult.psd.toFixed(2)+(analysisResult.p_psd>0?" (<"+analysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;}
+                CusText{property var ght: if(analysisResult.GHT===0){return qsTr("Out of limits");} else if(analysisResult.GHT===1){return qsTr("Low sensitivity");}else if(analysisResult.GHT===2){return qsTr("Border of limits");}else if(analysisResult.GHT===3){return qsTr("Within normal limits");}
+                width:parent.width;height:textHeight;horizontalAlignment: Text.AlignLeft;text:qsTr("Within normal limits")+": "+ ght;}
+                CusText{width:parent.width;height:textHeight;text:qsTr("MD")+": "+analysisResult.md.toFixed(2)+(analysisResult.p_md>0?" (<"+analysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;}
+                CusText{width:parent.width;height:textHeight;text:qsTr("PSD")+": "+analysisResult.psd.toFixed(2)+(analysisResult.p_psd>0?" (<"+analysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;}
             }
         }
         Row{width: parent.width;height:parent.height*0.03;spacing:width*0.05;
-            CusText{width:parent.parent.height*0.98/3;height:textHeight;text: "总体偏差"; verticalAlignment: Text.AlignVCenter; }
-            CusText{width:parent.parent.height*0.98/3;height:textHeight;text: "模式偏差";  verticalAlignment: Text.AlignVCenter;}
+            CusText{width:parent.parent.height*0.98/3;height:textHeight;text: qsTr("Total deviation"); verticalAlignment: Text.AlignVCenter; }
+            CusText{width:parent.parent.height*0.98/3;height:textHeight;text: qsTr("Pattern deviation");  verticalAlignment: Text.AlignVCenter;}
         }
         Row{
             width: parent.width;height:parent.height*0.97/3;spacing:width*0.05

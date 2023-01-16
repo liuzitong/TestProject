@@ -1,4 +1,4 @@
-import QtQuick 2.7
+﻿import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
@@ -49,37 +49,40 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"创建程序"; horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;height: parent.height;anchors.left: parent.left;anchors.leftMargin: 0.5*height;}
+                    CusText{text:qsTr("Create program"); horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;height: parent.height;anchors.left: parent.left;anchors.leftMargin: 0.5*height;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;
                     Item{ anchors.topMargin: parent.height*0.08;anchors.bottomMargin:parent.height*0.08; anchors.leftMargin:parent.height*0.12; anchors.rightMargin:parent.height*0.12;anchors.fill: parent;
                         Column{anchors.fill: parent;spacing:parent.height*(1-0.12*5)/4;
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
-                                CusText{text:"名字:";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                CusText{text:qsTr("Name")+":";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                 LineEdit{id:nameEdit;text:"";width: parent.width*0.7;height:parent.height;}
                             }
 
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
-                                CusText{text:"范围:";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                CusText{text:qsTr("Range")+":";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                 NumberLineEdit{id:rangeEdit;width: parent.width*0.7;height:parent.height;step:1;min:5;max:90;value:30;}
                             }
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
-                                CusText{text:"类别:";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                CusText{text:qsTr("Type")+":";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                 CusComboBox{
                                     id:typeComboBox;
                                     width: parent.width*0.7;
                                     height:parent.height;
                                     imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                                    model: ["阈值" ,"筛选","动态" ];
+                                    model: [qsTr("Threshold") ,qsTr("Screening"),qsTr("Dynamic") ];
                                     onCurrentIndexChanged: type=currentIndex;
                                 }
                             }
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
-                                CusText{text:"策略:";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                CusText{text:qsTr("Strategy")+":";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                 CusComboBox{
                                     id:stratComboBox
-                                    property var strategies: [["全阈值","智能交互式","快速智能交互式"],["二区法","三区法","量化缺损","单刺激"],["标准动态","盲区动态","暗区动态","直线动态"]];
+                                    property var strategies:
+                                        [[qsTr("Full threshold"),qsTr("Smart interactive"),qsTr("Fast interactive")],
+                                        [qsTr("One stage screening"),qsTr("Two stages screening"),qsTr("Quantify defects"),qsTr("Single stimulus")],
+                                        [qsTr("Standard"),qsTr("Blind area"),qsTr("Dark area"),qsTr("Straight line")]];
                                     width: parent.width*0.7;
                                     height:parent.height;
                                     imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
@@ -91,8 +94,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             Item{
                                 id:okCancel
                                 width:parent.width;height: parent.height*0.12 ;
-                                CusButton{ text:"确定"; anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;onClicked: {idPopup.close();ok()}}
-                                CusButton{ text:"取消"; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter;onClicked: {idPopup.close();}}
+                                CusButton{ text:qsTr("OK"); anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;onClicked: {idPopup.close();ok()}}
+                                CusButton{ text:qsTr("Cancel"); anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter;onClicked: {idPopup.close();}}
                             }
                         }
                     }

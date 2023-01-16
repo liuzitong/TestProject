@@ -6,7 +6,6 @@
 #include <QQmlContext>
 #include <QTranslator>
 
-#define Q_INVOKABLE
 
 class TranslateController : public QObject
 {

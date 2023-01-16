@@ -99,7 +99,7 @@ Column {
         Row{anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:"返回";
+                    CusButton{text:qsTr("Back");
                         onClicked:{
                             root.changePage("patientManagement",null);
                             if(currentCheckResult!==null)
@@ -120,10 +120,10 @@ Column {
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
 //                        CusButton{text:"进展分析";onClicked:{changePage("progressAnalysis",null)}}
                         CusComboBoxButton{
-                            height: parent.height;width: height*3.5;
-                            property var listModel:["左眼分析","右眼分析"]
+                            height: parent.height;width:IcUiQmlApi.appCtrl.settings.language==="Chinese"?height*3.5:height*5;
+                            property var listModel:[qsTr("Left eye Analysis"),qsTr("Right eye Analysis")]
                             comboBox.model: listModel;popDirectionDown: false;complexType: false;
-                            button.text: "进展分析";
+                            button.text: qsTr("Progress Analysis");
                             button.onClicked:
                             {
                                 changePage("progressAnalysisLobby",0)
@@ -134,7 +134,7 @@ Column {
                             }
                         }
                         CusButton{
-                            text:"视岛图";
+                            text:qsTr("View island");
                             enabled: currentProgram.type===0&&currentProgram.category!==4;
                             onClicked:
                             {
@@ -149,7 +149,7 @@ Column {
 
             Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:"删除"; enabled: currentCheckResult!==null;anchors.horizontalCenter: parent.horizontalCenter;
+                    CusButton{text:qsTr("Delete"); enabled: currentCheckResult!==null;anchors.horizontalCenter: parent.horizontalCenter;
                         onClicked:analysisLobbyListVm.deleteCheckResult(currentCheckResult.id);
                     }
                 }
@@ -162,9 +162,9 @@ Column {
                         height: parent.height;width: height*3.5;
                         enabled: currentCheckResult!==null;
                         property var listModel:ListModel {}
-                        property var reportNames: [["常规分析","三合一图","总览图","三合一图","阈值图"],["筛选"],["动态","动态数据"]]
+                        property var reportNames: [[qsTr("Single"),qsTr("Three in one"),qsTr("Overview"),qsTr("Three in one"),qsTr("Threshold")],[qsTr("Screening")],[qsTr("Dynamic"),qsTr("Dyanmic data")]]
                         comboBox.model: listModel;popDirectionDown: false;complexType: true;
-                        button.text: "分析";
+                        button.text: qsTr("Analysis");
                         button.onClicked:
                         {
                             var report=listModel.get(0).report;

@@ -1,4 +1,4 @@
-import QtQuick 2.7
+﻿import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
@@ -44,14 +44,14 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"另存为程序"; horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;height: parent.height;anchors.left: parent.left;anchors.leftMargin: 0.5*height;}
+                    CusText{text:qsTr("Save as another program"); horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;height: parent.height;anchors.left: parent.left;anchors.leftMargin: 0.5*height;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;
                     Item{ anchors.topMargin: parent.height*0.2;anchors.bottomMargin:parent.height*0.2; anchors.leftMargin:parent.height*0.2; anchors.rightMargin:parent.height*0.2;anchors.fill: parent;
                         Column{anchors.fill: parent;spacing:parent.height*(1-0.38*2);
                             Row{width:parent.width;height: parent.height*0.38;spacing: width*0.05;
-                                CusText{text:"名字:"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
+                                CusText{text:qsTr("Name")+":"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                 LineEdit{
                                     id:name;
                                     width: parent.width*0.7;
@@ -62,8 +62,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             Item{
                                 id:okCancel
                                 width:parent.width;height: parent.height*0.38 ;
-                                CusButton{ text:"确定"; anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;onClicked: {idPopup.close();ok()}}
-                                CusButton{ text:"取消"; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter;onClicked: {idPopup.close();}}
+                                CusButton{ text:qsTr("OK"); anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;onClicked: {idPopup.close();ok()}}
+                                CusButton{ text:qsTr("Cancel"); anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter;onClicked: {idPopup.close();}}
                             }
                         }
                     }

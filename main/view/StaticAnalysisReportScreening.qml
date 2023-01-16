@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
@@ -40,9 +40,9 @@ Item {
         {
             anchors.fill: parent;
             model:[
-                {img:"qrc:/grays/SE0.bmp",text:":看见:"+(analysisResult.dotSeen+analysisResult.dotWeakSeen)+"/"+currentProgram.data.dots.length},
-                {img:"qrc:/grays/SE2.bmp",text:":未看见:"+analysisResult.dotUnseen+"/"+currentProgram.data.dots.length},
-                {img:"qrc:/grays/SE3.bmp",text:":盲点"}
+                {img:"qrc:/grays/SE0.bmp",text:":"+qsTr("Seen")+":"+(analysisResult.dotSeen+analysisResult.dotWeakSeen)+"/"+currentProgram.data.dots.length},
+                {img:"qrc:/grays/SE2.bmp",text:":"+qsTr("Unseen")+":"+analysisResult.dotUnseen+"/"+currentProgram.data.dots.length},
+                {img:"qrc:/grays/SE3.bmp",text:":"+qsTr("Blind spot")}
             ]
             Row{
                 height: parent.height*0.15;width: parent.width;spacing: height*0.2

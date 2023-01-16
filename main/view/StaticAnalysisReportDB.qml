@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
@@ -23,7 +23,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         source:"/previewImage/dBDiagram.bmp";
-        textTop:"阈值(dB)";
+        textTop:qsTr("Threshold")+"(dB)";
         analysisVm: root.analysisVm;
         range:root.range;
         onClicked:root.clearDot();

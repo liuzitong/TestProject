@@ -1,6 +1,2 @@
-#include "translate_svc.h"
+﻿#include "translate_svc.h"
 
-TranslateSvc::TranslateSvc()
-{
-
-}

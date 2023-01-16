@@ -1,4 +1,4 @@
-#ifndef PARAMSVM_H
+﻿#ifndef PARAMSVM_H
 #define PARAMSVM_H
 #include <QObject>
 #include "../model/Params.h"
@@ -17,7 +17,7 @@ class CommonParamsVM:public QObject
     Q_PROPERTY(int backGroundColor READ getBackGroundColor WRITE setBackGroundColor)
     Q_PROPERTY(bool cyanYellowTest READ getCyanYellowTest WRITE setCyanYellowTest)
     Q_PROPERTY(bool responseAutoAdapt READ getResponseAutoAdapt WRITE setResponseAutoAdapt)
-    Q_PROPERTY(int intervalTime READ getIntervalTime WRITE setIntervalTime)
+    Q_PROPERTY(int responseDelayTime READ getResponseDelayTime WRITE setResponseDelayTime)
     Q_PROPERTY(bool centerDotCheck READ getCenterDotCheck WRITE setCenterDotCheck)
     Q_PROPERTY(bool shortTermFluctuation READ getShortTermFluctuation WRITE setShortTermFluctuation)
     Q_PROPERTY(int fixationTarget READ getFixationTarget WRITE setFixationTarget)
@@ -39,7 +39,7 @@ public:
     int getBackGroundColor(){return int(m_data->backGroundColor);}void setBackGroundColor(int value){m_data->backGroundColor=BackGroundColor(value);}
     bool getCyanYellowTest(){return m_data->cyanYellowTest;}void setCyanYellowTest(bool value){m_data->cyanYellowTest=value;}
     bool getResponseAutoAdapt(){return m_data->responseAutoAdapt;}void setResponseAutoAdapt(bool value){m_data->responseAutoAdapt=value;}
-    int getIntervalTime(){return m_data->intervalTime;}void setIntervalTime(int value){m_data->intervalTime=value;}
+    int getResponseDelayTime(){return m_data->responseDelayTime;}void setResponseDelayTime(int value){m_data->responseDelayTime=value;}
     bool getCenterDotCheck(){return m_data->centerDotCheck;}void setCenterDotCheck(bool value){m_data->centerDotCheck=value;}
     bool getShortTermFluctuation(){return m_data->shortTermFluctuation;}void setShortTermFluctuation(bool value){m_data->shortTermFluctuation=value;}
     int getFixationTarget(){return int(m_data->fixationTarget);}void setFixationTarget(int value){m_data->fixationTarget=FixationTarget(value);}

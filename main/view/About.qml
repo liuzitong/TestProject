@@ -1,4 +1,4 @@
-import QtQuick 2.7
+﻿import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import perimeter.main.view.Controls 1.0
@@ -46,7 +46,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"关于";width: height*1.4;font.pointSize:fontPointSize;}
+                    CusText{text:qsTr("About");width: height*1.4;font.pointSize:fontPointSize;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;
@@ -64,8 +64,9 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             property int rowHeight: height/12;
                             anchors.fill: parent;
                             Item{
-                                height:parent.height*0.11;width: parent.width;CusText{width:parent.width;text:"电脑自动视野仪系统"; fontSizeMode: Text.VerticalFit;
-                                    anchors.horizontalCenter: parent.horizontalCenter;font.pointSize:fontPointSize*2;
+                                height:parent.height*0.11;width: parent.width;
+                                CusText{width:parent.width;text:qsTr("Computer automatic perimeter system"); fontSizeMode: Text.VerticalFit;
+                                    anchors.horizontalCenter: parent.horizontalCenter;font.pointSize:fontPointSize*1.5;
                                 }
                             }
                             Item{height:parent.height*0.06;width: parent.width; }
@@ -82,16 +83,16 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                             CusText{
                                 height:parent.height*0.04;width: parent.width;
-                                text: "设备型号: " +IcUiQmlApi.appCtrl.settings.deviceInfo;horizontalAlignment: Text.AlignLeft;
-                                font.pointSize:height*0.6;
+                                text: qsTr("Device type: ") +IcUiQmlApi.appCtrl.settings.deviceInfo;horizontalAlignment: Text.AlignLeft;
+                                font.pointSize:fontPointSize;
                             }
                             Item{height:parent.height*0.06;width: parent.width; }
 
                             CusText{
                                 height:parent.height*0.04;width: parent.width;
-                                text: "软件版本: "+IcUiQmlApi.appCtrl.settings.version;
+                                text: qsTr("Version: ")+IcUiQmlApi.appCtrl.settings.version;
                                 horizontalAlignment: Text.AlignLeft;
-                                font.pointSize:height*0.6;
+                                font.pointSize:fontPointSize;
                             }
 
                             Item{
@@ -100,10 +101,10 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                             CusText{
                                 height:parent.height*0.04;width: parent.width;
-                                text: "版权所有 ©2019 重庆贝奥新视野医疗设备有限公司"
+                                text: qsTr("Copyright @2019 Chongqing BioNewVision Medical Device Co.Lt.");
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 horizontalAlignment: Text.AlignHCenter
-                                font.pointSize:height*0.6;
+                                font.pointSize:fontPointSize;
                             }
                             Item{height:parent.height*0.12;width: parent.width; }
 
@@ -114,7 +115,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             height: parent.height*0.08; anchors.bottom: parent.bottom; width: parent.width;
                             CusButton{
                                 buttonColor: "#e0e0e0";
-                                text:"确定"
+                                text:qsTr("OK")
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 onClicked: {
                                     idPopup.close();

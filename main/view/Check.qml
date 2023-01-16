@@ -73,7 +73,6 @@ Item {id:root; width: 1366;height: 691
                     currentProgram.type!==2?staticParamsSetting.currentProgram=currentProgram:dynamicParamsSetting.currentProgram=currentProgram;
                     if(currentCheckResult.type!==2)
                         IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticCheckResultVm",currentCheckResult);
-
                     else
                         IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::DynamicCheckResultVm",currentCheckResult);
                     currentCheckResult=null;
@@ -90,16 +89,16 @@ Item {id:root; width: 1366;height: 691
                                     Item{anchors.fill: parent;anchors.margins: parent.height*0.1;
                                         Column{anchors.fill: parent;spacing: 0.175*height;
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:"程序名"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
+                                                CusText{text:qsTr("Program name"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;}
                                                 LineEdit {
-                                                    text:currentProgram==null?"":currentProgram.name; width: parent.width*0.70;textInput.readOnly: true;
+                                                    text:currentProgram==null?"":currentProgram.name; width: parent.width*0.50;textInput.readOnly: true;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){text=currentProgram.name});}
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:"光标"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
+                                                CusText{text:qsTr("Cursor"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
-                                                    text:"";width: parent.width*0.70;textInput.readOnly: true;
+                                                    text:"";width: parent.width*0.50;textInput.readOnly: true;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){
                                                         text="";
                                                         var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
@@ -110,9 +109,9 @@ Item {id:root; width: 1366;height: 691
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:"策略"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
+                                                CusText{text:qsTr("Strategy"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
-                                                    text:"";width: parent.width*0.7;textInput.readOnly: true;
+                                                    text:"";width: parent.width*0.5;textInput.readOnly: true;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){
                                                         text="";
                                                         var params=(currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params);
@@ -131,27 +130,27 @@ Item {id:root; width: 1366;height: 691
                                     Item{ anchors.fill: parent;anchors.margins: parent.height*0.1;
                                         Column{anchors.fill: parent;spacing: 0.175*height;
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:"假阳性率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
+                                                CusText{text:qsTr("False positive rate"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots:currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.falsePositiveCount;
                                                     property var totalDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.falsePositiveTestCount;
-                                                    text:currentCheckResult===null?"":currentCheckResult.type!==2?checkedDots+"/"+totalDots:"";width: parent.width*0.7;textInput.readOnly: true;
+                                                    text:currentCheckResult===null?"":currentCheckResult.type!==2?checkedDots+"/"+totalDots:"";width: parent.width*0.5;textInput.readOnly: true;
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:"假阴形率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
+                                                CusText{text:qsTr("False negative rate"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.falseNegativeCount;
                                                     property var totalDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.falseNegativeTestCount;
-                                                    text:currentCheckResult===null?"":currentCheckResult.type!==2?checkedDots+"/"+totalDots:"";width: parent.width*0.7;textInput.readOnly: true;
+                                                    text:currentCheckResult===null?"":currentCheckResult.type!==2?checkedDots+"/"+totalDots:"";width: parent.width*0.5;textInput.readOnly: true;
                                                 }
                                             }
                                             Row{ width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:"固视丢失率"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
+                                                CusText{text:qsTr("Fixation loss rate"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.fixationLostCount;
                                                     property var totalDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.fixationLostTestCount;
-                                                    text:currentCheckResult===null?"":currentCheckResult.type!==2?checkedDots+"/"+totalDots:"";width: parent.width*0.7;textInput.readOnly: true;
+                                                    text:currentCheckResult===null?"":currentCheckResult.type!==2?checkedDots+"/"+totalDots:"";width: parent.width*0.5;textInput.readOnly: true;
                                                 }
                                             }
                                         }
@@ -161,18 +160,18 @@ Item {id:root; width: 1366;height: 691
                                     Item{anchors.fill: parent;anchors.margins: parent.height*0.13;
                                         Column{anchors.fill: parent;spacing: 1/3*height;
                                             Row{width:parent.width;height: parent.height*1/3;spacing: width*0.05;
-                                                CusText{text:"测试点数"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
+                                                CusText{text:qsTr("Check dot count"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots: IcUiQmlApi.appCtrl.checkSvc===null?0:IcUiQmlApi.appCtrl.checkSvc.checkedCount;
                                                     property var totalDots: currentProgram===null?0:currentProgram.data.dots.length;
-                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.7;textInput.readOnly: true;
+                                                    text:checkedDots+"/"+totalDots;width: parent.width*0.5;textInput.readOnly: true;
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*1/3;spacing: width*0.05;
-                                                CusText{text:"测试时间"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
+                                                CusText{text:qsTr("Check time"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property int timeSpan: currentCheckResult===null?0:currentCheckResult.resultData.testTimespan;
-                                                    text:Math.floor(timeSpan/60)+":"+timeSpan%60;width: parent.width*0.7;textInput.readOnly: true;}
+                                                    text:Math.floor(timeSpan/60)+":"+timeSpan%60;width: parent.width*0.5;textInput.readOnly: true;}
                                             }
                                         }
                                     }
@@ -201,17 +200,17 @@ Item {id:root; width: 1366;height: 691
                                         Column{anchors.fill: parent;spacing: 0.125*height;
                                             Row{width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{}
-                                                CusText{text:"瞳孔尺寸"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
-                                                LineEdit{text:currentCheckResult.resultData.pupilDiameter.toFixed(2);width: parent.width*0.5;textInput.readOnly: true;}
+                                                CusText{text:qsTr("Pupil diameter"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.5;font.pointSize: fontPointSize;}
+                                                LineEdit{text:currentCheckResult.resultData.pupilDiameter.toFixed(2);width: parent.width*0.25;textInput.readOnly: true;}
                                             }
                                             Row{id: row;width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{enabled: false;checked:currentProgram.type!==2?currentProgram.params.commonParams.fixationMonitor>0:currentProgram.params.fixationMonitor>0;}
-                                                CusText{text:"眼动警报"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
+                                                CusText{text:qsTr("Eye move alarm"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.50;font.pointSize: fontPointSize;}
                                                 Image {source: "qrc:/Pics/capture-svg/btn_alarm.svg";height:parent.height*0.6; anchors.verticalCenter: parent.verticalCenter;width: height; }
                                             }
                                             Row{width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{id:deviationCheckBox;checked:true;}
-                                                CusText{text:"固视偏移"; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
+                                                CusText{text:qsTr("Fixation deviation"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                             }
                                         }
                                     }
@@ -287,7 +286,7 @@ Item {id:root; width: 1366;height: 691
                         CusText{
                             id:os_od;font.pointSize: fontPointSize*2;
                             property int value: 0;
-                            text:value===0?"左眼":"右眼"; z: 1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;height: parent.height*0.05;}
+                            text:value===0?qsTr("Left eye"):qsTr("Right eye"); z: 1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;height: parent.height*0.05;}
                         CheckDisplay{id:checkDisplay; currentProgram:root.currentProgram;currentCheckResult:root.currentCheckResult;
                             onClickedDotIndexChanged: {
                                 if(currentCheckResult==null) return;
@@ -308,7 +307,7 @@ Item {id:root; width: 1366;height: 691
                         CusButton
                         {
                             enabled: IcUiQmlApi.appCtrl.checkSvc.checkState>=3;
-                            text:"返回";onClicked:
+                            text:qsTr("Back");onClicked:
                             {
                                 if(currentCheckResult!==null)
                                 {
@@ -327,8 +326,8 @@ Item {id:root; width: 1366;height: 691
                 Item{height: parent.height;width:parent.width*0.25;
                     Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                         Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
-                            CusButton{enabled:IcUiQmlApi.appCtrl.checkSvc.checkState>=3;text:"选择程序";onClicked: chooseProgram.open();}
-                            CusButton{id:paramsSetting;text:"参数选择";enabled:(currentProgram!==null&&IcUiQmlApi.appCtrl.checkSvc.checkState>=3);onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { dynamicParamsSetting.open();}}
+                            CusButton{enabled:IcUiQmlApi.appCtrl.checkSvc.checkState>=3;text:qsTr("Select program");width:IcUiQmlApi.appCtrl.settings.language==="Chinese"?height*2.5:height*4;onClicked: chooseProgram.open();}
+                            CusButton{id:paramsSetting;text:qsTr("Params setting");enabled:(currentProgram!==null&&IcUiQmlApi.appCtrl.checkSvc.checkState>=3);width:IcUiQmlApi.appCtrl.settings.language==="Chinese"?height*2.5:height*4;onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { dynamicParamsSetting.open();}}
                         }
                     }
                 }
@@ -340,7 +339,7 @@ Item {id:root; width: 1366;height: 691
                             CusButton{
 //                                text:"开始测试";
                                 property int checkState: IcUiQmlApi.appCtrl.checkSvc.checkState;
-                                text:{if(checkState>=3||checkState==-1) return "开始测试";if(checkState===2) return "恢复检查";if(checkState===0||checkState===1) return "暂停检查"}
+                                text:{if(checkState>=3||checkState==-1) return qsTr("Start");if(checkState===2) return qsTr("Resume");if(checkState===0||checkState===1) return qsTr("Pause")}
                                 onClicked:{
 //                                    if(currentCheckResult!=null)
 //                                    {
@@ -407,7 +406,7 @@ Item {id:root; width: 1366;height: 691
 //                                }
                             }
                             CusButton{
-                                text:"停止测试";enabled: IcUiQmlApi.appCtrl.checkSvc.checkState<=2;
+                                text:qsTr("Stop");enabled: IcUiQmlApi.appCtrl.checkSvc.checkState<=2;
                                 onClicked:
                                 {
                                     IcUiQmlApi.appCtrl.checkSvc.stop();
@@ -421,7 +420,7 @@ Item {id:root; width: 1366;height: 691
                                     }
                                 }}
                             CusButton{
-                                text:"切换眼别";onClicked:os_od.value=(os_od.value+1)%2;
+                                text:qsTr("Switch eye");onClicked:os_od.value=(os_od.value+1)%2;
                                 enabled:IcUiQmlApi.appCtrl.checkSvc.checkState>=3;
                             }
                         }
@@ -432,9 +431,9 @@ Item {id:root; width: 1366;height: 691
 //                            enabled: currentCheckResult!==null;
                             enabled: currentCheckResult!==null&&IcUiQmlApi.appCtrl.checkSvc.checkState===4;
                             property var listModel:ListModel {}
-                            property var reportNames: [["常规分析","三合一图","总览图","三合一图","阈值图"],["筛选"],["动态","动态数据"]]
+                            property var reportNames: [[qsTr("Single"),qsTr("Three in one"),qsTr("Overview"),qsTr("Three in one"),qsTr("Threshold")],[qsTr("Screening")],[qsTr("Dynamic"),qsTr("Dyanmic data")]]
                             comboBox.model: listModel;popDirectionDown: false;complexType: true;
-                            button.text: "分析";
+                            button.text: qsTr("Analysis");
                             button.onClicked:
                             {
 //                                console.log(currentCheckResult.id);

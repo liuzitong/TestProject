@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -35,11 +35,11 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
         NewProgram{
             id:newProgram;
             anchors.fill: parent;
-//            onOk: {
-//                currentProgram.type=type;currentProgram.strategy=strategy;
-//                if(currentProgram.type!==2){currentProgram.params.commonParams.Range[1]=range;}
-//                else{currentProgram.params.Range[1]=range;}
-//            }
+            onOk: {
+                currentProgram.type=type;currentProgram.strategy=strategy;
+                if(currentProgram.type!==2){currentProgram.params.commonParams.Range[1]=range;}
+                else{currentProgram.params.Range[1]=range;}
+            }
         }
 
         SaveToAnotherProgram{
@@ -85,7 +85,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                         Rectangle{height: parent.height*0.1;width: parent.width;color:"#D2D2D3"
                             TabBar {id: bar;height: parent.height*0.8;anchors.bottom: parent.bottom;anchors.right: parent.right; anchors.rightMargin:0.03*parent.width;
                                 anchors.left: parent.left; anchors.leftMargin: 0.03*parent.width;spacing: 0;currentIndex: 0;
-                                Repeater { model:["阈值","筛选","特殊","动态","自定义"]
+                                Repeater { model:[qsTr("Threshold"),qsTr("Screening"),qsTr("Special"),qsTr("Dynamic"),qsTr("Custom")]
                                     TabButton {width: bar.width*0.20;height: parent.height;
                                         Rectangle{anchors.fill: parent;color:parent.checked? "#E3E5E8":"#D2D2D3";
                                             Rectangle{width: parent.width;height: 3;color: "#0064B6";visible: parent.parent.checked? true:false; }
@@ -182,7 +182,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                     }
                     Column{width: parent.width;height: parent.height*0.4-2
                         Rectangle{width: parent.width;height: parent.height*0.11;color:"#D2D2D3";
-                            CusText{text:"策略"; horizontalAlignment: Text.AlignHCenter; anchors.fill: parent;font.pointSize: fontPointSize;}
+                            CusText{text:qsTr("Strategy"); horizontalAlignment: Text.AlignHCenter; anchors.fill: parent;font.pointSize: fontPointSize;}
                         }
                         Rectangle{width: parent.width;height: parent.height*0.89;color:"#DCDEE0";
                             StackLayout {
@@ -194,8 +194,8 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
 //                                    console.log("currentProgram.type"+currentProgram.type);
                                     switch(currentProgram.type)
                                     {
-                                        case 0:strategyNames=[{name:qsTr("fullThreshold"),strategy:0},{name:qsTr("smart interactive"),strategy:1},{name:qsTr("fast interactive"),strategy:2}];break;
-                                        case 1:strategyNames=[{name:qsTr("one stage"),strategy:3},{name:qsTr("two stages"),strategy:4},{name:qsTr("quantify defects"),strategy:5},{name:qsTr("single stimulation"),strategy:6}];break;
+                                        case 0:strategyNames=[{name:qsTr("Full threshold"),strategy:0},{name:qsTr("Smart interactive"),strategy:1},{name:qsTr("Fast interactive"),strategy:2}];break;
+                                        case 1:strategyNames=[{name:qsTr("One stage"),strategy:3},{name:qsTr("Two stages"),strategy:4},{name:qsTr("Quantify defects"),strategy:5},{name:qsTr("Single stimulation"),strategy:6}];break;
 //                                        case 2:strategyNames=[];break;
                                         default:break;
                                     }
@@ -281,7 +281,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                     Rectangle{anchors.fill: parent;color: "#DCDEE0";
                         Item{ anchors.fill: parent;anchors.margins: 0.15*width;
                             Column{anchors.fill: parent;spacing: width*0.25;
-                                CusButton{text:"新建";height: parent.width*0.3;width: parent.width;
+                                CusButton{text:qsTr("New");height: parent.width*0.3;width: parent.width;
                                     onClicked: {newProgram.open();}
                                     Component.onCompleted: {
                                         newProgram.ok.connect(createProgram);
@@ -344,19 +344,19 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                 }
 //                                CusButton{text:"取消";height: parent.width*0.3;width: parent.width;}
                                 CusButton{
-                                    text:"保存";height: parent.width*0.3;width: parent.width;enabled:currentProgram===null?false:currentProgram.category===4||!locked;
+                                    text:qsTr("Save");height: parent.width*0.3;width: parent.width;enabled:currentProgram===null?false:currentProgram.category===4||!locked;
                                     onClicked: {/*currentProgram.dots.forEach(function(item){console.log("x:"+item.x+" y:"+item.y);});*/currentProgram.updateProgram();}
                                 }
 
-                                CusButton{text:"删除";height: parent.width*0.3;width: parent.width;enabled:currentProgram===null?false:currentProgram.category===4||!locked; onClicked:{ currentProgram.deleteProgram();paramsSetting.enabled=false;programLists.refreshData();}}
-                                CusButton{text:"清除";height: parent.width*0.3;width: parent.width;enabled:currentProgram===null?false:currentProgram.category===4||!locked;
+                                CusButton{text:qsTr("Delete");height: parent.width*0.3;width: parent.width;enabled:currentProgram===null?false:currentProgram.category===4||!locked; onClicked:{ currentProgram.deleteProgram();paramsSetting.enabled=false;programLists.refreshData();}}
+                                CusButton{text:qsTr("Clear");height: parent.width*0.3;width: parent.width;enabled:currentProgram===null?false:currentProgram.category===4||!locked;
                                     onClicked:
                                     {
                                         currentProgram.data.dots=[];
 //                                        currentProgramChanged;
                                     }}
                                 CusButton{
-                                    text:"复制";height: parent.width*0.3;width: parent.width;
+                                    text:qsTr("Copy");height: parent.width*0.3;width: parent.width;
                                     onClicked: saveToAnotherProgram.open();
                                     Component.onCompleted: {
                                         saveToAnotherProgram.ok.connect(saveToAnother);
@@ -397,36 +397,36 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
         Item{ id: item1;anchors.fill: parent;
             Item{height: parent.height; anchors.left: parent.left; anchors.leftMargin: 0;width:parent.width*0.235;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:"返回";onClicked:root.changePage("patientManagement",null);}
+                    CusButton{text:qsTr("Back");onClicked:root.changePage("patientManagement",null);}
                     }
                 }
             Item{height: parent.height; anchors.horizontalCenter: parent.horizontalCenter;width:parent.width*0.5;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter
-                        CusButton{id:paramsSetting;text:"参数设置";enabled:false;onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { dynamicParamsSetting.open();}}
-                        CusButton{text:"圆形选点";enabled: currentProgram==null?false:((currentProgram.category===4||!locked)&&currentProgram.type!==2)?true:false;onClicked: circleDot.open();}
-                        CusButton{text:"矩形选点";enabled: currentProgram==null?false:((currentProgram.category===4||!locked)&&currentProgram.type!==2)?true:false;onClicked: squareDot.open();}
+                        CusButton{id:paramsSetting;text:qsTr("Params setting");enabled:false;onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { dynamicParamsSetting.open();}}
+                        CusButton{text:qsTr("Circle dots");enabled: currentProgram==null?false:((currentProgram.category===4||!locked)&&currentProgram.type!==2)?true:false;onClicked: circleDot.open();}
+                        CusButton{text:qsTr("Rectangle dots");enabled: currentProgram==null?false:((currentProgram.category===4||!locked)&&currentProgram.type!==2)?true:false;onClicked: squareDot.open();}
                         }
                     }
                 }
             Item{height: parent.height; anchors.right: parent.right; width:parent.width*0.117;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     CusButton{
-                        id:unlock;text:"解锁"; anchors.horizontalCenter: parent.horizontalCenter;
+                        id:unlock;text:qsTr("Unlock"); anchors.horizontalCenter: parent.horizontalCenter;
                         onClicked: {unlock.visible=false;unlockPwd.visible=true;}
                     }
                     CusText{
                         anchors.fill: parent;
-                        text:"已解锁";color: "white";visible: !locked;font.pointSize: fontPointSize;}
+                        text:qsTr("Unlocked");color: "white";visible: !locked;font.pointSize: fontPointSize;}
                 }
             }
             Item{height: parent.height; anchors.right: parent.right; width:parent.width*0.25;visible:false;
                 id:unlockPwd
                 Row{
                     layoutDirection: Qt.RightToLeft;anchors.fill: parent;anchors.margins:parent.height*0.15;spacing:0.5*height
-                    CusButton{text:"确定";onClicked:{if(pwd.text===IcUiQmlApi.appCtrl.settings.programUnlockPwd) {locked=false;unlockPwd.visible=false;}else{pwdText.text="输入密码错误"}}}
+                    CusButton{text:qsTr("Confirm");onClicked:{if(pwd.text===IcUiQmlApi.appCtrl.settings.programUnlockPwd) {locked=false;unlockPwd.visible=false;}else{pwdText.text="输入密码错误"}}}
                     LineEdit{id:pwd;width: parent.height*3;textInput.echoMode: TextInput.Password;}
-                    CusText{id:pwdText;text:"输入解锁密码:";color: "white";font.pointSize: fontPointSize;}
+                    CusText{id:pwdText;text:qsTr("Input password")+":";color: "white";font.pointSize: fontPointSize;}
                 }
             }
 
