@@ -2,6 +2,7 @@
 #define SETTINGS_H
 
 #include <QObject>
+
 namespace Perimeter
 {
 class Settings :public QObject
@@ -15,6 +16,8 @@ class Settings :public QObject
     Q_PROPERTY(QString programUnlockPwd READ programUnlockPwd WRITE setProgramUnlockPwd)
     Q_PROPERTY(int defaultProgramId READ defaultProgramId WRITE setDefaultProgramId)
     Q_PROPERTY(int defaultProgramType READ defaultProgramType WRITE setDefaultProgramType)
+//    Q_PROPERTY(QString trigger READ getTrigger NOTIFY triggerChanged)
+    Q_PROPERTY(QString langTrigger READ langTrigger /*WRITE setLangTrigger*/ NOTIFY langTriggerChanged)
 
 
 
@@ -27,11 +30,22 @@ public:
     QString getVersion(){return m_version;}void setVersion(QString value){m_version=value;emit versionChanged(value);}Q_SIGNAL void versionChanged(QString value);
     QString getDeviceInfo(){return m_deviceInfo;}void setDeviceInfo(QString value){m_deviceInfo=value;emit deviceInfoChanged(value);}Q_SIGNAL void deviceInfoChanged(QString value);
     bool getDoubleName(){return m_doubleName;}void setDoubleName(bool value){m_doubleName=value;emit doubleNameChanged(value);}Q_SIGNAL void doubleNameChanged(bool value);
-    QString programUnlockPwd() const{return m_programUnlockPwd;}public slots:void setProgramUnlockPwd(QString value){m_programUnlockPwd = value;}
+    QString programUnlockPwd() const{return m_programUnlockPwd;}void setProgramUnlockPwd(QString value){m_programUnlockPwd = value;}
     int defaultProgramId(){return m_defaultProgramId;}void setDefaultProgramId(int value){m_defaultProgramId=value;}
     int defaultProgramType(){return m_defaultProgramType;}void setDefaultProgramType(int value){m_defaultProgramType=value;}
+    QString langTrigger(){return "";}Q_SIGNAL void langTriggerChanged();
+    //    QString getTrigger(){return "";} Q_SIGNAL void triggerChanged();
+//    void setLangTrigger(QString langTrigger)
+//    {
+//        if (m_langTrigger == langTrigger)
+//            return;
 
-public:
+//        m_langTrigger = langTrigger;
+//        emit langTriggerChanged(m_langTrigger);
+//    }
+private:
+    void changeLang();
+private:
     QString m_hospitalName;
     QString m_language;
     QString m_version;
@@ -40,6 +54,9 @@ public:
     bool m_doubleName;
     int m_defaultProgramId;
     int m_defaultProgramType;
+
+
+
 
 };
 }

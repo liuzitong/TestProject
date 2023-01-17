@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 **
 ** Copyright (C) 2016 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
@@ -194,7 +194,7 @@ Column {
         Row{anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.50;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:"返回";onClicked:{root.changePage("analysisLobby",null);}}}
+                    CusButton{text:qsTr("Back");onClicked:{root.changePage("analysisLobby",null);}}}
                 }
 //            Item{height: parent.height;width:parent.width*0.52;
 //                Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
@@ -211,9 +211,9 @@ Column {
                     {
                         height: parent.height; layoutDirection: Qt.RightToLeft;spacing: height*0.8;width: parent.width
                         anchors.horizontalCenter: parent.horizontalCenter
-                        CusButton{text:"复位";}
-                        CusButton{text:"缩小";}
-                        CusButton{text:"放大";}
+                        CusButton{text:qsTr("Reset");}
+                        CusButton{text:qsTr("Zoom out");}
+                        CusButton{text:qsTr("Zoom in");}
                     }
                 }
             }

@@ -149,8 +149,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                                     {
                                                         switch (strategies[i])
                                                         {
-                                                        case 3:listModel.append({modelData:"One stage screening"});break;
-                                                        case 4:listModel.append({modelData:"Two stages screening"});break;
+                                                        case 3:listModel.append({modelData:"One stage"});break;
+                                                        case 4:listModel.append({modelData:"Two stages"});break;
                                                         case 5:listModel.append({modelData:"Quantify defects"});break;
                                                         case 6:listModel.append({modelData:"Single stimulus"});break;
                                                         }
@@ -233,7 +233,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:qsTr("Center point check"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:qsTr("Center dot check"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
                                             width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("On"),qsTr("Off")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.centerDotCheck;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.centerDotCheck=currentIndex;})}
@@ -251,7 +251,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                        width: parent.width; height:parent.parent.rowHeight;
                                        CusText{text:qsTr("Fixation target"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("Center point"),qsTr("Small diamond"),qsTr("Big diamond"),qsTr("Bottom point")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.fixationTarget;
+                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("Center dot"),qsTr("Small diamond"),qsTr("Big diamond"),qsTr("Bottom dot")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.fixationTarget;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.fixationTarget=currentIndex;})}
                                        }
                                    }
@@ -265,7 +265,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:qsTr("Blind point test"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:qsTr("Blind dot test"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("On"),qsTr("Off")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.blindDotTest;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.blindDotTest=currentIndex;})}
@@ -294,7 +294,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.45;
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"刺激时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:qsTr("Stimulus time"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
                                             width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.stimulationTime=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.stimulationTime;});}
@@ -302,7 +302,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"间隔时间"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:qsTr("Inteval time"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
                                             width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.intervalTime=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.intervalTime;});}
@@ -310,7 +310,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"假阳性周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:qsTr("False positive cycle"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
                                             width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.falsePositiveCycle=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.falsePositiveCycle;}); }
@@ -318,7 +318,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"假阴性周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:qsTr("False negative cycle"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
                                             width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.falseNegativeCycle=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.falseNegativeCycle;}); }
@@ -326,7 +326,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:"固视丢失率周期"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:qsTr("Fixation loss cycle"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
                                             width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.fixationViewLossCycle=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.fixationViewLossCycle;}); }
@@ -338,7 +338,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.45;
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"单刺激分贝"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:qsTr("Single stimulus DB"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.singleStimulationDB=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.singleStimulationDB;}); }
@@ -346,7 +346,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"盲点刺激分贝"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:qsTr("Blind dot stimulus DB"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.blindDotStimulationDB=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.blindDotStimulationDB;}); }
@@ -354,7 +354,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"短期波动次数"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:qsTr("Short term fluctuation count"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:1;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.shortTermFluctuationCount=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.shortTermFluctuationCount;}); }
@@ -377,8 +377,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             layoutDirection: Qt.RightToLeft
                             anchors.verticalCenter: parent.verticalCenter
 //
-                            CusButton{text:"取消";onClicked: idPopup.close();}
-                            CusButton{text:"确定";onClicked:{ok();idPopup.close();dataRefreshed();}}
+                            CusButton{text:qsTr(qsTr("Cancel"));onClicked: idPopup.close();}
+                            CusButton{text:qsTr(qsTr("OK"));onClicked:{ok();idPopup.close();dataRefreshed();}}
 //                             CusButton{text:"aa";onClicked:{
 //                                     console.log(currentProgram.params.commonParams.cursorSize) ;
 //                                     console.log(currentProgram.params.fixedParams.stimulationTime) ;

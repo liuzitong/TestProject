@@ -292,7 +292,7 @@ void StaticAnalysisVm::showReport(int report)
 
     auto commomParams=m_checkResult.m_params.commonParams;
     QString fixationMonitor;switch (int(commomParams.fixationMonitor)) {case 0:fixationMonitor="No Alarm"; break;case 1:fixationMonitor="Only Alarm";break;case 2:fixationMonitor="Pause And Alarm";break;}
-    QString fixationTarget;switch (int(commomParams.fixationTarget)){case 0:fixationTarget="Center Point";break;case 1:fixationTarget="Small Diamond";break;case 2:fixationTarget="Big Diamond";break;case 3:fixationTarget="Bottom Point";break;}
+    QString fixationTarget;switch (int(commomParams.fixationTarget)){case 0:fixationTarget="Center dot";break;case 1:fixationTarget="Small Diamond";break;case 2:fixationTarget="Big Diamond";break;case 3:fixationTarget="Bottom dot";break;}
     manager->setReportVariable("fixationMonitor","Fixation Monitor: "+fixationMonitor);
     manager->setReportVariable("fixationTarget","Fixation Target: "+fixationTarget);
     auto resultData=m_checkResult.m_data;

@@ -105,7 +105,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
 
                         Row{height: content.rowHeight; width: parent.width;spacing: width*0.05;
-                            CusText{width: parent.width*0.50; text:"* "+qsTr("Unit")+":°,"+qsTr("degree");horizontalAlignment: Text.AlignLeft;font.pointSize:CommonSettings.fontPointSize;}
+                            CusText{width: parent.width*0.50; text:"* "+qsTr("Unit")+":°,"+qsTr("Degree");horizontalAlignment: Text.AlignLeft;font.pointSize:CommonSettings.fontPointSize;}
                             CusButton{width: parent.width*0.20;buttonColor: "#e0e0e0";text:qsTr("OK");
                                 onClicked: {
                                     confirm(x0.value,y0.value,x1.value,y1.value,gap.value);

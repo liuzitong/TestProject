@@ -13,6 +13,9 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
    anchors.fill: parent;
 //   width: 1366;height: 640;
 
+   property string lt:"";
+   Component.onCompleted:{IcUiQmlApi.appCtrl.settings.langTriggerChanged.connect(function(){ltChanged();});}
+
    property int fontPointSize: CommonSettings.fontPointSize;
    property int rowHeight: CommonSettings.windowHeight*0.04;
 
@@ -44,7 +47,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         ctx.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:qsTr("Settings");width: height*1.4;font.pointSize: fontPointSize;anchors.left:parent.left;anchors.leftMargin: height*0.5;}
+                    CusText{text:qsTr("Settings")+lt; horizontalAlignment: Text.AlignLeft;width: height*1.4;font.pointSize: fontPointSize;anchors.left:parent.left;anchors.leftMargin: height*0.5;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;
@@ -59,7 +62,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             Item{width: parent.width;height:rowHeight*0.1;}
                             Flow{
                                 height: rowHeight; width: parent.width*0.7;anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
-                                CusText{text:qsTr("Select language")+":"; horizontalAlignment: Text.AlignRight;width:parent.width*0.3;font.pointSize: fontPointSize;}
+                                CusText{text:qsTr("Select language")+lt+":"; horizontalAlignment: Text.AlignRight;width:parent.width*0.3;font.pointSize: fontPointSize;}
                                 CusComboBox{
                                     id:languageSelection;height: parent.height;width:parent.width*0.60;
                                     borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
@@ -75,7 +78,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             }
                             Flow{
                                 height: rowHeight;width: parent.width*0.7; anchors.horizontalCenter: parent.horizontalCenter;spacing: width*0.1
-                                CusText{text:qsTr("Hospital name")+":"; horizontalAlignment: Text.AlignRight;width: parent.width*0.3;font.pointSize: fontPointSize;}
+                                CusText{text:qsTr("Hospital name")+lt+":"; horizontalAlignment: Text.AlignRight;width: parent.width*0.3;font.pointSize: fontPointSize;}
                                 LineEdit{id:hospitalName;height: rowHeight;width:parent.width*0.60;text:IcUiQmlApi.appCtrl.settings.hospitalName}
                             }
 
@@ -90,7 +93,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             CusButton
                             {
                                 buttonColor: CommonSettings.darkButtonColor;
-                                text:qsTr("OK");
+                                text:qsTr("OK")+lt;
                                 anchors.left: parent.left;
                                 anchors.leftMargin: 0;
                                 onClicked:
@@ -105,7 +108,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     idPopup.close();
                                 }
                             }
-                            CusButton{buttonColor: CommonSettings.darkButtonColor;text:qsTr("Cancel"); anchors.right: parent.right; anchors.rightMargin: 0;onClicked: {idPopup.close();}}
+                            CusButton{buttonColor: CommonSettings.darkButtonColor;text:qsTr("Cancel")+lt; anchors.right: parent.right; anchors.rightMargin: 0;onClicked: {idPopup.close();}}
                         }
                     }
                 }

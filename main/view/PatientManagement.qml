@@ -152,7 +152,7 @@ Item{
                                     Rectangle{width: parent.width*2.5/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Patient ID");font.pointSize: fontPointSize;}}
                                     Rectangle{width: parent.width*2.5/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Name");font.pointSize: fontPointSize;}}
                                     Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Sex");font.pointSize: fontPointSize;}}
-                                    Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Birth Date");font.pointSize: fontPointSize;}}
+                                    Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Birth date");font.pointSize: fontPointSize;}}
                                     Rectangle{width: parent.width*1/10;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Load");font.pointSize: fontPointSize;}}
                                 }
                                 ListView{
@@ -218,7 +218,7 @@ Item{
                             Flow{
                                 id:pageIndex;
                                 property int currentPage: 1;property int totalPage:1;property int totalRecordCount: 0;anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;height:parent.height;
-                                CusText{id:currentPageNumberText;text:qsTr("The")+" "+pageIndex.currentPage+"/"+pageIndex.totalPage+" "+qsTr("Page")+","+qsTr("total")+" "+pageIndex.totalRecordCount+" "+qsTr("records"); horizontalAlignment: Text.AlignLeft;height: parent.height*0.8;font.pointSize: fontPointSize;}
+                                CusText{id:currentPageNumberText;text:qsTr("The")+" "+pageIndex.currentPage+"/"+pageIndex.totalPage+" "+qsTr("Page")+","+qsTr("Total")+" "+pageIndex.totalRecordCount+" "+qsTr("Records"); horizontalAlignment: Text.AlignLeft;height: parent.height*0.8;font.pointSize: fontPointSize;}
                             }
                             Flow{
                                 anchors.right: parent.right;height:parent.height*1.0;anchors.verticalCenter: parent.verticalCenter;spacing:0.5*height;

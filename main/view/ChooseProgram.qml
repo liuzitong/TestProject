@@ -161,7 +161,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                         CusButton
                         {
-                            enabled: programSelection.selectedProgram!==null;text:qsTr("Apply");
+                            enabled: programSelection.selectedProgram!==null;text:qsTr("OK");
                             onClicked:
                             {
                                 if (currentProgram!==null)

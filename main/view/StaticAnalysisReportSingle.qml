@@ -77,7 +77,7 @@ Item {
                 Item{width: parent.width;height: textHeight;}
                 CusText{width:parent.width;height:textHeight;text:"VFI:"+Math.round(analysisResult.VFI*100)+"%" ;horizontalAlignment: Text.AlignLeft;}
                 CusText{property var ght: if(analysisResult.GHT===0){return qsTr("Out of limits");} else if(analysisResult.GHT===1){return qsTr("Low sensitivity");}else if(analysisResult.GHT===2){return qsTr("Border of limits");}else if(analysisResult.GHT===3){return qsTr("Within normal limits");}
-                width:parent.width;height:textHeight;horizontalAlignment: Text.AlignLeft;text:qsTr("Within normal limits")+": "+ ght;}
+                width:parent.width;height:textHeight;horizontalAlignment: Text.AlignLeft;text:qsTr("GHT")+": "+ ght;}
                 CusText{width:parent.width;height:textHeight;text:qsTr("MD")+": "+analysisResult.md.toFixed(2)+(analysisResult.p_md>0?" (<"+analysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;}
                 CusText{width:parent.width;height:textHeight;text:qsTr("PSD")+": "+analysisResult.psd.toFixed(2)+(analysisResult.p_psd>0?" (<"+analysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;}
             }

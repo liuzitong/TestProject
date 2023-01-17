@@ -68,7 +68,7 @@ Item
                             property var params: currentCheckResult.params.commonParams;
                             property int timeSpan:currentCheckResult.resultData.testTimespan;
                             property var fixationMonitor: [qsTr("No alarm"),qsTr("Only alarm"),qsTr("Alarm and pause")];
-                            property var fixationTarget: [qsTr("Center point"),qsTr("Small diamond"),qsTr("Big diamond"),qsTr("Bottom point")]
+                            property var fixationTarget: [qsTr("Center dot"),qsTr("Small diamond"),qsTr("Big diamond"),qsTr("Bottom dot")]
                             property var centerDotCheck: [qsTr("On"),qsTr("Off")];
 
                             model: [
@@ -78,7 +78,7 @@ Item
                                 {name:qsTr("False positive rate"),param:Math.round(currentCheckResult.resultData.falsePositiveCount/currentCheckResult.resultData.falsePositiveTestCount*100)+"%"},
                                 {name:qsTr("False negative rate"),param:Math.round(currentCheckResult.resultData.falseNegativeCount/currentCheckResult.resultData.falseNegativeTestCount*100)+"%"},
                                 {name:qsTr("Check time"),param:Math.floor(timeSpan/60)+":"+timeSpan%60},
-                                {name:qsTr("Center point check"),param:params.centerDotCheck?centerDotCheck[0]:centerDotCheck[1]}]
+                                {name:qsTr("Center dot check"),param:params.centerDotCheck?centerDotCheck[0]:centerDotCheck[1]}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
     //                        CusText{text:"固视监测";  horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
@@ -89,7 +89,7 @@ Item
                             property var cursorSize: ["I","II","III","IV","V"];
                             property var cursorColor: [qsTr("White"),qsTr("Red"),qsTr("Blue")];
                             property var backGroundColor: ["31.5 ASB","315 ASB"];
-                            property var strategy: [qsTr("Full threshold"),qsTr("Smart interactive"),qsTr("Fast interactive"),qsTr("One stage screening"),qsTr("Two stages screening"),qsTr("Quantify defects"),qsTr("Single stimulus")]
+                            property var strategy: [qsTr("Full threshold"),qsTr("Smart interactive"),qsTr("Fast interactive"),qsTr("One stage"),qsTr("Two stages"),qsTr("Quantify defects"),qsTr("Single stimulus")]
                             model: [
                                 {name:qsTr("Stimulus cursor"),param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
                                 {name:qsTr("Background light"),param:backGroundColor[params.backGroundColor]},

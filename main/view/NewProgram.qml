@@ -81,7 +81,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     id:stratComboBox
                                     property var strategies:
                                         [[qsTr("Full threshold"),qsTr("Smart interactive"),qsTr("Fast interactive")],
-                                        [qsTr("One stage screening"),qsTr("Two stages screening"),qsTr("Quantify defects"),qsTr("Single stimulus")],
+                                        [qsTr("One stage"),qsTr("Two stages"),qsTr("Quantify defects"),qsTr("Single stimulus")],
                                         [qsTr("Standard"),qsTr("Blind area"),qsTr("Dark area"),qsTr("Straight line")]];
                                     width: parent.width*0.7;
                                     height:parent.height;

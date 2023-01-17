@@ -112,7 +112,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:qsTr("Cursor color"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                         CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("white"),qsTr("red"),qsTr("blue")];
+                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("White"),qsTr("Red"),qsTr("Blue")];
                                             currentIndex:currentProgram===null?0:currentProgram.params.cursorColor;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.cursorColor=currentIndex;})}
                                         }
@@ -130,7 +130,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                         width: parent.width; height:parent.parent.rowHeight;
                                         CusText{text:qsTr("Background color"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                         CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("white"),qsTr("yellow")];
+                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("White"),qsTr("Yellow")];
                                             currentIndex:currentProgram===null?0:currentProgram.params.backGroundColor;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.backGroundColor=currentIndex;})}
                                         }

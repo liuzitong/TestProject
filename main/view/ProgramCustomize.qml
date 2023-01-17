@@ -424,7 +424,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                 id:unlockPwd
                 Row{
                     layoutDirection: Qt.RightToLeft;anchors.fill: parent;anchors.margins:parent.height*0.15;spacing:0.5*height
-                    CusButton{text:qsTr("Confirm");onClicked:{if(pwd.text===IcUiQmlApi.appCtrl.settings.programUnlockPwd) {locked=false;unlockPwd.visible=false;}else{pwdText.text="输入密码错误"}}}
+                    CusButton{text:qsTr("OK");onClicked:{if(pwd.text===IcUiQmlApi.appCtrl.settings.programUnlockPwd) {locked=false;unlockPwd.visible=false;}else{pwdText.text="输入密码错误"}}}
                     LineEdit{id:pwd;width: parent.height*3;textInput.echoMode: TextInput.Password;}
                     CusText{id:pwdText;text:qsTr("Input password")+":";color: "white";font.pointSize: fontPointSize;}
                 }

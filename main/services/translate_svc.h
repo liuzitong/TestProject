@@ -6,57 +6,37 @@
 #include <QQmlContext>
 #include <QTranslator>
 
-
+namespace Perimeter{
 class TranslateController : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Language)
-public:
-    enum class Language
-    {
-        English = 1,
-        Chinese
-    };
+//    Q_ENUMS(Language)
+
 
 public:
-    static TranslateController* instance(QQmlEngine *engine)
-    {
-        static TranslateController controller(engine);
-        return &controller;
-    }
+//    enum class Language
+//    {
+//        English = 1,
+//        Chinese
+//    };
 
-    void retranslateUi() {
+public:
+    static TranslateController* instance(/*QQmlEngine *engine*/);
+//    version too low can't work.at least 5.12.
+//    void retranslateUi() {
 //        m_engine->retranslate();
-    }
+//    }
 
-    Q_INVOKABLE void loadLanguage(Language lang) {
-        switch (lang) {
-        case Language::Chinese:
-            if (m_translator->load("./language/Translator_qml_zh_CN.qm")) {
-                emit message(tr("--- Language changed to Chinese"));
-            }
-            break;
-        case Language::English:
-            m_translator->load("");
-            emit message(tr("--- Language changed to English"));
-            break;
-        }
+    Q_INVOKABLE void loadLanguage(QLocale::Language lang);
 
-        retranslateUi();
-    }
-
-signals:
-    void message(const QString &msg);
+//signals:
+//    void message(const QString &msg);
 
 private:
-    TranslateController(QQmlEngine *engine) {
-        m_engine = engine;
-        m_translator = new QTranslator(this);
-        QCoreApplication::installTranslator(m_translator);
-    }
+    TranslateController(/*QQmlEngine *engine*/);
 
-    QQmlEngine *m_engine = nullptr;
+//    QQmlEngine *m_engine = nullptr;
     QTranslator *m_translator = nullptr;
 };
-
+}
 #endif // TRANSLATE_SVC_H

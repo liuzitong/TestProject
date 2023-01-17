@@ -1,4 +1,4 @@
-#ifndef PERIMETER_APPCTRL_HXX
+﻿#ifndef PERIMETER_APPCTRL_HXX
 #define PERIMETER_APPCTRL_HXX
 
 #include "perimeter/base/common/perimeter_def.h"
@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QString>
 #include "perimeter/main/database/databaseSvc.h"
+#include <perimeter/main/services/translate_svc.h>
 
 
 namespace Perimeter {
@@ -45,7 +46,6 @@ public:
     QObject*    getAnalysisSvc() const;
     QObject*    getCheckSvc() const;
     QObject*    getSettings();
-
 //    QObject*    getCurrentPatient();    void setCurrentPatient(QObject* value);     Q_SIGNAL void  currentPatientChanged(QObject* value);
 //    Q_SIGNAL void  changePage(QString value);
 protected:

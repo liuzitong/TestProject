@@ -63,8 +63,8 @@ Item
                         Repeater{
                             property var params: currentCheckResult.params.commonParams;
                             property int timeSpan:currentCheckResult.resultData.testTimespan;
-                            property var fixationMonitor: [qsTr("No alarm"),qsTr("只报警"),qsTr("Alarm and pause")];
-                            property var fixationTarget: [qsTr("Center point"),qsTr("Small diamond"),qsTr("Big diamond"),qsTr("Bottom point")]
+                            property var fixationMonitor: [qsTr("No alarm"),qsTr("Only alarm"),qsTr("Alarm and pause")];
+                            property var fixationTarget: [qsTr("Center Dot"),qsTr("Small diamond"),qsTr("Big diamond"),qsTr("Bottom dot")]
                             property var centerDotCheck: [qsTr("On"),qsTr("Off")];
 
                             model: [
@@ -74,7 +74,7 @@ Item
                                 {name:qsTr("False positive rate"),param:Math.round(currentCheckResult.resultData.falsePositiveCount/currentCheckResult.resultData.falsePositiveTestCount*100)+"%"},
                                 {name:qsTr("False negative rate"),param:Math.round(currentCheckResult.resultData.falseNegativeCount/currentCheckResult.resultData.falseNegativeTestCount*100)+"%"},
                                 {name:qsTr("Check time"),param:Math.floor(timeSpan/60)+":"+timeSpan%60},
-                                {name:qsTr("Center point check"),param:params.centerDotCheck?centerDotCheck[0]:centerDotCheck[1]}]
+                                {name:qsTr("Center Dot check"),param:params.centerDotCheck?centerDotCheck[0]:centerDotCheck[1]}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
@@ -82,9 +82,9 @@ Item
                         Repeater{
                             property var params: currentCheckResult.params.commonParams;
                             property var cursorSize: ["I","II","III","IV","V"];
-                            property var cursorColor: [qsTr("white"),qsTr("red"),qsTr("blue")];
+                            property var cursorColor: [qsTr("White"),qsTr("Red"),qsTr("Blue")];
                             property var backGroundColor: ["31.5 ASB","315 ASB"];
-                            property var strategy: [qsTr("Full threshold"),qsTr("Smart interactive"),qsTr("Fast interactive"),qsTr("One stage screening"),qsTr("Two stages screening"),qsTr("Quantify defects"),qsTr("Single stimulus")]
+                            property var strategy: [qsTr("Full threshold"),qsTr("Smart interactive"),qsTr("Fast interactive"),qsTr("One stage"),qsTr("Two stages"),qsTr("Quantify defects"),qsTr("Single stimulus")]
                             model: [
                                 {name:qsTr("Stimulus cursor"),param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
                                 {name:qsTr("Background light"),param:backGroundColor[params.backGroundColor]},
@@ -211,7 +211,7 @@ Item
                     Column{width: parent.width*0.3;height:parent.height;spacing: textHeight*0.5;
                         CusText{width:parent.width;height:textHeight;text:"VFI:"+Math.round(staticAnalysisResult.VFI*100)+"%" ;horizontalAlignment: Text.AlignLeft;}
                         CusText{
-                            property var ght: if(staticAnalysisResult.GHT===0){return qsTr("Out of limits");} else if(staticAnalysisResult.GHT===1){return "普遍敏感度降低";}else if(staticAnalysisResult.GHT===2){return "边界";}else if(staticAnalysisResult.GHT===3){return "正常范围";}
+                            property var ght: if(staticAnalysisResult.GHT===0){return qsTr("Out of limits");} else if(staticAnalysisResult.GHT===1){return qsTr("Low sensitivity");}else if(staticAnalysisResult.GHT===2){return qsTr("Border of limits");}else if(staticAnalysisResult.GHT===3){return qsTr("Within normal limits");}
                             width:parent.width;height:textHeight;horizontalAlignment: Text.AlignLeft;text:qsTr("GHT")+": "+ ght;}
                         CusText{width:parent.width;height:textHeight;text:qsTr("MD")+": "+staticAnalysisResult.md.toFixed(2)+(staticAnalysisResult.p_md>0?" (<"+staticAnalysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;}
                         CusText{width:parent.width;height:textHeight;text:qsTr("PSD")+": "+staticAnalysisResult.psd.toFixed(2)+(staticAnalysisResult.p_psd>0?" (<"+staticAnalysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;}

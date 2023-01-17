@@ -1,4 +1,4 @@
-#ifndef PERIMETER_APPCTRL_CXX
+﻿#ifndef PERIMETER_APPCTRL_CXX
 #define PERIMETER_APPCTRL_CXX
 
 #include "perimeter_appctrl.hxx"
@@ -35,7 +35,6 @@ private:
     QObject*    m_testClass;
     QObject*    m_settings;
     QObject*    m_checkSvc;
-
 //    QObject*    m_currentPatient;
 public :
     AppCtrlPriv ( AppCtrl *pa );
@@ -150,6 +149,7 @@ QObject *AppCtrl::getSettings()
 {
     return T_PrivPtr(m_obj)->getSettings();
 }
+
 
 //QObject*    AppCtrl::getCurrentPatient()                {
 //    return T_PrivPtr( m_obj )->getCurrentPatient();

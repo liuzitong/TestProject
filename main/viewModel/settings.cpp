@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QDir>
 #include <QDebug>
+#include <perimeter/main/services/translate_svc.h>
 namespace Perimeter
 {
 Settings::Settings()
@@ -22,22 +23,7 @@ Settings::Settings()
         m_programUnlockPwd=jo["programUnlockPwd"].toString();
         m_defaultProgramId=jo["defaultProgramId"].toInt();
         m_defaultProgramType=jo["defaultProgramType"].toInt();
-
-        if(m_language=="Default")
-        {
-            QLocale local = QLocale::system();
-            QLocale::Language lang = local.language();
-            qDebug()<<lang;
-            lang==QLocale::Chinese? setDoubleName(false):setDoubleName(true);
-        }
-        else if(m_language=="Chinese")
-        {
-            setDoubleName(false);
-        }
-        else if(m_language=="English")
-        {
-            setDoubleName(true);
-        }
+        changeLang();
         jsonFile.close();
     }
 }
@@ -55,23 +41,27 @@ void Settings::save()
         {"defaultProgramId",m_defaultProgramId},
         {"defaultProgramType",m_defaultProgramType}
     };
-    if(m_language=="Default")
-    {
-        QLocale local = QLocale::system();
-        QLocale::Language lang = local.language();
-        lang==QLocale::Chinese? setDoubleName(false):setDoubleName(true);
-    }
-    else if(m_language=="Chinese")
-    {
-        setDoubleName(false);
-    }
-    else if(m_language=="English")
-    {
-        setDoubleName(true);
-    }
+    changeLang();
     QJsonDocument jsonDoc;
     jsonDoc.setObject(jo);
     jsonFile.write(jsonDoc.toJson());
     jsonFile.close();
+}
+
+void Settings::changeLang()
+{
+    QLocale::Language lang;
+    if(m_language=="Chinese"||(m_language=="Default"&&QLocale::system().language()==QLocale::Chinese))
+    {
+        lang=QLocale::Chinese;
+        setDoubleName(false);
+    }
+    else
+    {
+        lang=QLocale::English;
+        setDoubleName(true);
+    }
+    TranslateController::instance()->loadLanguage(lang);
+    emit langTriggerChanged();
 }
 }

@@ -11,6 +11,7 @@
 
 #include "perimeter/main/appctrl/perimeter_appctrl.hxx"
 #include "perimeter/base/common/perimeter_memcntr.hxx"
+#include "perimeter/main/services/translate_svc.h"
 #include "qxpack/indcom/common/qxpack_ic_memcntr.hxx"
 #include "qxpack/indcom/common/qxpack_ic_global.hxx"
 #include "qxpack/indcom/sys/qxpack_ic_eventloopbarrier.hxx"
@@ -146,7 +147,9 @@ int  main ( int argc, char *argv[] )
         QSharedPointer<QObject> s_app_ctrl( app_ctrl, [](QObject*){});
         QxPack::IcUiQmlApi::setAppCtrl( s_app_ctrl );
 
-        // --------------------------------------------------------------------
+//        auto transCon=Perimeter::TranslateController::instance();
+//        transCon->loadLanguage(QLocale::Chinese);
+
         //  here create the main view
         // --------------------------------------------------------------------
         QQmlApplicationEngine *eng = new QQmlApplicationEngine;

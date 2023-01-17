@@ -12,6 +12,9 @@ DEFINES += QT_DEPRECATED_WARNINGS QT_MESSAGELOGCONTEXT _QX_NO_PRECOMPILED_HEADER
 QMAKE_CFLAGS += /utf-8
 QMAKE_CXXFLAGS += /utf-8
 
+TRANSLATIONS +=  $$PWD/../../perimeter_zh_CN.ts
+TR_EXCLUDE += $$PWD/../../../perimeter/third-part/*
+
 
 INCLUDEPATH *= $$PWD/../../../
 # ///////////////////////////////////////////////////////////////////////////
@@ -32,12 +35,13 @@ target.path = $${APP_INSTALL_PATH}
 INSTALLS += target
 
 
-
 # QxOrm 库相关配置
 INCLUDEPATH += $$PWD/../../../perimeter/third-part/QxOrm/include
 INCLUDEPATH += $$PWD/../../../perimeter/third-part/LimeReport/include
 INCLUDEPATH += $$PWD/../../../perimeter/third-part/LimeReport/limereport/base
 INCLUDEPATH += $$PWD/../../../perimeter/third-part/
+
+
 LIBS += -L$$PWD/../../../perimeter/third-part/QxOrm/lib
 LIBS += -L$$PWD/../../../perimeter/third-part/boost/lib
 LIBS += -L$$PWD/../../../perimeter/third-part/LimeReport/build/5.9.7/win32/debug/lib

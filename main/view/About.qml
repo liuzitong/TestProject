@@ -16,10 +16,12 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 //    property alias contentHeight: idContent.implicitHeight;
 //    property int textHeight: height*0.02;
     property int fontPointSize: CommonSettings.fontPointSize;
+    property string lt:"";
+    Component.onCompleted:{IcUiQmlApi.appCtrl.settings.langTriggerChanged.connect(function(){ltChanged();});}
 
 
-   contentItem:
-   Rectangle{
+    contentItem:
+    Rectangle{
         id: idContent; color: "#60606060";implicitWidth: idPopup.width; implicitHeight: idPopup.height;
         Rectangle
         {
@@ -46,7 +48,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:qsTr("About");width: height*1.4;font.pointSize:fontPointSize;}
+                    CusText{text:qsTr("About")+lt/*IcUiQmlApi.appCtrl.settings.langTrigger*/;width: height*1.4;font.pointSize:fontPointSize;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;
@@ -65,7 +67,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             anchors.fill: parent;
                             Item{
                                 height:parent.height*0.11;width: parent.width;
-                                CusText{width:parent.width;text:qsTr("Computer automatic perimeter system"); fontSizeMode: Text.VerticalFit;
+                                CusText{width:parent.width;text:qsTr("Computer automatic perimeter system")+lt; fontSizeMode: Text.VerticalFit;
                                     anchors.horizontalCenter: parent.horizontalCenter;font.pointSize:fontPointSize*1.5;
                                 }
                             }
@@ -83,14 +85,14 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                             CusText{
                                 height:parent.height*0.04;width: parent.width;
-                                text: qsTr("Device type: ") +IcUiQmlApi.appCtrl.settings.deviceInfo;horizontalAlignment: Text.AlignLeft;
+                                text: qsTr("Device type")+lt+": " +IcUiQmlApi.appCtrl.settings.deviceInfo;horizontalAlignment: Text.AlignLeft;
                                 font.pointSize:fontPointSize;
                             }
                             Item{height:parent.height*0.06;width: parent.width; }
 
                             CusText{
                                 height:parent.height*0.04;width: parent.width;
-                                text: qsTr("Version: ")+IcUiQmlApi.appCtrl.settings.version;
+                                text: qsTr("Version")+lt+": "+IcUiQmlApi.appCtrl.settings.version;
                                 horizontalAlignment: Text.AlignLeft;
                                 font.pointSize:fontPointSize;
                             }
@@ -101,7 +103,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                             CusText{
                                 height:parent.height*0.04;width: parent.width;
-                                text: qsTr("Copyright @2019 Chongqing BioNewVision Medical Device Co.Lt.");
+                                text: qsTr("Copyright @2019 Chongqing BioNewVision Medical Device Co.Lt.")+lt;
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 horizontalAlignment: Text.AlignHCenter
                                 font.pointSize:fontPointSize;

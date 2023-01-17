@@ -345,7 +345,7 @@ public :
     inline T&  rx2()      { return m_pt2.rx(); }
     inline T&  ry2()      { return m_pt2.ry(); }
 
-    //! @return the center point of this line
+    //! @return the Center dot of this line
     inline IcPoint2D<T>   center() const
     { return IcPoint2D<T>( 0.5 * m_pt1.x() + 0.5 * m_pt2.x(), 0.5 * m_pt2.y() + 0.5 * m_pt2.y() ); }
 
