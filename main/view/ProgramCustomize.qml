@@ -14,6 +14,9 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
     property var content;
     property bool locked: true;
     property int fontPointSize: CommonSettings.fontPointSize;
+    property string lt:"";
+    Component.onCompleted:{IcUiQmlApi.appCtrl.settings.langTriggerChanged.connect(function(){ltChanged();});}
+
 //    onCurrentProgramChanged: {
 //        if(currentProgram.type!==2){staticParamsSetting.currentProgram=currentProgram;}else{dynamicParamsSetting.currentProgram=currentProgram;}}
 
@@ -137,7 +140,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         }
                                         Component{id:delegateProg;
                                             Rectangle{height: (homeTab.height-1)*1/10+1;width: listView.width;color:"white";border.color: backGroundBorderColor;
-                                                CusText{width: parent.width;text:model.name;font.pointSize: fontPointSize;}
+                                                CusText{width: parent.width;text:model.name+lt;font.pointSize: fontPointSize;}
                                                 MouseArea{ anchors.fill: parent;
                                                     onClicked:
                                                     {

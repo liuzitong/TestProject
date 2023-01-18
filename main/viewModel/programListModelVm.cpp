@@ -1,5 +1,8 @@
-#include "programListModelVm.h"
+﻿#include "programListModelVm.h"
 #include <perimeter/main/model/programModel.h>
+#include <perimeter/third-part/qxpack/indcom/ui_qml_base/qxpack_ic_ui_qml_api.hxx>
+#include <perimeter/main/appctrl/perimeter_appctrl.hxx>
+#include <perimeter/main/viewModel/settings.h>
 
 namespace Perimeter{
 
@@ -50,10 +53,28 @@ QVariant ProgramListModelVm::data(const QModelIndex &index, int role) const
     switch (role) {
     case program_id:return int(m_list[index.row()]->m_id);
     case type:return program_type=int(m_list[index.row()]->m_type);
-    case name:return m_list[index.row()]->m_name;
+    case name:
+    {
+        auto name = m_list[index.row()]->m_name;
+        auto splitNames=name.split("@");
+        if(splitNames.count()!=2)
+        {
+            return name;
+        }
+        else
+        {
+            auto appCtrl=static_cast<AppCtrl*>(QxPack::IcUiQmlApi::appCtrl());
+            auto setting=static_cast<Settings*>(appCtrl->getSettings());
+            auto lang=setting->getLanguage();
+            if(lang=="Chinese"||(lang=="Default"&&QLocale::system().language()==QLocale::Chinese))
+                return splitNames[1];
+            else
+                return splitNames[0];
+        }
+    }
     case category:return m_list[index.row()]->m_category;
 //    case strategy:
-//    {
+//    {3
 //        QString dataStr=m_list[index.row()]->m_data;
 //        if(program_type==int(Type::ThreshHold))
 //        {

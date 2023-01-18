@@ -54,7 +54,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"Params setting";horizontalAlignment: Text.AlignLeft;height:parent.height; anchors.left: parent.left; anchors.leftMargin:height*0.5;font.pointSize:fontPointSize;}
+                    CusText{text:qsTr("Params setting");horizontalAlignment: Text.AlignLeft;height:parent.height; anchors.left: parent.left; anchors.leftMargin:height*0.5;font.pointSize:fontPointSize;}
                 }
                 Column{
                     width: parent.width;height: parent.height-header.height;
@@ -133,9 +133,9 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                                     {
                                                         switch (strategies[i])
                                                         {
-                                                        case 0:listModel.append({modelData:"Full threshold"});break;
-                                                        case 1:listModel.append({modelData:"Smart interactive"});break;
-                                                        case 2:listModel.append({modelData:"Fast interactive"});break;
+                                                        case 0:listModel.append({modelData:qsTr("Full threshold")});break;
+                                                        case 1:listModel.append({modelData:qsTr("Smart interactive")});break;
+                                                        case 2:listModel.append({modelData:qsTr("Fast interactive")});break;
                                                         }
                                                         if(currentProgram.params.commonParams.strategy===strategies[i])
                                                         {
@@ -149,10 +149,10 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                                     {
                                                         switch (strategies[i])
                                                         {
-                                                        case 3:listModel.append({modelData:"One stage"});break;
-                                                        case 4:listModel.append({modelData:"Two stages"});break;
-                                                        case 5:listModel.append({modelData:"Quantify defects"});break;
-                                                        case 6:listModel.append({modelData:"Single stimulus"});break;
+                                                        case 3:listModel.append({modelData:qsTr("One stage")});break;
+                                                        case 4:listModel.append({modelData:qsTr("Two stages")});break;
+                                                        case 5:listModel.append({modelData:qsTr("Quantify defects")});break;
+                                                        case 6:listModel.append({modelData:qsTr("Single stimulus")});break;
                                                         }
                                                         if(currentProgram.params.commonParams.strategy===strategies[i])
                                                         {
@@ -211,7 +211,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.45;
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"Response auto adapt"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:qsTr("Response auto adapt"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("On"),qsTr("Off")];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.responseAutoAdapt;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.responseAutoAdapt=currentIndex;})}

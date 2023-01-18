@@ -18,9 +18,12 @@ Column {
     property var analysisVm: null;
     property int report;
 //    property int textHeight: height*0.05;
+    property string lt:"";
+    Component.onCompleted:{IcUiQmlApi.appCtrl.settings.langTriggerChanged.connect(function(){ltChanged();});}
 
     signal refresh();
     signal changePage(var pageName,var params);
+
 
     onRefresh: {
 //        console.log("report type is "+report);
@@ -72,7 +75,7 @@ Column {
         Row{anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:qsTr("Back");onClicked:{root.changePage(lastPage,null);}}}
+                    CusButton{text:qsTr("Back")+lt;onClicked:{root.changePage(lastPage,null);}}}
                 }
             Item{height: parent.height;width:parent.width*0.52;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;

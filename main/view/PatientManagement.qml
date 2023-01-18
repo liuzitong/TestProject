@@ -21,11 +21,11 @@ Item{
     width: 1440
     height: 700
     anchors.fill:parent;
-    Component.onCompleted: createNewPatient();
 
 //    onLanguageChanged: console.log("haha");
 //    onDoubleNameChanged: console.log("dogdog");
-
+    property string lt:"";
+    Component.onCompleted:{createNewPatient();IcUiQmlApi.appCtrl.settings.langTriggerChanged.connect(function(){ltChanged();});}
 
     function createNewPatient(){
         if(currentPatient!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::PatientVm", currentPatient);
@@ -51,12 +51,12 @@ Item{
                         property int rowHight: height*0.06
                         Row{
                             id:dateSelection; width: parent.width;opacity: 1;height: patientInfo.rowHight;spacing: height*0.4;
-                            CusText{text: qsTr("Check date");horizontalAlignment: Text.AlignLeft;width: height*2.5;font.pointSize: fontPointSize;}
+                            CusText{text: qsTr("Check date")+lt;horizontalAlignment: Text.AlignLeft;width: height*2.5;font.pointSize: fontPointSize;}
                             LineEdit{/*property string name: "dateFrom";*/id:dateFrom;radius: height/6;width: height*3.1;}
-                            CusButton{id:dateFromButton;text:qsTr("Select");width:height*2;onClicked:{calendar.inputObj=dateFrom;calendar.open();}}
-                            CusText{text:qsTr("To");width: height*0.6;font.pointSize: fontPointSize;}
+                            CusButton{id:dateFromButton;text:qsTr("Select")+lt;width:height*2;onClicked:{calendar.inputObj=dateFrom;calendar.open();}}
+                            CusText{text:qsTr("To")+lt;width: height*0.6;font.pointSize: fontPointSize;}
                             LineEdit{/*property string name: "dateTo";*/id:dateTo;radius: height/6;width: height*3.1;}
-                            CusButton{id:dateToButton;text:qsTr("Select");width:height*2;
+                            CusButton{id:dateToButton;text:qsTr("Select")+lt;width:height*2;
                                 onClicked:{
                                     if(dateFrom.text!==""&&dateTo.text=="")
                                         dateTo.text=dateFrom.text;
@@ -69,7 +69,8 @@ Item{
                                 id:queryStrategy;height: parent.height;width: parent.height*5;
                                 borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                                 imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                                model: ListModel {ListElement { name: qsTr("Query by time") } ListElement { name: qsTr("Patient ID") } ListElement { name: qsTr("Name") }ListElement { name: qsTr("Sex") }ListElement { name: qsTr("Birth date") }}
+//                                model: ListModel {ListElement { name: qsTr("Query by time") } ListElement { name: qsTr("Patient ID") } ListElement { name: qsTr("Name") }ListElement { name: qsTr("Sex") }ListElement { name: qsTr("Birth date") }}
+                                model:  [qsTr("Query by time")+lt,qsTr("Patient ID")+lt,qsTr("Name")+lt,qsTr("Sex")+lt,qsTr("Birth date")+lt]
                                 onCurrentIndexChanged: {
                                     patientID.visible=false;chineseName.visible=false;englishNameGroup.visible=false;sex.visible=false;birthDateGroup.visible=false;dateSelection.opacity=0;
                                     switch(currentIndex)
@@ -88,21 +89,22 @@ Item{
                             LineEdit{id:chineseName;radius:height/6;width: height*4;onEnterPressed:{query.startQuery();}}
                             Flow{
                                 id:englishNameGroup;height: parent.height;spacing: height*0.4;
-                                CusText{text:qsTr("First name")+":";width:height*2.5;font.pointSize: fontPointSize;}
+                                CusText{text:qsTr("First name")+lt+":";width:height*2.5;font.pointSize: fontPointSize;}
                                 LineEdit{id:firstName;radius:height/6;width: height*4}
-                                CusText{text:qsTr("Last name")+":";width:height*2.5;font.pointSize: fontPointSize;}
+                                CusText{text:qsTr("Last name")+lt+":";width:height*2.5;font.pointSize: fontPointSize;}
                                 LineEdit{id:lastName;radius:height/6;width: height*4}
                             }
                             CusComboBox{
                                 id:sex;height: parent.height;width: parent.height*3;
                                 borderColor: backGroundBorderColor;font.family:"Microsoft YaHei";
                                 imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                                model: ListModel {ListElement { text: qsTr("Male") } ListElement { text: qsTr("Female") } ListElement { text: qsTr("Others") } }
+                                model: [qsTr("Male")+lt,qsTr("Female")+lt,qsTr("Others")+lt]
+//                                model: ListModel {ListElement { text: qsTr("Male") } ListElement { text: qsTr("Female") } ListElement { text: qsTr("Others")} }
                             }
                             Flow{
                                 id:birthDateGroup;visible: false;height: parent.height;spacing: height*0.4;
                                 LineEdit{id:birthDate;height: parent.height;radius:height/6;width: height*4;visible: true;}
-                                CusButton{text:qsTr("Select");width:height*2;onClicked:{calendar.inputObj=birthDate;calendar.open();}}
+                                CusButton{text:qsTr("Select")+lt;width:height*2;onClicked:{calendar.inputObj=birthDate;calendar.open();}}
                             }
                             CusButton{
                                 height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"
@@ -149,11 +151,11 @@ Item{
                                             }
                                         }
                                     }
-                                    Rectangle{width: parent.width*2.5/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Patient ID");font.pointSize: fontPointSize;}}
-                                    Rectangle{width: parent.width*2.5/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Name");font.pointSize: fontPointSize;}}
-                                    Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Sex");font.pointSize: fontPointSize;}}
-                                    Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Birth date");font.pointSize: fontPointSize;}}
-                                    Rectangle{width: parent.width*1/10;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Load");font.pointSize: fontPointSize;}}
+                                    Rectangle{width: parent.width*2.5/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Patient ID")+lt;font.pointSize: fontPointSize;}}
+                                    Rectangle{width: parent.width*2.5/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Name")+lt;font.pointSize: fontPointSize;}}
+                                    Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Sex")+lt;font.pointSize: fontPointSize;}}
+                                    Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Birth date")+lt;font.pointSize: fontPointSize;}}
+                                    Rectangle{width: parent.width*1/10;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;text:qsTr("Load")+lt;font.pointSize: fontPointSize;}}
                                 }
                                 ListView{
                                     id:patientInfoListView
@@ -218,7 +220,7 @@ Item{
                             Flow{
                                 id:pageIndex;
                                 property int currentPage: 1;property int totalPage:1;property int totalRecordCount: 0;anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;height:parent.height;
-                                CusText{id:currentPageNumberText;text:qsTr("The")+" "+pageIndex.currentPage+"/"+pageIndex.totalPage+" "+qsTr("Page")+","+qsTr("Total")+" "+pageIndex.totalRecordCount+" "+qsTr("Records"); horizontalAlignment: Text.AlignLeft;height: parent.height*0.8;font.pointSize: fontPointSize;}
+                                CusText{id:currentPageNumberText;text:qsTr("The")+" "+pageIndex.currentPage+"/"+pageIndex.totalPage+" "+qsTr("Page")+","+qsTr("Total")+" "+pageIndex.totalRecordCount+" "+qsTr("Records")+lt; horizontalAlignment: Text.AlignLeft;height: parent.height*0.8;font.pointSize: fontPointSize;}
                             }
                             Flow{
                                 anchors.right: parent.right;height:parent.height*1.0;anchors.verticalCenter: parent.verticalCenter;spacing:0.5*height;
@@ -304,33 +306,33 @@ Item{
 
                             Row{
                                 width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*"+qsTr("Patient ID")+" "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
+                                CusText{text:"*"+qsTr("Patient ID")+lt+" "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
                                 LineEdit{id:newPatientId;width: parent.width*0.6;}
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
                             Row{
                                 id:newChineseNameRow;visible:false;width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*"+qsTr("Name")+" "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
+                                CusText{text:"*"+qsTr("Name")+lt+" "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
                                 LineEdit{id:newChineseName;width: parent.width*0.6}
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
 
                             Row{
                                 id:newEnglishFirstNameRow;visible:false;width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*"+qsTr("First name")+" "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
+                                CusText{text:"*"+qsTr("First name")+lt+" "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
                                 LineEdit{id:newEnglishFirstName;width: parent.width*0.6}
                                 CusButton{height: parent.height;width: height;imageSrc:"qrc:/Pics/base-svg/btn_find.svg"}
                             }
 
                             Row{
                                 id:newEnglishLastNameRow;visible:false;width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*"+qsTr("Last name"); horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
+                                CusText{text:"*"+qsTr("Last name")+lt; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
                                 LineEdit{id:newEnglishLastName;width: parent.width*0.6}
                             }
 
                             Row{
                                 width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*"+qsTr("Sex")+" "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
+                                CusText{text:"*"+qsTr("Sex")+lt+" "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
                                 Row{
                                     id:genderSelect;property int gender;
                                     height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
@@ -342,7 +344,7 @@ Item{
                                         id:womanButton;property bool chosen:false;imageSrc: "qrc:/Pics/base-svg/btn_sex_woman.svg";width: 2*height
                                         onClicked:  {genderSelect.selectGender(1)}
                                     }
-                                    CusButton{id:otherButton;property bool chosen:false;text:qsTr("Others");width:height*2;
+                                    CusButton{id:otherButton;property bool chosen:false;text:qsTr("Others")+lt;width:height*2;
                                          onClicked: {genderSelect.selectGender(2)}
                                     }
                                     function selectGender(id)
@@ -363,11 +365,11 @@ Item{
                             Row{
                                 id:newBirthDateRow
                                 width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.02
-                                CusText{text:"*"+qsTr("Birth date")+" "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
+                                CusText{text:"*"+qsTr("Birth date")+lt+" "; horizontalAlignment: Text.AlignRight ;width:parent.width*0.20;font.pointSize: fontPointSize;}
                                 Row{
                                     height:parent.height;spacing:(width-6*height)/2;width:newPatient.width*0.6
                                     Item{height: parent.height;width: 2*height;LineEdit{id:newBirthDate;width: height*3.1;onTextChanged:{newPatientage.text=CusUtils.getAge(newBirthDate.text);}}}
-                                    CusButton{text:qsTr("Select");width:height*2;onClicked:{calendar.inputObj=newBirthDate;calendar.open();}}
+                                    CusButton{text:qsTr("Select")+lt;width:height*2;onClicked:{calendar.inputObj=newBirthDate;calendar.open();}}
                                     LineEdit{id:newPatientage;width: height*2;text:"1";radius: height*0.2;horizontalAlignment: Text.AlignHCenter;readOnly: true;backgroundColor:backGroundColor;}
                                 }
                             }
@@ -386,16 +388,16 @@ Item{
                                Item{height:parent.height;width:parent.width*0.15}
                                Row{
                                    height:parent.height;spacing:(width-8*height)/3;width:newPatient.width*0.7
-                                   CusText{ text:qsTr("Sphere");width: 2*height;font.pointSize: fontPointSize;}
-                                   CusText{ text:qsTr("Cylinder");width: 2*height;font.pointSize: fontPointSize;}
-                                   CusText{ text:qsTr("Axis");width: 2*height;font.pointSize: fontPointSize;}
-                                   CusText{ text:qsTr("Visual acuity");width: 2*height;font.pointSize: fontPointSize;}
+                                   CusText{ text:qsTr("Sphere")+lt;width: 2*height;font.pointSize: fontPointSize;}
+                                   CusText{ text:qsTr("Cylinder")+lt;width: 2*height;font.pointSize: fontPointSize;}
+                                   CusText{ text:qsTr("Axis")+lt;width: 2*height;font.pointSize: fontPointSize;}
+                                   CusText{ text:qsTr("Visual acuity")+lt;width: 2*height;font.pointSize: fontPointSize;}
                                }
                            }
                            Column{
                                id:eyeBallCalc;width: parent.width;height: parent.height-patientInfo.rowHight;spacing: patientInfo.rowHight*0.8;
                                Row{width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.05
-                                   CusText{text:qsTr("Right eye"); horizontalAlignment: Text.AlignRight;width:parent.width*0.15;font.pointSize: fontPointSize;}
+                                   CusText{text:qsTr("Right eye")+lt; horizontalAlignment: Text.AlignRight;width:parent.width*0.15;font.pointSize: fontPointSize;}
                                    Row{
                                        height:parent.height;spacing:(width-8*height)/3;width:newPatient.width*0.7
                                        LineEdit{ id:rx1_r;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?"":currentPatient.rx.rx1_r.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
@@ -406,7 +408,7 @@ Item{
                                }
                                Row{
                                    width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.05
-                                   CusText{text:qsTr("Left eye"); horizontalAlignment: Text.AlignRight;width:parent.width*0.15;font.pointSize: fontPointSize;}
+                                   CusText{text:qsTr("Left eye")+lt; horizontalAlignment: Text.AlignRight;width:parent.width*0.15;font.pointSize: fontPointSize;}
                                    Row{
                                        height:parent.height;spacing:(width-8*height)/3;width:newPatient.width*0.7
                                        LineEdit{ id:rx1_l;width: 2*height;horizontalAlignment: Text.AlignHCenter;text:currentPatient==null?"":currentPatient.rx.rx1_l.toFixed(2);textInput.validator: DoubleValidator{bottom:0.0;notation: DoubleValidator.StandardNotation;decimals: 2}}
@@ -419,7 +421,7 @@ Item{
                                    width: parent.width;height:patientInfo.rowHight;spacing: parent.width*0.05
                                    Item{height:parent.height;width:parent.width*0.15}
                                    Item{height:parent.height;width:newPatient.width*0.7
-                                       CusButton{text:qsTr("Calculate"); anchors.horizontalCenter: parent.horizontalCenter; width: 2*height;
+                                       CusButton{text:qsTr("Calculate")+lt; anchors.horizontalCenter: parent.horizontalCenter; width: 2*height;
                                            function getRx1(rx1,rx2,age)
                                            {
                                                var x,y;
@@ -457,10 +459,10 @@ Item{
     Rectangle{id:bottomRibbon;width: parent.width;height: parent.height*1/15;color: "#333e44";anchors.bottom: parent.bottom
         Row{anchors.fill: parent;anchors.margins:parent.height*0.15;
             Item{height: parent.height;width:parent.width*0.6;
-                CusButton{text:qsTr("Exit");onClicked:Qt.quit()}
+                CusButton{text:qsTr("Exit")+lt;onClicked:Qt.quit()}
                 Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter
-                    CusButton{text:qsTr("Recheck")}
-                    CusButton{id:patientReviseButton;enabled: false;text:qsTr("Modify");
+                    CusButton{text:qsTr("Recheck")+lt}
+                    CusButton{id:patientReviseButton;enabled: false;text:qsTr("Modify")+lt;
                         onClicked:
                         {
                             var Name;
@@ -483,7 +485,7 @@ Item{
                             query.startQuery();
                         }
                     }
-                    CusButton{text:qsTr("Delete");
+                    CusButton{text:qsTr("Delete")+lt;
                         enabled: !(patientInfoListView.seletedPatientLength===0);
                         onClicked: {
                             var pl=patientInfoListView.seletedPatient;
@@ -493,12 +495,12 @@ Item{
                             query.startQuery();
                         }
                     }
-                    CusButton{text:qsTr("View reports");enabled:currentPatient!==null;onClicked: {root.changePage("analysisLobby","patientManagement");}}
+                    CusButton{text:qsTr("View reports")+lt;enabled:currentPatient!==null;onClicked: {root.changePage("analysisLobby","patientManagement");}}
                 }
             }
             Flow{height:parent.height; layoutDirection: Qt.RightToLeft;width:parent.width*0.4;spacing: height*0.8;
-                CusButton{text:qsTr("Check");enabled:!(currentPatient===null);onClicked: {root.changePage("check",{pageFrom:"patientManagement"});}}
-                CusButton{id:patientSaveButton;text:qsTr("Save");enabled: false;
+                CusButton{text:qsTr("Check")+lt;enabled:!(currentPatient===null);onClicked: {root.changePage("check",{pageFrom:"patientManagement"});}}
+                CusButton{id:patientSaveButton;text:qsTr("Save")+lt;enabled: false;
                     onClicked:{
                         var name="";
                         if(!doubleName){ name=newChineseName.text; }
@@ -523,7 +525,7 @@ Item{
                     }
                 }
                 CusButton{
-                    id:newPatientButton;text:qsTr("New");
+                    id:newPatientButton;text:qsTr("New")+lt;
                     onClicked: root.createNewPatient()
                 }
             }
