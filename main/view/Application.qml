@@ -1,4 +1,4 @@
-import QtQuick 2.6
+﻿import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.3
 import QtQml 2.2
@@ -10,14 +10,16 @@ import perimeter.main.view.Utils 1.0
 
 
 Window {
-    id: window;visible: true;width: 1366;height: 768;title: qsTr("Perimeter");
+    id: window;visible: true;width: 1366;height: 768;title: lt+qsTr("Perimeter");
     minimumWidth: 1366;minimumHeight: 768;property string currentpage: "Login";
-    property string language: IcUiQmlApi.appCtrl.settings.language
     Content{id:content;anchors.fill: parent;}
     Login{id:login;visible: false;anchors.fill: parent;}
-
-
-    Component.onCompleted: {idPriv.init();content.changePage.connect(changePage);login.changePage.connect(changePage);CommonSettings.windowHeight=height;}
+    property bool isEng: IcUiQmlApi.appCtrl.settings.isRuntimeLangEng;
+    property string lt:"";
+    Component.onCompleted: {
+        IcUiQmlApi.appCtrl.settings.langTriggerChanged.connect(function(){ltChanged();});
+        idPriv.init();content.changePage.connect(changePage);login.changePage.connect(changePage);CommonSettings.windowHeight=height;
+    }
 
     onHeightChanged: {CommonSettings.windowHeight=height;console.log(height);console.log(CommonSettings.textHeight);console.log(CommonSettings.fontPointSize);}
 

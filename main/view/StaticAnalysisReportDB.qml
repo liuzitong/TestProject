@@ -23,7 +23,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         source:"/previewImage/dBDiagram.bmp";
-        textTop:qsTr("Threshold")+"(dB)";
+        textTop:lt+qsTr("Threshold")+"(dB)";
         analysisVm: root.analysisVm;
         range:root.range;
         onClicked:root.clearDot();

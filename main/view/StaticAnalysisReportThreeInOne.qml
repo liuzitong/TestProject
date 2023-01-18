@@ -26,7 +26,7 @@ Item {
                 width: parent.height;height:parent.height;
                 anchors.horizontalCenter: parent.horizontalCenter
                 source:"/previewImage/gray.bmp";
-                textTop:qsTr("Gray tone");
+                textTop:lt+qsTr("Gray tone");
                 analysisVm: root.analysisVm;
                 range:root.range;
                 onClicked:root.clearDot();
@@ -42,7 +42,7 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width*0.05
                 source:"/previewImage/defectDepth.bmp";
-                textTop:qsTr("Defect depth")+"(db)";
+                textTop:lt+qsTr("Defect depth")+"(db)";
                 textBottom:"□=4db的预期";
                 analysisVm: root.analysisVm;
                 range:root.range;
@@ -56,7 +56,7 @@ Item {
                 anchors.right: parent.right
                 anchors.rightMargin: parent.width*0.05
                 source:"/previewImage/dBDiagram.bmp";
-                textTop:qsTr("Threshold")+"(dB)";
+                textTop:lt+qsTr("Threshold")+"(dB)";
                 analysisVm: root.analysisVm;
                 range:root.range;
                 onClicked:root.clearDot();

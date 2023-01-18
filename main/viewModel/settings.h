@@ -12,7 +12,7 @@ class Settings :public QObject
     Q_PROPERTY(QString language READ getLanguage WRITE setLanguage NOTIFY languageChanged)
     Q_PROPERTY(QString version READ getVersion WRITE setVersion NOTIFY versionChanged)
     Q_PROPERTY(QString deviceInfo READ getDeviceInfo WRITE setDeviceInfo NOTIFY deviceInfoChanged)
-    Q_PROPERTY(bool doubleName READ getDoubleName WRITE setDoubleName NOTIFY doubleNameChanged)
+    Q_PROPERTY(bool isRuntimeLangEng READ getIsRuntimeLangEng WRITE setIsRuntimeLangEng NOTIFY isRuntimeLangEngChanged)
     Q_PROPERTY(QString programUnlockPwd READ programUnlockPwd WRITE setProgramUnlockPwd)
     Q_PROPERTY(int defaultProgramId READ defaultProgramId WRITE setDefaultProgramId)
     Q_PROPERTY(int defaultProgramType READ defaultProgramType WRITE setDefaultProgramType)
@@ -29,7 +29,7 @@ public:
     QString getLanguage(){return m_language;}void setLanguage(QString value){m_language=value;emit languageChanged(value);} Q_SIGNAL void languageChanged(QString value);
     QString getVersion(){return m_version;}void setVersion(QString value){m_version=value;emit versionChanged(value);}Q_SIGNAL void versionChanged(QString value);
     QString getDeviceInfo(){return m_deviceInfo;}void setDeviceInfo(QString value){m_deviceInfo=value;emit deviceInfoChanged(value);}Q_SIGNAL void deviceInfoChanged(QString value);
-    bool getDoubleName(){return m_doubleName;}void setDoubleName(bool value){m_doubleName=value;emit doubleNameChanged(value);}Q_SIGNAL void doubleNameChanged(bool value);
+    bool getIsRuntimeLangEng(){return m_isRuntimeLangEng;}void setIsRuntimeLangEng(bool value){m_isRuntimeLangEng=value;emit isRuntimeLangEngChanged(value);}Q_SIGNAL void isRuntimeLangEngChanged(bool value);
     QString programUnlockPwd() const{return m_programUnlockPwd;}void setProgramUnlockPwd(QString value){m_programUnlockPwd = value;}
     int defaultProgramId(){return m_defaultProgramId;}void setDefaultProgramId(int value){m_defaultProgramId=value;}
     int defaultProgramType(){return m_defaultProgramType;}void setDefaultProgramType(int value){m_defaultProgramType=value;}
@@ -51,7 +51,7 @@ private:
     QString m_version;
     QString m_deviceInfo;
     QString m_programUnlockPwd;
-    bool m_doubleName;
+    bool m_isRuntimeLangEng;
     int m_defaultProgramId;
     int m_defaultProgramType;
 

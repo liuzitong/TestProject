@@ -1,5 +1,6 @@
-pragma Singleton
+﻿pragma Singleton
 import QtQuick 2.0
+import qxpack.indcom.ui_qml_base 1.0
 
 //Rectangle{
 //    height:300;width:300;
@@ -13,5 +14,18 @@ Item{
         if(now.getMonth()<birthDate.getMonth()) age-=1;
         if((now.getMonth()==birthDate.getMonth())&&(now.getDay()<birthDate.getDay())) age-=1;
         return age;
+    }
+
+    function getTranslatedStr(previousStr)
+    {
+        var strs=previousStr.split('@');
+        if(strs.length===2)
+        {
+            if( IcUiQmlApi.appCtrl.settings.isRuntimeLangEng)
+                return strs[0];
+            else return strs[1];
+        }
+        else
+            return previousStr;
     }
 }

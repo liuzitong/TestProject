@@ -16,8 +16,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 //    property alias contentHeight: idContent.implicitHeight;
 //    property int textHeight: height*0.02;
     property int fontPointSize: CommonSettings.fontPointSize;
-    property string lt:"";
-    Component.onCompleted:{IcUiQmlApi.appCtrl.settings.langTriggerChanged.connect(function(){ltChanged();});}
+
 
 
     contentItem:
@@ -48,7 +47,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:qsTr("About")+lt/*IcUiQmlApi.appCtrl.settings.langTrigger*/;width: height*1.4;font.pointSize:fontPointSize;}
+                    CusText{text:lt+qsTr("About")/*IcUiQmlApi.appCtrl.settings.langTrigger*/;width: height*1.4;font.pointSize:fontPointSize;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;
@@ -67,7 +66,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             anchors.fill: parent;
                             Item{
                                 height:parent.height*0.11;width: parent.width;
-                                CusText{width:parent.width;text:qsTr("Computer automatic perimeter system")+lt; fontSizeMode: Text.VerticalFit;
+                                CusText{width:parent.width;text:lt+qsTr("Computer automatic perimeter system"); fontSizeMode: Text.VerticalFit;
                                     anchors.horizontalCenter: parent.horizontalCenter;font.pointSize:fontPointSize*1.5;
                                 }
                             }
@@ -85,14 +84,14 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                             CusText{
                                 height:parent.height*0.04;width: parent.width;
-                                text: qsTr("Device type")+lt+": " +IcUiQmlApi.appCtrl.settings.deviceInfo;horizontalAlignment: Text.AlignLeft;
+                                text: lt+qsTr("Device type")+": " +IcUiQmlApi.appCtrl.settings.deviceInfo;horizontalAlignment: Text.AlignLeft;
                                 font.pointSize:fontPointSize;
                             }
                             Item{height:parent.height*0.06;width: parent.width; }
 
                             CusText{
                                 height:parent.height*0.04;width: parent.width;
-                                text: qsTr("Version")+lt+": "+IcUiQmlApi.appCtrl.settings.version;
+                                text: lt+qsTr("Version")+": "+IcUiQmlApi.appCtrl.settings.version;
                                 horizontalAlignment: Text.AlignLeft;
                                 font.pointSize:fontPointSize;
                             }
@@ -103,7 +102,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                             CusText{
                                 height:parent.height*0.04;width: parent.width;
-                                text: qsTr("Copyright @2019 Chongqing BioNewVision Medical Device Co.Lt.")+lt;
+                                text: lt+qsTr("Copyright @2019 Chongqing BioNewVision Medical Device Co.Lt.");
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 horizontalAlignment: Text.AlignHCenter
                                 font.pointSize:fontPointSize;
@@ -117,7 +116,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             height: parent.height*0.08; anchors.bottom: parent.bottom; width: parent.width;
                             CusButton{
                                 buttonColor: "#e0e0e0";
-                                text:qsTr("OK")
+                                text:lt+qsTr("OK")
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 onClicked: {
                                     idPopup.close();

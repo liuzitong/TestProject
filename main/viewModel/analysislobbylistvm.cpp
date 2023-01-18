@@ -1,10 +1,11 @@
-#include "analysislobbylistvm.h"
+﻿#include "analysislobbylistvm.h"
 #include <perimeter/main/database/patient.h>
 #include <perimeter/main/database/program.h>
 #include <perimeter/main/database/checkResult.h>
 #include <perimeter/main/model/programModel.h>
 #include <perimeter/main/model/checkResultModel.h>
 #include <perimeter/main/services/analysis_svc.h>
+#include <perimeter/main/services/translate_svc.h>
 
 namespace Perimeter{
 class SimpleCheckResultList:public QAbstractListModel
@@ -127,6 +128,7 @@ QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
     program_ptr->m_id=checkResult_ptr->m_program->m_id;
     qx::dao::fetch_by_id(program_ptr);
     QString programName=program_ptr->m_name;
+    programName=TranslateController::getTranlatedName(programName);
     auto img=QImage(m_imageHeight*0.8,m_imageHeight*0.8,QImage::Format_ARGB32);
     auto total=QImage(m_imageHeight*0.8,m_imageHeight,QImage::Format_ARGB32);
     auto info=QImage(m_imageHeight*0.8,m_imageHeight*0.2,QImage::Format_ARGB32);
@@ -213,7 +215,7 @@ QString AnalysisLobbyListVm::drawImage(CheckResult_ptr checkResult_ptr)
     painter.setFont({"consolas",int(info.height()*0.5),QFont::Weight::Bold});
     painter.drawText(QRect{QPoint{int(info.width()*0.03),int(info.height()*0.2)},QPoint{int(info.width()*0.22),int(info.height()*0.8)}},Qt::AlignCenter,os_od);
     painter.drawLine(QPoint{int(info.width()*0.25),int(info.height()*0.1)},QPoint{int(info.width()*0.25),int(info.height()*0.9)});
-    painter.setFont({"consolas",int(info.height()*0.30),QFont::Weight::Black});
+    painter.setFont({"consolas",int(info.height()*0.30)});
     painter.drawText(QRect{QPoint{int(info.width()*0.28),int(info.height()*0.10)},QPoint{int(info.width()*0.95),int(info.height()*0.5)}},Qt::AlignCenter,programName);
     painter.drawText(QRect{QPoint{int(info.width()*0.28),int(info.height()*0.5)},QPoint{int(info.width()*0.95),int(info.height()*0.90)}},Qt::AlignCenter,checkTime);
 

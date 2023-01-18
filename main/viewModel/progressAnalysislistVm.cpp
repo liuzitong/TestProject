@@ -580,13 +580,13 @@ ProgressAnalysisListVm::Data ProgressAnalysisListVm::getProgressData(CheckResult
     auto time=checkResult.m_time;
     QString programName=program.m_name;
     auto strategy=checkResult.m_params.commonParams.strategy;
-    QString strategyName=QVector<QString>{"全阈值","智能交互式","快速智能交互式","未知"}[int(strategy)<3?int(strategy):3];
+//    QString strategyName=QVector<QString>{"全阈值","智能交互式","快速智能交互式","未知"}[int(strategy)<3?int(strategy):3];
     auto& resultData=checkResult.m_data;
     float fixationLossRate=resultData.fixationLostTestCount!=0?float(resultData.fixationLostCount)/resultData.fixationLostTestCount:0;
     float falseNegativeRate=resultData.falseNegativeTestCount!=0?float(resultData.falseNegativeCount)/resultData.falseNegativeTestCount:0;
     float falsePositiveRate=resultData.falsePositiveTestCount!=0?float(resultData.falsePositiveCount)/resultData.falsePositiveTestCount:0;
 
-    return Data{checkResult.m_id,time,programName,strategyName,centerDotCheck,md,p_md,psd,p_psd,GHT,resultData.fixationLostCount,resultData.fixationLostTestCount,fixationLossRate,
+    return Data{checkResult.m_id,time,programName,int(strategy),centerDotCheck,md,p_md,psd,p_psd,GHT,resultData.fixationLostCount,resultData.fixationLostTestCount,fixationLossRate,
                 falseNegativeRate,falsePositiveRate,values,dev,mDev,peDev,peMDev,locs};
 }
 

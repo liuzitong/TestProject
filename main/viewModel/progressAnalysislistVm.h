@@ -1,4 +1,4 @@
-#ifndef PROGRESSANALYSISLISTVM_H
+﻿#ifndef PROGRESSANALYSISLISTVM_H
 #define PROGRESSANALYSISLISTVM_H
 #include <QAbstractListModel>
 #include <QString>
@@ -36,7 +36,7 @@ class ProgressAnalysisListVm:public QAbstractListModel
         int checkResultId;
         QDateTime dateTime;
         QString program;
-        QString strategy;
+        int strategy;
         bool centerDotCheck;
         float md;
         float p_md;

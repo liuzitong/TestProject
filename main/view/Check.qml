@@ -23,6 +23,13 @@ Item {id:root; width: 1366;height: 691
     property int fontPointSize: CommonSettings.fontPointSize;
     signal realTimePicRefresh(var count);
 
+
+    Component.onCompleted:{
+        IcUiQmlApi.appCtrl.checkSvc.checkResultChanged.connect(currentCheckResultChanged);
+
+    }
+
+
 //    onCurrentCheckResultChanged: {realTimeDBRec.visible=false;}
 //    property var selectedDotIndex;
 //    onSelectedDotIndexChanged:{if(currentCheckResult==null) return;var count=currentCheckResult.drawRealTimeEyePosPic(selectedDotIndex);realTimePicRefresh(count);}
@@ -61,9 +68,7 @@ Item {id:root; width: 1366;height: 691
 
     }
 
-    Component.onCompleted: {
-        IcUiQmlApi.appCtrl.checkSvc.checkResultChanged.connect(currentCheckResultChanged);
-    }
+
 
     Column{anchors.fill: parent;
         Rectangle{width: parent.width; height: parent.height*14/15; id:content;
@@ -89,14 +94,14 @@ Item {id:root; width: 1366;height: 691
                                     Item{anchors.fill: parent;anchors.margins: parent.height*0.1;
                                         Column{anchors.fill: parent;spacing: 0.175*height;
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:qsTr("Program name"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;}
+                                                CusText{text:lt+qsTr("Program name"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;}
                                                 LineEdit {
                                                     text:currentProgram==null?"":currentProgram.name; width: parent.width*0.50;textInput.readOnly: true;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){text=currentProgram.name});}
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:qsTr("Cursor"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
+                                                CusText{text:lt+qsTr("Cursor"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     text:"";width: parent.width*0.50;textInput.readOnly: true;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){
@@ -104,22 +109,22 @@ Item {id:root; width: 1366;height: 691
                                                         var params=currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params;
                                                         switch (params.cursorSize){ case 0:text+="I";break;case 1:text+="II";break;case 2:text+="III";break;case 3: text+="IV";break;case 4:text+="V";break;}
                                                         text+=",";
-                                                        switch (params.cursorColor){case 0:text+="white";break;case 1:text+="red";break;case 2:text+="blue";break;}
+                                                        switch (params.cursorColor){case 0:text+=lt+qsTr("White");break;case 1:text+=lt+qsTr("Red");break;case 2:text+=lt+qsTr("Blue");break;}
                                                     });}
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:qsTr("Strategy"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
+                                                CusText{text:lt+qsTr("Strategy"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     text:"";width: parent.width*0.5;textInput.readOnly: true;
                                                     Component.onCompleted: {currentProgramChanged.connect(function(){
                                                         text="";
                                                         var params=(currentProgram.type!==2?currentProgram.params.commonParams:currentProgram.params);
                                                         if(currentProgram.type!==2)
-                                                            switch (params.strategy){ case 0:text+="fullThreshold";break;case 1:text+="smartInteractive";break;case 2:text+="fastInterative";break;case 3: text+="oneStage";break;
-                                                                                      case 4:text+="twoStages";break;case 5:text+="quantifyDefects";break;case 6:text+="singleStimulation";break;}
+                                                            switch (params.strategy){ case 0:text+=lt+qsTr("Full threshold");break;case 1:text+=lt+qsTr("Smart interactive");break;case 2:text+=lt+qsTr("Fast interative");break;case 3: text+=lt+qsTr("One stage");break;
+                                                                                      case 4:text+=lt+qsTr("Two stages");break;case 5:text+=lt+qsTr("Quantify defects");break;case 6:text+=lt+qsTr("Single stimulus");break;}
                                                         else
-                                                            switch (params.strategy){ case 0:text+="standard";break;case 1:text+="blindArea";break;case 2:text+="darkArea";break;case 3: text+="straightLine";break;}
+                                                            switch (params.strategy){ case 0:text+=lt+qsTr("Standard");break;case 1:text+=lt+qsTr("Blind area");break;case 2:text+=lt+qsTr("Dark area");break;case 3: text+=lt+qsTr("Straight line");break;}
                                                     });}
                                                 }
                                             }
@@ -130,7 +135,7 @@ Item {id:root; width: 1366;height: 691
                                     Item{ anchors.fill: parent;anchors.margins: parent.height*0.1;
                                         Column{anchors.fill: parent;spacing: 0.175*height;
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:qsTr("False positive rate"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
+                                                CusText{text:lt+qsTr("False positive rate"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots:currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.falsePositiveCount;
                                                     property var totalDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.falsePositiveTestCount;
@@ -138,7 +143,7 @@ Item {id:root; width: 1366;height: 691
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:qsTr("False negative rate"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
+                                                CusText{text:lt+qsTr("False negative rate"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.falseNegativeCount;
                                                     property var totalDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.falseNegativeTestCount;
@@ -146,7 +151,7 @@ Item {id:root; width: 1366;height: 691
                                                 }
                                             }
                                             Row{ width:parent.width;height: parent.height*0.65/3;spacing: width*0.05;
-                                                CusText{text:qsTr("Fixation loss rate"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
+                                                CusText{text:lt+qsTr("Fixation loss rate"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.fixationLostCount;
                                                     property var totalDots: currentCheckResult===null?0:currentCheckResult.type===2?0:currentCheckResult.resultData.fixationLostTestCount;
@@ -160,7 +165,7 @@ Item {id:root; width: 1366;height: 691
                                     Item{anchors.fill: parent;anchors.margins: parent.height*0.13;
                                         Column{anchors.fill: parent;spacing: 1/3*height;
                                             Row{width:parent.width;height: parent.height*1/3;spacing: width*0.05;
-                                                CusText{text:qsTr("Check dot count"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
+                                                CusText{text:lt+qsTr("Check dot count"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property var checkedDots: IcUiQmlApi.appCtrl.checkSvc===null?0:IcUiQmlApi.appCtrl.checkSvc.checkedCount;
                                                     property var totalDots: currentProgram===null?0:currentProgram.data.dots.length;
@@ -168,7 +173,7 @@ Item {id:root; width: 1366;height: 691
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*1/3;spacing: width*0.05;
-                                                CusText{text:qsTr("Check time"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
+                                                CusText{text:lt+qsTr("Check time"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property int timeSpan: currentCheckResult===null?0:currentCheckResult.resultData.testTimespan;
                                                     text:Math.floor(timeSpan/60)+":"+timeSpan%60;width: parent.width*0.5;textInput.readOnly: true;}
@@ -200,17 +205,17 @@ Item {id:root; width: 1366;height: 691
                                         Column{anchors.fill: parent;spacing: 0.125*height;
                                             Row{width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{}
-                                                CusText{text:qsTr("Pupil diameter"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.5;font.pointSize: fontPointSize;}
+                                                CusText{text:lt+qsTr("Pupil diameter"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.5;font.pointSize: fontPointSize;}
                                                 LineEdit{text:currentCheckResult.resultData.pupilDiameter.toFixed(2);width: parent.width*0.25;textInput.readOnly: true;}
                                             }
                                             Row{id: row;width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{enabled: false;checked:currentProgram.type!==2?currentProgram.params.commonParams.fixationMonitor>0:currentProgram.params.fixationMonitor>0;}
-                                                CusText{text:qsTr("Eye move alarm"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.50;font.pointSize: fontPointSize;}
+                                                CusText{text:lt+qsTr("Eye move alarm"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.50;font.pointSize: fontPointSize;}
                                                 Image {source: "qrc:/Pics/capture-svg/btn_alarm.svg";height:parent.height*0.6; anchors.verticalCenter: parent.verticalCenter;width: height; }
                                             }
                                             Row{width:parent.width;height: parent.height*0.75/3;spacing: width*0.05;
                                                 CusCheckBox{id:deviationCheckBox;checked:true;}
-                                                CusText{text:qsTr("Fixation deviation"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
+                                                CusText{text:lt+qsTr("Fixation deviation"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.25;font.pointSize: fontPointSize;}
                                             }
                                         }
                                     }
@@ -286,7 +291,7 @@ Item {id:root; width: 1366;height: 691
                         CusText{
                             id:os_od;font.pointSize: fontPointSize*2;
                             property int value: 0;
-                            text:value===0?qsTr("Left eye"):qsTr("Right eye"); z: 1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;height: parent.height*0.05;}
+                            text:value===0?lt+qsTr("Left eye"):lt+qsTr("Right eye"); z: 1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;height: parent.height*0.05;}
                         CheckDisplay{id:checkDisplay; currentProgram:root.currentProgram;currentCheckResult:root.currentCheckResult;
                             onClickedDotIndexChanged: {
                                 if(currentCheckResult==null) return;
@@ -307,7 +312,7 @@ Item {id:root; width: 1366;height: 691
                         CusButton
                         {
                             enabled: IcUiQmlApi.appCtrl.checkSvc.checkState>=3;
-                            text:qsTr("Back");onClicked:
+                            text:lt+qsTr("Back");onClicked:
                             {
                                 if(currentCheckResult!==null)
                                 {
@@ -326,8 +331,8 @@ Item {id:root; width: 1366;height: 691
                 Item{height: parent.height;width:parent.width*0.25;
                     Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                         Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
-                            CusButton{enabled:IcUiQmlApi.appCtrl.checkSvc.checkState>=3;text:qsTr("Select program");width:IcUiQmlApi.appCtrl.settings.language==="Chinese"?height*2.5:height*4;onClicked: chooseProgram.open();}
-                            CusButton{id:paramsSetting;text:qsTr("Params setting");enabled:(currentProgram!==null&&IcUiQmlApi.appCtrl.checkSvc.checkState>=3);width:IcUiQmlApi.appCtrl.settings.language==="Chinese"?height*2.5:height*4;onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { dynamicParamsSetting.open();}}
+                            CusButton{enabled:IcUiQmlApi.appCtrl.checkSvc.checkState>=3;text:lt+qsTr("Select program");width:IcUiQmlApi.appCtrl.settings.isRuntimeLangEng?height*4:height*2.5;onClicked: chooseProgram.open();}
+                            CusButton{id:paramsSetting;text:lt+qsTr("Params setting");enabled:(currentProgram!==null&&IcUiQmlApi.appCtrl.checkSvc.checkState>=3);width:IcUiQmlApi.appCtrl.settings.isRuntimeLangEng?height*4:height*2.5;onClicked:if(currentProgram.type!==2){ staticParamsSetting.open()} else  { dynamicParamsSetting.open();}}
                         }
                     }
                 }
@@ -339,7 +344,7 @@ Item {id:root; width: 1366;height: 691
                             CusButton{
 //                                text:"开始测试";
                                 property int checkState: IcUiQmlApi.appCtrl.checkSvc.checkState;
-                                text:{if(checkState>=3||checkState==-1) return qsTr("Start");if(checkState===2) return qsTr("Resume");if(checkState===0||checkState===1) return qsTr("Pause")}
+                                text:{if(checkState>=3||checkState==-1) return lt+qsTr("Start");if(checkState===2) return lt+qsTr("Resume");if(checkState===0||checkState===1) return lt+qsTr("Pause")}
                                 onClicked:{
 //                                    if(currentCheckResult!=null)
 //                                    {
@@ -406,7 +411,7 @@ Item {id:root; width: 1366;height: 691
 //                                }
                             }
                             CusButton{
-                                text:qsTr("Stop");enabled: IcUiQmlApi.appCtrl.checkSvc.checkState<=2;
+                                text:lt+qsTr("Stop");enabled: IcUiQmlApi.appCtrl.checkSvc.checkState<=2;
                                 onClicked:
                                 {
                                     IcUiQmlApi.appCtrl.checkSvc.stop();
@@ -420,7 +425,7 @@ Item {id:root; width: 1366;height: 691
                                     }
                                 }}
                             CusButton{
-                                text:qsTr("Switch eye");onClicked:os_od.value=(os_od.value+1)%2;
+                                text:lt+qsTr("Switch eye");onClicked:os_od.value=(os_od.value+1)%2;
                                 enabled:IcUiQmlApi.appCtrl.checkSvc.checkState>=3;
                             }
                         }
@@ -431,9 +436,9 @@ Item {id:root; width: 1366;height: 691
 //                            enabled: currentCheckResult!==null;
                             enabled: currentCheckResult!==null&&IcUiQmlApi.appCtrl.checkSvc.checkState===4;
                             property var listModel:ListModel {}
-                            property var reportNames: [[qsTr("Single"),qsTr("Three in one"),qsTr("Overview"),qsTr("Three in one"),qsTr("Threshold")],[qsTr("Screening")],[qsTr("Dynamic"),qsTr("Dyanmic data")]]
+                            property var reportNames: [[lt+qsTr("Single"),lt+qsTr("Three in one"),lt+qsTr("Overview"),lt+qsTr("Three in one"),lt+qsTr("Threshold")],[lt+qsTr("Screening")],[lt+qsTr("Dynamic"),lt+qsTr("Dyanmic data")]]
                             comboBox.model: listModel;popDirectionDown: false;complexType: true;
-                            button.text: qsTr("Analysis");
+                            button.text: lt+qsTr("Analysis");
                             button.onClicked:
                             {
 //                                console.log(currentCheckResult.id);

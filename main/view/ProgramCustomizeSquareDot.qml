@@ -21,7 +21,6 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
     property var range: currentProgram.params.commonParams.Range;
 
-
    contentItem:
    Rectangle{
         id: idContent; color: "#60606060";implicitWidth: idPopup.width; implicitHeight: idPopup.height;
@@ -97,7 +96,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     NumberLineEdit{id:y1;width: parent.width*0.6;step:1;max:range[1];min:-range[1];}
                                 }
                                 Row{width: parent.width;height: content.rowHeight;spacing: width*0.1;
-                                    CusText{text:qsTr("Spacing");width: parent.width*0.3;font.pointSize: CommonSettings.fontPointSize;}
+                                    CusText{text:lt+qsTr("Spacing");width: parent.width*0.3;font.pointSize: CommonSettings.fontPointSize;}
                                     NumberLineEdit{id:gap;width: parent.width*0.6;step:1;max:range[1];value:1;min:1;}
                                 }
                             }
@@ -106,13 +105,13 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                         Row{height: content.rowHeight; width: parent.width;spacing: width*0.05;
                             CusText{width: parent.width*0.50; text:"* "+qsTr("Unit")+":°,"+qsTr("Degree");horizontalAlignment: Text.AlignLeft;font.pointSize:CommonSettings.fontPointSize;}
-                            CusButton{width: parent.width*0.20;buttonColor: "#e0e0e0";text:qsTr("OK");
+                            CusButton{width: parent.width*0.20;buttonColor: "#e0e0e0";text:lt+qsTr("OK");
                                 onClicked: {
                                     confirm(x0.value,y0.value,x1.value,y1.value,gap.value);
                                     idPopup.close();
                                 }
                             }
-                            CusButton{width: parent.width*0.20;buttonColor: "#e0e0e0";text:qsTr("Cancel");
+                            CusButton{width: parent.width*0.20;buttonColor: "#e0e0e0";text:lt+qsTr("Cancel");
                                 onClicked: {
                                     cancel();
                                     idPopup.close();

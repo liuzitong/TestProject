@@ -13,7 +13,7 @@ Item{
     signal painted();
     onDotListChanged: {displayCanvas.requestPaint();dotPosDisplay.text="";}
 
-    CusText{id:dotPosDisplay;text:qsTr(""); horizontalAlignment: Text.AlignLeft;z:1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
+    CusText{id:dotPosDisplay;text:lt+qsTr(""); horizontalAlignment: Text.AlignLeft;z:1; anchors.top: parent.top; anchors.topMargin: 0.05*parent.height; anchors.left: parent.left; anchors.leftMargin: 0.05*parent.width;width: parent.width*0.06;height: parent.height*0.05;}
 
     Canvas{
         id:displayCanvas;

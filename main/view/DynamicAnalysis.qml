@@ -21,6 +21,7 @@ Item
     property int fontPointSize: CommonSettings.fontPointSize;
     property int textHeight:CommonSettings.textHeight;
 
+
     onRefresh:{
         if(currentPatient.os_od===0)  //左
             rx=currentPatient.rx.rx1_l.toFixed(2)+"DS "+currentPatient.rx.rx2_l.toFixed(2)+"DC "+currentPatient.rx.rx3_l.toFixed(2)+"X";
@@ -38,9 +39,9 @@ Item
                         Repeater{
                             property var params: currentCheckResult.params;
                             property int timeSpan:currentCheckResult.resultData.testTimespan;
-                            property var fixationMonitor: [qsTr("No alarm"),qsTr("Only alarm"),qsTr("Alarm and pause")];
+                            property var fixationMonitor: [lt+qsTr("No alarm"),lt+qsTr("Only alarm"),lt+qsTr("Alarm and pause")];
 
-                            model: [{name:qsTr("Eye move alarm mode"),param:fixationMonitor[params.fixationMonitor]},{name:qsTr("Check time"),param:Math.floor(timeSpan/60)+":"+timeSpan%60}]
+                            model: [{name:lt+qsTr("Eye move alarm mode"),param:fixationMonitor[params.fixationMonitor]},{name:lt+qsTr("Check time"),param:Math.floor(timeSpan/60)+":"+timeSpan%60}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
     //                        CusText{text:"固视监测";  horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
@@ -49,28 +50,28 @@ Item
                         Repeater{
                             property var params: currentCheckResult.params;
                             property var cursorSize: ["I","II","III","IV","V"];
-                            property var cursorColor: [qsTr("White"),qsTr("Red"),qsTr("Blue")];
+                            property var cursorColor: [lt+qsTr("White"),lt+qsTr("Red"),lt+qsTr("Blue")];
                             property var backGroundColor: ["31.5 ASB","315 ASB"];
-                            property var strategy: [qsTr("Standard"),qsTr("Blind area"),qsTr("Dark area"),qsTr("Straight line")]
+                            property var strategy: [lt+qsTr("Standard"),lt+qsTr("Blind area"),lt+qsTr("Dark area"),lt+qsTr("Straight line")]
                             model: [
-                                {name:qsTr("Stimulus cursor"),param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
-                                {name:qsTr("Background color"),param:backGroundColor[params.backGroundColor]},
-                                {name:qsTr("Strategy"),param:strategy[params.strategy]}]
+                                {name:lt+qsTr("Stimulus cursor"),param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
+                                {name:lt+qsTr("Background color"),param:backGroundColor[params.backGroundColor]},
+                                {name:lt+qsTr("Strategy"),param:strategy[params.strategy]}]
                             CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
                     Column{width:parent.width;height: parent.height*0.15;spacing: textHeight*0.5;
                         Repeater{
                             model: [
-                                {name:qsTr("Pupil diameter"),param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
-                                {name:qsTr("Visual acuity"),param:!currentCheckResult.OS_OD?currentPatient.rx.visual_l.toFixed(2):currentPatient.rx.visual_r.toFixed(2)},
-                                {name:qsTr("Diopter"),param:"Rx:"+rx}]
+                                {name:lt+qsTr("Pupil diameter"),param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
+                                {name:lt+qsTr("Visual acuity"),param:!currentCheckResult.OS_OD?currentPatient.rx.visual_l.toFixed(2):currentPatient.rx.visual_r.toFixed(2)},
+                                {name:lt+qsTr("Diopter"),param:"Rx:"+rx}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
 
                     Column{width:parent.width;height: parent.height*0.25;spacing: textHeight*0.5;
-                        CusText{text:qsTr("Diagnosis")+":"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
+                        CusText{text:lt+qsTr("Diagnosis")+":"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
                         Rectangle{ id: rectangle;width:parent.width;height: parent.height*0.73;radius: 5;border.color: "black";smooth: false;
                             TextInput
                             {
@@ -83,7 +84,7 @@ Item
                             }
 
                             CusButton{ id: cusButton;height: parent.height*0.25;width: height*2;
-                                text:qsTr("Save");anchors.right: parent.right;anchors.bottom: parent.bottom;
+                                text:lt+qsTr("Save");anchors.right: parent.right;anchors.bottom: parent.bottom;
                                 anchors.rightMargin: 5;anchors.bottomMargin: 5;
                                 onClicked:
                                 {
@@ -120,7 +121,7 @@ Item
                         Row{
                             width: scrollView.width-20;height: parent.height/21;
                             Repeater{
-                                model:[qsTr("Iospter ident"),qsTr("Degrees start"),qsTr("Meridian start"),qsTr("Degrees stop"),qsTr("Meridian stop"),qsTr("Stimulus response")]
+                                model:[lt+qsTr("Iospter ident"),lt+qsTr("Degrees start"),lt+qsTr("Meridian start"),lt+qsTr("Degrees stop"),lt+qsTr("Meridian stop"),lt+qsTr("Stimulus response")]
                                 CusText{width:parent.width/6;text:modelData;font.pointSize: fontPointSize;}
                             }
                         }

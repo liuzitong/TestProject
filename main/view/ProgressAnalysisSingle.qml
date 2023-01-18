@@ -63,18 +63,18 @@ Item
                         Repeater{
                             property var params: currentCheckResult.params.commonParams;
                             property int timeSpan:currentCheckResult.resultData.testTimespan;
-                            property var fixationMonitor: [qsTr("No alarm"),qsTr("Only alarm"),qsTr("Alarm and pause")];
-                            property var fixationTarget: [qsTr("Center Dot"),qsTr("Small diamond"),qsTr("Big diamond"),qsTr("Bottom dot")]
-                            property var centerDotCheck: [qsTr("On"),qsTr("Off")];
+                            property var fixationMonitor: [lt+qsTr("No alarm"),lt+qsTr("Only alarm"),lt+qsTr("Alarm and pause")];
+                            property var fixationTarget: [lt+qsTr("Center Dot"),lt+qsTr("Small diamond"),lt+qsTr("Big diamond"),lt+qsTr("Bottom dot")]
+                            property var centerDotCheck: [lt+qsTr("On"),lt+qsTr("Off")];
 
                             model: [
-                                {name:qsTr("Eye move alarm mode"),param:fixationMonitor[params.fixationMonitor]},
-                                {name:qsTr("Fixation target"),param:fixationTarget[params.fixationTarget]},
-                                {name:qsTr("Fixation loss rate"),param:Math.round(currentCheckResult.resultData.fixationLostCount/currentCheckResult.resultData.fixationLostTestCount*100)+"%"},
-                                {name:qsTr("False positive rate"),param:Math.round(currentCheckResult.resultData.falsePositiveCount/currentCheckResult.resultData.falsePositiveTestCount*100)+"%"},
-                                {name:qsTr("False negative rate"),param:Math.round(currentCheckResult.resultData.falseNegativeCount/currentCheckResult.resultData.falseNegativeTestCount*100)+"%"},
-                                {name:qsTr("Check time"),param:Math.floor(timeSpan/60)+":"+timeSpan%60},
-                                {name:qsTr("Center Dot check"),param:params.centerDotCheck?centerDotCheck[0]:centerDotCheck[1]}]
+                                {name:lt+qsTr("Eye move alarm mode"),param:fixationMonitor[params.fixationMonitor]},
+                                {name:lt+qsTr("Fixation target"),param:fixationTarget[params.fixationTarget]},
+                                {name:lt+qsTr("Fixation loss rate"),param:Math.round(currentCheckResult.resultData.fixationLostCount/currentCheckResult.resultData.fixationLostTestCount*100)+"%"},
+                                {name:lt+qsTr("False positive rate"),param:Math.round(currentCheckResult.resultData.falsePositiveCount/currentCheckResult.resultData.falsePositiveTestCount*100)+"%"},
+                                {name:lt+qsTr("False negative rate"),param:Math.round(currentCheckResult.resultData.falseNegativeCount/currentCheckResult.resultData.falseNegativeTestCount*100)+"%"},
+                                {name:lt+qsTr("Check time"),param:Math.floor(timeSpan/60)+":"+timeSpan%60},
+                                {name:lt+qsTr("Center Dot check"),param:params.centerDotCheck?centerDotCheck[0]:centerDotCheck[1]}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
@@ -82,28 +82,28 @@ Item
                         Repeater{
                             property var params: currentCheckResult.params.commonParams;
                             property var cursorSize: ["I","II","III","IV","V"];
-                            property var cursorColor: [qsTr("White"),qsTr("Red"),qsTr("Blue")];
+                            property var cursorColor: [lt+qsTr("White"),lt+qsTr("Red"),lt+qsTr("Blue")];
                             property var backGroundColor: ["31.5 ASB","315 ASB"];
-                            property var strategy: [qsTr("Full threshold"),qsTr("Smart interactive"),qsTr("Fast interactive"),qsTr("One stage"),qsTr("Two stages"),qsTr("Quantify defects"),qsTr("Single stimulus")]
+                            property var strategy: [lt+qsTr("Full threshold"),lt+qsTr("Smart interactive"),lt+qsTr("Fast interactive"),lt+qsTr("One stage"),lt+qsTr("Two stages"),lt+qsTr("Quantify defects"),lt+qsTr("Single stimulus")]
                             model: [
-                                {name:qsTr("Stimulus cursor"),param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
-                                {name:qsTr("Background light"),param:backGroundColor[params.backGroundColor]},
-                                {name:qsTr("Strategy"),param:strategy[params.strategy]}]
+                                {name:lt+qsTr("Stimulus cursor"),param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
+                                {name:lt+qsTr("Background light"),param:backGroundColor[params.backGroundColor]},
+                                {name:lt+qsTr("Strategy"),param:strategy[params.strategy]}]
                             CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
                     Column{width:parent.width;height: parent.height*0.12;spacing: textHeight*0.5;
                         Repeater{
                             model: [
-                                {name:qsTr("Pupil diameter"),param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
-                                {name:qsTr("Visual acuity"),param:!currentCheckResult.OS_OD?currentPatient.rx.visual_l.toFixed(2):currentPatient.rx.visual_r.toFixed(2)},
-                                {name:qsTr("Diopter"),param:"Rx:"+rx}]
+                                {name:lt+qsTr("Pupil diameter"),param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
+                                {name:lt+qsTr("Visual acuity"),param:!currentCheckResult.OS_OD?currentPatient.rx.visual_l.toFixed(2):currentPatient.rx.visual_r.toFixed(2)},
+                                {name:lt+qsTr("Diopter"),param:"Rx:"+rx}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
 
                     Column{width:parent.width;height: parent.height*0.20;spacing: textHeight*0.3;
-                        CusText{text:qsTr("Diagnosis")+":"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
+                        CusText{text:lt+qsTr("Diagnosis")+":"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
                         Rectangle{ id: rectangle;width:parent.width;height: parent.height-1.3*textHeight;radius: 5;border.color: "black";smooth: false;
                             TextInput
                             {
@@ -116,7 +116,7 @@ Item
                             }
 
                             CusButton{ id: cusButton;height: parent.height*0.28;width: height*2;
-                                text:qsTr("Save");anchors.right: parent.right;anchors.bottom: parent.bottom;
+                                text:lt+qsTr("Save");anchors.right: parent.right;anchors.bottom: parent.bottom;
                                 anchors.rightMargin: 5;anchors.bottomMargin: 5;
                                 onClicked:
                                 {
@@ -181,8 +181,8 @@ Item
 
                         }
                         Row{width: parent.width;height:parent.height*0.03;spacing:width*0.1;
-                            CusText{width:parent.parent.height*0.98/3;height: parent.height;text: qsTr("Total deviation"); verticalAlignment: Text.AlignVCenter; font.pointSize: height*0.50}
-                            CusText{width:parent.parent.height*0.98/3;height: parent.height;text: qsTr("Pattern deviation");  verticalAlignment: Text.AlignVCenter;font.pointSize: height*0.50}
+                            CusText{width:parent.parent.height*0.98/3;height: parent.height;text: lt+qsTr("Total deviation"); verticalAlignment: Text.AlignVCenter; font.pointSize: height*0.50}
+                            CusText{width:parent.parent.height*0.98/3;height: parent.height;text: lt+qsTr("Pattern deviation");  verticalAlignment: Text.AlignVCenter;font.pointSize: height*0.50}
                         }
                         Row{
                             width: parent.width;height:parent.height*0.96/3;spacing:width*0.1;
@@ -211,10 +211,10 @@ Item
                     Column{width: parent.width*0.3;height:parent.height;spacing: textHeight*0.5;
                         CusText{width:parent.width;height:textHeight;text:"VFI:"+Math.round(staticAnalysisResult.VFI*100)+"%" ;horizontalAlignment: Text.AlignLeft;}
                         CusText{
-                            property var ght: if(staticAnalysisResult.GHT===0){return qsTr("Out of limits");} else if(staticAnalysisResult.GHT===1){return qsTr("Low sensitivity");}else if(staticAnalysisResult.GHT===2){return qsTr("Border of limits");}else if(staticAnalysisResult.GHT===3){return qsTr("Within normal limits");}
-                            width:parent.width;height:textHeight;horizontalAlignment: Text.AlignLeft;text:qsTr("GHT")+": "+ ght;}
-                        CusText{width:parent.width;height:textHeight;text:qsTr("MD")+": "+staticAnalysisResult.md.toFixed(2)+(staticAnalysisResult.p_md>0?" (<"+staticAnalysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;}
-                        CusText{width:parent.width;height:textHeight;text:qsTr("PSD")+": "+staticAnalysisResult.psd.toFixed(2)+(staticAnalysisResult.p_psd>0?" (<"+staticAnalysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;}
+                            property var ght: if(staticAnalysisResult.GHT===0){return lt+qsTr("Out of limits");} else if(staticAnalysisResult.GHT===1){return lt+qsTr("Low sensitivity");}else if(staticAnalysisResult.GHT===2){return lt+qsTr("Border of limits");}else if(staticAnalysisResult.GHT===3){return lt+qsTr("Within normal limits");}
+                            width:parent.width;height:textHeight;horizontalAlignment: Text.AlignLeft;text:lt+qsTr("GHT")+": "+ ght;}
+                        CusText{width:parent.width;height:textHeight;text:lt+qsTr("MD")+": "+staticAnalysisResult.md.toFixed(2)+(staticAnalysisResult.p_md>0?" (<"+staticAnalysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;}
+                        CusText{width:parent.width;height:textHeight;text:lt+qsTr("PSD")+": "+staticAnalysisResult.psd.toFixed(2)+(staticAnalysisResult.p_psd>0?" (<"+staticAnalysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;}
                         Rectangle{
                             width: parent.width;height: parent.height*0.66;border.color: "black";
                             Column{
@@ -227,22 +227,22 @@ Item
                                     Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + "/previewImage/single_progressPic.bmp";})}
                                 }
                                 CusText{
-                                    property var progress: [qsTr("no progress"),qsTr("possible progress"),qsTr("very possible progress")];
+                                    property var progress: [lt+qsTr("no progress"),lt+qsTr("possible progress"),lt+qsTr("very possible progress")];
                                     height: textHeight;text:progressAnalysisResult===null?"":progress[progressAnalysisResult] ;horizontalAlignment: Text.AlignLeft
                                 }
-                                CusText{height: textHeight;text:qsTr("BaseLine dates")+":" ;horizontalAlignment: Text.AlignLeft}
+                                CusText{height: textHeight;text:lt+qsTr("BaseLine dates")+":" ;horizontalAlignment: Text.AlignLeft}
                                 Row{width: parent.width;height: textHeight;spacing: parent.width*0.1;
                                     CusText{height: parent.height;width:parent.width*0.4;text:progressAnalysisListVm===null?"":Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
                                     CusText{height: parent.height;width:parent.width*0.4;text:progressAnalysisListVm===null?"":Qt.formatDateTime(progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
                                 }
-                                CusText{height: textHeight;text:qsTr("Previous dates")+":" ;horizontalAlignment: Text.AlignLeft}
+                                CusText{height: textHeight;text:lt+qsTr("Previous dates")+":" ;horizontalAlignment: Text.AlignLeft}
                                 Row{width: parent.width;height: textHeight;spacing: parent.width*0.1;
                                     CusText{height: parent.height;width:parent.width*0.4;text:progressAnalysisListVm===null?"":Qt.formatDateTime(progressAnalysisListVm.getData(progressAnalysisListVm.selectedIndex-2,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
                                     CusText{height: parent.height;width:parent.width*0.4;text:progressAnalysisListVm===null?"":Qt.formatDateTime(progressAnalysisListVm.getData(progressAnalysisListVm.selectedIndex-1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft}
                                 }
                                 Repeater{
                                     anchors.fill: parent;
-                                    model: [{image:"qrc:/grays/GPA1.bmp",progress:"<5% ("+qsTr("Deterioarted")+")"},{image:"qrc:/grays/GPA2.bmp",progress:"<5% (2"+qsTr("Consecutiveness")+")"},{image:"qrc:/grays/GPA3.bmp",progress:"<5% (3"+qsTr("Consecutiveness")+")"},{image:"qrc:/grays/GPA4.bmp",progress:qsTr("Out of range")}]
+                                    model: [{image:"qrc:/grays/GPA1.bmp",progress:"<5% ("+qsTr("Deterioarted")+")"},{image:"qrc:/grays/GPA2.bmp",progress:"<5% (2"+qsTr("Consecutiveness")+")"},{image:"qrc:/grays/GPA3.bmp",progress:"<5% (3"+qsTr("Consecutiveness")+")"},{image:"qrc:/grays/GPA4.bmp",progress:lt+qsTr("Out of range")}]
                                     Row{
                                         height: textHeight;width: parent.width;
         //                                height:parent.height*0.14;width: parent.width;spacing: height*0.5

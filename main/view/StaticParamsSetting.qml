@@ -21,8 +21,6 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
     signal cancel();
     property bool isCustomProg:false;
     property var currentProgram:null;
-
-
     property int fontPointSize: CommonSettings.fontPointSize;
 
 
@@ -34,7 +32,7 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
         Rectangle
         {
         // [HINT] Popup element need implicitWidth & implicitHeight to calc. the right position
-            id: menu; width:idPopup.width*0.5; height: idPopup.height*0.98;color: "#dcdee0";radius: 5;/*width:480; height:480;*/
+            id: menu; width:isEng?idPopup.width*0.6:idPopup.width*0.5; height: idPopup.height*0.98;color: "#dcdee0";radius: 5;/*width:480; height:480;*/
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             border.color: "#7C7C7C";
@@ -54,17 +52,16 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:"Params setting";horizontalAlignment: Text.AlignLeft;height:parent.height; anchors.left: parent.left; anchors.leftMargin:height*0.5;font.pointSize:fontPointSize;}
+                    CusText{text:lt+qsTr("Params setting");horizontalAlignment: Text.AlignLeft;height:parent.height; anchors.left: parent.left; anchors.leftMargin:height*0.5;font.pointSize:fontPointSize;}
                 }
                 Column{
                     width: parent.width;height: parent.height-header.height;
                     Rectangle{
-                        id: rectangle
                         height: parent.height*0.07;width:parent.width-2;color: "#D2D2D3";anchors.horizontalCenter: parent.horizontalCenter;
-                        TabBar {id: bar;currentIndex: 0;height: parent.height*0.8;width:isCustomProg?parent.width*0.20:parent.width*0.10; anchors.bottom: parent.bottom; anchors.bottomMargin: 0;anchors.left: parent.left; anchors.leftMargin: 0.01*parent.width;spacing: 0;
+                        TabBar {id: bar;currentIndex: 0;height: parent.height*0.8;width:isEng?isCustomProg?parent.width*0.30:parent.width*0.15:isCustomProg?parent.width*0.20:parent.width*0.10; anchors.bottom: parent.bottom; anchors.bottomMargin: 0;anchors.left: parent.left; anchors.leftMargin: 0.01*parent.width;spacing: 0;
                             Repeater {
-                                model:isCustomProg?[qsTr("Common params"),qsTr("Fixed params")]:[qsTr("Common params")]
-                                TabButton {width: isCustomProg?bar.width*0.5:bar.width*1;height: parent.height;
+                                model:isCustomProg?[lt+qsTr("Common params"),lt+qsTr("Fixed params")]:[lt+qsTr("Common params")]
+                                TabButton {width: bar.width/model.length;height: parent.height;
                                     Rectangle{anchors.fill: parent;color:parent.checked? "#E3E5E8":"#D2D2D3";
                                         Rectangle{width: parent.width;height: 3;color: "#0064B6";visible: parent.parent.checked? true:false; }
                                         CusText{text:modelData; anchors.fill: parent;color:parent.parent.checked?"#0064B6":"black";font.pointSize: height*0.3}
@@ -95,18 +92,18 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.45;
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("Check range"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
-                                        LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.params.commonParams.Range[1];}
+                                        CusText{text:lt+qsTr("Check range"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        LineEdit{width: parent.width*0.5; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.params.commonParams.Range[1];}
 
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("Dots count"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
-                                        LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.data.dots.length;}
+                                        CusText{text:lt+qsTr("Dots count"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        LineEdit{width: parent.width*0.5; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.data.dots.length;}
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("Strategy"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:lt+qsTr("Strategy"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
                                             property var strategies: currentProgram.data.strategies;
 //                                            property var threshold:["全阈值","智能交互式","快速智能交互式"];
@@ -114,28 +111,28 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 //                                            property var threshold:[];
 //                                            property var screening:[];
                                             property var listModel: ListModel{}
-                                            width: parent.width*0.6; anchors.right: parent.right;
+                                            width: parent.width*0.5; anchors.right: parent.right;
                                             model:/*currentProgram===null?null:currentProgram.type===0?threshold:screening;*/listModel;
                                             currentIndex: 0/*:(currentProgram.type===0?currentProgram.params.commonParams.strategy:currentProgram.params.commonParams.strategy-3)*/;
-                                            Component.onCompleted: idPopup.ok.connect(function(){currentProgram.params.commonParams.strategy=strategies[currentIndex];});
+                                            Component.onCompleted:
+                                            {
+                                                idPopup.ok.connect(function(){currentProgram.params.commonParams.strategy=strategies[currentIndex];});
+                                                IcUiQmlApi.appCtrl.settings.langTriggerChanged.connect(strategiesChanged);
+                                            }
                                             onStrategiesChanged:
                                             {
 
-                                                console.log(strategies);
                                                 var i;
                                                 listModel.clear();
-//                                                listModel.append({modelData:"全阈值"});
-//                                                listModel.append({modelData:"智能交互式"});
-//                                                listModel.append({modelData:"快速智能交互式"});
                                                 if(currentProgram.type===0)
                                                 {
                                                     for(i=0;i<strategies.length;i++)
                                                     {
                                                         switch (strategies[i])
                                                         {
-                                                        case 0:listModel.append({modelData:"Full threshold"});break;
-                                                        case 1:listModel.append({modelData:"Smart interactive"});break;
-                                                        case 2:listModel.append({modelData:"Fast interactive"});break;
+                                                        case 0:listModel.append({modelData:lt+qsTr("Full threshold")});break;
+                                                        case 1:listModel.append({modelData:lt+qsTr("Smart interactive")});break;
+                                                        case 2:listModel.append({modelData:lt+qsTr("Fast interactive")});break;
                                                         }
                                                         if(currentProgram.params.commonParams.strategy===strategies[i])
                                                         {
@@ -149,10 +146,10 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                                     {
                                                         switch (strategies[i])
                                                         {
-                                                        case 3:listModel.append({modelData:"One stage"});break;
-                                                        case 4:listModel.append({modelData:"Two stages"});break;
-                                                        case 5:listModel.append({modelData:"Quantify defects"});break;
-                                                        case 6:listModel.append({modelData:"Single stimulus"});break;
+                                                        case 3:listModel.append({modelData:lt+qsTr("One stage")});break;
+                                                        case 4:listModel.append({modelData:lt+qsTr("Two stages")});break;
+                                                        case 5:listModel.append({modelData:lt+qsTr("Quantify defects")});break;
+                                                        case 6:listModel.append({modelData:lt+qsTr("Single stimulus")});break;
                                                         }
                                                         if(currentProgram.params.commonParams.strategy===strategies[i])
                                                         {
@@ -166,43 +163,47 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("Strategy mode"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:lt+qsTr("Strategy mode"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("Age related"),qsTr("Threshold related"),qsTr("Single stimulus")];
+                                            width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("Age related"),lt+qsTr("Threshold related"),lt+qsTr("Single stimulus")];
                                             currentIndex: currentProgram===null?0:currentProgram.params.commonParams.strategyMode;
-                                            Component.onCompleted: idPopup.ok.connect(function(){currentProgram.params.commonParams.strategyMode=currentIndex;});
+                                            Component.onCompleted:
+                                            {
+                                                idPopup.ok.connect(function(){currentProgram.params.commonParams.strategyMode=currentIndex;});
+//                                                IcUiQmlApi.appCtrl.settings.langTriggerChanged.connect(modelChanged);
+                                            }
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("Cursor size"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:lt+qsTr("Cursor size"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:["I","II","III","IV","V"];
+                                            width: parent.width*0.5; anchors.right: parent.right;model:["I","II","III","IV","V"];
                                             currentIndex: currentProgram===null?0:currentProgram.params.commonParams.cursorSize;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.cursorSize=currentIndex;})}
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("Cursor color"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:lt+qsTr("Cursor color"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("White"),qsTr("Red"),qsTr("Blue")];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.cursorColor;
+                                            width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("White"),lt+qsTr("Red"),lt+qsTr("Blue")];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.cursorColor;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.cursorColor=currentIndex;})}
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("Background color"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:lt+qsTr("Background color"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("White"),qsTr("Yellow")];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.backGroundColor;
+                                            width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("White"),lt+qsTr("Yellow")];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.backGroundColor;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.backGroundColor=currentIndex;})}
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("Cyan·yellow Check"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:lt+qsTr("Cyan·yellow Check"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("On"),qsTr("Off")];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.cyanYellowTest;
+                                            width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("On"),lt+qsTr("Off")];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.cyanYellowTest;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.cyanYellowTest=currentIndex;})}
                                         }
                                     }
@@ -211,18 +212,18 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.45;
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:"Response auto adapt"; anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:lt+qsTr("Response auto adapt"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
-                                           width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("On"),qsTr("Off")];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.responseAutoAdapt;
+                                           width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("On"),lt+qsTr("Off")];currentIndex: currentProgram===null?0:currentProgram.params.commonParams.responseAutoAdapt;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.responseAutoAdapt=currentIndex;})}
                                        }
 
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:qsTr("Response delay time"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:lt+qsTr("Response delay time"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
-                                           width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;
+                                           width: parent.width*0.5; anchors.right: parent.right;step:50;max:5000;min:0;
                                            Component.onCompleted: {
                                                idPopup.ok.connect(function(){currentProgram.params.commonParams.intervalTime=value;})
                                                idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.commonParams.responseDelayTime;});
@@ -233,41 +234,41 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
 
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:qsTr("Center dot check"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:lt+qsTr("Center dot check"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("On"),qsTr("Off")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.centerDotCheck;
+                                            width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("On"),lt+qsTr("Off")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.centerDotCheck;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.centerDotCheck=currentIndex;})}
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:qsTr("Short term fluctuation"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:lt+qsTr("Short term fluctuation"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("On"),qsTr("Off")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.shortTermFluctuation;
+                                            width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("On"),lt+qsTr("Off")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.shortTermFluctuation;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.shortTermFluctuation=currentIndex;})}
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:qsTr("Fixation target"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:lt+qsTr("Fixation target"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("Center dot"),qsTr("Small diamond"),qsTr("Big diamond"),qsTr("Bottom dot")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.fixationTarget;
+                                            width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("Center dot"),lt+qsTr("Small diamond"),lt+qsTr("Big diamond"),lt+qsTr("Bottom dot")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.fixationTarget;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.fixationTarget=currentIndex;})}
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:qsTr("Eye move alarm mode"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:lt+qsTr("Eye move alarm mode"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
-                                           width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("No alarm"),qsTr("Only alarm"),qsTr("Alarm and pause")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.fixationMonitor;
+                                           width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("No alarm"),lt+qsTr("Only alarm"),lt+qsTr("Alarm and pause")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.fixationMonitor;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.fixationMonitor=currentIndex;})}
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:qsTr("Blind dot test"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:lt+qsTr("Blind dot test"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        CusComboBox{
-                                           width: parent.width*0.6; anchors.right: parent.right;model:[qsTr("On"),qsTr("Off")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.blindDotTest;
+                                           width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("On"),lt+qsTr("Off")];currentIndex:currentProgram===null?0:currentProgram.params.commonParams.blindDotTest;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.commonParams.blindDotTest=currentIndex;})}
                                        }
                                    }
@@ -294,41 +295,41 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.45;
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("Stimulus time"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:lt+qsTr("Stimulus time"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
-                                            width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;
+                                            width: parent.width*0.5; anchors.right: parent.right;step:50;max:5000;min:0;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.stimulationTime=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.stimulationTime;});}
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("Inteval time"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:lt+qsTr("Inteval time"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
-                                            width: parent.width*0.6; anchors.right: parent.right;step:50;max:5000;min:0;
+                                            width: parent.width*0.5; anchors.right: parent.right;step:50;max:5000;min:0;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.intervalTime=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.intervalTime;});}
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("False positive cycle"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:lt+qsTr("False positive cycle"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
-                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;
+                                            width: parent.width*0.5; anchors.right: parent.right;step:1;max:50;min:0;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.falsePositiveCycle=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.falsePositiveCycle;}); }
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("False negative cycle"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:lt+qsTr("False negative cycle"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
-                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;
+                                            width: parent.width*0.5; anchors.right: parent.right;step:1;max:50;min:0;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.falseNegativeCycle=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.falseNegativeCycle;}); }
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:qsTr("Fixation loss cycle"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                        CusText{text:lt+qsTr("Fixation loss cycle"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                         NumberLineEdit{
-                                            width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:0;
+                                            width: parent.width*0.5; anchors.right: parent.right;step:1;max:50;min:0;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.fixationViewLossCycle=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.fixationViewLossCycle;}); }
                                         }
                                     }
@@ -338,25 +339,25 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.45;
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:qsTr("Single stimulus DB"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:lt+qsTr("Single stimulus DB"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
-                                           width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;
+                                           width: parent.width*0.5; anchors.right: parent.right;step:1;max:51;min:0;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.singleStimulationDB=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.singleStimulationDB;}); }
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:qsTr("Blind dot stimulus DB"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:lt+qsTr("Blind dot stimulus DB"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
                                        NumberLineEdit{
-                                           width: parent.width*0.6; anchors.right: parent.right;step:1;max:51;min:0;
+                                           width: parent.width*0.5; anchors.right: parent.right;step:1;max:51;min:0;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.blindDotStimulationDB=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.blindDotStimulationDB;}); }
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:qsTr("Short term fluctuation count"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;}
+                                       CusText{text:lt+qsTr("Short term fluctuation count"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.45;horizontalAlignment: Text.AlignLeft;font.pointSize:fontPointSize;wrapMode: Text.WordWrap;}
                                        NumberLineEdit{
-                                           width: parent.width*0.6; anchors.right: parent.right;step:1;max:50;min:1;
+                                           width: parent.width*0.5; anchors.right: parent.right;step:1;max:50;min:1;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixedParams.shortTermFluctuationCount=value;});idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.fixedParams.shortTermFluctuationCount;}); }
                                        }
                                    }
@@ -377,8 +378,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             layoutDirection: Qt.RightToLeft
                             anchors.verticalCenter: parent.verticalCenter
 //
-                            CusButton{text:qsTr(qsTr("Cancel"));onClicked: idPopup.close();}
-                            CusButton{text:qsTr(qsTr("OK"));onClicked:{ok();idPopup.close();dataRefreshed();}}
+                            CusButton{text:lt+qsTr(lt+qsTr("Cancel"));onClicked: idPopup.close();}
+                            CusButton{text:lt+qsTr(lt+qsTr("OK"));onClicked:{ok();idPopup.close();dataRefreshed();}}
 //                             CusButton{text:"aa";onClicked:{
 //                                     console.log(currentProgram.params.commonParams.cursorSize) ;
 //                                     console.log(currentProgram.params.fixedParams.stimulationTime) ;

@@ -67,18 +67,18 @@ Item
                         Repeater{
                             property var params: currentCheckResult.params.commonParams;
                             property int timeSpan:currentCheckResult.resultData.testTimespan;
-                            property var fixationMonitor: [qsTr("No alarm"),qsTr("Only alarm"),qsTr("Alarm and pause")];
-                            property var fixationTarget: [qsTr("Center dot"),qsTr("Small diamond"),qsTr("Big diamond"),qsTr("Bottom dot")]
-                            property var centerDotCheck: [qsTr("On"),qsTr("Off")];
+                            property var fixationMonitor: [lt+qsTr("No alarm"),lt+qsTr("Only alarm"),lt+qsTr("Alarm and pause")];
+                            property var fixationTarget: [lt+qsTr("Center dot"),lt+qsTr("Small diamond"),lt+qsTr("Big diamond"),lt+qsTr("Bottom dot")]
+                            property var centerDotCheck: [lt+qsTr("On"),lt+qsTr("Off")];
 
                             model: [
-                                {name:qsTr("Eye move alarm mode"),param:fixationMonitor[params.fixationMonitor]},
-                                {name:qsTr("Fixation target"),param:fixationTarget[params.fixationTarget]},
-                                {name:qsTr("Fixation loss rate"),param:Math.round(currentCheckResult.resultData.fixationLostCount/currentCheckResult.resultData.fixationLostTestCount*100)+"%"},
-                                {name:qsTr("False positive rate"),param:Math.round(currentCheckResult.resultData.falsePositiveCount/currentCheckResult.resultData.falsePositiveTestCount*100)+"%"},
-                                {name:qsTr("False negative rate"),param:Math.round(currentCheckResult.resultData.falseNegativeCount/currentCheckResult.resultData.falseNegativeTestCount*100)+"%"},
-                                {name:qsTr("Check time"),param:Math.floor(timeSpan/60)+":"+timeSpan%60},
-                                {name:qsTr("Center dot check"),param:params.centerDotCheck?centerDotCheck[0]:centerDotCheck[1]}]
+                                {name:lt+qsTr("Eye move alarm mode"),param:fixationMonitor[params.fixationMonitor]},
+                                {name:lt+qsTr("Fixation target"),param:fixationTarget[params.fixationTarget]},
+                                {name:lt+qsTr("Fixation loss rate"),param:Math.round(currentCheckResult.resultData.fixationLostCount/currentCheckResult.resultData.fixationLostTestCount*100)+"%"},
+                                {name:lt+qsTr("False positive rate"),param:Math.round(currentCheckResult.resultData.falsePositiveCount/currentCheckResult.resultData.falsePositiveTestCount*100)+"%"},
+                                {name:lt+qsTr("False negative rate"),param:Math.round(currentCheckResult.resultData.falseNegativeCount/currentCheckResult.resultData.falseNegativeTestCount*100)+"%"},
+                                {name:lt+qsTr("Check time"),param:Math.floor(timeSpan/60)+":"+timeSpan%60},
+                                {name:lt+qsTr("Center dot check"),param:params.centerDotCheck?centerDotCheck[0]:centerDotCheck[1]}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
     //                        CusText{text:"固视监测";  horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
@@ -87,28 +87,28 @@ Item
                         Repeater{
                             property var params: currentCheckResult.params.commonParams;
                             property var cursorSize: ["I","II","III","IV","V"];
-                            property var cursorColor: [qsTr("White"),qsTr("Red"),qsTr("Blue")];
+                            property var cursorColor: [lt+qsTr("White"),lt+qsTr("Red"),lt+qsTr("Blue")];
                             property var backGroundColor: ["31.5 ASB","315 ASB"];
-                            property var strategy: [qsTr("Full threshold"),qsTr("Smart interactive"),qsTr("Fast interactive"),qsTr("One stage"),qsTr("Two stages"),qsTr("Quantify defects"),qsTr("Single stimulus")]
+                            property var strategy: [lt+qsTr("Full threshold"),lt+qsTr("Smart interactive"),lt+qsTr("Fast interactive"),lt+qsTr("One stage"),lt+qsTr("Two stages"),lt+qsTr("Quantify defects"),lt+qsTr("Single stimulus")]
                             model: [
-                                {name:qsTr("Stimulus cursor"),param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
-                                {name:qsTr("Background light"),param:backGroundColor[params.backGroundColor]},
-                                {name:qsTr("Strategy"),param:strategy[params.strategy]}]
+                                {name:lt+qsTr("Stimulus cursor"),param:cursorSize[params.cursorSize]+","+cursorColor[params.cursorColor]},
+                                {name:lt+qsTr("Background light"),param:backGroundColor[params.backGroundColor]},
+                                {name:lt+qsTr("Strategy"),param:strategy[params.strategy]}]
                             CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
                     Column{width:parent.width;height: parent.height*0.12;spacing: textHeight*0.5;
                         Repeater{
                             model: [
-                                {name:qsTr("Pupil diameter"),param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
-                                {name:qsTr("Visual acuity"),param:!currentCheckResult.OS_OD?currentPatient.rx.visual_l.toFixed(2):currentPatient.rx.visual_r.toFixed(2)},
-                                {name:qsTr("Diopter"),param:"Rx:"+rx}]
+                                {name:lt+qsTr("Pupil diameter"),param:currentCheckResult.resultData.pupilDiameter.toFixed(2)+"mm"},
+                                {name:lt+qsTr("Visual acuity"),param:!currentCheckResult.OS_OD?currentPatient.rx.visual_l.toFixed(2):currentPatient.rx.visual_r.toFixed(2)},
+                                {name:lt+qsTr("Diopter"),param:"Rx:"+rx}]
                            CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                         }
                     }
 
                     Column{width:parent.width;height: parent.height*0.20;spacing: textHeight*0.3;
-                        CusText{text:qsTr("Diagnosis")+":"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
+                        CusText{text:lt+qsTr("Diagnosis")+":"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
                         Rectangle{ id: rectangle;width:parent.width;height: parent.height-1.3*textHeight;radius: 5;border.color: "black";smooth: false;
                             TextInput
                             {
@@ -121,7 +121,7 @@ Item
                             }
 
                             CusButton{ id: cusButton;height: parent.height*0.28;width: height*2;
-                                text:qsTr("Save");anchors.right: parent.right;anchors.bottom: parent.bottom;
+                                text:lt+qsTr("Save");anchors.right: parent.right;anchors.bottom: parent.bottom;
                                 anchors.rightMargin: 5;anchors.bottomMargin: 5;
                                 onClicked:
                                 {

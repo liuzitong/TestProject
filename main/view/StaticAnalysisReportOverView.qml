@@ -21,7 +21,7 @@ Item {
         Row{ id: row;width: parent.width;height:parent.height*0.8/2;
             AnalysisDiagram{
                 width: parent.height;height:parent.height;
-                textTop:qsTr("Threshold")+"(dB)"
+                textTop:lt+qsTr("Threshold")+"(dB)"
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/dbDiagram.bmp";
                 range:root.range;
@@ -31,7 +31,7 @@ Item {
             }
             AnalysisDiagram{
                 width: parent.height;height:parent.height;
-                textTop:qsTr("Gray tone")
+                textTop:lt+qsTr("Gray tone")
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/gray.bmp";
                 range:root.range;
@@ -46,11 +46,11 @@ Item {
                 CusText{width:parent.width;height:parent.height*0.12;text:"VFI:"+Math.round(analysisResult.VFI*100)+"%" ;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
                 Item{width:parent.width;height:parent.height*0.1;}
                 CusText{
-                property var ght: if(analysisResult.GHT===0){return qsTr("Out of limits");} else if(analysisResult.GHT===1){return qsTr("Low sensitivity");}else if(analysisResult.GHT===2){return qsTr("Border of limits");}else if(analysisResult.GHT===3){return qsTr("Within normal limits");}
-                width:parent.width;height:parent.height*0.12;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40;text:qsTr("GHT")+": "+ ght;}
+                property var ght: if(analysisResult.GHT===0){return lt+qsTr("Out of limits");} else if(analysisResult.GHT===1){return lt+qsTr("Low sensitivity");}else if(analysisResult.GHT===2){return lt+qsTr("Border of limits");}else if(analysisResult.GHT===3){return lt+qsTr("Within normal limits");}
+                width:parent.width;height:parent.height*0.12;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40;text:lt+qsTr("GHT")+": "+ ght;}
                 Item{width:parent.width;height:parent.height*0.1;}
-                CusText{width:parent.width;height:parent.height*0.12;text:qsTr("MD")+": "+analysisResult.md.toFixed(2)+(analysisResult.p_md>0?" (<"+analysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
-                CusText{width:parent.width;height:parent.height*0.12;text:qsTr("PSD")+": "+analysisResult.psd.toFixed(2)+(analysisResult.p_psd>0?" (<"+analysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
+                CusText{width:parent.width;height:parent.height*0.12;text:lt+qsTr("MD")+": "+analysisResult.md.toFixed(2)+(analysisResult.p_md>0?" (<"+analysisResult.p_md+"%)":"") ;horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
+                CusText{width:parent.width;height:parent.height*0.12;text:lt+qsTr("PSD")+": "+analysisResult.psd.toFixed(2)+(analysisResult.p_psd>0?" (<"+analysisResult.p_psd+"%)" :"");horizontalAlignment: Text.AlignLeft;font.pointSize: height*0.40}
             }
 
         }
@@ -61,7 +61,7 @@ Item {
             width: parent.width;height:parent.height*0.8/2;
             AnalysisDiagram{
                 width: parent.height;height:parent.height;
-                textTop:qsTr("Total deviation")
+                textTop:lt+qsTr("Total deviation")
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/TotalPE.bmp";
                 range:root.range;
@@ -71,7 +71,7 @@ Item {
             }
             AnalysisDiagram{
                 width: parent.height;height:parent.height;
-                textTop:qsTr("Pattern deviation")
+                textTop:lt+qsTr("Pattern deviation")
                 anchors.verticalCenter: parent.verticalCenter
                 source:"/previewImage/PatternPE.bmp";
                 range:root.range;

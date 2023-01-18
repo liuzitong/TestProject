@@ -19,6 +19,8 @@ Column {
     signal refresh()
     property int fontPointSize: CommonSettings.fontPointSize;
 
+
+
     onRefresh: {
         if(analysisLobbyListVm!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::AnalysisLobbyListVm",analysisLobbyListVm);
         analysisLobbyListVm=IcUiQmlApi.appCtrl.objMgr.
@@ -99,7 +101,7 @@ Column {
         Row{anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:qsTr("Back");
+                    CusButton{text:lt+qsTr("Back");
                         onClicked:{
                             root.changePage("patientManagement",null);
                             if(currentCheckResult!==null)
@@ -120,10 +122,10 @@ Column {
                     Flow{height: parent.height;spacing: height*0.8;anchors.horizontalCenter: parent.horizontalCenter;
 //                        CusButton{text:"进展分析";onClicked:{changePage("progressAnalysis",null)}}
                         CusComboBoxButton{
-                            height: parent.height;width:IcUiQmlApi.appCtrl.settings.language==="Chinese"?height*3.5:height*5;
-                            property var listModel:[qsTr("Left eye Analysis"),qsTr("Right eye Analysis")]
+                            height: parent.height;width:IcUiQmlApi.appCtrl.settings.isRuntimeLangEng?height*5:height*3.5;
+                            property var listModel:[lt+qsTr("Left eye Analysis"),lt+qsTr("Right eye Analysis"),]
                             comboBox.model: listModel;popDirectionDown: false;complexType: false;
-                            button.text: qsTr("Progress Analysis");
+                            button.text: lt+qsTr("Progress Analysis");
                             button.onClicked:
                             {
                                 changePage("progressAnalysisLobby",0)
@@ -134,7 +136,7 @@ Column {
                             }
                         }
                         CusButton{
-                            text:qsTr("View island");
+                            text:lt+qsTr("View island");
                             enabled: currentProgram.type===0&&currentProgram.category!==4;
                             onClicked:
                             {
@@ -149,7 +151,7 @@ Column {
 
             Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:qsTr("Delete"); enabled: currentCheckResult!==null;anchors.horizontalCenter: parent.horizontalCenter;
+                    CusButton{text:lt+qsTr("Delete"); enabled: currentCheckResult!==null;anchors.horizontalCenter: parent.horizontalCenter;
                         onClicked:analysisLobbyListVm.deleteCheckResult(currentCheckResult.id);
                     }
                 }
@@ -162,9 +164,9 @@ Column {
                         height: parent.height;width: height*3.5;
                         enabled: currentCheckResult!==null;
                         property var listModel:ListModel {}
-                        property var reportNames: [[qsTr("Single"),qsTr("Three in one"),qsTr("Overview"),qsTr("Three in one"),qsTr("Threshold")],[qsTr("Screening")],[qsTr("Dynamic"),qsTr("Dyanmic data")]]
+                        property var reportNames: [[lt+qsTr("Single"),lt+qsTr("Three in one"),lt+qsTr("Overview"),lt+qsTr("Three in one"),lt+qsTr("Threshold")],[lt+qsTr("Screening")],[lt+qsTr("Dynamic"),lt+qsTr("Dyanmic data")]]
                         comboBox.model: listModel;popDirectionDown: false;complexType: true;
-                        button.text: qsTr("Analysis");
+                        button.text: lt+qsTr("Analysis");
                         button.onClicked:
                         {
                             var report=listModel.get(0).report;

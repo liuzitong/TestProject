@@ -8,6 +8,9 @@
 #include <perimeter/main/database/program.h>
 #include <qsharedpointer.h>
 #include <vector>
+#include <perimeter/main/appctrl/perimeter_appctrl.hxx>
+#include <perimeter/third-part/qxpack/indcom/ui_qml_base/qxpack_ic_ui_qml_api.hxx>
+#include <perimeter/main/viewModel/settings.h>
 namespace Perimeter
 {
 
@@ -140,7 +143,25 @@ class ProgramVm:public QObject
 public:
     long getID(){return m_data->m_id;}void setID(int value){m_data->m_id=value;}
     long getType(){return long(m_data->m_type);}void setType(int value){m_data->m_type=Type(value);typeChanged();}Q_SIGNAL void typeChanged();
-    QString getName(){return m_data->m_name;}void setName(QString value){m_data->m_name=value;}
+    QString getName(){
+        auto name= m_data->m_name;
+        auto splitNames=name.split("@");
+        if(splitNames.count()!=2)
+        {
+            return name;
+        }
+        else
+        {
+            auto appCtrl=static_cast<AppCtrl*>(QxPack::IcUiQmlApi::appCtrl());
+            auto setting=static_cast<Settings*>(appCtrl->getSettings());
+            auto lang=setting->getLanguage();
+            if(lang=="Chinese"||(lang=="Default"&&QLocale::system().language()==QLocale::Chinese))
+                return splitNames[1];
+            else
+                return splitNames[0];
+        }
+    }
+    void setName(QString value){m_data->m_name=value;}
     QVariantList getReport()
     {
         QVariantList reports;

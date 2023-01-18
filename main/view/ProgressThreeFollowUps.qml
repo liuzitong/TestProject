@@ -48,21 +48,21 @@ Rectangle {
                         Column{
                             width: parent.width*0.2;height: parent.height;spacing: textHeight*0.3;
                             Repeater{
-                                property var centerDotCheck: [qsTr("On"),qsTr("Off")];
-                                property var ght: [qsTr("Out of limits"),qsTr("Low sensitivity"),qsTr("Border of limits"),qsTr("Within normal limits")];
-                                property var progress: [qsTr("no progress"),qsTr("possible progress"),qsTr("very possible progress")];
+                                property var centerDotCheck: [lt+qsTr("On"),lt+qsTr("Off")];
+                                property var ght: [lt+qsTr("Out of limits"),lt+qsTr("Low sensitivity"),lt+qsTr("Border of limits"),lt+qsTr("Within normal limits")];
+                                property var progress: [lt+qsTr("no progress"),lt+qsTr("possible progress"),lt+qsTr("very possible progress")];
                                 property int index: progressAnalysisListVm.selectedIndex;
                                 model: [
-                                    {name:qsTr("Date"),param:Qt.formatDateTime(progressAnalysisListVm.getData(index+modelData.index_list,"dateTime"),"yyyy/MM/dd")},
-                                    {name:qsTr("Program"),param:progressAnalysisListVm.getData(index+modelData.index_list,"program")},
-                                    {name:qsTr("GHT"),param:ght[progressAnalysisListVm.getData(index+modelData.index_list,"GHT")]},
-                                    {name:qsTr("Center dot"),param:centerDotCheck[progressAnalysisListVm.getData(index+modelData.index_list,"centerDotCheck")?1:0]},
-                                    {name:qsTr("MD"),param:progressAnalysisListVm.getData(index+modelData.index_list,"md").toFixed(2)+(progressAnalysisListVm.getData(index+modelData.index_list,"p_md")>0?(" (<"+progressAnalysisListVm.getData(index+modelData.index_list,"p_md")+"%)"):"")},
-                                    {name:qsTr("PSD"),param:progressAnalysisListVm.getData(index+modelData.index_list,"psd").toFixed(2)+(progressAnalysisListVm.getData(index+modelData.index_list,"p_psd")>0?(" (<"+progressAnalysisListVm.getData(index+modelData.index_list,"p_psd")+"%)"):"")},
-                                    {name:qsTr("Fixation loss rate"),param:progressAnalysisListVm.getData(index+modelData.index_list,"fixationLostCount")+"/"+progressAnalysisListVm.getData(index+modelData.index_list,"fixationLostTestCount")},
-                                    {name:qsTr("False negative rate"),param:Math.round((progressAnalysisListVm.getData(index+modelData.index_list,"falseNegativeRate")*100))+"%"},
-                                    {name:qsTr("False positive rate"),param:Math.round((progressAnalysisListVm.getData(index+modelData.index_list,"falsePositiveRate")*100))+"%"},
-                                    {name:qsTr("Progress"),param:progress[progressAnalysisResult[modelData.index_progress]]},
+                                    {name:lt+qsTr("Date"),param:Qt.formatDateTime(progressAnalysisListVm.getData(index+modelData.index_list,"dateTime"),"yyyy/MM/dd")},
+                                    {name:lt+qsTr("Program"),param:progressAnalysisListVm.getData(index+modelData.index_list,"program")},
+                                    {name:lt+qsTr("GHT"),param:ght[progressAnalysisListVm.getData(index+modelData.index_list,"GHT")]},
+                                    {name:lt+qsTr("Center dot"),param:centerDotCheck[progressAnalysisListVm.getData(index+modelData.index_list,"centerDotCheck")?1:0]},
+                                    {name:lt+qsTr("MD"),param:progressAnalysisListVm.getData(index+modelData.index_list,"md").toFixed(2)+(progressAnalysisListVm.getData(index+modelData.index_list,"p_md")>0?(" (<"+progressAnalysisListVm.getData(index+modelData.index_list,"p_md")+"%)"):"")},
+                                    {name:lt+qsTr("PSD"),param:progressAnalysisListVm.getData(index+modelData.index_list,"psd").toFixed(2)+(progressAnalysisListVm.getData(index+modelData.index_list,"p_psd")>0?(" (<"+progressAnalysisListVm.getData(index+modelData.index_list,"p_psd")+"%)"):"")},
+                                    {name:lt+qsTr("Fixation loss rate"),param:progressAnalysisListVm.getData(index+modelData.index_list,"fixationLostCount")+"/"+progressAnalysisListVm.getData(index+modelData.index_list,"fixationLostTestCount")},
+                                    {name:lt+qsTr("False negative rate"),param:Math.round((progressAnalysisListVm.getData(index+modelData.index_list,"falseNegativeRate")*100))+"%"},
+                                    {name:lt+qsTr("False positive rate"),param:Math.round((progressAnalysisListVm.getData(index+modelData.index_list,"falsePositiveRate")*100))+"%"},
+                                    {name:lt+qsTr("Progress"),param:progress[progressAnalysisResult[modelData.index_progress]]},
                                 ]
                                 CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                             }
@@ -84,8 +84,8 @@ Rectangle {
             {
                 width: parent.width*0.15;
                 height: parent.height;spacing:textHeight;
-                CusText{text:qsTr("MD")+":"+((progressAnalysisListVm.getData(0,"md")+progressAnalysisListVm.getData(1,"md"))/2).toFixed(2); horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
-                CusText{text:qsTr("BaseLine dates")+":"+Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd")+"  "+Qt.formatDateTime(progressAnalysisListVm==null?"":progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
+                CusText{text:lt+qsTr("MD")+":"+((progressAnalysisListVm.getData(0,"md")+progressAnalysisListVm.getData(1,"md"))/2).toFixed(2); horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
+                CusText{text:lt+qsTr("BaseLine dates")+":"+Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd")+"  "+Qt.formatDateTime(progressAnalysisListVm==null?"":progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                 Row{
                     width: parent.width;height: parent.height*0.4
                     Column{
@@ -104,7 +104,7 @@ Rectangle {
                         height: parent.height;  width:parent.width/2;spacing:textHeight*0.5;
                         Repeater{
                             anchors.fill: parent;
-                            model: [{image:"qrc:/grays/GPA1.bmp",progress:"<5% ("+qsTr("Deterioarted")+")"},{image:"qrc:/grays/GPA2.bmp",progress:"<5% (2"+qsTr("Consecutiveness")+")"},{image:"qrc:/grays/GPA3.bmp",progress:"<5% (3"+qsTr("Consecutiveness")+")"},{image:"qrc:/grays/GPA4.bmp",progress:qsTr("Out of range")}]
+                            model: [{image:"qrc:/grays/GPA1.bmp",progress:"<5% ("+qsTr("Deterioarted")+")"},{image:"qrc:/grays/GPA2.bmp",progress:"<5% (2"+qsTr("Consecutiveness")+")"},{image:"qrc:/grays/GPA3.bmp",progress:"<5% (3"+qsTr("Consecutiveness")+")"},{image:"qrc:/grays/GPA4.bmp",progress:lt+qsTr("Out of range")}]
                             Row{
                                 height:textHeight;width: parent.width;spacing: height*0.5
                                 Image {height: sourceSize.height*2; fillMode: Image.PreserveAspectFit; width:sourceSize.height*2;smooth: false;source: modelData.image}

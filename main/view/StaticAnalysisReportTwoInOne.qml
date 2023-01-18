@@ -23,7 +23,7 @@ Item {
         anchors.left: parent.left
         anchors.top: parent.top
         source:"/previewImage/defectDepth.bmp";
-        textTop:qsTr("Defect depth")+"(db)";
+        textTop:lt+qsTr("Defect depth")+"(db)";
         textBottom:"□=4db"+"Expectation";
         analysisVm: root.analysisVm;
         range:root.range;
@@ -37,7 +37,7 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         source:"/previewImage/dBDiagram.bmp";
-        textTop:qsTr("Threshold")+"(dB)";
+        textTop:lt+qsTr("Threshold")+"(dB)";
         analysisVm: root.analysisVm;
         range:root.range;
         onClicked:root.clearDot();

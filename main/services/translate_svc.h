@@ -14,6 +14,7 @@ class TranslateController : public QObject
 
 
 public:
+    static QString getTranlatedName(QString name);
 //    enum class Language
 //    {
 //        English = 1,
@@ -38,5 +39,8 @@ private:
 //    QQmlEngine *m_engine = nullptr;
     QTranslator *m_translator = nullptr;
 };
+
+
+
 }
 #endif // TRANSLATE_SVC_H

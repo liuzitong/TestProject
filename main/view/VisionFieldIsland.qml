@@ -194,7 +194,7 @@ Column {
         Row{anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.50;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:qsTr("Back");onClicked:{root.changePage("analysisLobby",null);}}}
+                    CusButton{text:lt+qsTr("Back");onClicked:{root.changePage("analysisLobby",null);}}}
                 }
 //            Item{height: parent.height;width:parent.width*0.52;
 //                Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
@@ -211,9 +211,9 @@ Column {
                     {
                         height: parent.height; layoutDirection: Qt.RightToLeft;spacing: height*0.8;width: parent.width
                         anchors.horizontalCenter: parent.horizontalCenter
-                        CusButton{text:qsTr("Reset");}
-                        CusButton{text:qsTr("Zoom out");}
-                        CusButton{text:qsTr("Zoom in");}
+                        CusButton{text:lt+qsTr("Reset");}
+                        CusButton{text:lt+qsTr("Zoom out");}
+                        CusButton{text:lt+qsTr("Zoom in");}
                     }
                 }
             }

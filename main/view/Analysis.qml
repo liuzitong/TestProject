@@ -19,8 +19,10 @@ Column {
     property int report;
 //    property int textHeight: height*0.05;
 
+
     signal refresh();
     signal changePage(var pageName,var params);
+
 
     onRefresh: {
 //        console.log("report type is "+report);
@@ -72,13 +74,13 @@ Column {
         Row{anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:qsTr("Back");onClicked:{root.changePage(lastPage,null);}}}
+                    CusButton{text:lt+qsTr("Back");onClicked:{root.changePage(lastPage,null);}}}
                 }
             Item{height: parent.height;width:parent.width*0.52;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height;spacing: height*0.8;width: parent.width;anchors.horizontalCenter: parent.horizontalCenter
-                        CusButton{text:qsTr("Recheck");onClicked:{root.changePage("check",{currentProgram:currentProgram});}}
-                        CusButton{text:qsTr("New patient");onClicked:{;root.changePage("patientManagement","createNewPatient");}}
+                        CusButton{text:lt+qsTr("Recheck");onClicked:{root.changePage("check",{currentProgram:currentProgram});}}
+                        CusButton{text:lt+qsTr("New patient");onClicked:{;root.changePage("patientManagement","createNewPatient");}}
                     }
                 }
             }
@@ -89,7 +91,7 @@ Column {
                     {
                         height: parent.height; layoutDirection: Qt.RightToLeft;spacing: height*0.8;width: parent.width
                         anchors.horizontalCenter: parent.horizontalCenter
-                        CusButton{text:qsTr("Print");onClicked:analysisVm.showReport(report);}
+                        CusButton{text:lt+qsTr("Print");onClicked:analysisVm.showReport(report);}
                     }
                 }
             }

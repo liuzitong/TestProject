@@ -54,12 +54,12 @@ void Settings::changeLang()
     if(m_language=="Chinese"||(m_language=="Default"&&QLocale::system().language()==QLocale::Chinese))
     {
         lang=QLocale::Chinese;
-        setDoubleName(false);
+        setIsRuntimeLangEng(false);
     }
     else
     {
         lang=QLocale::English;
-        setDoubleName(true);
+        setIsRuntimeLangEng(true);
     }
     TranslateController::instance()->loadLanguage(lang);
     emit langTriggerChanged();

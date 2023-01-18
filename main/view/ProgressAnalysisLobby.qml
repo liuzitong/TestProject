@@ -34,14 +34,14 @@ Column {
             Row{
                 id:header
                 width: parent.width; height:(infoCol.height)/(pageSize+1);spacing: -1;z:1;
-                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"日期";}}
-                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"选择程序";}}
-                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"策略";}}
-                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"平均缺损";}}
-                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"模式标准差";}}
-                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"固视丢失率";}}
-                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"假阳性率";}}
-                Rectangle{width: parent.width*1/10;  height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:"假阴性率";}}
+                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:lt+qsTr("Check date");}}
+                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:lt+qsTr("Program name");}}
+                Rectangle{width: parent.width*2/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:lt+qsTr("Strategy");}}
+                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:lt+qsTr("MD");}}
+                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:lt+qsTr("PSD");}}
+                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:lt+qsTr("Fixation loss rate");}}
+                Rectangle{width: parent.width*1/10+1;height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:lt+qsTr("False positive rate");}}
+                Rectangle{width: parent.width*1/10;  height: parent.height;color: "#D2D3D5"; border.color: "#656566";CusText{anchors.fill: parent;font.pointSize: fontPointSize;text:lt+qsTr("False negative rate");}}
             }
             ListView{
                 id:progressAnalysisListView
@@ -51,6 +51,8 @@ Column {
                 width: parent.width;height:(infoCol.height)/(pageSize+1)*pageSize ; interactive: false; spacing: -1;clip:true;snapMode: ListView.SnapPosition;/*interactive: false;*/
                 delegate: infoDelegate
                 model:progressAnalysisListVm;
+                property var strategyNames:[lt+qsTr("Full threshold"),lt+qsTr("Smart interactive"),lt+qsTr("Fast interactive")];
+
 //                currentIndex: progressAnalysisListVm.selectedIndex;
 //                currentIndex: count-1;
 //                model:[
@@ -59,9 +61,9 @@ Column {
 //                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:false},
 //                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:false},
 //                    {time:"sss",programName:"30-2",strategy:3,md:1.35,psd:2.0,fixationLossRate:0.3,falsePosRate:0.1,falseNegRate:0.5,baseline:false}]
-                Component.onCompleted: {
-
-                }
+//                Component.onCompleted: {
+//                    IcUiQmlApi.appCtrl.settings.langTriggerChanged.connect(progressAnalysisListVmChanged);
+//                }
                 Component{
                     id:infoDelegate
                     Item{
@@ -87,7 +89,7 @@ Column {
                             id:infoRow;anchors.fill: parent;spacing: -1;
                             Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:Qt.formatDateTime(dateTime,"yyyy/MM/dd")}}
                             Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:program}}
-                            Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:strategy}}
+                            Rectangle{width: parent.width*2/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:progressAnalysisListView.strategyNames[strategy]}}
                             Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:md.toFixed(2)}}
                             Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:psd.toFixed(2)}}
                             Rectangle{width: parent.width*1/10+1;height: parent.height;color:rootItem.rowBackGroundColor; border.color: backGroundBorderColor;CusText{color:rootItem.rowForeGroundColor;anchors.fill: parent;font.pointSize: fontPointSize;text:fixationLostCount+"/"+fixationLostTestCount}}
@@ -103,7 +105,7 @@ Column {
         Item{ id: item2;anchors.fill: parent;
             Item{height: parent.height;width:parent.width*0.20;
                 Item{anchors.fill: parent;anchors.margins:parent.height*0.15;
-                    CusButton{text:qsTr("Back");onClicked:root.changePage("analysisLobby",null);}
+                    CusButton{text:lt+qsTr("Back");onClicked:root.changePage("analysisLobby",null);}
                     }
                 }
 
@@ -111,7 +113,7 @@ Column {
             Item{height: parent.height; anchors.horizontalCenter: parent.horizontalCenter; width:parent.width*0.33;
                 Item{ id: item1;anchors.fill: parent;anchors.margins:parent.height*0.15;
                     Flow{height: parent.height; layoutDirection: Qt.RightToLeft; anchors.right: parent.right; spacing: height*0.4;anchors.horizontalCenter: parent.horizontalCenter;
-                        CusButton{text:qsTr("Remove");enabled:progressAnalysisListVm==null?false:progressAnalysisListVm.rowCount()>=3;
+                        CusButton{text:lt+qsTr("Remove");enabled:progressAnalysisListVm==null?false:progressAnalysisListVm.rowCount()>=3;
                             onClicked:
                             {
                                 progressAnalysisListVm.removeCheckResult(progressAnalysisListView.currentIndex);
@@ -125,12 +127,12 @@ Column {
                         }
                         CusButton
                         {
-                            text:qsTr("Reset");onClicked:
+                            text:lt+qsTr("Reset");onClicked:
                             {
                                 progressAnalysisListVm.reset();progressAnalysisListVmChanged();
                             }
                         }
-                        CusButton{text:qsTr("Switch eye");onClicked:{
+                        CusButton{text:lt+qsTr("Switch eye");onClicked:{
                                 progressAnalysisListVm.switchEye();
                                 console.log(root.progressAnalysisListVm.selectedIndex);
 //                                progressAnalysisListView.currentIndex=root.progressAnalysisListVm.selectedIndex;
@@ -155,17 +157,28 @@ Column {
                         property var staticAnalysisResult: null;    //对象
                         property var staticAnalysisVm: null;
 
-                        height: parent.height; anchors.right: parent.right; width: height*3.5;
-                        property var listModel:ListModel {
-                            ListElement{name:qsTr("Progress baseline");report:0}
-                            ListElement{name:qsTr("Progress analysis");report:1}
-                            ListElement{name:qsTr("Single Progress");report:2}}
-                        property var listModel2:ListModel {
-                            ListElement{name:qsTr("Progress baseline");report:0}}
+                        height: parent.height; anchors.right: parent.right; width: isEng?height*5:height*3.5;
+//                        property var listModel:ListModel {
+//                            ListElement{name:lt+qsTr("Progress baseline");report:0}
+//                            ListElement{name:lt+qsTr("Progress analysis");report:1}
+//                            ListElement{name:lt+qsTr("Single Progress");report:2}}
+//                        property var listModel2:ListModel {
+//                            ListElement{name:lt+qsTr("Progress baseline");report:0}}
+                        property var listModel;
+                        property var listModel2;
+                        Component.onCompleted:
+                        {
+                            listModel.append({name:lt+qsTr("Progress baseline"),report:0});
+                            listModel.append({name:lt+qsTr("Progress analysis"),report:1});
+                            listModel.append({name:lt+qsTr("Single Progress"),report:2});
+                            listModel2.append({name:lt+qsTr("Progress baseline"),report:0});
+                        }
+
+
                         enabled:progressAnalysisListVm==null?false: progressAnalysisListVm.rowCount()>1;
                         comboBox.model:progressAnalysisListVm.selectedIndex>1?listModel:listModel2;
                         popDirectionDown: false;complexType: true;
-                        button.text: qsTr("Progress analysis");
+                        button.text: lt+qsTr("Progress analysis");
                         button.onClicked:
                         {
                             progressAnalysisListVm.selectedIndex>1?analysis(1):analysis(0);

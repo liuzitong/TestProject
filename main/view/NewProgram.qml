@@ -23,7 +23,6 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
     signal cancel();
 
 
-
    contentItem:
    Rectangle{
         id: idContent; color: "#60606060";implicitWidth: idPopup.width; implicitHeight: idPopup.height;
@@ -49,40 +48,40 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                         context.fillStyle = "#D2D2D3"
                         ctx.fill();
                     }
-                    CusText{text:qsTr("Create program"); horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;height: parent.height;anchors.left: parent.left;anchors.leftMargin: 0.5*height;}
+                    CusText{text:lt+qsTr("Create program"); horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;height: parent.height;anchors.left: parent.left;anchors.leftMargin: 0.5*height;}
                 }
                 Item{
                     width: parent.width;height: parent.height-header.height;
                     Item{ anchors.topMargin: parent.height*0.08;anchors.bottomMargin:parent.height*0.08; anchors.leftMargin:parent.height*0.12; anchors.rightMargin:parent.height*0.12;anchors.fill: parent;
                         Column{anchors.fill: parent;spacing:parent.height*(1-0.12*5)/4;
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
-                                CusText{text:qsTr("Name")+":";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                CusText{text:lt+qsTr("Name")+":";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                 LineEdit{id:nameEdit;text:"";width: parent.width*0.7;height:parent.height;}
                             }
 
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
-                                CusText{text:qsTr("Range")+":";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                CusText{text:lt+qsTr("Range")+":";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                 NumberLineEdit{id:rangeEdit;width: parent.width*0.7;height:parent.height;step:1;min:5;max:90;value:30;}
                             }
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
-                                CusText{text:qsTr("Type")+":";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                CusText{text:lt+qsTr("Type")+":";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                 CusComboBox{
                                     id:typeComboBox;
                                     width: parent.width*0.7;
                                     height:parent.height;
                                     imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
-                                    model: [qsTr("Threshold") ,qsTr("Screening"),qsTr("Dynamic") ];
+                                    model: [lt+qsTr("Threshold") ,lt+qsTr("Screening"),lt+qsTr("Dynamic") ];
                                     onCurrentIndexChanged: type=currentIndex;
                                 }
                             }
                             Row{width:parent.width;height: parent.height*0.12;spacing: width*0.05;
-                                CusText{text:qsTr("Strategy")+":";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
+                                CusText{text:lt+qsTr("Strategy")+":";font.pointSize: fontPointSize; horizontalAlignment: Text.AlignLeft;width: parent.width*0.25}
                                 CusComboBox{
                                     id:stratComboBox
                                     property var strategies:
-                                        [[qsTr("Full threshold"),qsTr("Smart interactive"),qsTr("Fast interactive")],
-                                        [qsTr("One stage"),qsTr("Two stages"),qsTr("Quantify defects"),qsTr("Single stimulus")],
-                                        [qsTr("Standard"),qsTr("Blind area"),qsTr("Dark area"),qsTr("Straight line")]];
+                                        [[lt+qsTr("Full threshold"),lt+qsTr("Smart interactive"),lt+qsTr("Fast interactive")],
+                                        [lt+qsTr("One stage"),lt+qsTr("Two stages"),lt+qsTr("Quantify defects"),lt+qsTr("Single stimulus")],
+                                        [lt+qsTr("Standard"),lt+qsTr("Blind area"),lt+qsTr("Dark area"),lt+qsTr("Straight line")]];
                                     width: parent.width*0.7;
                                     height:parent.height;
                                     imageSrc: "qrc:/Pics/base-svg/btn_drop_down.svg";
@@ -94,8 +93,8 @@ ModalPopupDialog /*Rectangle*/{   // this is the wrapped Popup element in ui_qml
                             Item{
                                 id:okCancel
                                 width:parent.width;height: parent.height*0.12 ;
-                                CusButton{ text:qsTr("OK"); anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;onClicked: {idPopup.close();ok()}}
-                                CusButton{ text:qsTr("Cancel"); anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter;onClicked: {idPopup.close();}}
+                                CusButton{ text:lt+qsTr("OK"); anchors.verticalCenter: parent.verticalCenter;anchors.left: parent.left;onClicked: {idPopup.close();ok()}}
+                                CusButton{ text:lt+qsTr("Cancel"); anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter;onClicked: {idPopup.close();}}
                             }
                         }
                     }
