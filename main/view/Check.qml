@@ -173,7 +173,7 @@ Item {id:root; width: 1366;height: 691
                                                 }
                                             }
                                             Row{width:parent.width;height: parent.height*1/3;spacing: width*0.05;
-                                                CusText{text:lt+qsTr("Check time"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
+                                                CusText{text:lt+qsTr("Check timespan"); horizontalAlignment: Text.AlignLeft;width: parent.width*0.45;font.pointSize: fontPointSize;}
                                                 LineEdit{
                                                     property int timeSpan: currentCheckResult===null?0:currentCheckResult.resultData.testTimespan;
                                                     text:Math.floor(timeSpan/60)+":"+timeSpan%60;width: parent.width*0.5;textInput.readOnly: true;}

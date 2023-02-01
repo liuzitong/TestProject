@@ -1,4 +1,4 @@
-#include "PatientVm.h"
+﻿#include "PatientVm.h"
 #include "perimeter/main/database/patient.h"
 #include "perimeter/base/common/perimeter_def.h"
 #include "perimeter/base/common/perimeter_memcntr.hxx"

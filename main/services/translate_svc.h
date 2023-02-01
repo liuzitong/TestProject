@@ -15,6 +15,7 @@ class TranslateController : public QObject
 
 public:
     static QString getTranlatedName(QString name);
+    static bool isRuntimeLangEng();
 //    enum class Language
 //    {
 //        English = 1,

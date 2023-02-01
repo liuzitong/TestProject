@@ -16,6 +16,7 @@ Rectangle {
     property var progressAnalysisResult: null;
     property int fontPointSize: CommonSettings.fontPointSize;
     property int textHeight:CommonSettings.textHeight;
+    property alias diagnosis: diagnosis.text;
     width: 1366;
     height: 660;
     signal refresh();
@@ -28,17 +29,18 @@ Rectangle {
         anchors.fill: parent;anchors.leftMargin: parent.width*0.04;anchors.rightMargin: parent.width*0.03;anchors.topMargin: parent.height*0.04;anchors.bottomMargin: parent.height*0.04;
         spacing: height*0.02
         Row{
-            width: parent.width;height: parent.height*0.04;spacing: parent.width*0.85*0.02;
-            Item{height: textHeight;width: parent.width*0.85*0.2;}
-            Item{height: textHeight;width: parent.parent.height*0.96*0.32;CusText{anchors.fill: parent;text:"灰度图"  ;}}
-            Item{height: textHeight;width: parent.parent.height*0.96*0.32;CusText{anchors.fill: parent;text:"阈值(DB)";}}
-            Item{height: textHeight;width: parent.parent.height*0.96*0.32;CusText{anchors.fill: parent;text:"进展差值";}}
-            Item{height: textHeight;width: parent.parent.height*0.96*0.32;CusText{anchors.fill: parent;text:"进展分析";}}
+            width: parent.width;height: parent.height*0.04;spacing: parent.width*0.82*0.02;
+            Item{height: textHeight;width: parent.width*0.82*0.2;}
+            Item{height: textHeight;width: parent.parent.height*0.96*0.32;CusText{anchors.fill: parent;text:lt+qsTr("Gray tone");}}
+            Item{height: textHeight;width: parent.parent.height*0.96*0.32;CusText{anchors.fill: parent;text:lt+qsTr("Threshold")+"(DB)";}}
+            Item{height: textHeight;width: parent.parent.height*0.96*0.32;CusText{anchors.fill: parent;text:lt+qsTr("Progress difference");}}
+            Item{height: textHeight;width: parent.parent.height*0.96*0.32;CusText{anchors.fill: parent;text:lt+qsTr("Progress analysis");}}
+
         }
         Row{
             width: parent.width;height: parent.height*0.96;
             Column{
-                width: parent.width*0.85;height: parent.height;spacing: parent.height*0.02;
+                width: parent.width*0.82;height: parent.height;spacing: parent.height*0.02;
                 Repeater{
                     model: if(progressAnalysisListVm.selectedIndex>=4) return [{index_list:-2,index_progress:0},{index_list:-1,index_progress:1},{index_list:0,index_progress:2}];
                            else if(progressAnalysisListVm.selectedIndex===3) return [{index_list:-1,index_progress:0},{index_list:0,index_progress:1}];
@@ -82,14 +84,15 @@ Rectangle {
             }
             Column
             {
-                width: parent.width*0.15;
+                width: parent.width*0.18;
                 height: parent.height;spacing:textHeight;
                 CusText{text:lt+qsTr("MD")+":"+((progressAnalysisListVm.getData(0,"md")+progressAnalysisListVm.getData(1,"md"))/2).toFixed(2); horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
-                CusText{text:lt+qsTr("BaseLine dates")+":"+Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd")+"  "+Qt.formatDateTime(progressAnalysisListVm==null?"":progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
+                CusText{text:lt+qsTr("BaseLine dates")+":"+Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd")+"  "+Qt.formatDateTime(progressAnalysisListVm==null?"":progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd");horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
+//                CusText{text:Qt.formatDateTime(progressAnalysisListVm.getData(0,"dateTime"),"yyyy/MM/dd")+"  "+Qt.formatDateTime(progressAnalysisListVm==null?"":progressAnalysisListVm.getData(1,"dateTime"),"yyyy/MM/dd"); horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                 Row{
                     width: parent.width;height: parent.height*0.4
                     Column{
-                        height: parent.height;  width:parent.width/2;spacing:height*0.08;
+                        height: parent.height;  width:parent.width*0.3;spacing:height*0.08;
                         Repeater{
                             anchors.fill: parent;
                             model: [{image:"qrc:/grays/PE1.bmp",pe:"<5%"},{image:"qrc:/grays/PE2.bmp",pe:"<2%"},{image:"qrc:/grays/PE3.bmp",pe:"<1%"},{image:"qrc:/grays/PE4.bmp",pe:"<0.5%"}]
@@ -101,7 +104,7 @@ Rectangle {
                         }
                     }
                     Column{
-                        height: parent.height;  width:parent.width/2;spacing:textHeight*0.5;
+                        height: parent.height;  width:parent.width*0.7;spacing:textHeight*0.5;
                         Repeater{
                             anchors.fill: parent;
                             model: [{image:"qrc:/grays/GPA1.bmp",progress:"<5% ("+qsTr("Deterioarted")+")"},{image:"qrc:/grays/GPA2.bmp",progress:"<5% (2"+qsTr("Consecutiveness")+")"},{image:"qrc:/grays/GPA3.bmp",progress:"<5% (3"+qsTr("Consecutiveness")+")"},{image:"qrc:/grays/GPA4.bmp",progress:lt+qsTr("Out of range")}]
@@ -112,7 +115,21 @@ Rectangle {
                             }
                         }
                     }
+                }
 
+                Column{
+                    width:parent.width;height: parent.height*0.3;spacing: textHeight*0.3;
+                    CusText{text:lt+qsTr("Diagnosis")+":"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
+                    Rectangle{ width:parent.width;height: parent.height*0.7;radius: 5;border.color: "black";smooth: false;
+                        TextInput
+                        {
+                            id:diagnosis;anchors.fill: parent;anchors.margins: 3;
+                            width:parent.width*1.0;height: parent.height*0.70;
+                            selectionColor: "blue";selectByMouse: true;
+                            font.pointSize: fontPointSize;font.family: "Consolas";
+                            wrapMode: Text.WrapAnywhere;renderType: Text.NativeRendering;
+                        }
+                    }
                 }
             }
         }

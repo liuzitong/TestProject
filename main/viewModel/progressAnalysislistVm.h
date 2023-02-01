@@ -64,15 +64,14 @@ public:
     Q_INVOKABLE QObject* getProgressBaseLinePreview(int imageSize);
     Q_INVOKABLE QVariantList getThreeFollowUpsPreview(int index,int imageSize);
     Q_INVOKABLE QVariant getSingleProgressPreview(int index,int imageSize);
-    Q_INVOKABLE void getProgressBaseLineReport();
-    Q_INVOKABLE void getThreeFollowUpsReport(int index);
-    Q_INVOKABLE void getSingleProgressReport(int index);
+    Q_INVOKABLE void getProgressBaseLineReport(QString diagnosis);
+    Q_INVOKABLE void getThreeFollowUpsReport(int index,QString diagnosis);
+    Q_INVOKABLE void getSingleProgressReport(int index,QString diagnosis);
     Q_INVOKABLE QVariant getData(int index,QString name);
 
     Q_INVOKABLE void removeCheckResult(int index);
     Q_INVOKABLE void switchEye();
     Q_INVOKABLE void reset();
-    Q_INVOKABLE void showReport(int report);
 
 
 private:

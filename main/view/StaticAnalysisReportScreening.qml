@@ -40,7 +40,8 @@ Item {
         {
             anchors.fill: parent;
             model:[
-                {img:"qrc:/grays/SE0.bmp",text:":"+qsTr("Seen")+":"+(analysisResult.dotSeen+analysisResult.dotWeakSeen)+"/"+currentProgram.data.dots.length},
+                {img:"qrc:/grays/SE0.bmp",text:":"+qsTr("Seen")+":"+analysisResult.dotSeen+"/"+currentProgram.data.dots.length},
+                {img:"qrc:/grays/SE1.bmp",text:":"+qsTr("Week seen")+":"+analysisResult.dotWeakSeen+"/"+currentProgram.data.dots.length},
                 {img:"qrc:/grays/SE2.bmp",text:":"+qsTr("Unseen")+":"+analysisResult.dotUnseen+"/"+currentProgram.data.dots.length},
                 {img:"qrc:/grays/SE3.bmp",text:":"+qsTr("Blind spot")}
             ]

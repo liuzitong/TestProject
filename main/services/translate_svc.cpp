@@ -41,13 +41,15 @@ QString Perimeter::TranslateController::getTranlatedName(QString name)
     }
     else
     {
-        auto appCtrl=static_cast<AppCtrl*>(QxPack::IcUiQmlApi::appCtrl());
-        auto setting=static_cast<Settings*>(appCtrl->getSettings());
-        auto lang=setting->getLanguage();
-        return setting->getIsRuntimeLangEng()?splitNames[0]:splitNames[1];
-//        if(lang=="Chinese"||(lang=="Default"&&QLocale::system().language()==QLocale::Chinese))
-//            return splitNames[1];
-//        else
-//            return splitNames[0];
+        return isRuntimeLangEng()?splitNames[0]:splitNames[1];
     }
+}
+
+
+bool Perimeter::TranslateController::isRuntimeLangEng()
+{
+    auto appCtrl=static_cast<AppCtrl*>(QxPack::IcUiQmlApi::appCtrl());
+    auto setting=static_cast<Settings*>(appCtrl->getSettings());
+    auto lang=setting->getLanguage();
+    return setting->getIsRuntimeLangEng();
 }

@@ -176,7 +176,7 @@ QVariant Perimeter::ProgressAnalysisListVm::getSingleProgressPreview(int index,i
     return QVariant(progress.last());
 }
 
-void ProgressAnalysisListVm::getProgressBaseLineReport()
+void ProgressAnalysisListVm::getProgressBaseLineReport(QString diagnosis)
 {
     auto analysisSvc=AnalysisSvc::getSingleton();
     QVector<float> mdList;
@@ -228,31 +228,34 @@ void ProgressAnalysisListVm::getProgressBaseLineReport()
     analysisSvc->drawBaseLine(mdList,startYear,endYear,months,img,true);img.save(m_reportFolder+"baseLine.bmp");
     analysisSvc->BaseLineAnalysis(mdList,months,avgMd,progressSpeedBase,progressSpeedDeviation,slopeType);
 
-
     auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
+    if(!TranslateController::isRuntimeLangEng())  reportEngine->setReportLanguage(QLocale::Chinese);
     reportEngine->loadFromFile("./reports/baseLine.lrxml");
     auto manager=reportEngine->dataManager();
     manager->clearUserVariables();
     manager->setReportVariable("hospitalName",QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("hospitalName").toString());
     manager->setReportVariable("name",m_patient.m_name);
     manager->setReportVariable("birthDate",m_patient.m_birthDate.toString("yyyy/MM/dd"));
-    manager->setReportVariable("sex", int(m_patient.m_sex)==0?"male":"female");
+    manager->setReportVariable("sex", int(m_patient.m_sex)==0?tr("Male"):tr("Female"));
     manager->setReportVariable("ID", m_patient.m_patientId);
     manager->setReportVariable("age", m_patient.m_age);
     manager->setReportVariable("OS_OD",m_OS_OD==0?"OS":"OD");
 
     for(int i=0;i<2;i++)
     {
-        QString GHTstr[]={"Out of limits","Low sensitivity","Border of limits","Within normal limits"};
-        manager->setReportVariable("Date"+QString::number(i),"Date:"+m_currentDataList[i].dateTime.date().toString("yyyy/MM/dd"));
-        manager->setReportVariable("programName"+QString::number(i),"Program:"+m_currentDataList[i].program);
-        manager->setReportVariable("GHT"+QString::number(i),"GHT:"+GHTstr[m_currentDataList[i].GHT]);
-        manager->setReportVariable("centerDotCheck"+QString::number(i),QString("Fovea: ")+(m_currentDataList[i].centerDotCheck?"ON":"OFF"));
-        manager->setReportVariable("MD"+QString::number(i),QString("MD: ")+QString::number(m_currentDataList[i].md,'f',2)+(m_currentDataList[i].p_md-5<=FLT_EPSILON?" (P<"+QString::number(m_currentDataList[i].p_md)+"%)":""));
-        manager->setReportVariable("PSD"+QString::number(i),QString("PSD: ")+QString::number(m_currentDataList[i].psd,'f',2)+(m_currentDataList[i].p_psd-5<=FLT_EPSILON?" (P<"+QString::number(m_currentDataList[i].p_psd)+"%)":""));
-        manager->setReportVariable("fixationLosses"+QString::number(i),"FixationLossRate: "+QString::number(m_currentDataList[i].fixationLostCount)+"/"+QString::number(m_currentDataList[i].fixationLostTestCount));
-        manager->setReportVariable("falsePositiveRate"+QString::number(i),"FalsePositiveRate: "+QString::number(qRound(m_currentDataList[i].falsePositiveRate*100))+"%");
-        manager->setReportVariable("falseNegativeRate"+QString::number(i),"FalseNegativeRate: "+QString::number(qRound(m_currentDataList[i].falseNegativeRate*100))+"%");
+        QString GHTstr[]={tr("Out of limits"),tr("Low sensitivity"),tr("Border of limits"),tr("Within normal limits")};
+        manager->setReportVariable("Date"+QString::number(i),QString(tr("Check date"))+": "+m_currentDataList[i].dateTime.date().toString("yyyy/MM/dd"));
+        manager->setReportVariable("programName"+QString::number(i),QString(tr("Program name"))+": "+m_currentDataList[i].program);
+        manager->setReportVariable("GHT"+QString::number(i),tr("GHT")+QString(": ")+GHTstr[m_currentDataList[i].GHT]);
+
+        manager->setReportVariable("centerDotCheck"+QString::number(i),tr("Center dot check")+QString(": ")+
+                                   (m_currentDataList[i].centerDotCheck?tr("On"):tr("Off")));
+
+        manager->setReportVariable("MD"+QString::number(i),tr("MD")+QString(": ")+QString::number(m_currentDataList[i].md,'f',2)+(m_currentDataList[i].p_md-5<=FLT_EPSILON?" (P<"+QString::number(m_currentDataList[i].p_md)+"%)":""));
+        manager->setReportVariable("PSD"+QString::number(i),tr("PSD")+QString(": ")+QString::number(m_currentDataList[i].psd,'f',2)+(m_currentDataList[i].p_psd-5<=FLT_EPSILON?" (P<"+QString::number(m_currentDataList[i].p_psd)+"%)":""));
+        manager->setReportVariable("fixationLosses"+QString::number(i),tr("Fixation losses")+QString(": ")+QString::number(m_currentDataList[i].fixationLostCount)+"/"+QString::number(m_currentDataList[i].fixationLostTestCount));
+        manager->setReportVariable("falsePositiveRate"+QString::number(i),tr("False positive rate")+QString(": ")+QString::number(qRound(m_currentDataList[i].falsePositiveRate*100))+"%");
+        manager->setReportVariable("falseNegativeRate"+QString::number(i),tr("False negative rate")+QString(": ")+QString::number(qRound(m_currentDataList[i].falseNegativeRate*100))+"%");
 
         manager->setReportVariable("baseLine_gray"+QString::number(i),m_reportFolder+"baseLine_gray"+QString::number(i)+".bmp");
         manager->setReportVariable("baseLine_DB"+QString::number(i),m_reportFolder+"baseLine_dBDiagram"+QString::number(i)+".bmp");
@@ -262,15 +265,14 @@ void ProgressAnalysisListVm::getProgressBaseLineReport()
 
     manager->setReportVariable("baseLine","./reportImage/baseLine.bmp");
 
-    manager->setReportVariable("ProgressSpeed","ProgressSpeed: "+QString::number(progressSpeedBase,'f',2)+"±"+QString::number(progressSpeedDeviation,'f',2));
-    QString slopeStr[]={"Slope insignificant","Slope significant"};
-    manager->setReportVariable("Slope","SlopeStatus: "+slopeStr[slopeType]);
-    manager->setReportVariable("AvgMD","AverageMD: "+QString::number(avgMd));
+    manager->setReportVariable("ProgressSpeed",QString(tr("Progress speed"))+": "+QString::number(progressSpeedBase,'f',2)+"±"+QString::number(progressSpeedDeviation,'f',2));
+    QString slopeStr[]={tr("Slope insignificant"),tr("Slope significant")};
+    manager->setReportVariable("Slope",QString(tr("Slope status"))+": "+slopeStr[slopeType]);
+    manager->setReportVariable("AvgMD",QString(tr("Average MD"))+": "+QString::number(avgMd,'f',2));
 
-    manager->setReportVariable("DoctorSign","DoctorSign: ");
-//    manager->setReportVariable("DiagnosisContent", m_checkResult.m_diagnosis);
-    manager->setReportVariable("deviceInfo","Device Info: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
-    manager->setReportVariable("version", "Version: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
+    manager->setReportVariable("DiagnosisContent",diagnosis);
+    manager->setReportVariable("deviceInfo",tr("Device info")+": "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
+    manager->setReportVariable("version", tr("Version")+": "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
 
 
     reportEngine->setShowProgressDialog(true);
@@ -279,7 +281,7 @@ void ProgressAnalysisListVm::getProgressBaseLineReport()
 
 }
 
-void Perimeter::ProgressAnalysisListVm::getThreeFollowUpsReport(int index)
+void Perimeter::ProgressAnalysisListVm::getThreeFollowUpsReport(int index,QString diagnosis)
 {
     auto analysisSvc=AnalysisSvc::getSingleton();
     QVector<QVector<int>> val,mPE,mDev,progressVal,progressPicVal;
@@ -319,13 +321,14 @@ void Perimeter::ProgressAnalysisListVm::getThreeFollowUpsReport(int index)
 
 
     auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
+    if(!TranslateController::isRuntimeLangEng())  reportEngine->setReportLanguage(QLocale::Chinese);
     reportEngine->loadFromFile("./reports/threeFollowUps.lrxml");
     auto manager=reportEngine->dataManager();
     manager->clearUserVariables();
     manager->setReportVariable("hospitalName",QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("hospitalName").toString());
     manager->setReportVariable("name",m_patient.m_name);
     manager->setReportVariable("birthDate",m_patient.m_birthDate.toString("yyyy/MM/dd"));
-    manager->setReportVariable("sex", int(m_patient.m_sex)==0?"male":"female");
+    manager->setReportVariable("sex", int(m_patient.m_sex)==0?tr("Male"):tr("Female"));
     manager->setReportVariable("ID", m_patient.m_patientId);
     manager->setReportVariable("age", m_patient.m_age);
     manager->setReportVariable("OS_OD",m_OS_OD==0?"OS":"OD");
@@ -334,31 +337,31 @@ void Perimeter::ProgressAnalysisListVm::getThreeFollowUpsReport(int index)
     {
         int dataIndex=qMax(index-2,2)+i;
         auto data=m_currentDataList[dataIndex];
-        QString GHTstr[]={"Out of limits","Low sensitivity","Border of limits","Within normal limits"};
-        manager->setReportVariable("Date"+QString::number(i),"Date:"+data.dateTime.date().toString("yyyy/MM/dd"));
-        manager->setReportVariable("programName"+QString::number(i),"Program:"+data.program);
-        manager->setReportVariable("GHT"+QString::number(i),"GHT:"+GHTstr[data.GHT]);
-        manager->setReportVariable("centerDotCheck"+QString::number(i),QString("Fovea: ")+(data.centerDotCheck?"ON":"OFF"));
-        manager->setReportVariable("MD"+QString::number(i),QString("MD: ")+QString::number(data.md,'f',2)+(data.p_md-5<=FLT_EPSILON?" (P<"+QString::number(data.p_md)+"%)":""));
-        manager->setReportVariable("PSD"+QString::number(i),QString("PSD: ")+QString::number(data.psd,'f',2)+(data.p_psd-5<=FLT_EPSILON?" (P<"+QString::number(data.p_psd)+"%)":""));
-        QString progressStr[]={"no progress","possible progress","very possible progress"};
-        manager->setReportVariable("progress"+QString::number(i),QString("progress: ")+progressStr[progress[i]]);
-        manager->setReportVariable("fixationLosses"+QString::number(i),"FixationLossRate: "+QString::number(data.fixationLostCount)+"/"+QString::number(data.fixationLostTestCount));
-        manager->setReportVariable("falsePositiveRate"+QString::number(i),"FalsePositiveRate: "+QString::number(qRound(data.falsePositiveRate*100))+"%");
-        manager->setReportVariable("falseNegativeRate"+QString::number(i),"FalseNegativeRate: "+QString::number(qRound(data.falseNegativeRate*100))+"%");
+        QString GHTstr[]={tr("Out of limits"),tr("Low sensitivity"),tr("Border of limits"),tr("Within normal limits")};
+        manager->setReportVariable("Date"+QString::number(i),QString(tr("Check date"))+": "+data.dateTime.date().toString("yyyy/MM/dd"));
+        manager->setReportVariable("ProgramName"+QString::number(i),QString(tr("Program name"))+": "+data.program);
+        manager->setReportVariable("GHT"+QString::number(i),tr("GHT")+QString(": ")+GHTstr[data.GHT]);
+        manager->setReportVariable("centerDotCheck"+QString::number(i),tr("Center dot check")+QString(": ")
+                                   +(data.centerDotCheck?tr("On"):tr("Off")));
+        manager->setReportVariable("MD"+QString::number(i),tr("MD")+QString(": ")+QString::number(data.md,'f',2)+(data.p_md-5<=FLT_EPSILON?" (P<"+QString::number(data.p_md)+"%)":""));
+        manager->setReportVariable("PSD"+QString::number(i),tr("PSD")+QString(": ")+QString::number(data.psd,'f',2)+(data.p_psd-5<=FLT_EPSILON?" (P<"+QString::number(data.p_psd)+"%)":""));
+        QString progressStr[]={tr("No progress"),tr("Possible progress"),tr("Very possible progress")};
+        manager->setReportVariable("progress"+QString::number(i),QString(tr("Progress"))+": "+progressStr[progress[i]]);
+        manager->setReportVariable("fixationLosses"+QString::number(i),tr("Fixation losses")+QString(": ")+QString::number(data.fixationLostCount)+"/"+QString::number(data.fixationLostTestCount));
+        manager->setReportVariable("falsePositiveRate"+QString::number(i),tr("False positive rate")+QString(": ")+QString::number(qRound(data.falsePositiveRate*100))+"%");
+        manager->setReportVariable("falseNegativeRate"+QString::number(i),tr("False negative rate")+QString(": ")+QString::number(qRound(data.falseNegativeRate*100))+"%");
 
         manager->setReportVariable("threeFollowUps_grey"+QString::number(i),m_reportFolder+"threeFollowUps_grey"+QString::number(i)+".bmp");
         manager->setReportVariable("threeFollowUps_PatternPE"+QString::number(i),m_reportFolder+"threeFollowUps_PatternPE"+QString::number(i)+".bmp");
         manager->setReportVariable("threeFollowUps_progressVal"+QString::number(i),m_reportFolder+"threeFollowUps_progressVal"+QString::number(i)+".bmp");
         manager->setReportVariable("threeFollowUps_progressPic"+QString::number(i),m_reportFolder+"threeFollowUps_progressPic"+QString::number(i)+".bmp");
     }
-    manager->setReportVariable("baseLine_MD","baseLine average MD:"+QString::number((m_currentDataList[0].md+m_currentDataList[1].md)/2,'f',2));
+    manager->setReportVariable("baseLine_MD",QString(tr("BaseLine average MD"))+": "+QString::number((m_currentDataList[0].md+m_currentDataList[1].md)/2,'f',2));
     manager->setReportVariable("baseLine_Dates","   "+m_currentDataList[0].dateTime.date().toString("yyyy/MM/dd")+"   "+m_currentDataList[1].dateTime.date().toString("yyyy/MM/dd"));
 
-    manager->setReportVariable("DoctorSign","DoctorSign: ");
-//    manager->setReportVariable("DiagnosisContent", m_checkResult.m_diagnosis);
-    manager->setReportVariable("deviceInfo","Device Info: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
-    manager->setReportVariable("version", "Version: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
+    manager->setReportVariable("DiagnosisContent",diagnosis);
+    manager->setReportVariable("deviceInfo",tr("Device info")+": "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
+    manager->setReportVariable("version",tr("Version")+": "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
 
 
     reportEngine->setShowProgressDialog(true);
@@ -366,7 +369,7 @@ void Perimeter::ProgressAnalysisListVm::getThreeFollowUpsReport(int index)
     reportEngine->previewReport(/*LimeReport::PreviewHint::ShowAllPreviewBars*/);
 }
 
-void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index)
+void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index,QString diagnosis)
 {
     CheckResult_ptr checkResult_ptr(new CheckResult());
     checkResult_ptr->m_id=m_selectedResultId;
@@ -421,7 +424,7 @@ void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index)
 
 
     auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
-//    reportEngine->setReportLanguage(QLocale::Chinese);
+    if(!TranslateController::isRuntimeLangEng())  reportEngine->setReportLanguage(QLocale::Chinese);
     reportEngine->loadFromFile("./reports/SingleProgress.lrxml");
     auto manager=reportEngine->dataManager();
     manager->clearUserVariables();
@@ -434,43 +437,44 @@ void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index)
     manager->setReportVariable("ID", m_patient.m_patientId);
     manager->setReportVariable("age", m_patient.m_age);
     manager->setReportVariable("checkTime", m_currentDataList[index].dateTime.time().toString("H:mm:ss"));
-    manager->setReportVariable("sex", int(m_patient.m_sex)==0?"male":"female");
+    manager->setReportVariable("sex", int(m_patient.m_sex)==0?tr("Male"):tr("Female"));
     auto rx=m_patient.m_rx;
-    if(m_OS_OD)
+    if(!m_OS_OD)
     {
-        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx.rx1_l,'f',2)+"DS "+QString::number(rx.rx2_l,'f',2)+"DC "+QString::number(rx.rx3_l,'f',2)+"X");
-        manager->setReportVariable("visualAcuity","visualAcuity:"+QString::number(rx.visual_l,'f',2));
+        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx.rx1_l,'f',2)+" DS:"+QString::number(rx.rx2_l,'f',2)+" DC:"+QString::number(rx.rx3_l,'f',2));
+        manager->setReportVariable("visualAcuity",tr("Visual acuity")+QString(":")+QString::number(rx.visual_l,'f',2));
     }
     else
     {
-        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx.rx1_r,'f',2)+"DS "+QString::number(rx.rx2_r,'f',2)+"DC "+QString::number(rx.rx3_r,'f',2)+"X");
-        manager->setReportVariable("visualAcuity","visualAcuity:"+QString::number(rx.visual_r,'f',2));
+        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx.rx1_r,'f',2)+" DS:"+QString::number(rx.rx2_r,'f',2)+" DC:"+QString::number(rx.rx3_r,'f',2));
+        manager->setReportVariable("visualAcuity",tr("Visual acuity")+QString(":")+QString::number(rx.visual_r,'f',2));
     }
-    manager->setReportVariable("pupilDiameter","pupilDiameter:"+QString::number(checkResult.m_data.pupilDiameter,'f',2));
+    manager->setReportVariable("pupilDiameter",tr("Pupil diameter")+QString(":")+QString::number(checkResult.m_data.pupilDiameter,'f',2));
 
     auto commomParams=checkResult.m_params.commonParams;
-    QString fixationMonitor;switch (int(commomParams.fixationMonitor)) {case 0:fixationMonitor="No Alarm"; break;case 1:fixationMonitor="Only Alarm";break;case 2:fixationMonitor="Pause And Alarm";break;}
-    QString fixationTarget;switch (int(commomParams.fixationTarget)){case 0:fixationTarget="Center dot";break;case 1:fixationTarget="Small Diamond";break;case 2:fixationTarget="Big Diamond";break;case 3:fixationTarget="Bottom dot";break;}
-    manager->setReportVariable("fixationMonitor","Fixation Monitor: "+fixationMonitor);
-    manager->setReportVariable("fixationTarget","Fixation Target: "+fixationTarget);
+    QString fixationMonitor;switch (int(commomParams.fixationMonitor)) {case 0:fixationMonitor=tr("No alarm"); break;case 1:fixationMonitor=tr("Only alarm");break;case 2:fixationMonitor=tr("Alarm and pause");break;}
+    QString fixationTarget;switch (int(commomParams.fixationTarget)){case 0:fixationTarget=tr("Center dot");break;case 1:fixationTarget=tr("Small diamond");break;case 2:fixationTarget=tr("Big diamond");break;case 3:fixationTarget=tr("Bottom dot");break;}
+    manager->setReportVariable("fixationMonitor",tr("Eye move alarm mode")+QString(": ")+fixationMonitor);
+    manager->setReportVariable("fixationTarget",tr("Fixation target")+QString(": ")+fixationTarget);
     auto resultData=checkResult.m_data;
-    manager->setReportVariable("fixationLosses","Fixation Losses: "+QString::number(resultData.fixationLostCount)+"/"+QString::number(resultData.fixationLostTestCount));
-    manager->setReportVariable("falsePositiveRate","False POS Errors: "+QString::number(qRound(float(resultData.falsePositiveCount)/resultData.falsePositiveTestCount*100))+"%");
-    manager->setReportVariable("falseNegativeRate","False NEG Errors: "+QString::number(qRound(float(resultData.falseNegativeCount)/resultData.falseNegativeTestCount*100))+"%");
+    manager->setReportVariable("fixationLosses",tr("Fixation losses")+QString(": ")+QString::number(resultData.fixationLostCount)+"/"+QString::number(resultData.fixationLostTestCount));
+    manager->setReportVariable("falsePositiveRate",tr("False positive rate")+QString(": ")+QString::number(qRound(float(resultData.falsePositiveCount)/resultData.falsePositiveTestCount*100))+"%");
+    manager->setReportVariable("falseNegativeRate",tr("False negative rate")+QString(": ")+QString::number(qRound(float(resultData.falseNegativeCount)/resultData.falseNegativeTestCount*100))+"%");
     QTime time;time.setHMS(0,0,0);time=time.addSecs(resultData.testTimespan);
-    manager->setReportVariable("testTime","Test Duration: "+time.toString("mm:ss"));
-    manager->setReportVariable("centerDotCheck",QString("Fovea: ")+(commomParams.centerDotCheck?"ON":"OFF"));
+    manager->setReportVariable("checkTimespan",tr("Check timespan")+QString(": ")+time.toString("mm:ss"));
+    manager->setReportVariable("centerDotCheck",tr("Center dot check")+QString(": ")
+                               +(commomParams.centerDotCheck?tr("On"):tr("Off")));
     QString cursorSize;switch(int(commomParams.cursorSize)){case 0:cursorSize="I";break;case 1:cursorSize="II";break;case 2:cursorSize="III";break;case 3:cursorSize="IV";break;case 4:cursorSize="V";break;}
-    QString cursorColor;switch(int(commomParams.cursorColor)){case 0:cursorColor="White";break;case 1:cursorColor="Red";break;case 2:cursorColor="Blue";break;}
-    manager->setReportVariable("stimCursor","Stimulus: "+cursorSize+","+cursorColor);
-    manager->setReportVariable("backgroundColor","Background: "+QString(int(commomParams.backGroundColor)==0?"31.5":"315")+" ASB");
-    QString strategy;switch(int(commomParams.strategy)){case 0:strategy="fullThreshold";break;case 1:strategy="smartInteractive";break;case 2:strategy="fastInteractive";break;case 3:strategy="oneStage";break;case 4:strategy="twoStages";break;case 5:strategy="quantifyDefects";break;case 6:strategy="singleStimulation";break;}
-    manager->setReportVariable("Strategy","Strategy: "+strategy);
-    manager->setReportVariable("VFI","VFI: "+QString::number(qRound(VFI*100))+"%");
-    QString GHTstr[]={"Out of limits","Low sensitivity","Border of limits","Within normal limits"};
-    manager->setReportVariable("GHT","GHT: "+GHTstr[GHT]);
-    manager->setReportVariable("MD",QString("MD: ")+QString::number(md,'f',2)+(p_md-5<=FLT_EPSILON?" (P<"+QString::number(p_md)+"%)":""));
-    manager->setReportVariable("PSD",QString("PSD: ")+QString::number(psd,'f',2)+(p_psd-5<=FLT_EPSILON?" (P<"+QString::number(p_psd)+"%)":""));
+    QString cursorColor;switch(int(commomParams.cursorColor)){case 0:cursorColor=tr("White");break;case 1:cursorColor=tr("Red");break;case 2:cursorColor=tr("Blue");break;}
+    manager->setReportVariable("stimCursor",tr("Stimulus cursor")+QString(": ")+cursorSize+","+cursorColor);
+    manager->setReportVariable("backgroundColor",tr("Background color")+QString(": ")+QString(int(commomParams.backGroundColor)==0?"31.5":"315")+" ASB");
+    QString strategy;switch(int(commomParams.strategy)){case 0:strategy=tr("Full threshold");break;case 1:strategy=tr("Smart interactive");break;case 2:strategy=tr("Fast interactive");break;case 3:strategy=tr("One stage");break;case 4:strategy=tr("Two stages");break;case 5:strategy=tr("Quantify defects");break;case 6:strategy=tr("Single stimulation");break;}
+    manager->setReportVariable("Strategy",tr("Strategy")+QString(": ")+strategy);
+    manager->setReportVariable("VFI",QString(tr("VFI"))+": "+QString::number(qRound(VFI*100))+"%");
+    QString GHTstr[]={tr("Out of limits"),tr("Low sensitivity"),tr("Border of limits"),tr("Within normal limits")};
+    manager->setReportVariable("GHT",tr("GHT")+QString(": ")+GHTstr[GHT]);
+    manager->setReportVariable("MD",tr("MD")+QString(": ")+QString::number(md,'f',2)+(p_md-5<=FLT_EPSILON?" (P<"+QString::number(p_md)+"%)":""));
+    manager->setReportVariable("PSD",tr("PSD")+QString(": ")+QString::number(psd,'f',2)+(p_psd-5<=FLT_EPSILON?" (P<"+QString::number(p_psd)+"%)":""));
 
     manager->setReportVariable("DBImagePath",m_reportFolder+"singleProgress_dBDiagram.bmp");
     manager->setReportVariable("GrayImagePath",m_reportFolder+"singleProgress_gray.bmp");
@@ -480,11 +484,15 @@ void Perimeter::ProgressAnalysisListVm::getSingleProgressReport(int index)
     manager->setReportVariable("PatternPEImagePath",m_reportFolder+"singleProgress_PatternPE.bmp");
     manager->setReportVariable("singleProgressPath",m_reportFolder+"singleProgress.bmp");
     manager->setReportVariable("FixationDeviationImagePath",m_reportFolder+"FixationDeviation.bmp");
-    QString progressStr[]={"no progress","possible progress","very possible progress"};
-    manager->setReportVariable("progress",QString("progress: ")+progressStr[progress.last()]);
+    QString progressStr[]={tr("No progress"),tr("Possible progress"),tr("Very possible progress")};
+    manager->setReportVariable("progress",QString(tr("Progress"))+": "+progressStr[progress.last()]);
 
     manager->setReportVariable("baseLine_Dates","   "+m_currentDataList[0].dateTime.date().toString("yyyy/MM/dd")+"   "+m_currentDataList[1].dateTime.date().toString("yyyy/MM/dd"));
     manager->setReportVariable("previous_Dates","   "+m_currentDataList[index-1].dateTime.date().toString("yyyy/MM/dd")+"   "+m_currentDataList[index-2].dateTime.date().toString("yyyy/MM/dd"));
+
+    manager->setReportVariable("DiagnosisContent",diagnosis);
+    manager->setReportVariable("deviceInfo",tr("Device info")+": "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
+    manager->setReportVariable("version",tr("Version")+": "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
 
     reportEngine->setShowProgressDialog(true);
     reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,50);
@@ -518,10 +526,6 @@ void ProgressAnalysisListVm::reset()
     endResetModel();
 }
 
-void ProgressAnalysisListVm::showReport(int report)
-{
-
-}
 
 void ProgressAnalysisListVm::generateDataList()
 {

@@ -17,6 +17,8 @@ Column {
 
     property int report;
 
+
+
     signal refresh();
     signal changePage(var pageName,var params);
 
@@ -88,11 +90,12 @@ Column {
                         anchors.horizontalCenter: parent.horizontalCenter
                         CusButton{text:lt+qsTr("Print");onClicked:
                             {
+                                var diagnosis=content.item.diagnosis
                                 switch (report)
                                 {
-                                case 0:progressAnalysisListVm.getProgressBaseLineReport();return;
-                                case 1:progressAnalysisListVm.getThreeFollowUpsReport(progressAnalysisListVm.selectedIndex);return;
-                                case 2:progressAnalysisListVm.getSingleProgressReport(progressAnalysisListVm.selectedIndex);return;
+                                case 0:progressAnalysisListVm.getProgressBaseLineReport(diagnosis);return;
+                                case 1:progressAnalysisListVm.getThreeFollowUpsReport(progressAnalysisListVm.selectedIndex,diagnosis);return;
+                                case 2:progressAnalysisListVm.getSingleProgressReport(progressAnalysisListVm.selectedIndex,diagnosis);return;
                                 }
                             }
                         }

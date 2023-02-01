@@ -19,8 +19,6 @@ Column {
     signal refresh()
     property int fontPointSize: CommonSettings.fontPointSize;
 
-
-
     onRefresh: {
         if(analysisLobbyListVm!==null) IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::AnalysisLobbyListVm",analysisLobbyListVm);
         analysisLobbyListVm=IcUiQmlApi.appCtrl.objMgr.

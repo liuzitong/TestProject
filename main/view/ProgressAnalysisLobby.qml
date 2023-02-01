@@ -158,25 +158,34 @@ Column {
                         property var staticAnalysisVm: null;
 
                         height: parent.height; anchors.right: parent.right; width: isEng?height*5:height*3.5;
-//                        property var listModel:ListModel {
-//                            ListElement{name:lt+qsTr("Progress baseline");report:0}
-//                            ListElement{name:lt+qsTr("Progress analysis");report:1}
-//                            ListElement{name:lt+qsTr("Single Progress");report:2}}
-//                        property var listModel2:ListModel {
-//                            ListElement{name:lt+qsTr("Progress baseline");report:0}}
-                        property var listModel;
-                        property var listModel2;
-                        Component.onCompleted:
-                        {
-                            listModel.append({name:lt+qsTr("Progress baseline"),report:0});
-                            listModel.append({name:lt+qsTr("Progress analysis"),report:1});
-                            listModel.append({name:lt+qsTr("Single Progress"),report:2});
-                            listModel2.append({name:lt+qsTr("Progress baseline"),report:0});
-                        }
+                        property var listModel:ListModel {
+                            ListElement{name:"Progress baseline";report:0}
+                            ListElement{name:"Progress analysis";report:1}
+                            ListElement{name:"Single Progress";report:2}}
+                        property var listModel2:ListModel {
+                            ListElement{name:"Progress baseline";report:0}}
+
+
+                        property var listModelCN:ListModel {
+                            ListElement{name:"进展基线";report:0}
+                            ListElement{name:"进展分析";report:1}
+                            ListElement{name:"单次进展分析";report:2}}
+                        property var listModel2CN:ListModel {
+                            ListElement{name:"进展基线";report:0}}
+
+//                        property var listModel;
+//                        property var listModel2;
+//                        Component.onCompleted:
+//                        {
+//                            listModel.append({name:lt+qsTr("Progress baseline"),report:0});
+//                            listModel.append({name:lt+qsTr("Progress analysis"),report:1});
+//                            listModel.append({name:lt+qsTr("Single Progress"),report:2});
+//                            listModel2.append({name:lt+qsTr("Progress baseline"),report:0});
+//                        }
 
 
                         enabled:progressAnalysisListVm==null?false: progressAnalysisListVm.rowCount()>1;
-                        comboBox.model:progressAnalysisListVm.selectedIndex>1?listModel:listModel2;
+                        comboBox.model:isEng?progressAnalysisListVm.selectedIndex>1?listModel:listModel2:progressAnalysisListVm.selectedIndex>1?listModelCN:listModel2CN;
                         popDirectionDown: false;complexType: true;
                         button.text: lt+qsTr("Progress analysis");
                         button.onClicked:

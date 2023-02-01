@@ -30,7 +30,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
         Rectangle
         {
         // [HINT] Popup element need implicitWidth & implicitHeight to calc. the right position
-            id: menu; width:idPopup.width*0.5; height: idPopup.height*0.98;color: "#dcdee0";radius: 5;/*width:480; height:480;*/
+            id: menu; width:isEng?idPopup.width*0.5:idPopup.width*0.4; height: idPopup.height*0.98;color: "#dcdee0";radius: 5;/*width:480; height:480;*/
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             border.color: "#7C7C7C";
@@ -57,7 +57,7 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                     Rectangle{
                         id: rectangle
                         height: parent.height*0.07;width:parent.width-2;color: "#D2D2D3";anchors.horizontalCenter: parent.horizontalCenter;
-                        TabBar {id: bar;height: parent.height*0.8;width:parent.width*0.10; anchors.bottom: parent.bottom; anchors.bottomMargin: 0;anchors.left: parent.left; anchors.leftMargin: 0.01*parent.width;spacing: 0;currentIndex: 0;
+                        TabBar {id: bar;height: parent.height*0.8;width:isEng?parent.width*0.17:parent.width*0.12; anchors.bottom: parent.bottom; anchors.bottomMargin: 0;anchors.left: parent.left; anchors.leftMargin: 0.01*parent.width;spacing: 0;currentIndex: 0;
                             Repeater { model:[lt+qsTr("Common params")]
                                 TabButton {width: bar.width;height: parent.height;
                                     Rectangle{anchors.fill: parent;color:parent.checked? "#E3E5E8":"#D2D2D3";
@@ -90,48 +90,48 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                     height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.8;
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:lt+qsTr("Check range"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
-                                        LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.params.Range[1];}
+                                        CusText{text:lt+qsTr("Check range"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.4;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
+                                        LineEdit{width: parent.width*0.5; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.params.Range[1];}
 
 
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:lt+qsTr("Dots count"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
-                                        LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.dots.length;}
+                                        CusText{text:lt+qsTr("Dots count"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.4;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
+                                        LineEdit{width: parent.width*0.5; anchors.right: parent.right;readOnly: true;text:currentProgram===null?0:currentProgram.dots.length;}
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:lt+qsTr("Strategy"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
+                                        CusText{text:lt+qsTr("Strategy"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.4;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                         LineEdit{
                                             property var strats:[lt+qsTr("Standard"),lt+qsTr("Blind area"),lt+qsTr("Dark area"),lt+qsTr("Straight line")];
                                             property int currentIndex:currentProgram===null?0:(currentProgram.type===2?currentProgram.params.strategy:0);
-                                            width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:strats[currentIndex];
+                                            width: parent.width*0.5; anchors.right: parent.right;readOnly: true;text:strats[currentIndex];
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:lt+qsTr("Cursor color"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
+                                        CusText{text:lt+qsTr("Cursor color"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.4;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                         CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:[lt+qsTr("White"),lt+qsTr("Red"),lt+qsTr("Blue")];
+                                            width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("White"),lt+qsTr("Red"),lt+qsTr("Blue")];
                                             currentIndex:currentProgram===null?0:currentProgram.params.cursorColor;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.cursorColor=currentIndex;})}
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:lt+qsTr("Cursor size"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
+                                        CusText{text:lt+qsTr("Cursor size"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.4;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                         CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:["I","II","III","IV","V"];
+                                            width: parent.width*0.5; anchors.right: parent.right;model:["I","II","III","IV","V"];
                                             currentIndex:currentProgram===null?0:currentProgram.params.cursorSize;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.cursorSize=currentIndex;})}
                                         }
                                     }
                                     Item{
                                         width: parent.width; height:parent.parent.rowHeight;
-                                        CusText{text:lt+qsTr("Background color"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
+                                        CusText{text:lt+qsTr("Background color"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.4;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                         CusComboBox{
-                                            width: parent.width*0.6; anchors.right: parent.right;model:[lt+qsTr("White"),lt+qsTr("Yellow")];
+                                            width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("White"),lt+qsTr("Yellow")];
                                             currentIndex:currentProgram===null?0:currentProgram.params.backGroundColor;
                                             Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.backGroundColor=currentIndex;})}
                                         }
@@ -141,49 +141,49 @@ ModalPopupDialog/* Rectangle*/{   // this is the wrapped Popup element in ui_qml
                                    height: parent.height;width: parent.width*0.45;spacing:parent.rowHeight*0.8;
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:lt+qsTr("Fixation target"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
-                                       LineEdit{width: parent.width*0.6; anchors.right: parent.right;readOnly: true;text:lt+qsTr("Center dot")}
+                                       CusText{text:lt+qsTr("Fixation target"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.4;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
+                                       LineEdit{width: parent.width*0.5; anchors.right: parent.right;readOnly: true;text:lt+qsTr("Center dot")}
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:lt+qsTr("Move speed"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
+                                       CusText{text:lt+qsTr("Move speed"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.4;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                        CusComboBox{
-                                           width: parent.width*0.6; anchors.right: parent.right;model:["1°/"+qsTr("sec"),"2°/"+qsTr("sec"),"3°/"+qsTr("sec"),"4°/"+qsTr("sec"),"5°/"+qsTr("sec"),"6°/"+qsTr("sec"),"7°/"+qsTr("sec"),"8°/"+qsTr("sec"),"9°/"+qsTr("sec")];
+                                           width: parent.width*0.5; anchors.right: parent.right;model:["1°/"+qsTr("sec"),"2°/"+qsTr("sec"),"3°/"+qsTr("sec"),"4°/"+qsTr("sec"),"5°/"+qsTr("sec"),"6°/"+qsTr("sec"),"7°/"+qsTr("sec"),"8°/"+qsTr("sec"),"9°/"+qsTr("sec")];
                                            currentIndex:currentProgram===null?0:(currentProgram.params.speed-1);
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.speed=currentIndex+1;})}
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:lt+qsTr("Move brightness"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
+                                       CusText{text:lt+qsTr("Move brightness"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.4;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                        NumberLineEdit{
-                                           width: parent.width*0.6; anchors.right: parent.right;readOnly: false;step:1;max:51;min:0;value:currentProgram===null?0:currentProgram.params.brightness;
+                                           width: parent.width*0.5; anchors.right: parent.right;readOnly: false;step:1;max:51;min:0;value:currentProgram===null?0:currentProgram.params.brightness;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.brightness=value;idPopup.currentProgramChanged.connect(function(){value=currentProgram.params.brightness;});}) }
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:lt+qsTr("Move method"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
+                                       CusText{text:lt+qsTr("Move method"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.4;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                        CusComboBox{
-                                           width: parent.width*0.6; anchors.right: parent.right;model:["4","6","8"];
+                                           width: parent.width*0.5; anchors.right: parent.right;model:["4","6","8"];
                                            currentIndex:currentProgram===null?0:currentProgram.params.dynamicMethod;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.dynamicMethod=currentIndex;})}
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:lt+qsTr("Move distance"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
+                                       CusText{text:lt+qsTr("Move distance"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.4;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                        CusComboBox{
-                                           width: parent.width*0.6; anchors.right: parent.right;model:["5","10","15"];
+                                           width: parent.width*0.5; anchors.right: parent.right;model:["5","10","15"];
                                            currentIndex:currentProgram===null?0:currentProgram.params.dynamicDistance;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.dynamicDistance=currentIndex;})}
                                        }
                                    }
                                    Item{
                                        width: parent.width; height:parent.parent.rowHeight;
-                                       CusText{text:lt+qsTr("Eye move alarm"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.35;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
+                                       CusText{text:lt+qsTr("Eye move alarm"); anchors.left: parent.left; anchors.leftMargin: 0;width: parent.width*0.4;horizontalAlignment: Text.AlignLeft;font.pointSize: fontPointSize;}
                                        CusComboBox{
-                                           width: parent.width*0.6; anchors.right: parent.right;model:[lt+qsTr("No alarm"),lt+qsTr("Only alarm"),lt+qsTr("Alarm and pause")];
+                                           width: parent.width*0.5; anchors.right: parent.right;model:[lt+qsTr("No alarm"),lt+qsTr("Only alarm"),lt+qsTr("Alarm and pause")];
                                            currentIndex:currentProgram===null?0:currentProgram.params.fixationMonitor;
                                            Component.onCompleted: {idPopup.ok.connect(function(){currentProgram.params.fixationMonitor=currentIndex;})}
                                        }

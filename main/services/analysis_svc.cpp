@@ -1002,7 +1002,7 @@ void AnalysisSvc::drawDefectDepth(QVector<int> values, QVector<QPointF> locs, in
         if(values[i]>-4)
         {
             float scale;
-            if(img.width()*minificationFactor<500)
+            if(img.width()*minificationFactor<480)
             {
 //                scale=qFloor(float(m_image.width())/240);
 //                if(scale<1) scale=1;

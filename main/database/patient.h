@@ -1,4 +1,4 @@
-#ifndef Patient_H
+﻿#ifndef Patient_H
 #define Patient_H
 #include "precompiled.h"
 #include <QxOrm_Impl.h>
@@ -32,6 +32,8 @@ public:
     QString m_name;
     sex m_sex;
     QDate m_birthDate;
+//    QString m_baselineDiagnosis;
+//    QString m_threeFollowUpsDiagnosis;
     QString m_rx;
     QDateTime m_lastUpdate;
     CheckResult_List m_checkResultX;

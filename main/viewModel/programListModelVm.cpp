@@ -54,8 +54,8 @@ QVariant ProgramListModelVm::data(const QModelIndex &index, int role) const
     case name:
     {
         auto name = m_list[index.row()]->m_name;
-//        return TranslateController::getTranlatedName(name);
-        return name;
+        return TranslateController::getTranlatedName(name);
+//        return name;
     }
     case category:return m_list[index.row()]->m_category;
 //    case strategy:

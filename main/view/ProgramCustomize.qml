@@ -141,7 +141,7 @@ Item {id:root; width: 1366;height: 691; visible: true;anchors.fill:parent;
                                         }
                                         Component{id:delegateProg;
                                             Rectangle{height: (homeTab.height-1)*1/10+1;width: listView.width;color:"white";border.color: backGroundBorderColor;
-                                                CusText{width: parent.width;text:CusUtils.getTranslatedStr(model.name);font.pointSize: fontPointSize;}
+                                                CusText{width: parent.width;text:/*CusUtils.getTranslatedStr(model.name)*/lt+model.name;font.pointSize: fontPointSize;}
                                                 MouseArea{ anchors.fill: parent;
                                                     onClicked:
                                                     {

@@ -51,10 +51,10 @@ Item
         content.item.analysisVm=analysisVm;
         content.item.refresh();
 
-        if(currentPatient.os_od===0)  //左
-            rx=currentPatient.rx.rx1_l.toFixed(2)+"DS "+currentPatient.rx.rx2_l.toFixed(2)+"DC "+currentPatient.rx.rx3_l.toFixed(2)+"X";
+        if(currentCheckResult.OS_OD===0)  //左
+            rx=currentPatient.rx.rx1_l.toFixed(2)+" DS:"+currentPatient.rx.rx2_l.toFixed(2)+" DC:"+currentPatient.rx.rx3_l.toFixed(2);
         else
-            rx=currentPatient.rx.rx1_r.toFixed(2)+"DS "+currentPatient.rx.rx2_r.toFixed(2)+"DC "+currentPatient.rx.rx3_r.toFixed(2)+"X";
+            rx=currentPatient.rx.rx1_r.toFixed(2)+" DS:"+currentPatient.rx.rx2_r.toFixed(2)+" DC:"+currentPatient.rx.rx3_r.toFixed(2);
     }
 
     Row{
@@ -62,7 +62,7 @@ Item
         Rectangle{width:parent.width*0.75;height: parent.height;color:"white";
             Row{anchors.fill: parent;anchors.leftMargin: parent.width*0.04;anchors.topMargin: parent.height*0.04;anchors.bottomMargin: parent.height*0.04;spacing: width*0.05;
                 Column{ id: column;width: parent.width*0.25;height: parent.height;spacing:parent.height*0.02
-                    CusText{text:currentProgram.name; font.bold: true; horizontalAlignment: Text.AlignLeft;height:parent.height*0.10;font.pointSize: fontPointSize*2;}
+                    CusText{text:lt+currentProgram.name; font.bold: true; horizontalAlignment: Text.AlignLeft;height:parent.height*0.10;font.pointSize: fontPointSize*2;}
                     Column{id:ttt;width:parent.width;height: parent.height*0.25;spacing: textHeight*0.5;
                         Repeater{
                             property var params: currentCheckResult.params.commonParams;
@@ -74,7 +74,7 @@ Item
                             model: [
                                 {name:lt+qsTr("Eye move alarm mode"),param:fixationMonitor[params.fixationMonitor]},
                                 {name:lt+qsTr("Fixation target"),param:fixationTarget[params.fixationTarget]},
-                                {name:lt+qsTr("Fixation loss rate"),param:Math.round(currentCheckResult.resultData.fixationLostCount/currentCheckResult.resultData.fixationLostTestCount*100)+"%"},
+                                {name:lt+qsTr("Fixation loss rate"),param:currentCheckResult.resultData.fixationLostCount+'/'+currentCheckResult.resultData.fixationLostTestCount},
                                 {name:lt+qsTr("False positive rate"),param:Math.round(currentCheckResult.resultData.falsePositiveCount/currentCheckResult.resultData.falsePositiveTestCount*100)+"%"},
                                 {name:lt+qsTr("False negative rate"),param:Math.round(currentCheckResult.resultData.falseNegativeCount/currentCheckResult.resultData.falseNegativeTestCount*100)+"%"},
                                 {name:lt+qsTr("Check time"),param:Math.floor(timeSpan/60)+":"+timeSpan%60},

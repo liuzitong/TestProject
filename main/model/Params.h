@@ -49,7 +49,7 @@ struct StaticParams/*:public QObject*/
         ON_OFF                      centerDotCheck;
         ON_OFF                      shortTermFluctuation;
         FixationTarget              fixationTarget;
-        FixationMonitor             fixationMonitor;
+        FixationMonitor             fixationMonitor;                //即是eye move alarm mode
         ON_OFF                      blindDotTest;
 
         template<class Archive>

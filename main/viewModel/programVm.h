@@ -145,21 +145,23 @@ public:
     long getType(){return long(m_data->m_type);}void setType(int value){m_data->m_type=Type(value);typeChanged();}Q_SIGNAL void typeChanged();
     QString getName(){
         auto name= m_data->m_name;
-        auto splitNames=name.split("@");
-        if(splitNames.count()!=2)
-        {
-            return name;
-        }
-        else
-        {
-            auto appCtrl=static_cast<AppCtrl*>(QxPack::IcUiQmlApi::appCtrl());
-            auto setting=static_cast<Settings*>(appCtrl->getSettings());
-            auto lang=setting->getLanguage();
-            if(lang=="Chinese"||(lang=="Default"&&QLocale::system().language()==QLocale::Chinese))
-                return splitNames[1];
-            else
-                return splitNames[0];
-        }
+
+//        auto splitNames=name.split("@");
+//        if(splitNames.count()!=2)
+//        {
+//            return name;
+//        }
+//        else
+//        {
+//            auto appCtrl=static_cast<AppCtrl*>(QxPack::IcUiQmlApi::appCtrl());
+//            auto setting=static_cast<Settings*>(appCtrl->getSettings());
+//            auto lang=setting->getLanguage();
+//            if(lang=="Chinese"||(lang=="Default"&&QLocale::system().language()==QLocale::Chinese))
+//                return splitNames[1];
+//            else
+//                return splitNames[0];
+//        }
+         return TranslateController::getTranlatedName(name);
     }
     void setName(QString value){m_data->m_name=value;}
     QVariantList getReport()

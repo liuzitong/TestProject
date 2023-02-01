@@ -23,10 +23,10 @@ Item
 
 
     onRefresh:{
-        if(currentPatient.os_od===0)  //左
-            rx=currentPatient.rx.rx1_l.toFixed(2)+"DS "+currentPatient.rx.rx2_l.toFixed(2)+"DC "+currentPatient.rx.rx3_l.toFixed(2)+"X";
+        if(currentCheckResult.OS_OD===0)  //左
+            rx=currentPatient.rx.rx1_l.toFixed(2)+" DS:"+currentPatient.rx.rx2_l.toFixed(2)+" DC:"+currentPatient.rx.rx3_l.toFixed(2);
         else
-            rx=currentPatient.rx.rx1_r.toFixed(2)+"DS "+currentPatient.rx.rx2_r.toFixed(2)+"DC "+currentPatient.rx.rx3_r.toFixed(2)+"X";
+            rx=currentPatient.rx.rx1_r.toFixed(2)+" DS:"+currentPatient.rx.rx2_r.toFixed(2)+" DC:"+currentPatient.rx.rx3_r.toFixed(2);
     }
 
     Row{
@@ -143,7 +143,7 @@ Item
                                         width:parent.width;height:scrollView.height/20;
                                         Repeater
                                         {
-                                            model:[modelData.name,modelData.start.x,modelData.start.y,modelData.end.x,modelData.end.y,modelData.isSeen?"Seen":"UnSeen"]
+                                            model:[modelData.name,modelData.start.x,modelData.start.y,modelData.end.x,modelData.end.y,modelData.isSeen?(lt+qsTr("Seen")):(lt+qsTr("UnSeen"))]
                                             CusText{width:parent.width/6;height: parent.height;font.pointSize:fontPointSize;text:modelData;}
                                         }
                                     }

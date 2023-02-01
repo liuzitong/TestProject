@@ -20,6 +20,7 @@ Item
     property var staticAnalysisResult: null;
     property int fontPointSize: CommonSettings.fontPointSize;
     property int textHeight:CommonSettings.textHeight;
+    property alias diagnosis: diagnosis.text;
     property string rx:"";
     signal clearDot;
     property int range: currentProgram.params.commonParams.Range[1];
@@ -41,10 +42,10 @@ Item
            IcUiQmlApi.appCtrl.objMgr.detachObj("Perimeter::StaticProgramVM", currentProgram);
         currentProgram=IcUiQmlApi.appCtrl.objMgr.attachObj("Perimeter::StaticProgramVM", false,[currentCheckResult.program_id]);
 
-        if(currentPatient.os_od===0)  //左
-            rx=currentPatient.rx.rx1_l.toFixed(2)+"DS "+currentPatient.rx.rx2_l.toFixed(2)+"DC "+currentPatient.rx.rx3_l.toFixed(2)+"X";
+        if(currentCheckResult.OS_OD===0)  //左
+            rx=currentPatient.rx.rx1_l.toFixed(2)+" DS:"+currentPatient.rx.rx2_l.toFixed(2)+" DC:"+currentPatient.rx.rx3_l.toFixed(2);
         else
-            rx=currentPatient.rx.rx1_r.toFixed(2)+"DS "+currentPatient.rx.rx2_r.toFixed(2)+"DC "+currentPatient.rx.rx3_r.toFixed(2)+"X";
+            rx=currentPatient.rx.rx1_r.toFixed(2)+" DS:"+currentPatient.rx.rx2_r.toFixed(2)+" DC:"+currentPatient.rx.rx3_r.toFixed(2);
 
         if(staticAnalysisResult!==null)
         {
@@ -70,7 +71,7 @@ Item
                             model: [
                                 {name:lt+qsTr("Eye move alarm mode"),param:fixationMonitor[params.fixationMonitor]},
                                 {name:lt+qsTr("Fixation target"),param:fixationTarget[params.fixationTarget]},
-                                {name:lt+qsTr("Fixation loss rate"),param:Math.round(currentCheckResult.resultData.fixationLostCount/currentCheckResult.resultData.fixationLostTestCount*100)+"%"},
+                                {name:lt+qsTr("Fixation loss rate"),param:currentCheckResult.resultData.fixationLostCount+'/'+currentCheckResult.resultData.fixationLostTestCount},
                                 {name:lt+qsTr("False positive rate"),param:Math.round(currentCheckResult.resultData.falsePositiveCount/currentCheckResult.resultData.falsePositiveTestCount*100)+"%"},
                                 {name:lt+qsTr("False negative rate"),param:Math.round(currentCheckResult.resultData.falseNegativeCount/currentCheckResult.resultData.falseNegativeTestCount*100)+"%"},
                                 {name:lt+qsTr("Check time"),param:Math.floor(timeSpan/60)+":"+timeSpan%60},
@@ -109,20 +110,9 @@ Item
                             {
                                 id:diagnosis;anchors.fill: parent;anchors.margins: 3;
                                 width:parent.width*1.0;height: parent.height*0.70;
-                                text:currentCheckResult==null?"":currentCheckResult.diagnosis;
                                 selectionColor: "blue";selectByMouse: true;
                                 font.pointSize: fontPointSize;font.family: "Consolas";
                                 wrapMode: Text.WrapAnywhere;renderType: Text.NativeRendering;
-                            }
-
-                            CusButton{ id: cusButton;height: parent.height*0.28;width: height*2;
-                                text:lt+qsTr("Save");anchors.right: parent.right;anchors.bottom: parent.bottom;
-                                anchors.rightMargin: 5;anchors.bottomMargin: 5;
-                                onClicked:
-                                {
-                                    currentCheckResult.diagnosis=diagnosis.text;
-                                    currentCheckResult.update();
-                                }
                             }
                         }
                     }

@@ -1,4 +1,4 @@
-#ifndef CHECKRESULTMODEL_H
+﻿#ifndef CHECKRESULTMODEL_H
 #define CHECKRESULTMODEL_H
 #include "Params.h"
 #include "Point.h"
@@ -13,7 +13,7 @@ struct ResultData
 {
     int alarm;
     float pupilDiameter;
-    int testTimespan;
+    int testTimespan;                              //Check time
     std::vector<int> fixationDeviation;
 };
 

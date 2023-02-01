@@ -16,10 +16,13 @@ Rectangle {
     property var progressAnalysisResult: null;
     property int fontPointSize: CommonSettings.fontPointSize;
     property int textHeight:CommonSettings.textHeight;
+
+    property alias diagnosis: diagnosis.text;
+//    width: 1440;height:768;
     signal refresh();
     onRefresh: {
-        console.log(progressAnalysisListVm.getData(0,"dateTime"));
-        console.log(progressAnalysisResult.slopeType);
+//        console.log(progressAnalysisListVm.getData(0,"dateTime"));
+//        console.log(progressAnalysisResult.slopeType);
     }
 
     Column
@@ -28,10 +31,10 @@ Rectangle {
         Row{
             width: parent.width;height: parent.height*0.04;spacing: parent.width*0.03;
             Item{height: parent.height;width: parent.parent.height*0.32;}
-            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:"灰度图";font.pointSize: fontPointSize;}}
-            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:"阈值(DB)";font.pointSize: fontPointSize;}}
-            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:"总体偏差";font.pointSize: fontPointSize;}}
-            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:"模式偏差";font.pointSize: fontPointSize;}}
+            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:lt+qsTr("Gray tone");font.pointSize: fontPointSize;}}
+            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:lt+qsTr("Threshold")+"(DB)";font.pointSize: fontPointSize;}}
+            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:lt+qsTr("Total deviation");font.pointSize: fontPointSize;}}
+            Item{height: parent.height;width: parent.parent.height*0.32;CusText{anchors.fill: parent;text:lt+qsTr("Pattern deviation");font.pointSize: fontPointSize;}}
         }
 
         Row{
@@ -130,11 +133,10 @@ Rectangle {
                     ]
                    CusText{text:modelData.name+":  "+modelData.param; horizontalAlignment: Text.AlignLeft;height:textHeight;width: parent.width;}
                 }
-
             }
             ScrollView
             {
-                width: parent.width;height: parent.height;
+                width: parent.width*0.5;height: parent.height;
                 Image{
                     property string picSource: "/previewImage/baseLine.bmp"
                     height: sourceSize.height;width: sourceSize.width;
@@ -142,6 +144,22 @@ Rectangle {
                     Component.onCompleted: {root.refresh.connect(function(){source="";source="file:///" + applicationDirPath + picSource;})}
                 }
             }
+
+            Column{
+                width:parent.width*0.2;height: parent.height;spacing: textHeight*0.3;
+                CusText{text:lt+qsTr("Diagnosis")+":"; horizontalAlignment: Text.AlignLeft;width:parent.width;height:textHeight;}
+                Rectangle{ width:parent.width;height: parent.height*0.7;radius: 5;border.color: "black";smooth: false;
+                    TextInput
+                    {
+                        id:diagnosis;anchors.fill: parent;anchors.margins: 3;
+                        width:parent.width*1.0;height: parent.height*0.70;
+                        selectionColor: "blue";selectByMouse: true;
+                        font.pointSize: fontPointSize;font.family: "Consolas";
+                        wrapMode: Text.WrapAnywhere;renderType: Text.NativeRendering;
+                    }
+                }
+            }
+
         }
     }
 }

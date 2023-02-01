@@ -5,6 +5,7 @@
 #include <perimeter/main/model/patientmodel.h>
 #include "perimeter/main/appctrl/perimeter_appctrl.hxx"
 #include "perimeter/third-part/qxpack/indcom/ui_qml_base/qxpack_ic_ui_qml_api.hxx"
+#include <perimeter/main/services/translate_svc.h>
 namespace Perimeter {
 class ThresholdAnalysisResult : public QObject
 {
@@ -264,10 +265,11 @@ void StaticAnalysisVm::showReport(int report)
     }
 
     auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
+    if(!TranslateController::isRuntimeLangEng())  reportEngine->setReportLanguage(QLocale::Chinese);
     reportEngine->loadFromFile(filePath);
     auto manager=reportEngine->dataManager();
     manager->clearUserVariables();
-    manager->setReportVariable("ProgramName",m_program.m_name);
+    manager->setReportVariable("ProgramName",TranslateController::getTranlatedName(m_program.m_name));
     manager->setReportVariable("OS_OD",m_checkResult.m_OS_OD==0?"OS":"OD");
     manager->setReportVariable("hospitalName",QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("hospitalName").toString());
     manager->setReportVariable("name",m_patient.m_name);
@@ -276,43 +278,45 @@ void StaticAnalysisVm::showReport(int report)
     manager->setReportVariable("ID", m_patient.m_patientId);
     manager->setReportVariable("age", m_patient.m_age);
     manager->setReportVariable("checkTime", m_checkResult.m_time.time().toString("H:mm:ss"));
-    manager->setReportVariable("sex", int(m_patient.m_sex)==0?"male":"female");
+    manager->setReportVariable("sex", int(m_patient.m_sex)==0?tr("Male"):tr("Female"));
     auto rx=m_patient.m_rx;
-    if(m_OS_OD)
+    if(!m_OS_OD)
     {
-        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx.rx1_l,'f',2)+"DS "+QString::number(rx.rx2_l,'f',2)+"DC "+QString::number(rx.rx3_l,'f',2)+"X");
-        manager->setReportVariable("visualAcuity","visualAcuity:"+QString::number(rx.visual_l,'f',2));
+        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx.rx1_l,'f',2)+" DS:"+QString::number(rx.rx2_l,'f',2)+" DC:"+QString::number(rx.rx3_l,'f',2));
+        manager->setReportVariable("visualAcuity",tr("Visual acuity")+QString(":")+QString::number(rx.visual_l,'f',2));
     }
     else
     {
-        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx.rx1_r,'f',2)+"DS "+QString::number(rx.rx2_r,'f',2)+"DC "+QString::number(rx.rx3_r,'f',2)+"X");
-        manager->setReportVariable("visualAcuity","visualAcuity:"+QString::number(rx.visual_r,'f',2));
+        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx.rx1_r,'f',2)+" DS:"+QString::number(rx.rx2_r,'f',2)+" DC:"+QString::number(rx.rx3_r,'f',2));
+        manager->setReportVariable("visualAcuity",tr("Visual acuity")+QString(":")+QString::number(rx.visual_r,'f',2));
     }
-    manager->setReportVariable("pupilDiameter","pupilDiameter:"+QString::number(m_checkResult.m_data.pupilDiameter,'f',2));
+    manager->setReportVariable("pupilDiameter",tr("Pupil diameter")+QString(":")+QString::number(m_checkResult.m_data.pupilDiameter,'f',2));
 
     auto commomParams=m_checkResult.m_params.commonParams;
-    QString fixationMonitor;switch (int(commomParams.fixationMonitor)) {case 0:fixationMonitor="No Alarm"; break;case 1:fixationMonitor="Only Alarm";break;case 2:fixationMonitor="Pause And Alarm";break;}
-    QString fixationTarget;switch (int(commomParams.fixationTarget)){case 0:fixationTarget="Center dot";break;case 1:fixationTarget="Small Diamond";break;case 2:fixationTarget="Big Diamond";break;case 3:fixationTarget="Bottom dot";break;}
-    manager->setReportVariable("fixationMonitor","Fixation Monitor: "+fixationMonitor);
-    manager->setReportVariable("fixationTarget","Fixation Target: "+fixationTarget);
+    QString fixationMonitor;
+    switch (int(commomParams.fixationMonitor)){case 0:fixationMonitor=tr("No alarm"); break;case 1:fixationMonitor=tr("Only alarm");break;case 2:fixationMonitor=tr("Alarm and pause");break;}
+    QString fixationTarget;
+    switch (int(commomParams.fixationTarget)){case 0:fixationTarget=tr("Center dot");break;case 1:fixationTarget=tr("Small diamond");break;case 2:fixationTarget=tr("Big diamond");break;case 3:fixationTarget=tr("Bottom dot");break;}
+    manager->setReportVariable("fixationMonitor",tr("Eye move alarm mode")+QString(": ")+fixationMonitor);
+    manager->setReportVariable("fixationTarget",tr("Fixation target")+QString(": ")+fixationTarget);
     auto resultData=m_checkResult.m_data;
-    manager->setReportVariable("fixationLosses","Fixation Losses: "+QString::number(resultData.fixationLostCount)+"/"+QString::number(resultData.fixationLostTestCount));
-    manager->setReportVariable("falsePositiveRate","False POS Errors: "+QString::number(qRound(float(resultData.falsePositiveCount)/resultData.falsePositiveTestCount*100))+"%");
-    manager->setReportVariable("falseNegativeRate","False NEG Errors: "+QString::number(qRound(float(resultData.falseNegativeCount)/resultData.falseNegativeTestCount*100))+"%");
+    manager->setReportVariable("fixationLosses",tr("Fixation losses")+QString(": ")+QString::number(resultData.fixationLostCount)+"/"+QString::number(resultData.fixationLostTestCount));
+    manager->setReportVariable("falsePositiveRate",tr("False positive rate")+QString(": ")+QString::number(qRound(float(resultData.falsePositiveCount)/resultData.falsePositiveTestCount*100))+"%");
+    manager->setReportVariable("falseNegativeRate",tr("False negative rate")+QString(": ")+QString::number(qRound(float(resultData.falseNegativeCount)/resultData.falseNegativeTestCount*100))+"%");
     QTime time;time.setHMS(0,0,0);time=time.addSecs(resultData.testTimespan);
-    manager->setReportVariable("testTime","Test Duration: "+time.toString("mm:ss"));
-    manager->setReportVariable("centerDotCheck",QString("Fovea: ")+(commomParams.centerDotCheck?"ON":"OFF"));
+    manager->setReportVariable("checkTimespan",tr("Check timespan")+QString(": ")+time.toString("mm:ss"));
+    manager->setReportVariable("centerDotCheck",tr("Center dot check")+QString(": ")+(commomParams.centerDotCheck?tr("On"):tr("Off")));
     QString cursorSize;switch(int(commomParams.cursorSize)){case 0:cursorSize="I";break;case 1:cursorSize="II";break;case 2:cursorSize="III";break;case 3:cursorSize="IV";break;case 4:cursorSize="V";break;}
-    QString cursorColor;switch(int(commomParams.cursorColor)){case 0:cursorColor="White";break;case 1:cursorColor="Red";break;case 2:cursorColor="Blue";break;}
-    manager->setReportVariable("stimCursor","Stimulus: "+cursorSize+","+cursorColor);
-    manager->setReportVariable("backgroundColor","Background: "+QString(int(commomParams.backGroundColor)==0?"31.5":"315")+" ASB");
-    QString strategy;switch(int(commomParams.strategy)){case 0:strategy="fullThreshold";break;case 1:strategy="smartInteractive";break;case 2:strategy="fastInteractive";break;case 3:strategy="oneStage";break;case 4:strategy="twoStages";break;case 5:strategy="quantifyDefects";break;case 6:strategy="singleStimulation";break;}
-    manager->setReportVariable("Strategy","Strategy: "+strategy);
-    manager->setReportVariable("VFI","VFI: "+QString::number(qRound(m_VFI*100))+"%");
-    QString GHT;switch (m_GHT){case 0:GHT="Out of limits";break;case 1:GHT="Low sensitivity";break;case 2:GHT="Border of limits";break;case 3:GHT="Within normal limits";break;}
-    manager->setReportVariable("GHT","GHT: "+GHT);
-    manager->setReportVariable("MD",QString("MD: ")+QString::number(m_md,'f',2)+(m_p_md-5<=FLT_EPSILON?" (P<"+QString::number(m_p_md)+"%)":""));
-    manager->setReportVariable("PSD",QString("PSD: ")+QString::number(m_psd,'f',2)+(m_p_psd-5<=FLT_EPSILON?" (P<"+QString::number(m_p_psd)+"%)":""));
+    QString cursorColor;switch(int(commomParams.cursorColor)){case 0:cursorColor=tr("White");break;case 1:cursorColor=tr("Red");break;case 2:cursorColor=tr("Blue");break;}
+    manager->setReportVariable("stimCursor",tr("Stimulus cursor")+QString(": ")+cursorSize+","+cursorColor);
+    manager->setReportVariable("backgroundColor",tr("Background color")+QString(": ")+QString(int(commomParams.backGroundColor)==0?"31.5":"315")+" ASB");
+    QString strategy;switch(int(commomParams.strategy)){case 0:strategy=tr("Full threshold");break;case 1:strategy=tr("Smart interactive");break;case 2:strategy=tr("Fast interactive");break;case 3:strategy=tr("One stage");break;case 4:strategy=tr("Two stages");break;case 5:strategy=tr("Quantify defects");break;case 6:strategy=tr("Single stimulation");break;}
+    manager->setReportVariable("Strategy",tr("Strategy")+QString(": ")+strategy);
+    manager->setReportVariable("VFI",QString(tr("VFI"))+": "+QString::number(qRound(m_VFI*100))+"%");
+    QString GHT;switch (m_GHT){case 0:GHT=tr("Out of limits");break;case 1:GHT=tr("Low sensitivity");break;case 2:GHT=tr("Border of limits");break;case 3:GHT=tr("Within normal limits");break;}
+    manager->setReportVariable("GHT",tr("GHT")+QString(": ")+GHT);
+    manager->setReportVariable("MD",tr("MD")+QString(": ")+QString::number(m_md,'f',2)+(m_p_md-5<=FLT_EPSILON?" (P<"+QString::number(m_p_md)+"%)":""));
+    manager->setReportVariable("PSD",tr("PSD")+QString(": ")+QString::number(m_psd,'f',2)+(m_p_psd-5<=FLT_EPSILON?" (P<"+QString::number(m_p_psd)+"%)":""));
 
     if(m_type==0)
     {
@@ -349,17 +353,16 @@ void StaticAnalysisVm::showReport(int report)
     else
     {
         manager->setReportVariable("ScreeningImagePath","./reportImage/Screening.bmp");
-        manager->setReportVariable("Seen",QString("Seen:")+QString::number(m_dotSeen)+"/"+QString::number(m_values.length()));
-        manager->setReportVariable("WeakSeen",QString("Weak Seen:")+QString::number(m_dotWeakSeen)+"/"+QString::number(m_values.length()));
-        manager->setReportVariable("Unseen",QString("Unseen:")+QString::number(m_dotUnseen)+"/"+QString::number(m_values.length()));
+        manager->setReportVariable("Seen",QString(tr("Seen"))+":"+QString::number(m_dotSeen)+"/"+QString::number(m_values.length()));
+        manager->setReportVariable("WeakSeen",QString(tr("Weak seen"))+":"+QString::number(m_dotWeakSeen)+"/"+QString::number(m_values.length()));
+        manager->setReportVariable("Unseen",QString(tr("Unseen"))+":"+QString::number(m_dotUnseen)+"/"+QString::number(m_values.length()));
     }
 
 
     manager->setReportVariable("FixationDeviationImagePath","./reportImage/FixationDeviation.bmp");
-    manager->setReportVariable("DoctorSign","DoctorSign: ");
     manager->setReportVariable("DiagnosisContent", m_checkResult.m_diagnosis);
-    manager->setReportVariable("deviceInfo","Device Info: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
-    manager->setReportVariable("version", "Version: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
+    manager->setReportVariable("deviceInfo",tr("Device info")+QString(":")+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
+    manager->setReportVariable("version", tr("Version")+QString(":")+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
 
     reportEngine->setShowProgressDialog(true);
     reportEngine->setPreviewScaleType(LimeReport::ScaleType::Percents,50);
@@ -432,6 +435,7 @@ void DynamicAnalysisVm::showReport(int report)
 
 
     auto reportEngine = QSharedPointer<LimeReport::ReportEngine>(new LimeReport::ReportEngine());
+    if(!TranslateController::isRuntimeLangEng())  reportEngine->setReportLanguage(QLocale::Chinese);
     if(report==0)
     {
         reportEngine->loadFromFile("./reports/Dynamic.lrxml");
@@ -442,7 +446,7 @@ void DynamicAnalysisVm::showReport(int report)
     }
     auto manager=reportEngine->dataManager();
     manager->clearUserVariables();
-    manager->setReportVariable("ProgramName",m_program.m_name);
+    manager->setReportVariable("ProgramName",TranslateController::getTranlatedName(m_program.m_name));
     manager->setReportVariable("OS_OD",m_checkResult.m_OS_OD==0?"OS":"OD");
     manager->setReportVariable("hospitalName",QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("hospitalName").toString());
     manager->setReportVariable("name",m_patient.m_name);
@@ -451,28 +455,29 @@ void DynamicAnalysisVm::showReport(int report)
     manager->setReportVariable("ID", m_patient.m_patientId);
     manager->setReportVariable("age", m_patient.m_age);
     manager->setReportVariable("checkTime", m_checkResult.m_time.time().toString("H:mm:ss"));
-    manager->setReportVariable("sex", int(m_patient.m_sex)==0?"male":"female");
+    manager->setReportVariable("sex", int(m_patient.m_sex)==0?tr("Male"):tr("Female"));
     auto rx=m_patient.m_rx;
-    if(m_checkResult.m_OS_OD)
+    if(!m_checkResult.m_OS_OD)
     {
-        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx.rx1_l,'f',2)+"DS "+QString::number(rx.rx2_l,'f',2)+"DC "+QString::number(rx.rx3_l,'f',2)+"X");
-        manager->setReportVariable("visualAcuity","visualAcuity:"+QString::number(rx.visual_l,'f',2));
+        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx.rx1_l,'f',2)+" DS:"+QString::number(rx.rx2_l,'f',2)+" DC:"+QString::number(rx.rx3_l,'f',2));
+        manager->setReportVariable("visualAcuity",tr("Visual acuity")+QString(":")+QString::number(rx.visual_l,'f',2));
     }
     else
     {
-        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx.rx1_r,'f',2)+"DS "+QString::number(rx.rx2_r,'f',2)+"DC "+QString::number(rx.rx3_r,'f',2)+"X");
-        manager->setReportVariable("visualAcuity","visualAcuity:"+QString::number(rx.visual_r,'f',2));
+        manager->setReportVariable("Rx_Ry","Rx:"+QString::number(rx.rx1_r,'f',2)+" DS:"+QString::number(rx.rx2_r,'f',2)+" DC:"+QString::number(rx.rx3_r,'f',2));
+        manager->setReportVariable("visualAcuity",tr("Visual acuity")+QString(":")+QString::number(rx.visual_r,'f',2));
     }
-    manager->setReportVariable("pupilDiameter","pupilDiameter:"+QString::number(m_checkResult.m_data.pupilDiameter,'f',2));
+    manager->setReportVariable("pupilDiameter",tr("Pupil diameter")+QString(":")+QString::number(m_checkResult.m_data.pupilDiameter,'f',2));
+
     auto resultData=m_checkResult.m_data;
     QTime time;time.setHMS(0,0,0);time=time.addSecs(resultData.testTimespan);
     auto params=m_checkResult.m_params;
     QString cursorSize;switch(int(params.cursorSize)){case 0:cursorSize="I";break;case 1:cursorSize="II";break;case 2:cursorSize="III";break;case 3:cursorSize="IV";break;case 4:cursorSize="V";break;}
-    QString cursorColor;switch(int(params.cursorColor)){case 0:cursorColor="White";break;case 1:cursorColor="Red";break;case 2:cursorColor="Blue";break;}
+    QString cursorColor;switch(int(params.cursorColor)){case 0:cursorColor=tr("White");break;case 1:cursorColor=tr("Red");break;case 2:cursorColor=tr("Blue");break;}
     QString cursorSpeed=QString::number(params.speed);
     QString cursorBrightness=QString::number(params.brightness);
-    manager->setReportVariable("testTime","Test Duration: "+time.toString("mm:ss"));
-    manager->setReportVariable("stimCursor","Stimulus: "+cursorSize+","+cursorColor+","+cursorSpeed+","+cursorBrightness);
+    manager->setReportVariable("checkTimespan",tr("Check timespan")+QString(": ")+time.toString("mm:ss"));
+    manager->setReportVariable("stimCursor",tr("Stimulus cursor")+QString(": ")+cursorSize+","+cursorColor);
 
 
     if(report==0)
@@ -494,15 +499,14 @@ void DynamicAnalysisVm::showReport(int report)
             model->setData( model->index(i,2),QString::number(data[i].start.y,'f',0));
             model->setData( model->index(i,3),QString::number(data[i].end.x,'f',0));
             model->setData( model->index(i,4),QString::number(data[i].end.y,'f',0));
-            model->setData( model->index(i,5),data[i].isSeen?"Seen":"UnSeen");
+            model->setData( model->index(i,5),data[i].isSeen?tr("Seen"):tr("Unseen"));
         }
     }
 
     manager->setReportVariable("FixationDeviationImagePath","./reportImage/FixationDeviation.bmp");
-    manager->setReportVariable("DoctorSign","DoctorSign: ");
     manager->setReportVariable("DiagnosisContent", m_checkResult.m_diagnosis);
-    manager->setReportVariable("deviceInfo","Device Info: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
-    manager->setReportVariable("version", "Version: "+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
+    manager->setReportVariable("deviceInfo",tr("Device info")+QString(":")+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("deviceInfo").toString());
+    manager->setReportVariable("version", tr("Version")+QString(":")+QxPack::IcUiQmlApi::appCtrl()->property("settings").value<QObject*>()->property("version").toString());
 
 
     reportEngine->setShowProgressDialog(true);
